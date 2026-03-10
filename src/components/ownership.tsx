@@ -5,11 +5,27 @@ import { useInView } from "./use-in-view";
 export function Ownership() {
   const { ref, inView } = useInView(0.1);
 
-  const theirs = [
-    { name: "Dust.tt", issue: "Your knowledge lives on their servers" },
-    { name: "CustomGPT", issue: "Locked to their platform" },
-    { name: "Notion AI", issue: "Tied to their workspace" },
-    { name: "ChatGPT", issue: "Gone when your session ends" },
+  const comparisons = [
+    {
+      them: "Dust.tt",
+      what: "Connects your chaos",
+      us: "We structure it first",
+    },
+    {
+      them: "CustomGPT",
+      what: "Reads your files",
+      us: "We read your identity",
+    },
+    {
+      them: "Notion AI",
+      what: "Searches your workspace",
+      us: "We structure what belongs there",
+    },
+    {
+      them: "ChatGPT",
+      what: "Forgets you every session",
+      us: "We compound every session",
+    },
   ];
 
   const yours = [
@@ -31,31 +47,40 @@ export function Ownership() {
         >
           You own everything you build.
         </h2>
-        <p className="text-muted text-sm leading-relaxed max-w-[600px] mb-16">
-          Every competitor locks your knowledge inside their platform. Codify uses plain markdown files in your own git repository. Portable. Version-controlled. Yours forever.
+        <p className="text-muted text-sm leading-relaxed max-w-[540px] mb-16">
+          Every competitor locks your knowledge inside their platform. We use plain markdown in your own git repo.
         </p>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Their way */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          {/* Competitor comparison */}
           <div
             className={`transition-all duration-600 ${
               inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
           >
-            <div className="bg-surface border border-border p-8">
-              <div className="flex items-center gap-2 mb-6">
-                <span className="font-mono text-red text-sm">✗</span>
-                <h3 className="font-mono text-red font-bold text-sm uppercase tracking-wider">
-                  Platform-locked
-                </h3>
+            <div className="bg-surface border border-border overflow-hidden">
+              <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+                <div className="w-3 h-3 rounded-full bg-red opacity-60" />
+                <div className="w-3 h-3 rounded-full bg-amber opacity-60" />
+                <div className="w-3 h-3 rounded-full bg-green opacity-60" />
+                <span className="ml-2 font-mono text-xs text-dim">diff --them vs --codify</span>
               </div>
-              <div className="space-y-4">
-                {theirs.map((t) => (
-                  <div key={t.name} className="flex items-start gap-3">
-                    <span className="font-mono text-red text-xs mt-0.5">−</span>
-                    <div>
-                      <span className="font-mono text-white text-sm">{t.name}</span>
-                      <span className="text-dim text-sm"> — {t.issue}</span>
+              <div className="divide-y divide-border">
+                {comparisons.map((c, i) => (
+                  <div key={c.them} className="px-6 py-4">
+                    <div className="flex items-start gap-3 mb-2">
+                      <span className="font-mono text-red text-sm shrink-0">−</span>
+                      <span className="text-sm">
+                        <span className="text-dim">{c.them}</span>
+                        <span className="text-muted"> — {c.what}</span>
+                      </span>
+                    </div>
+                    <div className="flex items-start gap-3">
+                      <span className="font-mono text-green text-sm shrink-0">+</span>
+                      <span className="text-sm">
+                        <span className="text-white font-bold">Codify</span>
+                        <span className="text-foreground"> — {c.us}</span>
+                      </span>
                     </div>
                   </div>
                 ))}
@@ -63,37 +88,49 @@ export function Ownership() {
             </div>
           </div>
 
-          {/* Our way */}
+          {/* Your stack */}
           <div
             className={`transition-all duration-600 ${
               inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
             }`}
             style={{ transitionDelay: "150ms" }}
           >
-            <div className="bg-surface border border-green/20 p-8">
-              <div className="flex items-center gap-2 mb-6">
-                <span className="font-mono text-green text-sm">✓</span>
-                <h3 className="font-mono text-green font-bold text-sm uppercase tracking-wider">
-                  You own it
-                </h3>
-              </div>
-              {/* Mini terminal */}
-              <div className="bg-[#0a0a0a] border border-border p-4 font-mono text-sm">
-                <p className="text-dim mb-3">❯ ls reference/core/</p>
-                {yours.map((file, i) => (
-                  <p
-                    key={file}
-                    className={`text-green transition-all duration-300 ${
-                      inView ? "opacity-100" : "opacity-0"
-                    }`}
-                    style={{ transitionDelay: `${400 + i * 150}ms` }}
-                  >
-                    {file}
+            <div className="bg-surface border border-green/20 p-8 h-full flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-2 mb-6">
+                  <span className="font-mono text-green text-sm">✓</span>
+                  <h3 className="font-mono text-green font-bold text-sm uppercase tracking-wider">
+                    Portable. Versioned. Yours.
+                  </h3>
+                </div>
+                {/* Mini terminal */}
+                <div className="bg-[#0a0a0a] border border-border p-5 font-mono text-sm mb-6">
+                  <p className="text-dim mb-3">❯ ls reference/core/</p>
+                  {yours.map((file, i) => (
+                    <p
+                      key={file}
+                      className={`text-green transition-all duration-300 ${
+                        inView ? "opacity-100" : "opacity-0"
+                      }`}
+                      style={{ transitionDelay: `${400 + i * 150}ms` }}
+                    >
+                      {file}
+                    </p>
+                  ))}
+                  <p className="text-dim mt-4 text-xs leading-relaxed">
+                    Plain markdown. Git versioned. Works with any AI.
+                    <br />Cancel anytime — take everything with you.
                   </p>
+                </div>
+              </div>
+
+              {/* Key differentiators */}
+              <div className="grid grid-cols-3 gap-3">
+                {["No lock-in", "No vendor risk", "No data hostage"].map((d) => (
+                  <div key={d} className="text-center py-2 border border-border bg-[#0a0a0a]">
+                    <p className="font-mono text-[10px] text-green uppercase tracking-wider">{d}</p>
+                  </div>
                 ))}
-                <p className="text-dim mt-3 text-xs">
-                  Plain markdown. Git versioned. Works with any AI.
-                </p>
               </div>
             </div>
           </div>

@@ -14,7 +14,7 @@ export const siteConfig = {
     eyebrow: "FOR BUSINESS OWNERS USING AI",
     headline: "Context compounds.\nPrompts don't.",
     subhead:
-      "You've been writing better prompts. The outputs are still generic. Because prompts are disposable — you use them once and start over. Context is different. Structure your business knowledge once, and every AI output gets better forever.",
+      "Prompts are disposable. You use them once and start over. Context compounds. Structure your business knowledge once — every AI output gets better forever.",
     ctaText: "Get the Starter Kit — Free",
     ctaUrl: "#starter-kit",
     badge: { text: "48 files · 322 commits · 9 hrs/week", dot: true },
@@ -26,28 +26,28 @@ export const siteConfig = {
       {
         title: "The Prompt Trap",
         description:
-          "You've spent hours writing better prompts. Bought prompt packs. Taken courses. The outputs are still generic — because prompts are disposable. You write one, it works once, you start over.",
+          "Better prompts. Prompt packs. Courses. The outputs are still generic. Because prompts are disposable — you use them once and start over.",
         stat: "95%",
         statLabel: "of AI pilots fail",
       },
       {
         title: "The Context Gap",
         description:
-          "Every AI session starts from zero. Your beliefs, your offer, your audience, your voice — none of it carries forward. You re-explain your business every single time.",
+          "Every AI session starts from zero. Your beliefs, offer, audience, voice — none of it carries forward. You re-explain your business every single time.",
         stat: "42%",
         statLabel: "of knowledge is undocumented",
       },
       {
         title: "The Knowledge Walkout",
         description:
-          "Your institutional knowledge lives in people's heads. When they leave, it leaves. No AI tool, no matter how powerful, can use knowledge it doesn't have access to.",
+          "Your knowledge lives in people's heads. When they leave, it leaves with them. No AI tool can use knowledge it can't access.",
         stat: "$31.5B",
         statLabel: "lost annually to knowledge gaps",
       },
       {
         title: "The Market Is Moving",
         description:
-          "The AI-driven knowledge management market is growing 47% year over year. Your competitors aren't waiting for better prompts — they're structuring their knowledge now. The gap widens every quarter you don't.",
+          "47% year-over-year growth. Your competitors aren't waiting for better prompts — they're structuring their knowledge now. Every quarter you don't, the gap widens.",
         stat: "47%",
         statLabel: "YoY market growth",
       },
@@ -57,7 +57,7 @@ export const siteConfig = {
     eyebrow: "THE THESIS",
     headline: "Context > Prompts.",
     description:
-      "Everyone is optimizing the vehicle while ignoring the fuel. The fuel is your business knowledge — structured so AI can use it.",
+      "Everyone is optimizing the vehicle. Nobody is checking the fuel.",
     comparison: [
       {
         market: "Better prompts = better outputs",
@@ -226,19 +226,19 @@ export const siteConfig = {
       {
         label: "Today",
         title: "You move first",
-        description: "You lock in your knowledge now. Every AI output carries your identity. Your competitors are still re-explaining their business to ChatGPT every morning.",
+        description: "You lock in your knowledge now. Every AI output carries your identity. Your competitors are still re-explaining themselves to ChatGPT every morning.",
         status: "green",
       },
       {
         label: "6 months",
         title: "The gap becomes a canyon",
-        description: "50+ reference files deep. Your AI knows your business better than your best employee. Competitors finally wake up — but you've been compounding for half a year. They can't catch you.",
+        description: "50+ reference files deep. Your AI knows your business cold. Competitors wake up — but you've been compounding for six months. They can't catch you.",
         status: "green",
       },
       {
         label: "12 months",
         title: "The moat is permanent",
-        description: "Walking away is unthinkable. Your context IS the business. New entrants would need a year just to stand where you're standing now — and you're still pulling ahead.",
+        description: "Your context IS the business. New entrants need a year just to stand where you are — and you're still pulling ahead.",
         status: "green",
       },
     ],
@@ -319,7 +319,7 @@ export const siteConfig = {
   cta: {
     headline: "The window is open.\nNot for long.",
     subhead:
-      "47% year-over-year growth means your competitors are structuring their knowledge right now. Start with the free Reference Stack Starter Kit — and see why context beats prompts in one session.",
+      "Your competitors are structuring their knowledge right now. See why context beats prompts — in one session.",
     ctaText: "Get the Starter Kit — Free",
     ctaUrl: "#starter-kit",
     files: ["soul.md", "offer.md", "audience.md", "voice.md"],
