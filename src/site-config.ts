@@ -12,9 +12,9 @@ export const siteConfig = {
   },
   hero: {
     eyebrow: "FOR BUSINESS OWNERS USING AI",
-    headline: "Your AI doesn't know\nyour business.",
+    headline: "Context compounds.\nPrompts don't.",
     subhead:
-      "You've tried prompts, custom GPTs, and AI consultants. The outputs are still generic. The problem isn't the AI — it's what the AI knows about you.",
+      "You've been writing better prompts. The outputs are still generic. Because prompts are disposable — you use them once and start over. Context is different. Structure your business knowledge once, and every AI output gets better forever.",
     ctaText: "Get the Starter Kit — Free",
     ctaUrl: "#starter-kit",
     badge: { text: "48 files · 322 commits · 9 hrs/week", dot: true },
