@@ -45,11 +45,11 @@ export const siteConfig = {
         statLabel: "lost annually to knowledge gaps",
       },
       {
-        title: "The Tool Treadmill",
+        title: "The Market Is Moving",
         description:
-          "New AI tool every week. Each promises to solve everything. None do — because they all have the same problem: they don't know your business. The tool isn't the bottleneck. The context is.",
-        stat: "∞",
-        statLabel: "tools, same problem",
+          "The AI-driven knowledge management market is growing 47% year over year. Your competitors aren't waiting for better prompts — they're structuring their knowledge now. The gap widens every quarter you don't.",
+        stat: "47%",
+        statLabel: "YoY market growth",
       },
     ],
   },
@@ -206,6 +206,42 @@ export const siteConfig = {
       },
     ],
   },
+  urgency: {
+    eyebrow: "THE WINDOW",
+    headline: "The market isn't waiting.",
+    terminal: {
+      command: "codify market --status",
+      lines: [
+        { type: "info", text: "AI knowledge management market ........... $4.8B → $16.2B by 2028" },
+        { type: "growth", text: "Year-over-year growth rate ............... 47%" },
+        { type: "info", text: "Businesses structuring knowledge for AI ... accelerating" },
+        { type: "warning", text: "Businesses still prompting from scratch .. falling behind" },
+        { type: "blank", text: "" },
+        { type: "result", text: "STATUS: First-mover window is open. Closing fast." },
+      ],
+    },
+    cards: [
+      {
+        label: "Today",
+        title: "Early advantage",
+        description: "You structure your knowledge now. Every AI output is informed by who you are. Your competitors are still writing prompts from scratch.",
+        status: "green",
+      },
+      {
+        label: "6 months",
+        title: "Compounding gap",
+        description: "Your reference stack has 50+ files. Your AI knows your business cold. Competitors are starting to realize they need this. They're already behind.",
+        status: "green",
+      },
+      {
+        label: "12 months",
+        title: "Unchallengeable moat",
+        description: "Starting over is unthinkable. Your context IS your competitive advantage. New entrants can't catch up — your system has been compounding for a year.",
+        status: "green",
+      },
+    ],
+    closingLine: "The businesses that codify first win. The rest become case studies in what went wrong.",
+  },
   objections: {
     eyebrow: "OBJECTIONS",
     headline: "You're thinking...",
@@ -243,12 +279,12 @@ export const siteConfig = {
     ],
   },
   cta: {
-    headline: "Stop prompting.\nStart codifying.",
+    headline: "The window is open.\nNot for long.",
     subhead:
-      "Get the free Reference Stack Starter Kit. Four template files that change how AI responds to you — in one session.",
+      "47% year-over-year growth means your competitors are structuring their knowledge right now. Start with the free Reference Stack Starter Kit — and see why context beats prompts in one session.",
     ctaText: "Get the Starter Kit — Free",
     ctaUrl: "#starter-kit",
-    microcopy: "4 files. 5 minutes. See the difference.",
+    microcopy: "4 files. 5 minutes. First-mover advantage starts here.",
   },
   footer: {
     tagline: "context > prompts",
