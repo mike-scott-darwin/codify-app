@@ -54,9 +54,8 @@ export function Proof() {
           That&apos;s leverage.
         </p>
         <p className="text-muted text-base max-w-[640px] mb-16 leading-relaxed">
-          Client Ready is Case Study #1. One business. Seven months. Every metric
-          below is real. Every piece of content on this page was generated from
-          the same system we license.
+          One business. Seven months. Every metric below is real. Every piece of
+          content on this page was generated from the same system we sell.
         </p>
 
         {/* Case study terminal */}
@@ -70,7 +69,7 @@ export function Proof() {
             <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
             <span className="w-3 h-3 rounded-full bg-[#28c840]" />
             <span className="font-mono text-xs text-dim ml-2">
-              codify status --case-study client-ready
+              codify status --live
             </span>
           </div>
 
