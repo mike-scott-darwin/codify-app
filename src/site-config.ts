@@ -152,8 +152,9 @@ export const siteConfig = {
           "The thinking engine. Research, decide, and codify your business knowledge into structured reference files.",
         skills: ["/start", "/think", "/help"],
         features: [
-          "Full thinking engine — research, decide, codify",
+          "Unlimited research sessions + AI generations",
           "Parallel AI agents + MCP routing",
+          "Full thinking engine — research, decide, codify",
           "Community access + classroom",
           "Group calls",
         ],
@@ -173,7 +174,7 @@ export const siteConfig = {
         skills: ["/start", "/think", "/help", "/ads", "/organic", "/vsl", "/site", "/wiki"],
         features: [
           "Everything in Build",
-          "Output skills — ads, organic, VSL, site, wiki",
+          "Unlimited output generation — ads, organic, VSL, site, wiki",
           "Compliance lenses + brand templates",
           "Guided onboarding sprint (first 4 weeks)",
           "Monthly co-working sessions",
@@ -194,6 +195,7 @@ export const siteConfig = {
         skills: ["All skills", "Internal research library", "Decision archive", "Advanced automations"],
         features: [
           "Everything in Pro",
+          "Unlimited everything — no caps, no throttling",
           "Internal research + decision library",
           "Advanced automations + agent workflows",
           "Weekly co-working sessions",
@@ -320,7 +322,8 @@ export const siteConfig = {
       "47% year-over-year growth means your competitors are structuring their knowledge right now. Start with the free Reference Stack Starter Kit — and see why context beats prompts in one session.",
     ctaText: "Get the Starter Kit — Free",
     ctaUrl: "#starter-kit",
-    microcopy: "4 files. 5 minutes. First-mover advantage starts here.",
+    files: ["soul.md", "offer.md", "audience.md", "voice.md"],
+    microcopy: "soul.md · offer.md · audience.md · voice.md — yours in 5 minutes.",
   },
   footer: {
     tagline: "context > prompts",
