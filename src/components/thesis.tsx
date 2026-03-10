@@ -35,7 +35,7 @@ export function Thesis() {
             <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
             <span className="w-3 h-3 rounded-full bg-[#28c840]" />
             <span className="font-mono text-xs text-dim ml-2">
-              diff --market vs --codify
+              diff --prompting vs --codifying
             </span>
           </div>
 
@@ -45,13 +45,13 @@ export function Thesis() {
                 key={i}
                 className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-border"
               >
-                <div className="px-6 py-4 flex items-start gap-3">
+                <div className="px-6 py-4 flex items-start gap-3 bg-[#ef444406]">
                   <span className="font-mono text-red text-sm shrink-0 mt-0.5">
                     −
                   </span>
                   <span className="text-sm text-dim">{row.market}</span>
                 </div>
-                <div className="px-6 py-4 flex items-start gap-3">
+                <div className="px-6 py-4 flex items-start gap-3 bg-[#22c55e06]">
                   <span className="font-mono text-green text-sm shrink-0 mt-0.5">
                     +
                   </span>
@@ -61,6 +61,23 @@ export function Thesis() {
             ))}
           </div>
         </div>
+
+        {/* Kicker line */}
+        {"kicker" in thesis && (
+          <div
+            className={`mt-12 text-center transition-all duration-600 ${
+              inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+            }`}
+            style={{ transitionDelay: "400ms" }}
+          >
+            <p
+              className="font-mono font-bold text-white max-w-[700px] mx-auto"
+              style={{ fontSize: "var(--text-xl)" }}
+            >
+              {(thesis as { kicker: string }).kicker}
+            </p>
+          </div>
+        )}
       </div>
     </section>
   );

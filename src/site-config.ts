@@ -60,26 +60,35 @@ export const siteConfig = {
       "Everyone is optimizing the vehicle. Nobody is checking the fuel.",
     comparison: [
       {
-        market: "Better prompts = better outputs",
-        codify: "Better context = better outputs",
+        market: "Write a better prompt, get a better output",
+        codify: "Structure your knowledge once, get better outputs forever",
       },
       {
-        market: "AI tools are the differentiator",
-        codify: "Your knowledge is the differentiator",
+        market: "Every session starts from zero",
+        codify: "Every session builds on the last — 322 commits and counting",
       },
       {
-        market: "Set it and forget it",
-        codify: "The system compounds because you engage",
+        market: "Your AI sounds like everyone else's AI",
+        codify: "Your AI sounds like YOU from the first draft",
       },
       {
-        market: "Platform matters most",
-        codify: "Knowledge structure matters most",
+        market: "Switch tools, lose everything",
+        codify: "Switch tools, keep everything — it's markdown in your repo",
       },
       {
-        market: "Hire an AI consultant",
-        codify: "Build the skill internally",
+        market: "Pay a consultant $10K for a report",
+        codify: "Build the skill yourself — the system keeps compounding",
+      },
+      {
+        market: "Upload docs and pray the AI figures it out",
+        codify: "Structure your identity — beliefs, voice, offer, audience",
+      },
+      {
+        market: "Your knowledge is scattered across 15 apps",
+        codify: "Your knowledge is in 4 files any AI can read",
       },
     ],
+    kicker: "The bottleneck isn't the tool. It's what the tool knows about you.",
   },
   mechanism: {
     eyebrow: "THE MECHANISM",
