@@ -44,11 +44,19 @@ export function Proof() {
           className="font-mono font-bold text-white mb-4"
           style={{ fontSize: "var(--text-3xl)" }}
         >
-          We eat our own cooking.
+          Same prompt. Different context.
+          <br />
+          <span className="text-green">Different business.</span>
         </h2>
-        <p className="text-muted text-lg max-w-[640px] mb-16 leading-relaxed">
-          This page was generated from reference files. So were the ads. The
-          emails. The VSL scripts. Everything runs on the same system we license.
+        <p className="text-muted text-lg max-w-[640px] mb-6 leading-relaxed">
+          Prompts are disposable — you write one, it works once, you start over.
+          Context compounds — you build it once, it informs every output, forever.
+          That&apos;s leverage.
+        </p>
+        <p className="text-muted text-base max-w-[640px] mb-16 leading-relaxed">
+          Client Ready is Case Study #1. One business. Seven months. Every metric
+          below is real. Every piece of content on this page was generated from
+          the same system we license.
         </p>
 
         {/* Case study terminal */}
@@ -67,17 +75,17 @@ export function Proof() {
           </div>
 
           <div className="p-8">
-            <div className="font-mono text-sm text-green mb-6">
-              ✓ Case Study #1: Client Ready — 7 months, daily use
+            <div className="font-mono text-sm text-green mb-8">
+              ✓ System active — 7 months daily use, compounding
             </div>
 
-            {/* Stats grid - clean, no suffixes in numbers */}
+            {/* Stats grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-border">
               {[
-                { value: 48, label: "reference files", color: "text-white" },
-                { value: 322, label: "git commits", color: "text-white", plus: true },
-                { value: 73, label: "research docs", color: "text-white" },
-                { value: 43, label: "decisions logged", color: "text-white" },
+                { value: 48, label: "reference files" },
+                { value: 322, label: "git commits", plus: true },
+                { value: 73, label: "research docs" },
+                { value: 43, label: "decisions logged" },
               ].map((stat, i) => (
                 <div
                   key={stat.label}
@@ -88,9 +96,11 @@ export function Proof() {
                   }`}
                   style={{ transitionDelay: `${200 + i * 100}ms` }}
                 >
-                  <div className={`font-mono text-5xl font-bold ${stat.color} mb-1`}>
+                  <div className="font-mono text-5xl font-bold text-white mb-1">
                     <AnimatedNumber value={stat.value} active={inView} />
-                    {stat.plus && <span className="text-blue text-3xl">+</span>}
+                    {stat.plus && (
+                      <span className="text-blue text-3xl">+</span>
+                    )}
                   </div>
                   <div className="font-mono text-[11px] text-dim uppercase tracking-wider">
                     {stat.label}
@@ -99,25 +109,54 @@ export function Proof() {
               ))}
             </div>
 
-            {/* Output line - the punchline */}
-            <div className="font-mono text-sm space-y-2">
-              <div>
-                <span className="text-dim">weekly_hours:</span>{" "}
-                <span className="text-green font-bold">9</span>
+            {/* The leverage metrics */}
+            <div className="font-mono text-sm space-y-3">
+              <div className="flex items-start gap-3">
+                <span className="text-green shrink-0">→</span>
+                <div>
+                  <span className="text-white font-bold">9 hours/week</span>
+                  <span className="text-dim">
+                    {" "}
+                    to run the entire business — ads, content, email, landing
+                    pages
+                  </span>
+                </div>
               </div>
-              <div>
-                <span className="text-dim">generates:</span>{" "}
-                <span className="text-muted">ads, emails, VSLs, landing pages, organic content, wiki</span>
+              <div className="flex items-start gap-3">
+                <span className="text-green shrink-0">→</span>
+                <div>
+                  <span className="text-white font-bold">
+                    Minutes per ad batch
+                  </span>
+                  <span className="text-dim">
+                    {" "}
+                    — not hours. Context does the heavy lifting.
+                  </span>
+                </div>
               </div>
-              <div>
-                <span className="text-dim">time_to_ad_batch:</span>{" "}
-                <span className="text-green font-bold">minutes</span>
-                <span className="text-dim"> (not hours)</span>
+              <div className="flex items-start gap-3">
+                <span className="text-green shrink-0">→</span>
+                <div>
+                  <span className="text-white font-bold">Zero platform lock</span>
+                  <span className="text-dim">
+                    {" "}
+                    — markdown files work with Claude, GPT, Gemini, whatever
+                    comes next
+                  </span>
+                </div>
               </div>
-              <div>
-                <span className="text-dim">platform_lock:</span>{" "}
-                <span className="text-green font-bold">none</span>
-                <span className="text-dim"> — markdown files, works with any AI</span>
+              <div className="flex items-start gap-3">
+                <span className="text-green shrink-0">→</span>
+                <div>
+                  <span className="text-white font-bold">
+                    Every output improves the next
+                  </span>
+                  <span className="text-dim">
+                    {" "}
+                    — research feeds reference, reference feeds outputs, outputs
+                    feed decisions
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -134,7 +173,7 @@ export function Proof() {
             <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
             <span className="w-3 h-3 rounded-full bg-[#28c840]" />
             <span className="font-mono text-xs text-dim ml-2">
-              diff --before --after codification
+              diff --prompting vs --codified
             </span>
           </div>
 
@@ -146,7 +185,7 @@ export function Proof() {
               },
               {
                 before: "Generic outputs that sound like everyone else",
-                after: "Outputs sound like you from the first draft",
+                after: "Outputs match your voice from the first draft",
               },
               {
                 before: "Hours editing AI copy to match your voice",
