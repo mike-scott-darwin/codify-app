@@ -242,6 +242,42 @@ export const siteConfig = {
     ],
     closingLine: "The businesses that codify first win. The rest become case studies in what went wrong.",
   },
+  testimonials: {
+    eyebrow: "FROM THE COMMUNITY",
+    headline: "Real people. Real timelines. Real results.",
+    description:
+      "These are members using the same engine that powers Codify. Same reference architecture. Same compounding system. Their words, not ours.",
+    items: [
+      {
+        name: "Joshua Breaux",
+        context: "4 days in — blog strategy",
+        result: "Full content strategy in 5 hours",
+        quote:
+          "Validated 105 keywords in Ahrefs. Mapped 5 pillar articles, 15+ cluster articles, and the full internal linking architecture between them. The part I\u2019m most pumped about is the compounding. Every decision codified in my reference files feeds the next session. No more starting over every time with a different AI Stranger.",
+      },
+      {
+        name: "Josh Ballard",
+        context: "2 days in — busy dad, 9-5 job",
+        result: "Business frameworks built in 2 days",
+        quote:
+          "Giving Claude Code an organizational structure to work within, and being able to build out my business frameworks have been truly incredible. This is just for a small community here on Skool, but as a busy dad and working a 9-5, this is great.",
+      },
+      {
+        name: "Grant Sparks",
+        context: "Sales team automation",
+        result: "Built a working AI agent from scratch",
+        quote:
+          "My sales team burns too much time looking for the right business networking events. Claude whipped it up, built the repo, did the initial searches. We refined the queries. It\u2019s functional and working, and takes that effort off of the team.",
+      },
+      {
+        name: "Community Member",
+        context: "Canceled every other subscription",
+        result: "Hundreds of ad variations, converting",
+        quote:
+          "Once you articulate your offer, your audience, your voice, and your proof into structured reference, everything downstream gets better. Ads. Content. Sales pages. Everything. I ran the ad skill and it made hundreds of ad variations. We put them in the ad account and it\u2019s converting.",
+      },
+    ],
+  },
   objections: {
     eyebrow: "OBJECTIONS",
     headline: "You're thinking...",

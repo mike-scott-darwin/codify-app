@@ -4,6 +4,7 @@ import { Thesis } from "../components/thesis";
 import { ProcessMap } from "../components/process-map";
 import { Mechanism } from "../components/mechanism";
 import { Proof } from "../components/proof";
+import { Testimonials } from "../components/testimonials";
 import { Product } from "../components/product";
 import { Urgency } from "../components/urgency";
 import { Objections } from "../components/objections";
@@ -19,6 +20,7 @@ export default function Home() {
       <ProcessMap />
       <Mechanism />
       <Proof />
+      <Testimonials />
       <Product />
       <Urgency />
       <Objections />
