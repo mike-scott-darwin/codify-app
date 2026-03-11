@@ -8,17 +8,19 @@ export function Problem() {
   const { problem } = siteConfig;
 
   return (
-    <section ref={ref} className="py-24 md:py-32 border-t border-border">
+    <section ref={ref} className="py-16 md:py-20 border-t border-border">
       <div className="max-w-[1200px] mx-auto px-6 md:px-12">
-        <p className="font-mono text-xs tracking-[0.2em] uppercase text-blue mb-4">
-          {problem.eyebrow}
-        </p>
-        <h2
-          className="font-mono font-bold text-white mb-16"
-          style={{ fontSize: "var(--text-3xl)" }}
-        >
-          {problem.headline}
-        </h2>
+        <div className="text-center mb-16">
+          <p className="font-mono text-xs tracking-[0.2em] uppercase text-blue mb-4">
+            {problem.eyebrow}
+          </p>
+          <h2
+            className="font-mono font-bold text-white"
+            style={{ fontSize: "var(--text-3xl)" }}
+          >
+            {problem.headline}
+          </h2>
+        </div>
 
         <div className="grid md:grid-cols-2 gap-6">
           {problem.items.map((item, i) => (

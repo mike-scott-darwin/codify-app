@@ -8,7 +8,7 @@ export function CTA() {
   const { cta } = siteConfig;
 
   return (
-    <section ref={ref} className="py-24 md:py-32 border-t border-border">
+    <section ref={ref} className="py-16 md:py-20 border-t border-border">
       <div className="max-w-[800px] mx-auto px-6 md:px-12 text-center">
         <div
           className={`transition-all duration-600 ${

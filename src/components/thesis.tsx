@@ -8,28 +8,28 @@ export function Thesis() {
   const { thesis } = siteConfig;
 
   return (
-    <section ref={ref} className="py-24 md:py-32 border-t border-border">
-      <div className="max-w-[1200px] mx-auto px-6 md:px-12">
-        <p className="font-mono text-xs tracking-[0.2em] uppercase text-blue mb-4">
-          {thesis.eyebrow}
-        </p>
-        <h2
-          className="font-mono font-bold text-white mb-6"
-          style={{ fontSize: "var(--text-4xl)" }}
-        >
-          {thesis.headline}
-        </h2>
-        <p className="text-muted text-lg max-w-[640px] mb-16 leading-relaxed">
-          {thesis.description}
-        </p>
+    <section ref={ref} className="py-16 md:py-20 border-t border-border">
+      <div className="max-w-[1000px] mx-auto px-6 md:px-12">
+        <div className="text-center mb-16">
+          <p className="font-mono text-xs tracking-[0.2em] uppercase text-blue mb-4">
+            {thesis.eyebrow}
+          </p>
+          <h2
+            className="font-mono font-bold text-white mb-6"
+            style={{ fontSize: "var(--text-4xl)" }}
+          >
+            {thesis.headline}
+          </h2>
+          <p className="text-muted text-lg max-w-[640px] mx-auto leading-relaxed">
+            {thesis.description}
+          </p>
+        </div>
 
-        {/* Terminal-style comparison table */}
         <div
           className={`bg-surface border border-border overflow-hidden transition-all duration-600 ${
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
         >
-          {/* Terminal header */}
           <div className="flex items-center gap-2 px-4 py-3 bg-[#1a1a1a] border-b border-border">
             <span className="w-3 h-3 rounded-full bg-[#ff5f57]" />
             <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
@@ -62,7 +62,6 @@ export function Thesis() {
           </div>
         </div>
 
-        {/* Kicker line */}
         {"kicker" in thesis && (
           <div
             className={`mt-12 text-center transition-all duration-600 ${

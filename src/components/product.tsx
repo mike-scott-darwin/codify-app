@@ -10,23 +10,25 @@ export function Product() {
   const { product } = siteConfig;
 
   return (
-    <section ref={ref} className="py-24 md:py-32 border-t border-border">
+    <section id="pricing" ref={ref} className="py-16 md:py-20 border-t border-border">
       <div className="max-w-[1200px] mx-auto px-6 md:px-12">
-        <p className="font-mono text-xs tracking-[0.2em] uppercase text-blue mb-4">
-          {product.eyebrow}
-        </p>
-        <h2
-          className="font-mono font-bold text-white mb-4"
-          style={{ fontSize: "var(--text-3xl)" }}
-        >
-          {product.headline}
-        </h2>
-        <p className="text-muted text-lg max-w-[640px] mb-10 leading-relaxed">
-          {product.description}
-        </p>
+        <div className="text-center mb-12">
+          <p className="font-mono text-xs tracking-[0.2em] uppercase text-blue mb-4">
+            {product.eyebrow}
+          </p>
+          <h2
+            className="font-mono font-bold text-white mb-4"
+            style={{ fontSize: "var(--text-3xl)" }}
+          >
+            {product.headline}
+          </h2>
+          <p className="text-muted text-lg max-w-[640px] mx-auto leading-relaxed">
+            {product.description}
+          </p>
+        </div>
 
-        {/* Billing toggle */}
-        <div className="flex items-center gap-4 mb-12">
+        {/* Billing toggle — centered */}
+        <div className="flex items-center justify-center gap-4 mb-12">
           <button
             onClick={() => setAnnual(false)}
             className={`font-mono text-sm px-4 py-2 transition-all ${
@@ -65,7 +67,6 @@ export function Product() {
               }`}
               style={{ transitionDelay: `${i * 100}ms` }}
             >
-              {/* Terminal header */}
               <div className="px-6 py-4 border-b border-border bg-[#1a1a1a]">
                 <div className="font-mono text-xs text-dim">
                   <span className="text-green">❯</span> {tier.command}
@@ -105,7 +106,6 @@ export function Product() {
                   {tier.description}
                 </p>
 
-                {/* Skills */}
                 <div className="mb-6">
                   <div className="font-mono text-[10px] tracking-[0.15em] uppercase text-dim mb-3">
                     Skills
@@ -122,7 +122,6 @@ export function Product() {
                   </div>
                 </div>
 
-                {/* Features */}
                 <ul className="space-y-3 mb-8 flex-1">
                   {tier.features.map((feature) => (
                     <li

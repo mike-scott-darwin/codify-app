@@ -10,17 +10,19 @@ export function Objections() {
   const { objections } = siteConfig;
 
   return (
-    <section ref={ref} className="py-24 md:py-32 border-t border-border">
+    <section id="faq" ref={ref} className="py-16 md:py-20 border-t border-border">
       <div className="max-w-[800px] mx-auto px-6 md:px-12">
-        <p className="font-mono text-xs tracking-[0.2em] uppercase text-blue mb-4">
-          {objections.eyebrow}
-        </p>
-        <h2
-          className="font-mono font-bold text-white mb-16"
-          style={{ fontSize: "var(--text-3xl)" }}
-        >
-          {objections.headline}
-        </h2>
+        <div className="text-center mb-16">
+          <p className="font-mono text-xs tracking-[0.2em] uppercase text-blue mb-4">
+            FAQ
+          </p>
+          <h2
+            className="font-mono font-bold text-white"
+            style={{ fontSize: "var(--text-3xl)" }}
+          >
+            {objections.headline}
+          </h2>
+        </div>
 
         <div className="space-y-2">
           {objections.items.map((item, i) => (

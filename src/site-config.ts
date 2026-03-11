@@ -13,10 +13,9 @@ export const siteConfig = {
   hero: {
     eyebrow: "FOR BUSINESS OWNERS USING AI",
     headline: "Context compounds.\nPrompts don't.",
-    subhead:
-      "Prompts are disposable. You use them once and start over. Context compounds. Structure your business knowledge once — every AI output gets better forever.",
-    ctaText: "Get the Starter Kit — Free",
-    ctaUrl: "#starter-kit",
+    subhead: "The context layer between your business and AI.\nLess time. Less tools. Better output.",
+    ctaText: "Get Your Free Starter Kit",
+    ctaUrl: "/codify-starter-kit.zip",
     badge: { text: "48 files · 322 commits · 9 hrs/week", dot: true },
   },
   problem: {
@@ -102,9 +101,9 @@ export const siteConfig = {
       },
       {
         label: "Codify",
-        command: "codify init",
+        command: "codify structure",
         description:
-          "Structure it into reference files: soul.md, offer.md, audience.md, voice.md. Markdown files any AI can read. Platform-agnostic. Portable. Yours.",
+          "Turn it into reference files: soul.md, offer.md, audience.md, voice.md. Plain markdown any AI can read. No platform lock. No vendor risk. Yours forever.",
       },
       {
         label: "Generate",
@@ -114,7 +113,7 @@ export const siteConfig = {
       },
       {
         label: "Compound",
-        command: "codify status",
+        command: "codify compound",
         description:
           "Each research session enriches the stack. Each decision sharpens positioning. The system gets smarter without you getting busier. That's the moat.",
       },
@@ -219,7 +218,7 @@ export const siteConfig = {
   },
   urgency: {
     eyebrow: "THE WINDOW",
-    headline: "While you prompt, they compound.",
+    headline: "The market won’t wait for you.",
     terminal: {
       command: "codify market --status",
       lines: [
@@ -251,7 +250,7 @@ export const siteConfig = {
         status: "green",
       },
     ],
-    closingLine: "The businesses that codify first win. The rest become case studies in what went wrong.",
+    closingLine: "First movers build moats. Everyone else pays to catch up.",
   },
   testimonials: {
     eyebrow: "FROM THE COMMUNITY",
@@ -260,34 +259,76 @@ export const siteConfig = {
       "These are members using the same engine that powers Codify. Same reference architecture. Same compounding system. Their words, not ours.",
     items: [
       {
+        name: "Alex Reisch",
+        context: "VIP — Skool community builder",
+        result: "Complete Skool community in days, not months",
+        quote:
+          "21+ lessons across 3 courses, 22 email triggers, all built in hours not weeks. The reference files mean every piece of content sounds like me. I’ve never experienced anything like this in 15+ years of building online.",
+      },
+      {
         name: "Joshua Breaux",
         context: "4 days in — blog strategy",
         result: "Full content strategy in 5 hours",
         quote:
-          "Validated 105 keywords in Ahrefs. Mapped 5 pillar articles, 15+ cluster articles, and the full internal linking architecture between them. The part I\u2019m most pumped about is the compounding. Every decision codified in my reference files feeds the next session. No more starting over every time with a different AI Stranger.",
+          "Validated 105 keywords in Ahrefs. Mapped 5 pillar articles, 15+ cluster articles, and the full internal linking architecture between them. The part I’m most pumped about is the compounding. Every decision codified in my reference files feeds the next session. No more starting over every time with a different AI Stranger.",
+      },
+      {
+        name: "Mark Schreiber",
+        context: "Built a SaaS tool in 4 hours",
+        result: "Mailing tool + AI readiness widget from scratch",
+        quote:
+          "Scraped 1,500 websites, built an AI readiness scoring widget, and created a mailing tool — all in about 4 hours. I would’ve never tried this two months ago. The reference stack gave me the confidence to just build.",
       },
       {
         name: "Josh Ballard",
-        context: "2 days in — busy dad, 9-5 job",
-        result: "Business frameworks built in 2 days",
+        context: "New GHL agency — busy dad, 9-5 job",
+        result: "New business stood up in a day",
         quote:
-          "Giving Claude Code an organizational structure to work within, and being able to build out my business frameworks have been truly incredible. This is just for a small community here on Skool, but as a busy dad and working a 9-5, this is great.",
+          "Stood up a brand new GHL agency with a landing page in a single day. As a busy dad working a 9-5, this would have taken triple the time without the reference architecture guiding every output.",
+      },
+      {
+        name: "Joel Neupane",
+        context: "Full funnel automation",
+        result: "Saved $500–1,500/mo replacing paid tools",
+        quote:
+          "Built a complete Stripe + CRM automation that replaced Zapier entirely. Full funnel — payment processing, email triggers, contact management. Saving $500–1,500 a month on tools I no longer need.",
       },
       {
         name: "Grant Sparks",
         context: "Sales team automation",
         result: "Built a working AI agent from scratch",
         quote:
-          "My sales team burns too much time looking for the right business networking events. Claude whipped it up, built the repo, did the initial searches. We refined the queries. It\u2019s functional and working, and takes that effort off of the team.",
+          "My sales team burns too much time looking for the right business networking events. Claude whipped it up, built the repo, did the initial searches. We refined the queries. It’s functional and working, and takes that effort off of the team.",
       },
       {
-        name: "Community Member",
-        context: "Canceled every other subscription",
-        result: "Hundreds of ad variations, converting",
+        name: "Joe DeFilippo",
+        context: "SaaS developer — 26 days in",
+        result: "Moving 60% faster with 5x more tests",
         quote:
-          "Once you articulate your offer, your audience, your voice, and your proof into structured reference, everything downstream gets better. Ads. Content. Sales pages. Everything. I ran the ad skill and it made hundreds of ad variations. We put them in the ad account and it\u2019s converting.",
+          "63 pull requests merged in 26 days. The previous 63 took me 43 days. And quality didn’t slip — we went from 75 automated tests to 395. The reference architecture doesn’t just speed you up, it keeps you honest.",
+      },
+      {
+        name: "Joe DeFilippo",
+        context: "Helped brother-in-law start a business",
+        result: "Full business reference built in 1 hour",
+        quote:
+          "My brother-in-law Frank is starting a personal training business. I researched his local competition, identified his advantages, and built his full reference — offer, audience, voice, brand. Sent him a summary email. His response: ‘Joe, I am blown away.’ Not bad for about an hour of work.",
+      },
+      {
+        name: "Jordan Watkins",
+        context: "Content creator — video production",
+        result: "3–4 hour animation done in 20 minutes",
+        quote:
+          "Created an animation using a reference file and my own stored assets. This would normally take three to four hours — I completed it in about 20 minutes. I can see the potential of introducing this into my content creation workflow and making really cool video ads.",
       },
     ],
+    featured: {
+      name: "Community Member",
+      context: "Canceled every other SaaS subscription",
+      result: "Hundreds of ad variations, converting",
+      quote:
+        "Once you articulate your offer, your audience, your voice, and your proof into structured reference, everything downstream gets better. Ads. Content. Sales pages. Everything. I ran the ad skill and it made hundreds of ad variations. We put them in the ad account and it\u2019s converting. I canceled every other subscription. This is the only tool I need.",
+    },
   },
   objections: {
     eyebrow: "OBJECTIONS",
@@ -328,9 +369,9 @@ export const siteConfig = {
   cta: {
     headline: "The window is open.\nNot for long.",
     subhead:
-      "Your competitors are structuring their knowledge right now. See why context beats prompts — in one session.",
-    ctaText: "Get the Starter Kit — Free",
-    ctaUrl: "#starter-kit",
+      "Download the 4 reference files. Fill them in. Start your first AI session with full context today.",
+    ctaText: "Get Your Free Starter Kit",
+    ctaUrl: "/codify-starter-kit.zip",
     files: ["soul.md", "offer.md", "audience.md", "voice.md"],
     microcopy: "soul.md · offer.md · audience.md · voice.md — yours in 5 minutes.",
   },
