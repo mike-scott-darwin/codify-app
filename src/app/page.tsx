@@ -1,301 +1,210 @@
 "use client";
 
-import Link from "next/link";
 import { useState, useEffect } from "react";
+import Link from "next/link";
+import { calculateContextScore } from "@/lib/scoring";
+import type { ContextScore, ReferenceFile } from "@/lib/types";
 
-function BlinkingCursor() {
-  const [visible, setVisible] = useState(true);
+// Demo data — replace with GitHub API later
+const DEMO_FILES = [
+  {
+    name: "soul.md",
+    path: "reference/core/soul.md",
+    content: `# Soul\n\n## Origin\nI started coaching because I saw too many talented people stuck in jobs that drained them.\n\n## Core Belief\nEveryone has a zone of genius. Most people just need permission and a framework to find it.`,
+    lastModified: "2026-03-10",
+  },
+  {
+    name: "offer.md",
+    path: "reference/core/offer.md",
+    content: `# Offer\n\n## What I Sell\n12-week coaching program for mid-career professionals who want to transition to coaching.\n\n## Price\n$2,500 one-time\n\n## Delivery\nWeekly 1:1 calls + Skool community access`,
+    lastModified: "2026-03-12",
+  },
+  {
+    name: "audience.md",
+    path: "reference/core/audience.md",
+  },
+  {
+    name: "voice.md",
+    path: "reference/core/voice.md",
+  },
+];
+
+const FILE_DESCRIPTIONS: Record<string, { tagline: string; interview: string }> = {
+  "soul.md": {
+    tagline: "WHY you exist — your origin, beliefs, and mission",
+    interview: "/interview/soul",
+  },
+  "offer.md": {
+    tagline: "WHAT you sell — the transformation, price, and proof",
+    interview: "/interview/soul", // TODO: /interview/offer
+  },
+  "audience.md": {
+    tagline: "WHO you serve — real people, not avatars",
+    interview: "/interview/soul", // TODO: /interview/audience
+  },
+  "voice.md": {
+    tagline: "HOW you sound — tone, phrases, personality",
+    interview: "/interview/soul", // TODO: /interview/voice
+  },
+};
+
+function terminalBar(percentage: number, length: number = 20): string {
+  const filled = Math.round((percentage / 100) * length);
+  const empty = length - filled;
+  return "\u2588".repeat(filled) + "\u2591".repeat(empty);
+}
+
+const STATUS_CONFIG: Record<
+  ReferenceFile["status"],
+  { color: string; label: string }
+> = {
+  missing: { color: "text-[#ef4444]", label: "MISSING" },
+  skeleton: { color: "text-[#f59e0b]", label: "SKELETON" },
+  draft: { color: "text-[#f59e0b]", label: "DRAFT" },
+  solid: { color: "text-[#4a9eff]", label: "SOLID" },
+  strong: { color: "text-[#22c55e]", label: "STRONG" },
+};
+
+function FileCard({ file }: { file: ReferenceFile }) {
+  const config = STATUS_CONFIG[file.status];
+  const desc = FILE_DESCRIPTIONS[file.name];
+  const percentage = Math.round((file.score / file.maxScore) * 100);
+
+  return (
+    <Link href={desc?.interview || "/interview/soul"} className="block group">
+      <div className="bg-[#111111] border border-[#1a1a1a] p-5 group-hover:border-[#333] transition-colors">
+        <div className="flex items-center justify-between mb-1">
+          <span className="font-mono text-[#22c55e] text-sm">{file.name}</span>
+          <span className={`font-mono text-[10px] uppercase tracking-[0.1em] ${config.color}`}>
+            {config.label}
+          </span>
+        </div>
+
+        <p className="text-xs text-[#6b6b6b] mb-3">{desc?.tagline}</p>
+
+        <div className="flex items-center justify-between mb-2">
+          <span className="font-mono text-[10px] text-[#6b6b6b]">
+            {file.wordCount} words
+          </span>
+          <span className="font-mono text-[10px] text-[#a0a0a0]">
+            {file.score}/{file.maxScore} pts
+          </span>
+        </div>
+
+        <div className="font-mono text-xs text-[#4a9eff] tracking-wider mb-2">
+          {terminalBar(percentage, 24)}
+        </div>
+
+        {file.lastModified ? (
+          <p className="font-mono text-[10px] text-[#6b6b6b]">
+            modified {file.lastModified}
+          </p>
+        ) : (
+          <p className="font-mono text-[10px] text-[#4a9eff] group-hover:text-white transition-colors">
+            start interview →
+          </p>
+        )}
+      </div>
+    </Link>
+  );
+}
+
+export default function AppDashboard() {
+  const [score, setScore] = useState<ContextScore | null>(null);
+
   useEffect(() => {
-    const interval = setInterval(() => setVisible((v) => !v), 530);
-    return () => clearInterval(interval);
+    const result = calculateContextScore(DEMO_FILES);
+    setScore(result);
   }, []);
-  return (
-    <span
-      className="inline-block w-[2px] h-[1.1em] bg-[#4a9eff] align-middle ml-0.5"
-      style={{ opacity: visible ? 1 : 0 }}
-    />
-  );
-}
 
-function BrandMark({ size = "text-xl" }: { size?: string }) {
-  return (
-    <span className={`font-mono font-bold ${size} text-white`}>
-      <span className="text-[#22c55e]">❯</span> codify
-      <BlinkingCursor />
-    </span>
-  );
-}
+  if (!score) return null;
 
-const problemItems = [
-  {
-    title: "The Prompt Trap",
-    stat: "95%",
-    desc: "of AI pilots fail",
-  },
-  {
-    title: "The Context Gap",
-    stat: "42%",
-    desc: "of knowledge is undocumented",
-  },
-  {
-    title: "The Knowledge Walkout",
-    stat: "$31.5B",
-    desc: "lost annually to knowledge gaps",
-  },
-  {
-    title: "The Market Is Moving",
-    stat: "47%",
-    desc: "YoY market growth",
-  },
-];
+  const missingCount = score.files.filter((f) => f.status === "missing").length;
 
-const mechanismSteps = [
-  {
-    cmd: "extract",
-    label: "Extract",
-    desc: "Guided interviews pull out what you know but haven't documented.",
-  },
-  {
-    cmd: "codify",
-    label: "Codify",
-    desc: "Answers become structured reference files — soul, offer, audience, voice.",
-  },
-  {
-    cmd: "generate",
-    label: "Generate",
-    desc: "Every AI tool reads your context. Outputs sound like you, sell what you sell.",
-  },
-  {
-    cmd: "compound",
-    label: "Compound",
-    desc: "Context gets richer with every session. Generic competitors fall further behind.",
-  },
-];
-
-export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white">
-      {/* ─── NAV ─── */}
-      <nav className="fixed top-0 z-50 w-full border-b border-[#1a1a1a] bg-[#0a0a0a]/90 backdrop-blur-sm">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <BrandMark />
-          <div className="flex items-center gap-6">
-            <Link
-              href="#problem"
-              className="hidden text-sm text-[#a0a0a0] hover:text-white transition-colors sm:block"
-            >
-              Problem
-            </Link>
-            <Link
-              href="#mechanism"
-              className="hidden text-sm text-[#a0a0a0] hover:text-white transition-colors sm:block"
-            >
-              How It Works
-            </Link>
-            <Link
-              href="#app"
-              className="hidden text-sm text-[#a0a0a0] hover:text-white transition-colors sm:block"
-            >
-              The App
-            </Link>
-            <Link href="/interview/soul">
-              <button className="rounded-none border border-[#22c55e] bg-[#22c55e]/10 px-4 py-2 text-sm font-medium text-[#22c55e] hover:bg-[#22c55e]/20 transition-colors">
-                Get Started
-              </button>
-            </Link>
-          </div>
+      {/* Nav */}
+      <nav className="border-b border-[#1a1a1a] px-6 py-4">
+        <div className="mx-auto flex max-w-4xl items-center justify-between">
+          <span className="font-mono text-lg text-white">
+            <span className="text-[#22c55e]">❯</span> codify
+          </span>
+          <Link
+            href="/interview/soul"
+            className="font-mono text-xs bg-[#22c55e] text-black px-4 py-2 font-bold hover:brightness-110 transition-all"
+          >
+            Build Reference →
+          </Link>
         </div>
       </nav>
 
-      {/* ─── HERO ─── */}
-      <section className="mx-auto max-w-4xl px-6 pt-32 pb-24 text-center">
-        <div className="mb-8">
-          <BrandMark size="text-3xl sm:text-4xl" />
+      <div className="mx-auto max-w-4xl px-6 py-10">
+        {/* Context Power Score */}
+        <div className="bg-[#111111] border border-[#1a1a1a] p-8 mb-8">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-5">
+            Context Power Score
+          </p>
+
+          <div className="flex items-baseline gap-3 mb-4">
+            <span className="font-mono text-6xl font-bold tabular-nums">
+              {score.percentage}
+            </span>
+            <span className="font-mono text-xl text-[#6b6b6b]">/ 100</span>
+          </div>
+
+          <div className="font-mono text-sm text-[#4a9eff] tracking-wider mb-3">
+            {terminalBar(score.percentage, 40)}
+          </div>
+
+          <p className="text-sm text-[#a0a0a0]">
+            {score.total} points across {score.files.length} core files
+            {missingCount > 0 && (
+              <span className="text-[#6b6b6b]">
+                {" "}&middot; {missingCount} file{missingCount > 1 ? "s" : ""} missing
+              </span>
+            )}
+          </p>
         </div>
 
-        <h1 className="font-mono text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl mb-6">
-          Context compounds.
-          <br />
-          Prompts don&apos;t.
-        </h1>
-
-        <p className="mx-auto max-w-2xl text-lg text-[#a0a0a0] mb-10 leading-relaxed">
-          The context layer between your business and AI.
-          <br />
-          Less time. Less tools. Better output.
+        {/* Reference Files */}
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-4">
+          Reference Files
         </p>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
-          <Link href="/interview/soul">
-            <button className="rounded-none bg-[#4a9eff] px-8 py-3 text-sm font-semibold text-white hover:bg-[#4a9eff]/80 transition-colors w-full sm:w-auto">
-              Start Building Context →
-            </button>
-          </Link>
-          <Link href="/dashboard">
-            <button className="rounded-none border border-[#1a1a1a] bg-[#111111] px-8 py-3 text-sm font-medium text-[#a0a0a0] hover:text-white hover:border-[#333] transition-colors w-full sm:w-auto">
-              View Dashboard
-            </button>
-          </Link>
+        <div className="grid gap-3 sm:grid-cols-2 mb-8">
+          {score.files.map((file) => (
+            <FileCard key={file.name} file={file} />
+          ))}
         </div>
 
-        <div className="inline-flex items-center gap-3 border border-[#1a1a1a] bg-[#111111] px-5 py-2.5 text-sm text-[#a0a0a0]">
-          <span className="inline-block h-2 w-2 bg-[#22c55e] rounded-full animate-pulse" />
-          <span className="font-mono">48 files · 322 commits · 9 hrs/week</span>
-        </div>
-      </section>
+        {/* Next Steps */}
+        {score.recommendations.length > 0 && (
+          <>
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-4">
+              Next Steps
+            </p>
 
-      {/* ─── PROBLEM ─── */}
-      <section id="problem" className="border-t border-[#1a1a1a] px-6 py-24">
-        <div className="mx-auto max-w-5xl">
-          <div className="text-center mb-16">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a9eff] mb-4 block">
-              THE PROBLEM
-            </span>
-            <h2 className="font-mono text-3xl font-bold sm:text-4xl">
-              Generic in, generic out.
-            </h2>
-          </div>
-
-          <div className="grid gap-0 sm:grid-cols-2 lg:grid-cols-4">
-            {problemItems.map((item) => (
-              <div
-                key={item.title}
-                className="border border-[#1a1a1a] bg-[#111111] p-6 -mt-px -ml-px"
-              >
-                <p className="text-sm text-[#6b6b6b] mb-3 font-mono">{item.title}</p>
-                <p className="text-3xl font-mono font-bold text-red-400 mb-1">
-                  {item.stat}
-                </p>
-                <p className="text-sm text-[#a0a0a0]">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── MECHANISM ─── */}
-      <section id="mechanism" className="border-t border-[#1a1a1a] px-6 py-24">
-        <div className="mx-auto max-w-5xl">
-          <div className="text-center mb-16">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a9eff] mb-4 block">
-              THE MECHANISM
-            </span>
-            <h2 className="font-mono text-3xl font-bold sm:text-4xl">
-              Extract → Codify → Generate → Compound
-            </h2>
-          </div>
-
-          {/* Terminal window */}
-          <div className="border border-[#1a1a1a] bg-[#111111] overflow-hidden max-w-3xl mx-auto">
-            {/* Title bar */}
-            <div className="flex items-center gap-2 border-b border-[#1a1a1a] px-4 py-3">
-              <span className="h-3 w-3 rounded-full bg-[#ff5f57]" />
-              <span className="h-3 w-3 rounded-full bg-[#febc2e]" />
-              <span className="h-3 w-3 rounded-full bg-[#28c840]" />
-              <span className="ml-4 text-xs text-[#6b6b6b] font-mono">~/business</span>
-            </div>
-
-            {/* Terminal content */}
-            <div className="p-6 font-mono text-sm space-y-6">
-              {mechanismSteps.map((step, i) => (
-                <div key={step.cmd}>
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[#22c55e]">❯</span>
-                    <span className="text-white">codify {step.cmd}</span>
-                    {i === mechanismSteps.length - 1 && <BlinkingCursor />}
-                  </div>
-                  <p className="text-[#6b6b6b] pl-5">{step.desc}</p>
+            <div className="bg-[#111111] border border-[#1a1a1a] p-5 space-y-3">
+              {score.recommendations.map((rec, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <span className="font-mono text-[#22c55e] text-sm shrink-0">❯</span>
+                  <p className="text-sm text-[#a0a0a0]">{rec}</p>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
+          </>
+        )}
+      </div>
 
-      {/* ─── HOW THE APP WORKS ─── */}
-      <section id="app" className="border-t border-[#1a1a1a] px-6 py-24">
-        <div className="mx-auto max-w-5xl">
-          <div className="text-center mb-16">
-            <span className="text-xs font-semibold uppercase tracking-[0.2em] text-[#4a9eff] mb-4 block">
-              THE APP
-            </span>
-            <h2 className="font-mono text-3xl font-bold sm:text-4xl">
-              Three surfaces. One system.
-            </h2>
-          </div>
-
-          <div className="grid gap-0 sm:grid-cols-3">
-            <div className="border border-[#1a1a1a] bg-[#111111] p-8 -ml-px -mt-px">
-              <div className="font-mono text-[#22c55e] text-2xl mb-4">01</div>
-              <h3 className="font-mono text-lg font-bold mb-3">Dashboard</h3>
-              <p className="text-sm text-[#a0a0a0] leading-relaxed">
-                See your entire context system at a glance. Track file completeness,
-                view recent activity, and know exactly where to pick up.
-              </p>
-            </div>
-
-            <div className="border border-[#1a1a1a] bg-[#111111] p-8 -ml-px -mt-px">
-              <div className="font-mono text-[#22c55e] text-2xl mb-4">02</div>
-              <h3 className="font-mono text-lg font-bold mb-3">Interview</h3>
-              <p className="text-sm text-[#a0a0a0] leading-relaxed">
-                Guided questions extract what you know. No blank pages, no overwhelm.
-                One question at a time — your answers become structured reference files.
-              </p>
-            </div>
-
-            <div className="border border-[#1a1a1a] bg-[#111111] p-8 -ml-px -mt-px">
-              <div className="font-mono text-[#22c55e] text-2xl mb-4">03</div>
-              <h3 className="font-mono text-lg font-bold mb-3">Preview</h3>
-              <p className="text-sm text-[#a0a0a0] leading-relaxed">
-                See your reference files rendered in real time. Watch your business
-                context take shape as you answer — soul, offer, audience, voice.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─── CTA ─── */}
-      <section className="border-t border-[#1a1a1a] px-6 py-24">
-        <div className="mx-auto max-w-3xl text-center">
-          <h2 className="font-mono text-3xl font-bold sm:text-4xl mb-6">
-            The window is open.
-            <br />
-            Not for long.
-          </h2>
-          <p className="text-[#a0a0a0] mb-10 max-w-xl mx-auto leading-relaxed">
-            AI is rewriting every industry. The businesses that win are the ones
-            whose context is already codified. Start building yours now.
-          </p>
-          <Link href="/interview/soul">
-            <button className="rounded-none bg-[#4a9eff] px-10 py-4 text-sm font-semibold text-white hover:bg-[#4a9eff]/80 transition-colors">
-              Start Your First Interview →
-            </button>
-          </Link>
-        </div>
-      </section>
-
-      {/* ─── FOOTER ─── */}
-      <footer className="border-t border-[#1a1a1a] px-6 py-8">
-        <div className="mx-auto flex max-w-6xl flex-col sm:flex-row items-center justify-between gap-4">
-          <BrandMark size="text-base" />
-          <p className="text-xs text-[#6b6b6b]">
-            Context compounds. Prompts don&apos;t.
-          </p>
-          <div className="flex items-center gap-6">
-            <Link
-              href="/interview/soul"
-              className="text-xs text-[#6b6b6b] hover:text-white transition-colors"
-            >
-              Start Interview
-            </Link>
-            <Link
-              href="/dashboard"
-              className="text-xs text-[#6b6b6b] hover:text-white transition-colors"
-            >
-              Dashboard
-            </Link>
-          </div>
+      {/* Footer */}
+      <footer className="border-t border-[#1a1a1a] px-6 py-6 mt-auto">
+        <div className="mx-auto max-w-4xl flex items-center justify-between">
+          <span className="font-mono text-xs text-[#6b6b6b]">
+            context &gt; prompts
+          </span>
+          <span className="font-mono text-xs text-[#6b6b6b]">
+            codify.build
+          </span>
         </div>
       </footer>
     </div>
