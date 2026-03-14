@@ -19,7 +19,9 @@ const DEMO_ANSWERS: Record<string, string> = {
 export default function SoulInterviewPage() {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const EMPTY_ANSWERS: Record<string, string> = Object.fromEntries(Object.keys(DEMO_ANSWERS).map(k => [k, ""]));  const [answers, setAnswers] = useState<Record<string, string>>(EMPTY_ANSWERS);
+  const EMPTY_ANSWERS: Record<string, string> = Object.fromEntries(Object.keys(DEMO_ANSWERS).map(k => [k, ""]));
+
+  const [answers, setAnswers] = useState<Record<string, string>>(EMPTY_ANSWERS);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const question = soulQuestions[currentIndex];
