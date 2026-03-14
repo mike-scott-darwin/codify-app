@@ -101,3 +101,89 @@ export const offerQuestions: InterviewQuestion[] = [
     required: true,
   },
 ];
+
+export const audienceQuestions: InterviewQuestion[] = [
+  {
+    id: "audience_who",
+    section: "Who They Are",
+    question: "Who is your ideal client? Describe them as a real person, not a demographic.",
+    placeholder: "They're a... who has been... and they're at the point where...",
+    helpText: "Think of your best client ever. Describe that person.",
+    required: true,
+  },
+  {
+    id: "audience_struggle",
+    section: "What They're Struggling With",
+    question: "What are they dealing with right now that brought them to you?",
+    placeholder: "They're stuck because... Every day they...",
+    helpText: "Use their words, not industry jargon. What do they say when they vent to a friend?",
+    required: true,
+  },
+  {
+    id: "audience_tried",
+    section: "What They've Already Tried",
+    question: "What have they already tried that didn't work?",
+    placeholder: "They've tried... They've paid for... They've spent time on...",
+    helpText: "This is important — it tells AI what NOT to suggest and shows you understand their frustration.",
+    required: true,
+  },
+  {
+    id: "audience_desire",
+    section: "What They Actually Want",
+    question: "In their own words, what do they wish they had?",
+    placeholder: "\"I just want...\" \"If only I could...\"",
+    helpText: "Not what you think they need — what THEY say they want. The gap between these two is your positioning.",
+    required: true,
+  },
+  {
+    id: "audience_objection",
+    section: "Why They Hesitate",
+    question: "What's the main reason they don't buy, even when they want to?",
+    placeholder: "They worry that... They're not sure if...",
+    helpText: "The real objection, not the polite one. What's actually stopping them?",
+    required: true,
+  },
+];
+
+export const voiceQuestions: InterviewQuestion[] = [
+  {
+    id: "voice_tone",
+    section: "Your Tone",
+    question: "How would you describe your tone in 2-3 words?",
+    placeholder: "Direct and warm... Professional but casual... Blunt but caring...",
+    helpText: "Think about how a friend would describe the way you talk about your work.",
+    required: true,
+  },
+  {
+    id: "voice_phrases",
+    section: "Signature Phrases",
+    question: "What phrases or words do you use a lot? What's distinctly 'you'?",
+    placeholder: "I always say... My go-to words are... I tend to open with...",
+    helpText: "These are the verbal fingerprints that make your content sound like YOU wrote it.",
+    required: true,
+  },
+  {
+    id: "voice_never",
+    section: "Words You'd Never Use",
+    question: "What words or phrases would you NEVER say? What makes you cringe?",
+    placeholder: "I'd never say... It sounds too... I hate when people use...",
+    helpText: "This is just as important as what you do say. It keeps AI from making you sound like everyone else.",
+    required: true,
+  },
+  {
+    id: "voice_example",
+    section: "Write Like You Talk",
+    question: "Write a short paragraph about your work — the way you'd actually say it to a friend.",
+    placeholder: "Here's the thing about...",
+    helpText: "Don't try to sound smart or polished. Just talk. This is how AI learns your real voice.",
+    required: true,
+  },
+  {
+    id: "voice_personality",
+    section: "Your Personality",
+    question: "What's your personality like when you're at your best? How do you show up?",
+    placeholder: "I'm the kind of person who... When I'm in my zone I...",
+    helpText: "Are you the calm one? The intense one? The funny one? The straight-shooter? AI needs to know.",
+    required: true,
+  },
+];
