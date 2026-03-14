@@ -2,29 +2,6 @@
 
 import Link from "next/link";
 
-const REFERENCE_FILES = [
-  {
-    name: "soul.md",
-    description: "Your origin story, core beliefs, and mission",
-    interview: "/interview/soul",
-  },
-  {
-    name: "offer.md",
-    description: "What you sell, the transformation, and the proof",
-    interview: "/interview/soul",
-  },
-  {
-    name: "audience.md",
-    description: "Who you serve and what keeps them stuck",
-    interview: "/interview/soul",
-  },
-  {
-    name: "voice.md",
-    description: "How you sound — tone, language, personality",
-    interview: "/interview/soul",
-  },
-];
-
 export default function HomePage() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
@@ -37,82 +14,91 @@ export default function HomePage() {
         </div>
       </nav>
 
-      <div className="mx-auto max-w-3xl px-6 py-16 flex-1">
-        {/* Welcome */}
-        <div className="mb-12">
-          <h1 className="font-mono text-2xl font-bold mb-3">
-            Build your reference files.
-          </h1>
-          <p className="text-[#a0a0a0] leading-relaxed max-w-xl">
-            Answer guided questions about your business. We turn your answers
-            into structured files that make AI understand who you are, what you
-            sell, and how you sound.
-          </p>
-        </div>
-
-        {/* What you'll build */}
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-4">
-          4 core files
+      <div className="mx-auto max-w-3xl px-6 flex-1 flex flex-col justify-center py-16">
+        {/* Headline */}
+        <h1 className="font-mono text-2xl font-bold mb-3">
+          Build your reference files.
+        </h1>
+        <p className="text-[#a0a0a0] leading-relaxed max-w-xl mb-16">
+          Answer guided questions about your business. We turn your answers
+          into structured files that make AI understand who you are, what you
+          sell, and how you sound.
         </p>
 
-        <div className="space-y-3 mb-12">
-          {REFERENCE_FILES.map((file, i) => (
-            <div
-              key={file.name}
-              className="bg-[#111111] border border-[#1a1a1a] px-5 py-4 flex items-center justify-between"
-            >
-              <div className="flex items-center gap-4">
-                <span className="font-mono text-[#22c55e] text-sm">
-                  {file.name}
-                </span>
-                <span className="text-sm text-[#6b6b6b]">
-                  {file.description}
-                </span>
+        {/* Visual process flow */}
+        <div className="mb-16">
+          {/* Step 1 */}
+          <div className="flex items-start gap-5">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 border border-[#4a9eff] flex items-center justify-center">
+                <span className="font-mono text-sm font-bold text-[#4a9eff]">1</span>
               </div>
-              {i === 0 ? (
-                <span className="font-mono text-xs text-[#4a9eff]">
-                  start here →
-                </span>
-              ) : (
-                <span className="font-mono text-xs text-[#333]">
-                  locked
-                </span>
-              )}
+              <div className="w-px h-8 bg-[#1a1a1a]" />
             </div>
-          ))}
-        </div>
+            <div className="pt-2">
+              <p className="font-mono text-sm text-white font-bold mb-1">Answer questions</p>
+              <p className="text-xs text-[#6b6b6b]">7 guided questions about your business — one at a time</p>
+            </div>
+          </div>
 
-        {/* What you'll get */}
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-4">
-          What you get
-        </p>
+          {/* Step 2 */}
+          <div className="flex items-start gap-5">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 border border-[#1a1a1a] flex items-center justify-center">
+                <span className="font-mono text-sm font-bold text-[#6b6b6b]">2</span>
+              </div>
+              <div className="w-px h-8 bg-[#1a1a1a]" />
+            </div>
+            <div className="pt-2">
+              <p className="font-mono text-sm text-white font-bold mb-1">Preview your file</p>
+              <p className="text-xs text-[#6b6b6b]">See your answers transformed into a structured reference file</p>
+            </div>
+          </div>
 
-        <div className="bg-[#111111] border border-[#1a1a1a] p-5 mb-12">
-          <div className="space-y-3 text-sm text-[#a0a0a0]">
-            <div className="flex items-start gap-3">
-              <span className="font-mono text-[#22c55e] shrink-0">❯</span>
-              <span>Structured reference files your AI tools can read</span>
+          {/* Step 3 */}
+          <div className="flex items-start gap-5">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 border border-[#1a1a1a] flex items-center justify-center">
+                <span className="font-mono text-sm font-bold text-[#6b6b6b]">3</span>
+              </div>
+              <div className="w-px h-8 bg-[#1a1a1a]" />
             </div>
-            <div className="flex items-start gap-3">
-              <span className="font-mono text-[#22c55e] shrink-0">❯</span>
-              <span>A Context Power Score showing how well AI knows your business</span>
+            <div className="pt-2">
+              <p className="font-mono text-sm text-white font-bold mb-1">Get your score</p>
+              <p className="text-xs text-[#6b6b6b]">See how well AI understands your business — and what to build next</p>
             </div>
-            <div className="flex items-start gap-3">
-              <span className="font-mono text-[#22c55e] shrink-0">❯</span>
-              <span>Outputs that sound like you from the first draft</span>
+          </div>
+
+          {/* Step 4 */}
+          <div className="flex items-start gap-5">
+            <div className="flex flex-col items-center">
+              <div className="w-10 h-10 border border-[#1a1a1a] flex items-center justify-center">
+                <span className="font-mono text-sm font-bold text-[#6b6b6b]">4</span>
+              </div>
+            </div>
+            <div className="pt-2">
+              <p className="font-mono text-sm text-white font-bold mb-1">Repeat for all 4 files</p>
+              <div className="flex items-center gap-3 mt-1.5">
+                <span className="font-mono text-xs text-[#22c55e]">soul.md</span>
+                <span className="font-mono text-xs text-[#6b6b6b]">→</span>
+                <span className="font-mono text-xs text-[#6b6b6b]">offer.md</span>
+                <span className="font-mono text-xs text-[#6b6b6b]">→</span>
+                <span className="font-mono text-xs text-[#6b6b6b]">audience.md</span>
+                <span className="font-mono text-xs text-[#6b6b6b]">→</span>
+                <span className="font-mono text-xs text-[#6b6b6b]">voice.md</span>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* CTA */}
+        {/* Single CTA */}
         <Link href="/interview/soul">
-          <button className="font-mono text-sm font-bold bg-[#22c55e] text-black px-8 py-3 hover:brightness-110 transition-all w-full sm:w-auto">
-            Start with soul.md →
+          <button className="font-mono text-sm font-bold bg-[#22c55e] text-black px-10 py-3.5 hover:brightness-110 transition-all">
+            Start →
           </button>
         </Link>
-
         <p className="font-mono text-xs text-[#6b6b6b] mt-3">
-          7 questions · takes about 5 minutes
+          Takes about 5 minutes
         </p>
       </div>
 
