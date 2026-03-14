@@ -100,11 +100,30 @@ const FILE_CONFIGS: FileConfig[] = [
   },
 ];
 
+function buildUseWithAIBlock(fileContents: Record<string, string>): string {
+  const files = Object.entries(fileContents);
+  if (files.length === 0) return "";
+
+  const fileBlock = files
+    .map(([name, content]) => `--- ${name} ---\n${content}`)
+    .join("\n\n");
+
+  return `Before responding to any request, read these reference files. They define who I am, what I sell, who I serve, and how I sound. Every response should be informed by this context.
+
+${fileBlock}
+
+---
+
+Now you know my business. Use this context for everything I ask. Match my voice. Reference my offer. Speak to my audience. Never sound generic.`;
+}
+
 export default function AssessmentPage() {
   const [score, setScore] = useState<ContextScore | null>(null);
   const [fileContents, setFileContents] = useState<Record<string, string>>({});
   const [completedFiles, setCompletedFiles] = useState<string[]>([]);
   const [missingFiles, setMissingFiles] = useState<FileConfig[]>([]);
+  const [showUseWithAI, setShowUseWithAI] = useState(false);
+  const [copiedAI, setCopiedAI] = useState(false);
 
   useEffect(() => {
     const contents: Record<string, string> = {};
@@ -143,6 +162,13 @@ export default function AssessmentPage() {
 
   const completedCount = score.files.filter((f) => f.status !== "missing").length;
   const allComplete = missingFiles.length === 0;
+  const aiBlock = buildUseWithAIBlock(fileContents);
+
+  const copyAIBlock = async () => {
+    await navigator.clipboard.writeText(aiBlock);
+    setCopiedAI(true);
+    setTimeout(() => setCopiedAI(false), 3000);
+  };
 
   const downloadSingleFile = (name: string, content: string) => {
     const blob = new Blob([content], { type: "text/markdown" });
@@ -166,7 +192,7 @@ export default function AssessmentPage() {
       <nav className="border-b border-[#1a1a1a] px-6 py-4">
         <div className="mx-auto flex max-w-4xl items-center justify-between">
           <Link href="/" className="font-mono text-lg text-white">
-            <span className="text-[#22c55e]">❯</span> codify
+            <span className="text-[#22c55e]">&#10095;</span> codify
           </Link>
           <span className="font-mono text-xs uppercase tracking-[0.15em] text-[#4a9eff]">
             Assessment
@@ -196,6 +222,63 @@ export default function AssessmentPage() {
             {completedCount} of {score.files.length} core files built
           </p>
         </div>
+
+        {/* USE WITH AI — The killer feature */}
+        {completedCount > 0 && (
+          <div className="mb-10">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#22c55e] mb-4">
+              Use with Any AI
+            </p>
+            <div className="bg-[#111111] border border-[#1a1a1a] p-8">
+              <p className="font-mono text-sm text-white mb-2">
+                Paste this into any AI chat — Claude, ChatGPT, Gemini, whatever you use.
+              </p>
+              <p className="text-sm text-[#6b6b6b] mb-6">
+                This single block contains all your reference files. The AI will read it
+                and produce output that matches your business — your voice, your offer,
+                your audience. Works everywhere.
+              </p>
+
+              {!showUseWithAI ? (
+                <button
+                  onClick={() => setShowUseWithAI(true)}
+                  className="font-mono text-sm font-bold px-6 py-3 hover:brightness-110 transition-all"
+                  style={{ backgroundColor: "#22c55e", color: "#000000", borderRadius: 0 }}
+                >
+                  Show AI Context Block
+                </button>
+              ) : (
+                <>
+                  <div
+                    className="bg-[#0a0a0a] border border-[#1a1a1a] p-4 mb-4 max-h-64 overflow-y-auto"
+                  >
+                    <pre className="whitespace-pre-wrap font-mono text-xs text-[#a0a0a0] leading-relaxed">
+                      {aiBlock}
+                    </pre>
+                  </div>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={copyAIBlock}
+                      className="font-mono text-sm font-bold px-6 py-3 hover:brightness-110 transition-all"
+                      style={{ backgroundColor: "#22c55e", color: "#000000", borderRadius: 0 }}
+                    >
+                      {copiedAI ? "Copied!" : "Copy to Clipboard"}
+                    </button>
+                    <button
+                      onClick={() => setShowUseWithAI(false)}
+                      className="font-mono text-sm px-4 py-3 border border-[#1a1a1a] text-[#6b6b6b] hover:text-white transition-colors"
+                    >
+                      Hide
+                    </button>
+                  </div>
+                  <p className="font-mono text-xs text-[#6b6b6b] mt-4">
+                    Works with: Claude &middot; ChatGPT &middot; Gemini &middot; Grok &middot; Any AI
+                  </p>
+                </>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* File breakdown */}
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-4">
@@ -246,7 +329,7 @@ export default function AssessmentPage() {
           })}
         </div>
 
-        {/* Build Next File / Congratulations */}
+        {/* Build Next File / All Complete */}
         {allComplete ? (
           <>
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#22c55e] mb-4">
@@ -322,7 +405,7 @@ export default function AssessmentPage() {
             <div className="bg-[#111111] border border-[#1a1a1a] p-5 space-y-3 mb-10">
               {score.recommendations.map((rec, i) => (
                 <div key={i} className="flex items-start gap-3">
-                  <span className="font-mono text-[#22c55e] text-sm shrink-0">❯</span>
+                  <span className="font-mono text-[#22c55e] text-sm shrink-0">&#10095;</span>
                   <p className="text-sm text-[#a0a0a0]">{rec}</p>
                 </div>
               ))}
@@ -346,7 +429,7 @@ export default function AssessmentPage() {
           {!allComplete && (
             <Link href={missingFiles[0]?.interviewPath || "/"}>
               <button className="font-mono text-sm font-bold bg-[#22c55e] text-black px-6 py-3 hover:brightness-110 transition-all w-full sm:w-auto">
-                Build next file →
+                Build next file &#8594;
               </button>
             </Link>
           )}
