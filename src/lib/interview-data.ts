@@ -1,0 +1,103 @@
+import { InterviewQuestion } from "./types";
+
+export const soulQuestions: InterviewQuestion[] = [
+  {
+    id: "origin",
+    section: "Origin Story",
+    question: "What made you start this business? What moment or frustration pushed you to do this?",
+    placeholder: "I was working at... and I realized that...",
+    helpText: "The real story, not the polished version. What actually happened.",
+    required: true,
+  },
+  {
+    id: "problem",
+    section: "The Problem You Solve",
+    question: "What problem do your clients have that keeps them up at night?",
+    placeholder: "They're struggling with... and it makes them feel...",
+    helpText: "Describe it the way your clients would say it, not how a marketer would write it.",
+    required: true,
+  },
+  {
+    id: "belief",
+    section: "Core Belief",
+    question: "What do you believe about your industry that most people get wrong?",
+    placeholder: "Most people think... but the truth is...",
+    helpText: "This is your contrarian edge. What do you know that others don't?",
+    required: true,
+  },
+  {
+    id: "transformation",
+    section: "The Transformation",
+    question: "When a client succeeds with you, what does their life look like after?",
+    placeholder: "They go from... to...",
+    helpText: "Paint the before and after. Be specific — what changes day-to-day?",
+    required: true,
+  },
+  {
+    id: "why_you",
+    section: "Why You",
+    question: "Why are YOU the right person to solve this? What's your unfair advantage?",
+    placeholder: "I've spent X years... I've personally...",
+    helpText: "This isn't about credentials. It's about lived experience.",
+    required: true,
+  },
+  {
+    id: "values",
+    section: "Non-Negotiables",
+    question: "What will you NEVER do in your business, no matter what?",
+    placeholder: "I will never... because...",
+    helpText: "These are your lines in the sand. What separates you from the people you don't want to be?",
+    required: true,
+  },
+  {
+    id: "mission",
+    section: "The Mission",
+    question: "If your business succeeds beyond your wildest dreams, what changes in the world?",
+    placeholder: "More people would... The industry would...",
+    helpText: "Think bigger than revenue. What's the ripple effect?",
+    required: false,
+  },
+];
+
+export const offerQuestions: InterviewQuestion[] = [
+  {
+    id: "offer_name",
+    section: "The Offer",
+    question: "What do you sell? Give it a name and describe it in one sentence.",
+    placeholder: "It's called... and it helps people...",
+    helpText: "If you had 10 seconds in an elevator, what would you say?",
+    required: true,
+  },
+  {
+    id: "offer_outcome",
+    section: "The Outcome",
+    question: "What specific result does someone get from buying this?",
+    placeholder: "In X weeks/months, they will...",
+    helpText: "Be concrete. 'Feel better' is weak. 'Land 3 new clients' is strong.",
+    required: true,
+  },
+  {
+    id: "offer_price",
+    section: "Price & Model",
+    question: "How much does it cost and how is it delivered?",
+    placeholder: "$X per month / one-time. Delivered via...",
+    helpText: "Include the delivery method — 1:1, group, course, community, etc.",
+    required: true,
+  },
+  {
+    id: "offer_audience",
+    section: "Who It's For",
+    question: "Describe the PERFECT buyer in one sentence. Who gets the most value?",
+    placeholder: "This is for someone who...",
+    helpText: "Not everyone. The specific person who's ready and needs this NOW.",
+    required: true,
+  },
+  {
+    id: "offer_differentiator",
+    section: "Why This vs. Alternatives",
+    question: "What makes your offer different from the 10 other options they could choose?",
+    placeholder: "Unlike [competitors], we...",
+    helpText: "If the answer is 'nothing,' that's the real problem to solve.",
+    required: true,
+  },
+];
