@@ -1,15 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { 
-  FileText, ArrowRight, AlertCircle, CheckCircle2, 
-  Clock, Sparkles, BarChart3, ArrowLeft
-} from "lucide-react";
 import Link from "next/link";
 import { calculateContextScore } from "@/lib/scoring";
 import type { ContextScore, ReferenceFile } from "@/lib/types";
@@ -38,6 +29,58 @@ const DEMO_FILES = [
   },
 ];
 
+function terminalBar(percentage: number, length: number = 20): string {
+  const filled = Math.round((percentage / 100) * length);
+  const empty = length - filled;
+  return "█".repeat(filled) + "░".repeat(empty);
+}
+
+const STATUS_CONFIG: Record<
+  ReferenceFile["status"],
+  { color: string; label: string }
+> = {
+  missing: { color: "text-[#ef4444]", label: "MISSING" },
+  skeleton: { color: "text-[#f59e0b]", label: "SKELETON" },
+  draft: { color: "text-[#f59e0b]", label: "DRAFT" },
+  solid: { color: "text-[#4a9eff]", label: "SOLID" },
+  strong: { color: "text-[#22c55e]", label: "STRONG" },
+};
+
+function FileCard({ file }: { file: ReferenceFile }) {
+  const config = STATUS_CONFIG[file.status];
+  const percentage = Math.round((file.score / file.maxScore) * 100);
+
+  return (
+    <div className="bg-[#111111] border border-[#1a1a1a] p-5">
+      <div className="flex items-center justify-between mb-3">
+        <span className="font-mono text-[#22c55e] text-sm">{file.name}</span>
+        <span className={`font-mono text-xs uppercase tracking-[0.1em] ${config.color}`}>
+          {config.label}
+        </span>
+      </div>
+
+      <div className="flex items-center justify-between mb-2">
+        <span className="font-mono text-xs text-[#6b6b6b]">
+          {file.wordCount} words
+        </span>
+        <span className="font-mono text-xs text-[#a0a0a0]">
+          {file.score}/{file.maxScore} pts
+        </span>
+      </div>
+
+      <div className="font-mono text-xs text-[#4a9eff] tracking-wider mb-2">
+        {terminalBar(percentage, 24)}
+      </div>
+
+      {file.lastModified && (
+        <p className="font-mono text-[10px] text-[#6b6b6b]">
+          modified {file.lastModified}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export default function DashboardPage() {
   const [score, setScore] = useState<ContextScore | null>(null);
 
@@ -49,120 +92,107 @@ export default function DashboardPage() {
   if (!score) return null;
 
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="border-b border-border/40 px-6 py-4">
-        <div className="mx-auto flex max-w-6xl items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="size-3.5" />
-            Back
+    <div className="min-h-screen bg-[#0a0a0a] text-white">
+      {/* Nav */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-[#0a0a0a] border-b border-[#1a1a1a] px-6 py-4">
+        <div className="mx-auto flex max-w-5xl items-center justify-between">
+          <Link href="/" className="font-mono text-lg text-white hover:text-[#a0a0a0] transition-colors">
+            <span className="text-[#4a9eff]">❯</span> codify
           </Link>
-          <span className="text-xl font-bold tracking-tight">Codify</span>
-          <div className="w-16" />
+          <div className="flex items-center gap-6">
+            <Link
+              href="/"
+              className="font-mono text-xs uppercase tracking-[0.15em] text-[#6b6b6b] hover:text-[#a0a0a0] transition-colors"
+            >
+              Home
+            </Link>
+            <span className="font-mono text-xs uppercase tracking-[0.15em] text-[#4a9eff]">
+              Dashboard
+            </span>
+          </div>
         </div>
       </nav>
 
-      <div className="mx-auto max-w-4xl px-6 py-12">
+      <div className="mx-auto max-w-5xl px-6 pt-24 pb-20">
         {/* Context Power Score */}
-        <div className="mb-10 text-center">
-          <p className="mb-2 text-sm font-medium uppercase tracking-wider text-muted-foreground">
+        <div className="mb-12">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-6">
             Context Power Score
           </p>
-          <div className="mb-3 text-7xl font-bold tracking-tight">
-            {score.percentage}
-            <span className="text-3xl text-muted-foreground">%</span>
+
+          <div className="bg-[#111111] border border-[#1a1a1a] p-8">
+            <div className="flex items-baseline gap-4 mb-4">
+              <span className="font-mono text-6xl font-bold text-white tabular-nums">
+                {score.percentage}
+              </span>
+              <span className="font-mono text-2xl text-[#6b6b6b]">%</span>
+              <span className="font-mono text-2xl text-[#a0a0a0] ml-2">
+                grade {score.grade}
+              </span>
+            </div>
+
+            <div className="font-mono text-sm text-[#4a9eff] tracking-wider mb-3">
+              {terminalBar(score.percentage, 40)}
+            </div>
+
+            <p className="font-mono text-xs text-[#6b6b6b]">
+              {score.total} / {score.maxTotal} points across {score.files.length} core reference files
+            </p>
           </div>
-          <Badge variant={score.percentage >= 60 ? "default" : "secondary"} className="text-sm">
-            Grade {score.grade}
-          </Badge>
-          <div className="mx-auto mt-4 max-w-md">
-            <Progress value={score.percentage} className="h-3" />
-          </div>
-          <p className="mt-3 text-sm text-muted-foreground">
-            {score.total} / {score.maxTotal} points across {score.files.length} core files
+        </div>
+
+        {/* Reference File Cards */}
+        <div className="mb-12">
+          <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-6">
+            Reference Files
           </p>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {score.files.map((file) => (
+              <FileCard key={file.name} file={file} />
+            ))}
+          </div>
         </div>
-
-        <Separator className="mb-10" />
-
-        {/* File Cards */}
-        <h2 className="mb-6 text-lg font-semibold flex items-center gap-2">
-          <FileText className="size-5" />
-          Reference Files
-        </h2>
-        <div className="grid gap-4 sm:grid-cols-2">
-          {score.files.map((file) => (
-            <FileCard key={file.name} file={file} />
-          ))}
-        </div>
-
-        <Separator className="my-10" />
 
         {/* Recommendations */}
         {score.recommendations.length > 0 && (
           <div>
-            <h2 className="mb-6 text-lg font-semibold flex items-center gap-2">
-              <Sparkles className="size-5" />
-              Recommended Next Steps
-            </h2>
-            <div className="space-y-3">
-              {score.recommendations.map((rec, i) => (
-                <div key={i} className="flex items-start gap-3 rounded-lg border border-border/60 bg-card p-4">
-                  <AlertCircle className="mt-0.5 size-4 shrink-0 text-amber-500" />
-                  <div className="flex-1">
-                    <p className="text-sm">{rec}</p>
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-6">
+              Recommendations
+            </p>
+
+            <div className="bg-[#111111] border border-[#1a1a1a] p-6">
+              <div className="space-y-3">
+                {score.recommendations.map((rec, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <span className="font-mono text-[#4a9eff] text-sm shrink-0">❯</span>
+                    <p className="text-sm text-[#a0a0a0] flex-1">{rec}</p>
+                    <Link
+                      href="/interview/soul"
+                      className="font-mono text-xs text-[#4a9eff] hover:text-white transition-colors shrink-0 border border-[#1a1a1a] px-3 py-1 hover:border-[#4a9eff]"
+                    >
+                      start →
+                    </Link>
                   </div>
-                  <Link href={`/interview/soul`}>
-                    <Button variant="ghost" size="sm" className="shrink-0">
-                      Start
-                      <ArrowRight className="ml-1 size-3" />
-                    </Button>
-                  </Link>
-                </div>
-              ))}
+                ))}
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-[#1a1a1a]">
+                <p className="font-mono text-xs text-[#6b6b6b]">
+                  <span className="text-[#4a9eff]">❯</span> run{" "}
+                  <Link
+                    href="/interview/soul"
+                    className="text-[#22c55e] hover:underline"
+                  >
+                    /interview/soul
+                  </Link>{" "}
+                  to build your first reference file
+                </p>
+              </div>
             </div>
           </div>
         )}
       </div>
     </div>
-  );
-}
-
-function FileCard({ file }: { file: ReferenceFile }) {
-  const statusConfig = {
-    missing: { color: "text-red-400", bg: "bg-red-500/10", icon: AlertCircle, label: "Missing" },
-    skeleton: { color: "text-amber-400", bg: "bg-amber-500/10", icon: Clock, label: "Skeleton" },
-    draft: { color: "text-yellow-400", bg: "bg-yellow-500/10", icon: FileText, label: "Draft" },
-    solid: { color: "text-blue-400", bg: "bg-blue-500/10", icon: BarChart3, label: "Solid" },
-    strong: { color: "text-green-400", bg: "bg-green-500/10", icon: CheckCircle2, label: "Strong" },
-  };
-
-  const config = statusConfig[file.status];
-  const Icon = config.icon;
-  const percentage = Math.round((file.score / file.maxScore) * 100);
-
-  return (
-    <Card className="border-border/60">
-      <CardHeader className="pb-3">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-base font-medium">{file.name}</CardTitle>
-          <div className={`flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${config.bg} ${config.color}`}>
-            <Icon className="size-3" />
-            {config.label}
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="mb-2 flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">{file.wordCount} words</span>
-          <span className="font-medium">{file.score}/{file.maxScore} pts</span>
-        </div>
-        <Progress value={percentage} className="h-2" />
-        {file.lastModified && (
-          <p className="mt-2 text-xs text-muted-foreground">
-            Last updated: {file.lastModified}
-          </p>
-        )}
-      </CardContent>
-    </Card>
   );
 }

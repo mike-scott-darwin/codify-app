@@ -1,11 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Copy, Check, Download, BarChart3 } from "lucide-react";
 import Link from "next/link";
 import { soulQuestions } from "@/lib/interview-data";
 
@@ -72,10 +67,31 @@ function generateSoulFile(answers: Record<string, string>): string {
   return lines.join("\n");
 }
 
+function TerminalHeader({ title, color }: { title: string; color: string }) {
+  return (
+    <div
+      className="flex items-center gap-3 px-4 py-2.5"
+      style={{ borderBottom: "1px solid #1a1a1a" }}
+    >
+      <div className="flex items-center gap-1.5">
+        <span className="inline-block h-3 w-3 rounded-full" style={{ backgroundColor: "#ff5f57" }} />
+        <span className="inline-block h-3 w-3 rounded-full" style={{ backgroundColor: "#febc2e" }} />
+        <span className="inline-block h-3 w-3 rounded-full" style={{ backgroundColor: "#28c840" }} />
+      </div>
+      <span
+        className="font-mono text-xs font-medium uppercase"
+        style={{ letterSpacing: "0.2em", color }}
+      >
+        {title}
+      </span>
+    </div>
+  );
+}
+
 export default function SoulPreviewPage() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [copied, setCopied] = useState(false);
-  const [view, setView] = useState<"split" | "raw" | "file">("split");
+  const [view, setView] = useState<"split" | "answers" | "file">("split");
 
   useEffect(() => {
     const stored = sessionStorage.getItem("codify-interview-soul");
@@ -86,7 +102,9 @@ export default function SoulPreviewPage() {
 
   const soulFile = generateSoulFile(answers);
   const wordCount = soulFile.split(/\s+/).filter(Boolean).length;
-  const answeredCount = Object.values(answers).filter((a) => a.trim().length > 0).length;
+  const answeredCount = Object.values(answers).filter(
+    (a) => a.trim().length > 0
+  ).length;
 
   const copyToClipboard = async () => {
     await navigator.clipboard.writeText(soulFile);
@@ -104,131 +122,163 @@ export default function SoulPreviewPage() {
     URL.revokeObjectURL(url);
   };
 
+  const viewOptions = ["split", "answers", "file"] as const;
+  const viewLabels = { split: "Split", answers: "Answers", file: "File" };
+
   return (
-    <div className="min-h-screen bg-background">
-      <nav className="border-b border-border/40 px-6 py-4">
+    <div className="min-h-screen" style={{ backgroundColor: "#0a0a0a" }}>
+      {/* Top bar */}
+      <nav className="px-6 py-4" style={{ borderBottom: "1px solid #1a1a1a" }}>
         <div className="mx-auto flex max-w-6xl items-center justify-between">
           <Link
             href="/interview/soul"
-            className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+            className="font-mono text-sm transition-colors hover:text-white"
+            style={{ color: "#a0a0a0" }}
           >
-            <ArrowLeft className="size-3.5" />
-            Back to Interview
+            ← Back to Interview
           </Link>
-          <span className="text-xl font-bold tracking-tight">Codify</span>
-          <Link href="/dashboard">
-            <Button variant="outline" size="sm" className="gap-1.5">
-              <BarChart3 className="size-3.5" />
-              Dashboard
-            </Button>
-          </Link>
+
+          <span className="font-mono text-sm text-white">
+            <span style={{ color: "#22c55e" }}>❯</span> codify
+          </span>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={copyToClipboard}
+              className="font-mono text-sm px-4 py-2 transition-colors"
+              style={{
+                border: "1px solid #1a1a1a",
+                borderRadius: 0,
+                color: copied ? "#22c55e" : "#a0a0a0",
+                backgroundColor: "transparent",
+              }}
+            >
+              {copied ? "Copied ✓" : "Copy"}
+            </button>
+            <button
+              onClick={downloadFile}
+              className="font-mono text-sm font-bold px-4 py-2"
+              style={{
+                backgroundColor: "#22c55e",
+                color: "#000000",
+                borderRadius: 0,
+              }}
+            >
+              Download soul.md
+            </button>
+          </div>
         </div>
       </nav>
 
       <div className="mx-auto max-w-6xl px-6 py-8">
-        {/* Header */}
+        {/* View toggle + stats */}
         <div className="mb-6 flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">Your Soul File</h1>
-            <p className="text-sm text-muted-foreground">
-              {answeredCount} questions answered &middot; {wordCount} words generated
-            </p>
+          <div className="flex" style={{ border: "1px solid #1a1a1a" }}>
+            {viewOptions.map((v) => (
+              <button
+                key={v}
+                onClick={() => setView(v)}
+                className="font-mono text-xs font-medium px-4 py-2 transition-colors"
+                style={{
+                  backgroundColor: view === v ? "#111111" : "transparent",
+                  color: view === v ? "#ffffff" : "#6b6b6b",
+                  borderRadius: 0,
+                }}
+              >
+                {viewLabels[v]}
+              </button>
+            ))}
           </div>
-          <div className="flex items-center gap-2">
-            <div className="flex rounded-lg border border-border/60">
-              <button
-                onClick={() => setView("split")}
-                className={`px-3 py-1.5 text-xs font-medium ${view === "split" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"} rounded-l-lg`}
-              >
-                Split
-              </button>
-              <button
-                onClick={() => setView("raw")}
-                className={`px-3 py-1.5 text-xs font-medium ${view === "raw" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-              >
-                Answers
-              </button>
-              <button
-                onClick={() => setView("file")}
-                className={`px-3 py-1.5 text-xs font-medium ${view === "file" ? "bg-muted text-foreground" : "text-muted-foreground hover:text-foreground"} rounded-r-lg`}
-              >
-                File
-              </button>
-            </div>
-            <Button variant="outline" size="sm" onClick={copyToClipboard} className="gap-1.5">
-              {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
-              {copied ? "Copied" : "Copy"}
-            </Button>
-            <Button size="sm" onClick={downloadFile} className="gap-1.5">
-              <Download className="size-3.5" />
-              Download soul.md
-            </Button>
-          </div>
+
+          <span className="font-mono text-xs" style={{ color: "#6b6b6b" }}>
+            {answeredCount} questions answered · {wordCount} words generated
+          </span>
         </div>
 
         {/* Content */}
         {view === "split" ? (
           <div className="grid gap-6 lg:grid-cols-2">
-            {/* Raw answers */}
-            <div>
-              <div className="mb-3 flex items-center gap-2">
-                <Badge variant="secondary">Your Answers</Badge>
+            {/* Left: Answers */}
+            <div style={{ border: "1px solid #1a1a1a", backgroundColor: "#111111" }}>
+              <TerminalHeader title="Your Answers" color="#4a9eff" />
+              <div className="p-6 space-y-6">
+                {soulQuestions.map((q) => {
+                  const answer = answers[q.id];
+                  if (!answer) return null;
+                  return (
+                    <div key={q.id}>
+                      <p
+                        className="font-mono text-xs font-medium uppercase mb-1.5"
+                        style={{ letterSpacing: "0.2em", color: "#6b6b6b" }}
+                      >
+                        {q.section}
+                      </p>
+                      <p className="font-mono text-sm leading-relaxed text-white">
+                        {answer}
+                      </p>
+                    </div>
+                  );
+                })}
               </div>
-              <Card className="border-border/60 p-6">
-                <div className="space-y-6">
-                  {soulQuestions.map((q) => {
-                    const answer = answers[q.id];
-                    if (!answer) return null;
-                    return (
-                      <div key={q.id}>
-                        <p className="mb-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                          {q.section}
-                        </p>
-                        <p className="text-sm leading-relaxed">{answer}</p>
-                      </div>
-                    );
-                  })}
-                </div>
-              </Card>
             </div>
 
-            {/* Generated file */}
-            <div>
-              <div className="mb-3 flex items-center gap-2">
-                <Badge>soul.md</Badge>
-              </div>
-              <Card className="border-border/60 p-6">
-                <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-muted-foreground">
+            {/* Right: Generated file */}
+            <div style={{ border: "1px solid #1a1a1a", backgroundColor: "#111111" }}>
+              <TerminalHeader title="soul.md" color="#22c55e" />
+              <div className="p-6">
+                <pre
+                  className="whitespace-pre-wrap font-mono text-sm leading-relaxed"
+                  style={{ color: "#a0a0a0" }}
+                >
                   {soulFile}
                 </pre>
-              </Card>
+              </div>
             </div>
           </div>
-        ) : view === "raw" ? (
-          <Card className="border-border/60 p-6">
-            <div className="space-y-6">
+        ) : view === "answers" ? (
+          <div style={{ border: "1px solid #1a1a1a", backgroundColor: "#111111" }}>
+            <TerminalHeader title="Your Answers" color="#4a9eff" />
+            <div className="p-6 space-y-6">
               {soulQuestions.map((q) => {
                 const answer = answers[q.id];
                 if (!answer) return null;
                 return (
                   <div key={q.id}>
-                    <p className="mb-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    <p
+                      className="font-mono text-xs font-medium uppercase mb-1"
+                      style={{ letterSpacing: "0.2em", color: "#6b6b6b" }}
+                    >
                       {q.section}
                     </p>
-                    <p className="text-sm font-medium mb-1">{q.question}</p>
-                    <p className="text-sm leading-relaxed text-muted-foreground">{answer}</p>
-                    <Separator className="mt-4" />
+                    <p className="font-mono text-sm font-medium text-white mb-1">
+                      {q.question}
+                    </p>
+                    <p
+                      className="font-mono text-sm leading-relaxed"
+                      style={{ color: "#a0a0a0" }}
+                    >
+                      {answer}
+                    </p>
+                    <div
+                      className="mt-4"
+                      style={{ borderBottom: "1px solid #1a1a1a" }}
+                    />
                   </div>
                 );
               })}
             </div>
-          </Card>
+          </div>
         ) : (
-          <Card className="border-border/60 p-6">
-            <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed">
-              {soulFile}
-            </pre>
-          </Card>
+          <div style={{ border: "1px solid #1a1a1a", backgroundColor: "#111111" }}>
+            <TerminalHeader title="soul.md" color="#22c55e" />
+            <div className="p-6">
+              <pre
+                className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-white"
+              >
+                {soulFile}
+              </pre>
+            </div>
+          </div>
         )}
       </div>
     </div>
