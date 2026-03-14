@@ -242,7 +242,26 @@ export default function SoulPreviewPage() {
             <div style={{ border: "1px solid #1a1a1a", backgroundColor: "#111111" }}>
               <TerminalHeader title="soul.md" color="#22c55e" />
               <div className="p-6">
-                <pre
+                {isLoading && (
+                    <div className="mb-4 p-4 border border-[#8b5cf6]" style={{ backgroundColor: "#111111" }}>
+                      <p className="font-mono text-sm animate-pulse" style={{ color: "#8b5cf6" }}>
+                        Enriching with AI...
+                      </p>
+                    </div>
+                  )}
+                  {enrichError && (
+                    <div className="mb-4 p-4 border border-[#ef4444]" style={{ backgroundColor: "#111111" }}>
+                      <p className="font-mono text-xs" style={{ color: "#ef4444" }}>
+                        Error: {enrichError}
+                      </p>
+                    </div>
+                  )}
+                  {isEnriched && (
+                    <p className="font-mono text-xs mb-4" style={{ color: "#8b5cf6" }}>
+                      Enriched with AI
+                    </p>
+                  )}
+                  <pre
                   className="whitespace-pre-wrap font-mono text-sm leading-relaxed"
                   style={{ color: "#a0a0a0" }}
                 >
