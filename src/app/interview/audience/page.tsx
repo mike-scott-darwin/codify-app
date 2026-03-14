@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { audienceQuestions } from "@/lib/interview-data";
 import { useRouter } from "next/navigation";
+import { saveAnswers } from "@/lib/db";
 
 // Client Ready demo answers — pre-populated so you can see the full output
 const DEMO_ANSWERS: Record<string, string> = {
@@ -40,6 +41,7 @@ export default function AudienceInterviewPage() {
     setTimeout(() => {
       if (isLast) {
         sessionStorage.setItem("codify-interview-audience", JSON.stringify(answers));
+        saveAnswers("audience", answers);
         router.push("/preview/audience");
       } else {
         setCurrentIndex((i) => i + 1);

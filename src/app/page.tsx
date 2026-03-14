@@ -1,16 +1,33 @@
 "use client";
 
 import Link from "next/link";
+import { useAuth } from "@/lib/auth-context";
 
 export default function HomePage() {
+  const { user, loading } = useAuth();
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
       {/* Nav */}
       <nav className="border-b border-[#1a1a1a] px-6 py-4">
         <div className="mx-auto flex max-w-3xl items-center justify-between">
           <span className="font-mono text-lg text-white">
-            <span className="text-[#22c55e]">❯</span> codify
+            <span className="text-[#22c55e]">&#10095;</span> codify
           </span>
+          {!loading && (
+            user ? (
+              <span className="font-mono text-xs text-[#6b6b6b]">
+                {user.email}
+              </span>
+            ) : (
+              <Link
+                href="/login"
+                className="font-mono text-xs text-[#6b6b6b] hover:text-[#a0a0a0] transition-colors"
+              >
+                Sign in
+              </Link>
+            )
+          )}
         </div>
       </nav>
 
@@ -20,8 +37,8 @@ export default function HomePage() {
           Build your business reference files.
         </h1>
         <p className="text-[#a0a0a0] leading-relaxed max-w-xl mb-16">
-          Right now, every time you use AI you re-explain your business from scratch. 
-          These reference files fix that — once built, any AI tool reads them first 
+          Right now, every time you use AI you re-explain your business from scratch.
+          These reference files fix that &mdash; once built, any AI tool reads them first
           and generates outputs that actually sound like you.
         </p>
 
@@ -37,7 +54,7 @@ export default function HomePage() {
             </div>
             <div className="pt-2">
               <p className="font-mono text-sm text-white font-bold mb-1">Answer questions about your business</p>
-              <p className="text-xs text-[#6b6b6b]">Guided prompts pull out what makes you different — no blank page</p>
+              <p className="text-xs text-[#6b6b6b]">Guided prompts pull out what makes you different &mdash; no blank page</p>
             </div>
           </div>
 
@@ -65,7 +82,7 @@ export default function HomePage() {
             </div>
             <div className="pt-2">
               <p className="font-mono text-sm text-white font-bold mb-1">See your Context Power Score</p>
-              <p className="text-xs text-[#6b6b6b]">Measures how well AI understands your business — and where the gaps are</p>
+              <p className="text-xs text-[#6b6b6b]">Measures how well AI understands your business &mdash; and where the gaps are</p>
             </div>
           </div>
 
@@ -81,19 +98,19 @@ export default function HomePage() {
               <div className="space-y-2">
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-xs text-[#22c55e] w-24">soul.md</span>
-                  <span className="text-xs text-[#6b6b6b]">Why you exist — so AI knows your beliefs and mission</span>
+                  <span className="text-xs text-[#6b6b6b]">Why you exist &mdash; so AI knows your beliefs and mission</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-xs text-[#6b6b6b] w-24">offer.md</span>
-                  <span className="text-xs text-[#6b6b6b]">What you sell — so AI can describe your transformation</span>
+                  <span className="text-xs text-[#6b6b6b]">What you sell &mdash; so AI can describe your transformation</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-xs text-[#6b6b6b] w-24">audience.md</span>
-                  <span className="text-xs text-[#6b6b6b]">Who you serve — so AI speaks to the right person</span>
+                  <span className="text-xs text-[#6b6b6b]">Who you serve &mdash; so AI speaks to the right person</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="font-mono text-xs text-[#6b6b6b] w-24">voice.md</span>
-                  <span className="text-xs text-[#6b6b6b]">How you sound — so AI writes like you, not like everyone</span>
+                  <span className="text-xs text-[#6b6b6b]">How you sound &mdash; so AI writes like you, not like everyone</span>
                 </div>
               </div>
             </div>
@@ -103,11 +120,16 @@ export default function HomePage() {
         {/* Single CTA */}
         <Link href="/interview/soul">
           <button className="font-mono text-sm font-bold bg-[#22c55e] text-black px-10 py-3.5 hover:brightness-110 transition-all">
-            Start →
+            Start &#8594;
           </button>
         </Link>
         <p className="font-mono text-xs text-[#6b6b6b] mt-3">
-          Takes about 5 minutes
+          Takes about 5 minutes &middot;{" "}
+          {!loading && !user && (
+            <Link href="/login" className="text-[#4a9eff] hover:text-white transition-colors">
+              Sign in to save progress
+            </Link>
+          )}
         </p>
       </div>
 

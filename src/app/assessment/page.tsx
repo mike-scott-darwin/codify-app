@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useAuth } from "@/lib/auth-context";
+import { loadAllAnswers } from "@/lib/db";
 import Link from "next/link";
 import { calculateContextScore } from "@/lib/scoring";
 import type { ContextScore, ReferenceFile } from "@/lib/types";
@@ -118,6 +120,7 @@ Now you know my business. Use this context for everything I ask. Match my voice.
 }
 
 export default function AssessmentPage() {
+  const { user } = useAuth();
   const [score, setScore] = useState<ContextScore | null>(null);
   const [fileContents, setFileContents] = useState<Record<string, string>>({});
   const [completedFiles, setCompletedFiles] = useState<string[]>([]);
@@ -126,6 +129,12 @@ export default function AssessmentPage() {
   const [copiedAI, setCopiedAI] = useState(false);
 
   useEffect(() => {
+    const init = async () => {
+      // If logged in, sync from DB to sessionStorage first
+      if (user) {
+        await loadAllAnswers();
+      }
+
     const contents: Record<string, string> = {};
     const completed: string[] = [];
     const missing: FileConfig[] = [];
@@ -156,7 +165,9 @@ export default function AssessmentPage() {
     setCompletedFiles(completed);
     setMissingFiles(missing);
     setScore(calculateContextScore(files));
-  }, []);
+    };
+    init();
+  }, [user]);
 
   if (!score) return null;
 
@@ -194,9 +205,16 @@ export default function AssessmentPage() {
           <Link href="/" className="font-mono text-lg text-white">
             <span className="text-[#22c55e]">&#10095;</span> codify
           </Link>
-          <span className="font-mono text-xs uppercase tracking-[0.15em] text-[#4a9eff]">
-            Assessment
-          </span>
+          <div className="flex items-center gap-4">
+            <span className="font-mono text-xs uppercase tracking-[0.15em] text-[#4a9eff]">
+              Assessment
+            </span>
+            {user && (
+              <span className="font-mono text-xs text-[#6b6b6b]">
+                {user.email}
+              </span>
+            )}
+          </div>
         </div>
       </nav>
 

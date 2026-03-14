@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import { voiceQuestions } from "@/lib/interview-data";
 import { useRouter } from "next/navigation";
+import { saveAnswers } from "@/lib/db";
 
 // Client Ready demo answers — pre-populated so you can see the full output
 const DEMO_ANSWERS: Record<string, string> = {
@@ -40,6 +41,7 @@ export default function VoiceInterviewPage() {
     setTimeout(() => {
       if (isLast) {
         sessionStorage.setItem("codify-interview-voice", JSON.stringify(answers));
+        saveAnswers("voice", answers);
         router.push("/preview/voice");
       } else {
         setCurrentIndex((i) => i + 1);
