@@ -17,12 +17,12 @@ export default function HomePage() {
       <div className="mx-auto max-w-3xl px-6 flex-1 flex flex-col justify-center py-16">
         {/* Headline */}
         <h1 className="font-mono text-2xl font-bold mb-3">
-          Build your reference files.
+          Build your business reference files.
         </h1>
         <p className="text-[#a0a0a0] leading-relaxed max-w-xl mb-16">
-          Answer guided questions about your business. We turn your answers
-          into structured files that make AI understand who you are, what you
-          sell, and how you sound.
+          Right now, every time you use AI you re-explain your business from scratch. 
+          These reference files fix that — once built, any AI tool reads them first 
+          and generates outputs that actually sound like you.
         </p>
 
         {/* Visual process flow */}
@@ -36,8 +36,8 @@ export default function HomePage() {
               <div className="w-px h-8 bg-[#1a1a1a]" />
             </div>
             <div className="pt-2">
-              <p className="font-mono text-sm text-white font-bold mb-1">Answer questions</p>
-              <p className="text-xs text-[#6b6b6b]">7 guided questions about your business — one at a time</p>
+              <p className="font-mono text-sm text-white font-bold mb-1">Answer questions about your business</p>
+              <p className="text-xs text-[#6b6b6b]">Guided prompts pull out what makes you different — no blank page</p>
             </div>
           </div>
 
@@ -50,8 +50,8 @@ export default function HomePage() {
               <div className="w-px h-8 bg-[#1a1a1a]" />
             </div>
             <div className="pt-2">
-              <p className="font-mono text-sm text-white font-bold mb-1">Preview your file</p>
-              <p className="text-xs text-[#6b6b6b]">See your answers transformed into a structured reference file</p>
+              <p className="font-mono text-sm text-white font-bold mb-1">We structure it into reference files</p>
+              <p className="text-xs text-[#6b6b6b]">Your answers become files any AI tool can read before generating</p>
             </div>
           </div>
 
@@ -64,12 +64,12 @@ export default function HomePage() {
               <div className="w-px h-8 bg-[#1a1a1a]" />
             </div>
             <div className="pt-2">
-              <p className="font-mono text-sm text-white font-bold mb-1">Get your score</p>
-              <p className="text-xs text-[#6b6b6b]">See how well AI understands your business — and what to build next</p>
+              <p className="font-mono text-sm text-white font-bold mb-1">See your Context Power Score</p>
+              <p className="text-xs text-[#6b6b6b]">Measures how well AI understands your business — and where the gaps are</p>
             </div>
           </div>
 
-          {/* Step 4 */}
+          {/* Step 4 - the files */}
           <div className="flex items-start gap-5">
             <div className="flex flex-col items-center">
               <div className="w-10 h-10 border border-[#1a1a1a] flex items-center justify-center">
@@ -77,15 +77,24 @@ export default function HomePage() {
               </div>
             </div>
             <div className="pt-2">
-              <p className="font-mono text-sm text-white font-bold mb-1">Repeat for all 4 files</p>
-              <div className="flex items-center gap-3 mt-1.5">
-                <span className="font-mono text-xs text-[#22c55e]">soul.md</span>
-                <span className="font-mono text-xs text-[#6b6b6b]">→</span>
-                <span className="font-mono text-xs text-[#6b6b6b]">offer.md</span>
-                <span className="font-mono text-xs text-[#6b6b6b]">→</span>
-                <span className="font-mono text-xs text-[#6b6b6b]">audience.md</span>
-                <span className="font-mono text-xs text-[#6b6b6b]">→</span>
-                <span className="font-mono text-xs text-[#6b6b6b]">voice.md</span>
+              <p className="font-mono text-sm text-white font-bold mb-3">Build all 4 core files</p>
+              <div className="space-y-2">
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs text-[#22c55e] w-24">soul.md</span>
+                  <span className="text-xs text-[#6b6b6b]">Why you exist — so AI knows your beliefs and mission</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs text-[#6b6b6b] w-24">offer.md</span>
+                  <span className="text-xs text-[#6b6b6b]">What you sell — so AI can describe your transformation</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs text-[#6b6b6b] w-24">audience.md</span>
+                  <span className="text-xs text-[#6b6b6b]">Who you serve — so AI speaks to the right person</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-xs text-[#6b6b6b] w-24">voice.md</span>
+                  <span className="text-xs text-[#6b6b6b]">How you sound — so AI writes like you, not like everyone</span>
+                </div>
               </div>
             </div>
           </div>
