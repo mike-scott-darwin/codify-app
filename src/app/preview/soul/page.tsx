@@ -280,6 +280,17 @@ export default function SoulPreviewPage() {
             </div>
           </div>
         )}
+        {/* Go to assessment */}
+        <div className="mt-8 text-center">
+          <Link href="/assessment">
+            <button
+              className="font-mono text-sm font-bold px-8 py-3 hover:brightness-110 transition-all"
+              style={{ backgroundColor: "#22c55e", color: "#000000", borderRadius: 0 }}
+            >
+              See Your Assessment →
+            </button>
+          </Link>
+        </div>
       </div>
     </div>
   );
