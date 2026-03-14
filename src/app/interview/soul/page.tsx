@@ -18,7 +18,7 @@ const DEMO_ANSWERS: Record<string, string> = {
 export default function SoulInterviewPage() {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>(DEMO_ANSWERS);
+  const EMPTY_ANSWERS: Record<string, string> = Object.fromEntries(Object.keys(DEMO_ANSWERS).map(k => [k, ""]));  const [answers, setAnswers] = useState<Record<string, string>>(EMPTY_ANSWERS);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const question = soulQuestions[currentIndex];
@@ -68,6 +68,12 @@ export default function SoulInterviewPage() {
           <span className="font-mono text-sm text-white">
             <span style={{ color: "#22c55e" }}>❯</span> codify
           </span>
+          <button
+            onClick={() => setAnswers(DEMO_ANSWERS)}
+            className="font-mono text-xs text-[#6b6b6b] hover:text-[#a0a0a0] underline transition-colors"
+          >
+            Load example
+          </button>
           <span className="font-mono text-sm" style={{ color: "#6b6b6b" }}>
             {progressBar}
           </span>

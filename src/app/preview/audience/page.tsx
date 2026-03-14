@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useEnrichment } from "@/lib/use-enrichment";
 import Link from "next/link";
 import { audienceQuestions } from "@/lib/interview-data";
 
@@ -87,19 +88,21 @@ export default function AudiencePreviewPage() {
   }, []);
 
   const audienceFile = generateAudienceFile(answers);
+  const { enrichedContent, isLoading, error: enrichError, enrich, reset: resetEnrichment, isEnriched } = useEnrichment("audience", answers);
+  const displayContent = enrichedContent || audienceFile;
   const wordCount = audienceFile.split(/\s+/).filter(Boolean).length;
   const answeredCount = Object.values(answers).filter(
     (a) => a.trim().length > 0
   ).length;
 
   const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(audienceFile);
+    await navigator.clipboard.writeText(displayContent);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const downloadFile = () => {
-    const blob = new Blob([audienceFile], { type: "text/markdown" });
+    const blob = new Blob([displayContent], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -129,6 +132,19 @@ export default function AudiencePreviewPage() {
           </span>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={isEnriched ? resetEnrichment : enrich}
+              disabled={isLoading}
+              className="font-mono text-sm px-4 py-2 transition-colors"
+              style={{
+                border: "1px solid #1a1a1a",
+                borderRadius: 0,
+                color: isLoading ? "#6b6b6b" : isEnriched ? "#f59e0b" : "#8b5cf6",
+                backgroundColor: "transparent",
+              }}
+            >
+              {isLoading ? "Enriching..." : isEnriched ? "Reset" : "Enrich with AI"}
+            </button>
             <button
               onClick={copyToClipboard}
               className="font-mono text-sm px-4 py-2 transition-colors"
@@ -216,7 +232,7 @@ export default function AudiencePreviewPage() {
                   className="whitespace-pre-wrap font-mono text-sm leading-relaxed"
                   style={{ color: "#a0a0a0" }}
                 >
-                  {audienceFile}
+                  {displayContent}
                 </pre>
               </div>
             </div>
@@ -261,7 +277,7 @@ export default function AudiencePreviewPage() {
               <pre
                 className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-white"
               >
-                {audienceFile}
+                {displayContent}
               </pre>
             </div>
           </div>

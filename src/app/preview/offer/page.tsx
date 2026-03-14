@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useEnrichment } from "@/lib/use-enrichment";
 import Link from "next/link";
 import { offerQuestions } from "@/lib/interview-data";
 
@@ -87,19 +88,21 @@ export default function OfferPreviewPage() {
   }, []);
 
   const offerFile = generateOfferFile(answers);
+  const { enrichedContent, isLoading, error: enrichError, enrich, reset: resetEnrichment, isEnriched } = useEnrichment("offer", answers);
+  const displayContent = enrichedContent || offerFile;
   const wordCount = offerFile.split(/\s+/).filter(Boolean).length;
   const answeredCount = Object.values(answers).filter(
     (a) => a.trim().length > 0
   ).length;
 
   const copyToClipboard = async () => {
-    await navigator.clipboard.writeText(offerFile);
+    await navigator.clipboard.writeText(displayContent);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const downloadFile = () => {
-    const blob = new Blob([offerFile], { type: "text/markdown" });
+    const blob = new Blob([displayContent], { type: "text/markdown" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -129,6 +132,19 @@ export default function OfferPreviewPage() {
           </span>
 
           <div className="flex items-center gap-2">
+            <button
+              onClick={isEnriched ? resetEnrichment : enrich}
+              disabled={isLoading}
+              className="font-mono text-sm px-4 py-2 transition-colors"
+              style={{
+                border: "1px solid #1a1a1a",
+                borderRadius: 0,
+                color: isLoading ? "#6b6b6b" : isEnriched ? "#f59e0b" : "#8b5cf6",
+                backgroundColor: "transparent",
+              }}
+            >
+              {isLoading ? "Enriching..." : isEnriched ? "Reset" : "Enrich with AI"}
+            </button>
             <button
               onClick={copyToClipboard}
               className="font-mono text-sm px-4 py-2 transition-colors"
@@ -216,7 +232,7 @@ export default function OfferPreviewPage() {
                   className="whitespace-pre-wrap font-mono text-sm leading-relaxed"
                   style={{ color: "#a0a0a0" }}
                 >
-                  {offerFile}
+                  {displayContent}
                 </pre>
               </div>
             </div>
@@ -261,7 +277,7 @@ export default function OfferPreviewPage() {
               <pre
                 className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-white"
               >
-                {offerFile}
+                {displayContent}
               </pre>
             </div>
           </div>
