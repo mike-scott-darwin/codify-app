@@ -4,10 +4,21 @@ import { useState, useCallback } from "react";
 import { soulQuestions } from "@/lib/interview-data";
 import { useRouter } from "next/navigation";
 
+// Client Ready demo answers — pre-populated so you can see the full output
+const DEMO_ANSWERS: Record<string, string> = {
+  origin: "Seven years. Since 2018. I've tried affiliate marketing, followed gurus who promised A to Z, watched the 'straight line' turn into circles. I've got the character to see things through — and I'm still here. That search taught me something: most people are building the wrong thing. Not because the tactics are wrong, but because the foundation is wrong. They're growing into pain. I'm trying to help people skip the seven years.",
+  problem: "Most coaches leave their 9-to-5 to escape the grind, then build a coaching business that's the same trap with worse benefits. They spend 12 months posting for likes and comments. Nobody takes the next step. That's not a business — it's a hamster wheel. They can't charge what they're worth because they've never validated their offer. They're selling time instead of transformation.",
+  belief: "You can't grow into pain. If the offer isn't aligned — if it hurts to show up — you'll eventually burn it down. I've watched people build big businesses and destroy them because they couldn't sustain something that wasn't them. The goal isn't just a business that makes money. It's a business you won't abandon. Alignment first, scale second.",
+  transformation: "A business built around your life — not a life built around your business. That means: an offer aligned with what you actually do well, a system that runs without you white-knuckling every day, paid traffic that works while you sleep, and freedom that doesn't require 70-hour weeks. They go from confused about their offer to clear in one sentence. From posting daily with no clients to running ads that convert while they sleep.",
+  why_you: "I'm still here. I've navigated the real maze of building a real business, not just selling the map. I've personally burned through the guru playbook, the content grind, the shiny object cycle — and came out the other side with something that actually works. I'm a few steps ahead on the same path, not a guru selling a shortcut that doesn't exist.",
+  values: "I will never tell you to push through pain — that's how people burn down businesses they spent years building. I will never sell scale for scale's sake. I will never outsource my thinking to templates or gurus. I will never pitch from stage or use high-pressure sales tactics. And I will never serve clients who drain me just for revenue.",
+  mission: "Help people build businesses they won't burn down. Not the biggest business. Not the fastest scale. The right business — for them. If this succeeds, people stay connected to their work instead of dissociated from it. They feel the value they create, not just execute it. The business doesn't become the thing they escaped from.",
+};
+
 export default function SoulInterviewPage() {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState<Record<string, string>>(DEMO_ANSWERS);
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   const question = soulQuestions[currentIndex];
@@ -19,8 +30,8 @@ export default function SoulInterviewPage() {
   // Build terminal progress bar
   const filled = currentIndex + 1;
   const total = soulQuestions.length;
-  const barFilled = "█".repeat(filled);
-  const barEmpty = "░".repeat(total - filled);
+  const barFilled = "\u2588".repeat(filled);
+  const barEmpty = "\u2591".repeat(total - filled);
   const progressBar = `[${barFilled}${barEmpty}] ${filled}/${total}`;
 
   const goNext = useCallback(() => {
