@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import ReactMarkdown from "react-markdown";
 import { AGENT_CONFIGS } from "@/lib/agents/types";
 import type { AgentType } from "@/lib/agents/types";
 
@@ -143,10 +144,29 @@ export default function AgentJobPage() {
             </div>
           </div>
 
-          <div className="bg-[#111111] border border-[#1a1a1a] p-6">
-            <pre className="whitespace-pre-wrap font-mono text-sm text-[#a0a0a0] leading-relaxed">
+          <div className="bg-[#111111] border border-[#1a1a1a] p-6 prose-terminal">
+            <ReactMarkdown
+              components={{
+                h1: ({ children }) => <h1 className="font-mono text-lg font-bold text-white mb-4 mt-6 first:mt-0">{children}</h1>,
+                h2: ({ children }) => <h2 className="font-mono text-sm font-bold text-[#4a9eff] uppercase tracking-wider mb-3 mt-6">{children}</h2>,
+                h3: ({ children }) => <h3 className="font-mono text-sm font-bold text-[#a0a0a0] mb-2 mt-4">{children}</h3>,
+                p: ({ children }) => <p className="font-mono text-sm text-[#a0a0a0] leading-relaxed mb-3">{children}</p>,
+                ul: ({ children }) => <ul className="space-y-1 mb-4 ml-4">{children}</ul>,
+                ol: ({ children }) => <ol className="space-y-1 mb-4 ml-4 list-decimal">{children}</ol>,
+                li: ({ children }) => <li className="font-mono text-sm text-[#a0a0a0] leading-relaxed">{children}</li>,
+                strong: ({ children }) => <strong className="text-white font-bold">{children}</strong>,
+                em: ({ children }) => <em className="text-[#f59e0b] not-italic">{children}</em>,
+                hr: () => <hr className="border-[#1a1a1a] my-6" />,
+                table: ({ children }) => <div className="overflow-x-auto mb-4"><table className="w-full border-collapse font-mono text-sm">{children}</table></div>,
+                thead: ({ children }) => <thead className="border-b border-[#333]">{children}</thead>,
+                th: ({ children }) => <th className="text-left text-[#4a9eff] text-xs uppercase tracking-wider px-3 py-2">{children}</th>,
+                td: ({ children }) => <td className="text-[#a0a0a0] px-3 py-2 border-b border-[#1a1a1a]">{children}</td>,
+                code: ({ children }) => <code className="bg-[#1a1a1a] text-[#22c55e] px-1.5 py-0.5 text-xs">{children}</code>,
+                blockquote: ({ children }) => <blockquote className="border-l-2 border-[#8b5cf6] pl-4 my-4">{children}</blockquote>,
+              }}
+            >
               {job.result.content}
-            </pre>
+            </ReactMarkdown>
           </div>
         </>
       )}
