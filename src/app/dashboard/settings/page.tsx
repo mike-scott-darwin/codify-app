@@ -60,6 +60,17 @@ export default function DashboardSettingsPage() {
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const [loaded, setLoaded] = useState(false);
 
+
+  // GitHub state
+  const [ghToken, setGhToken] = useState("");
+  const [ghOwner, setGhOwner] = useState("");
+  const [ghRepo, setGhRepo] = useState("");
+  const [ghBranch, setGhBranch] = useState("main");
+  const [ghConnected, setGhConnected] = useState(false);
+  const [ghSaving, setGhSaving] = useState(false);
+  const [ghInitializing, setGhInitializing] = useState(false);
+  const [ghFeedback, setGhFeedback] = useState<{ type: "success" | "error"; msg: string } | null>(null);
+
   // Integration state
   const [integrations, setIntegrations] = useState<IntegrationConnection[]>([]);
   const [intCredentials, setIntCredentials] = useState<Record<Platform, Record<string, string>>>({
@@ -92,6 +103,20 @@ export default function DashboardSettingsPage() {
         setLoaded(true);
       })
       .catch(() => setLoaded(true));
+
+
+    // Load GitHub config
+    fetch("/api/github/config")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.config && data.config.connected) {
+          setGhOwner(data.config.owner || "");
+          setGhRepo(data.config.repo || "");
+          setGhBranch(data.config.branch || "main");
+          setGhConnected(true);
+        }
+      })
+      .catch(() => {});
 
     // Load integrations
     fetch("/api/integrations")
@@ -163,6 +188,55 @@ export default function DashboardSettingsPage() {
       setFeedback({ type: "error", msg: "Network error." });
     }
     setTesting(false);
+  }
+
+  async function handleGhConnect() {
+    setGhSaving(true);
+    setGhFeedback(null);
+    try {
+      const res = await fetch("/api/github/config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: ghToken, owner: ghOwner, repo: ghRepo, branch: ghBranch }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setGhConnected(true);
+        setGhToken("");
+        setGhFeedback({ type: "success", msg: data.message || "Connected" });
+      } else {
+        setGhFeedback({ type: "error", msg: data.error || "Failed to connect" });
+      }
+    } catch {
+      setGhFeedback({ type: "error", msg: "Network error" });
+    }
+    setGhSaving(false);
+  }
+
+  async function handleGhDisconnect() {
+    setGhConnected(false);
+    setGhOwner("");
+    setGhRepo("");
+    setGhBranch("main");
+    setGhToken("");
+    setGhFeedback({ type: "success", msg: "Disconnected. Save new credentials to reconnect." });
+  }
+
+  async function handleGhInit() {
+    setGhInitializing(true);
+    setGhFeedback(null);
+    try {
+      const res = await fetch("/api/github/init", { method: "POST" });
+      const data = await res.json();
+      if (data.success) {
+        setGhFeedback({ type: "success", msg: data.message });
+      } else {
+        setGhFeedback({ type: "error", msg: data.message || "Failed to initialize" });
+      }
+    } catch {
+      setGhFeedback({ type: "error", msg: "Network error" });
+    }
+    setGhInitializing(false);
   }
 
   function isConnected(platform: Platform): boolean {
@@ -297,6 +371,119 @@ export default function DashboardSettingsPage() {
             </span>
           </div>
         </div>
+      </div>
+
+
+      {/* GitHub Repository */}
+      <div className={"bg-[#111111] border p-6 mb-6 " + (ghConnected ? "border-[#22c55e]" : "border-[#1a1a1a]")}>
+        <div className="flex items-center justify-between mb-4">
+          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#4a9eff]">
+            GitHub Repository
+          </p>
+          {ghConnected && (
+            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#22c55e] border border-[#22c55e] px-2 py-0.5">
+              Connected
+            </span>
+          )}
+        </div>
+
+        {ghConnected ? (
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-sm text-white font-bold">GH</span>
+              <a
+                href={"https://github.com/" + ghOwner + "/" + ghRepo}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-mono text-sm text-[#4a9eff] hover:underline"
+              >
+                {ghOwner}/{ghRepo}
+              </a>
+              <span className="font-mono text-[10px] text-[#6b6b6b]">({ghBranch})</span>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={handleGhInit}
+                disabled={ghInitializing}
+                className="border border-[#4a9eff] text-[#4a9eff] font-mono text-xs font-bold px-4 py-2 hover:bg-[#4a9eff]/10 disabled:opacity-50 transition-colors"
+              >
+                {ghInitializing ? "Initializing..." : "Initialize Repo"}
+              </button>
+              <button
+                onClick={handleGhDisconnect}
+                className="font-mono text-xs px-3 py-1.5 border border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444] hover:text-white transition-colors"
+              >
+                Disconnect
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            <p className="font-mono text-xs text-[#6b6b6b]">
+              Connect a GitHub repo to store reference files. You need a Personal Access Token with &quot;repo&quot; scope.
+            </p>
+            <div>
+              <label className="font-mono text-xs text-[#6b6b6b] block mb-1">Personal Access Token</label>
+              <input
+                type="password"
+                value={ghToken}
+                onChange={(e) => setGhToken(e.target.value)}
+                placeholder="ghp_..."
+                className="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-white font-mono text-sm p-2 focus:border-[#22c55e] focus:outline-none"
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="font-mono text-xs text-[#6b6b6b] block mb-1">Owner (username)</label>
+                <input
+                  type="text"
+                  value={ghOwner}
+                  onChange={(e) => setGhOwner(e.target.value)}
+                  placeholder="your-username"
+                  className="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-white font-mono text-sm p-2 focus:border-[#22c55e] focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="font-mono text-xs text-[#6b6b6b] block mb-1">Repository</label>
+                <input
+                  type="text"
+                  value={ghRepo}
+                  onChange={(e) => setGhRepo(e.target.value)}
+                  placeholder="my-business"
+                  className="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-white font-mono text-sm p-2 focus:border-[#22c55e] focus:outline-none"
+                />
+              </div>
+            </div>
+            <div>
+              <label className="font-mono text-xs text-[#6b6b6b] block mb-1">Branch</label>
+              <input
+                type="text"
+                value={ghBranch}
+                onChange={(e) => setGhBranch(e.target.value)}
+                placeholder="main"
+                className="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-white font-mono text-sm p-2 focus:border-[#22c55e] focus:outline-none"
+              />
+            </div>
+            <button
+              onClick={handleGhConnect}
+              disabled={ghSaving || !ghToken || !ghOwner || !ghRepo}
+              className="bg-[#22c55e] text-black font-mono text-xs font-bold px-4 py-2 hover:bg-[#22c55e]/80 disabled:opacity-50 transition-colors"
+            >
+              {ghSaving ? "Connecting..." : "Connect"}
+            </button>
+          </div>
+        )}
+
+        {ghFeedback && (
+          <p
+            className={
+              "font-mono text-xs mt-3 " +
+              (ghFeedback.type === "success" ? "text-[#22c55e]" : "text-red-400")
+            }
+          >
+            {ghFeedback.msg}
+          </p>
+        )}
       </div>
 
       {/* AI Provider */}

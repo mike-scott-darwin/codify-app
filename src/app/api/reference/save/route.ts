@@ -45,5 +45,29 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
+
+  // Non-blocking: commit to GitHub if connected
+  try {
+    const { data: profile } = await supabase
+      .from("user_profiles")
+      .select("github_config")
+      .eq("id", user.id)
+      .single();
+    if (profile?.github_config) {
+      const { writeFileToRepo } = await import("@/lib/github");
+      const ghConfig = profile.github_config as { token: string; owner: string; repo: string; branch?: string };
+      writeFileToRepo(
+        ghConfig,
+        `reference/core/${fileType}.md`,
+        content,
+        `[codify] Apply codified content to ${fileType}.md`
+      ).catch((err: unknown) => {
+        console.error("GitHub commit failed (non-blocking):", err instanceof Error ? err.message : err);
+      });
+    }
+  } catch {
+    // GitHub commit is non-blocking
+  }
+
   return NextResponse.json({ success: true });
 }

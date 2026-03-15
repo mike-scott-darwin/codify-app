@@ -76,6 +76,34 @@ export async function POST(request: NextRequest) {
     // Strip YAML frontmatter if the model includes it
     enrichedContent = enrichedContent.replace(/^---[\s\S]*?---\s*\n/, "").trim();
 
+
+    // Non-blocking: commit to GitHub if connected
+    try {
+      const supabaseForGh = await createServerSupabaseClient();
+      const { data: { user: ghUser } } = await supabaseForGh.auth.getUser();
+      if (ghUser) {
+        const { data: profile } = await supabaseForGh
+          .from("user_profiles")
+          .select("github_config")
+          .eq("id", ghUser.id)
+          .single();
+        if (profile?.github_config) {
+          const { writeFileToRepo } = await import("@/lib/github");
+          const ghConfig = profile.github_config as { token: string; owner: string; repo: string; branch?: string };
+          writeFileToRepo(
+            ghConfig,
+            `reference/core/${fileType}.md`,
+            enrichedContent,
+            `[codify] Update ${fileType}.md via enrichment`
+          ).catch((err: unknown) => {
+            console.error("GitHub commit failed (non-blocking):", err instanceof Error ? err.message : err);
+          });
+        }
+      }
+    } catch {
+      // GitHub commit is non-blocking
+    }
+
     return NextResponse.json({ enrichedContent });
   } catch (err: unknown) {
     console.error("Enrichment error:", err instanceof Error ? err.message : err);

@@ -114,25 +114,64 @@ export default function FilesPage() {
   const [score, setScore] = useState<ContextScore | null>(null);
   const [fileContents, setFileContents] = useState<Record<string, string>>({});
 
+  const [ghSyncStatus, setGhSyncStatus] = useState<{ synced: boolean; repoUrl?: string } | null>(null);
+
   useEffect(() => {
     const init = async () => {
       if (user) await loadAllAnswers();
 
+      let ghFiles: Record<string, string> | null = null;
+      let ghRepoUrl: string | undefined;
+
+      // Try to load from GitHub first
+      try {
+        const configRes = await fetch("/api/github/config");
+        const configData = await configRes.json();
+        if (configData.config && configData.config.connected) {
+          ghRepoUrl = "https://github.com/" + configData.config.owner + "/" + configData.config.repo;
+          const filesRes = await fetch("/api/github/files");
+          const filesData = await filesRes.json();
+          if (filesData.files && Object.keys(filesData.files).length > 0) {
+            ghFiles = filesData.files;
+          }
+        }
+      } catch {
+        // GitHub load failed, fall back to sessionStorage
+      }
+
       const contents: Record<string, string> = {};
       const files = FILE_CONFIGS.map((config) => {
-        const raw = sessionStorage.getItem(config.storageKey);
-        const enriched = sessionStorage.getItem("codify-enriched-" + config.key);
-        const answers = raw ? JSON.parse(raw) : null;
-        const content = enriched || (answers ? config.buildContent(answers) : undefined);
+        // GitHub is source of truth, then sessionStorage
+        let fileContent: string | undefined;
+        if (ghFiles && ghFiles[config.key]) {
+          fileContent = ghFiles[config.key];
+        } else {
+          const raw = sessionStorage.getItem(config.storageKey);
+          const enriched = sessionStorage.getItem("codify-enriched-" + config.key);
+          const answers = raw ? JSON.parse(raw) : null;
+          fileContent = enriched || (answers ? config.buildContent(answers) : undefined);
+        }
 
-        if (content) contents[config.key] = content;
+        if (fileContent) contents[config.key] = fileContent;
 
         return {
           name: config.name,
           path: config.path,
-          ...(content ? { content, lastModified: new Date().toISOString().split("T")[0] } : {}),
+          ...(fileContent ? { content: fileContent, lastModified: new Date().toISOString().split("T")[0] } : {}),
         };
       });
+
+      // Cache GitHub files in sessionStorage for other pages
+      if (ghFiles) {
+        for (const [key, val] of Object.entries(ghFiles)) {
+          sessionStorage.setItem("codify-enriched-" + key, val);
+        }
+        setGhSyncStatus({ synced: true, repoUrl: ghRepoUrl });
+      } else if (ghRepoUrl) {
+        setGhSyncStatus({ synced: false, repoUrl: ghRepoUrl });
+      } else {
+        setGhSyncStatus(null);
+      }
 
       setFileContents(contents);
       setScore(calculateContextScore(files));
@@ -199,6 +238,17 @@ export default function FilesPage() {
           {terminalBar(score.percentage)}
         </div>
       </div>
+
+      {/* Sync Status */}
+      {ghSyncStatus !== null && (
+        <div className={"font-mono text-xs px-4 py-2 mb-4 border " + (ghSyncStatus.synced ? "border-[#22c55e]/30 text-[#22c55e]" : "border-[#f59e0b]/30 text-[#f59e0b]")}>
+          {ghSyncStatus.synced ? (
+            <>Synced with <a href={ghSyncStatus.repoUrl} target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">{ghSyncStatus.repoUrl?.replace("https://github.com/", "")}</a></>
+          ) : (
+            "Local only — no files found in connected repo"
+          )}
+        </div>
+      )}
 
       {/* File Cards */}
       <div className="space-y-4">
