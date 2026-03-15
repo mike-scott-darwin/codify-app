@@ -187,32 +187,36 @@ export default function DashboardPage() {
           Sharper files produce better content. Better content reveals what to research next.
         </p>
 
-        {/* Flow diagram */}
-        <div className="flex items-center justify-between gap-1 mb-6 overflow-x-auto">
+        {/* Flow — matches sidebar order */}
+        <div className="space-y-0">
           {[
-            { step: "1", label: "Build", desc: "Reference files", color: "#22c55e", href: "/dashboard/files" },
-            { step: "2", label: "Research", desc: "Explore topics", color: "#4a9eff", href: "/dashboard/research" },
-            { step: "3", label: "Decide", desc: "Make decisions", color: "#f59e0b", href: "/dashboard/research" },
-            { step: "4", label: "Codify", desc: "Update reference", color: "#8b5cf6", href: "/dashboard/research" },
-            { step: "5", label: "Generate", desc: "Create content", color: "#22c55e", href: "/dashboard/generate" },
-            { step: "6", label: "Publish", desc: "Ship to platforms", color: "#4a9eff", href: "/dashboard/outputs" },
+            { icon: "☰", label: "Reference Files", desc: "Build and enrich your soul, offer, audience, and voice", color: "#22c55e", href: "/dashboard/files", step: "Build" },
+            { icon: "◆", label: "Research", desc: "Explore topics, make decisions, codify insights back into reference", color: "#4a9eff", href: "/dashboard/research", step: "Research + Decide + Codify" },
+            { icon: "⚡", label: "Generate", desc: "Create content powered by your reference files", color: "#f59e0b", href: "/dashboard/generate", step: "Create" },
+            { icon: "▶", label: "Outputs", desc: "Review, publish to connected platforms", color: "#8b5cf6", href: "/dashboard/outputs", step: "Publish" },
+            { icon: "⬡", label: "Agents", desc: "Multi-step campaigns, audits, deep research", color: "#4a9eff", href: "/dashboard/agents", step: "Automate" },
           ].map((s, i) => (
-            <Link key={s.step} href={s.href} className="flex items-center gap-1 group">
-              <div className="text-center min-w-[80px]">
-                <div
-                  className="w-8 h-8 mx-auto mb-1.5 flex items-center justify-center border font-mono text-xs font-bold transition-colors group-hover:brightness-125"
-                  style={{ borderColor: s.color, color: s.color }}
-                >
-                  {s.step}
-                </div>
-                <p className="font-mono text-[11px] text-white">{s.label}</p>
-                <p className="font-mono text-[9px] text-[#6b6b6b]">{s.desc}</p>
+            <Link key={s.label} href={s.href} className="flex items-center gap-4 p-3 hover:bg-[#1a1a1a] transition-colors group">
+              <div className="flex flex-col items-center w-8">
+                <span className="text-sm" style={{ color: s.color }}>{s.icon}</span>
+                {i < 4 && <div className="w-px h-6 bg-[#333] mt-1" />}
               </div>
-              {i < 5 && (
-                <span className="font-mono text-[#333] text-xs self-start mt-3">→</span>
-              )}
+              <div className="flex-1">
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-sm text-white font-bold">{s.label}</span>
+                  <span className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-0.5 border" style={{ color: s.color, borderColor: s.color }}>{s.step}</span>
+                </div>
+                <p className="font-mono text-[11px] text-[#6b6b6b] mt-0.5">{s.desc}</p>
+              </div>
+              <span className="font-mono text-[#333] text-xs group-hover:text-[#6b6b6b] transition-colors">→</span>
             </Link>
           ))}
+        </div>
+
+        {/* Loop back */}
+        <div className="flex items-center gap-3 mt-4 pl-12">
+          <span className="font-mono text-[#8b5cf6] text-xs">↰</span>
+          <span className="font-mono text-[10px] text-[#8b5cf6]">Outputs reveal what to research next — the loop compounds</span>
         </div>
 
         {/* Loop indicator */}
