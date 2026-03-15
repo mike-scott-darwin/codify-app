@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getEnrichmentPrompt } from "@/lib/enrichment-prompts";
 
 const VALID_FILE_TYPES = ["soul", "offer", "audience", "voice"] as const;
 
-// Simple in-memory rate limiting: 10 requests per IP per minute
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
 function isRateLimited(ip: string): boolean {
@@ -31,10 +30,11 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const apiKey = process.env.ANTHROPIC_API_KEY;
-  if (!apiKey) {
+  const googleKey = process.env.GOOGLE_API_KEY;
+
+  if (!googleKey) {
     return NextResponse.json(
-      { error: "Enrichment not configured. ANTHROPIC_API_KEY missing." },
+      { error: "Enrichment not configured. GOOGLE_API_KEY missing." },
       { status: 503 }
     );
   }
@@ -48,9 +48,12 @@ export async function POST(request: NextRequest) {
 
   const { fileType, answers } = body;
 
-  if (!fileType || !VALID_FILE_TYPES.includes(fileType as typeof VALID_FILE_TYPES[number])) {
+  if (
+    !fileType ||
+    !VALID_FILE_TYPES.includes(fileType as (typeof VALID_FILE_TYPES)[number])
+  ) {
     return NextResponse.json(
-      { error: `Invalid fileType. Must be: ${VALID_FILE_TYPES.join(", ")}` },
+      { error: "Invalid fileType. Must be: " + VALID_FILE_TYPES.join(", ") },
       { status: 400 }
     );
   }
@@ -62,16 +65,15 @@ export async function POST(request: NextRequest) {
   const { system, user } = getEnrichmentPrompt(fileType, answers);
 
   try {
-    const client = new Anthropic({ apiKey });
-    const message = await client.messages.create({
-      model: "claude-haiku-4-5-20251001",
-      max_tokens: 2000,
-      system,
-      messages: [{ role: "user", content: user }],
+    const genAI = new GoogleGenerativeAI(googleKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+
+    const result = await model.generateContent({
+      contents: [{ role: "user", parts: [{ text: user }] }],
+      systemInstruction: { role: "model", parts: [{ text: system }] },
     });
 
-    const textBlock = message.content.find((block) => block.type === "text");
-    const enrichedContent = textBlock && "text" in textBlock ? textBlock.text : "";
+    const enrichedContent = result.response.text();
 
     return NextResponse.json({ enrichedContent });
   } catch (err: unknown) {
