@@ -38,7 +38,12 @@ export type Feature =
   | "generate:landing_page"
   | "research"
   | "output_history"
-  | "file_editor";
+  | "file_editor"
+  | "agent:congruence_audit"
+  | "agent:ad_campaign"
+  | "agent:deep_research"
+  | "agent:content_calendar"
+  | "agent:email_campaign";
 
 export const FEATURE_REQUIRED_TIER: Record<Feature, Tier> = {
   enrichment: "free",
@@ -51,6 +56,11 @@ export const FEATURE_REQUIRED_TIER: Record<Feature, Tier> = {
   "generate:landing_page": "pro",
   output_history: "pro",
   file_editor: "pro",
+  "agent:congruence_audit": "build",
+  "agent:deep_research": "build",
+  "agent:ad_campaign": "pro",
+  "agent:content_calendar": "pro",
+  "agent:email_campaign": "pro",
 };
 
 // Per-output-type monthly limits by tier
@@ -61,6 +71,11 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     email_sequence: 0,
     vsl_script: 0,
     landing_page: 0,
+    congruence_audit: 0,
+    ad_campaign: 0,
+    deep_research: 0,
+    content_calendar: 0,
+    email_campaign: 0,
   },
   build: {
     social_post: 5,
@@ -68,6 +83,11 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     email_sequence: 0,
     vsl_script: 0,
     landing_page: 0,
+    congruence_audit: 1,
+    ad_campaign: 0,
+    deep_research: 2,
+    content_calendar: 0,
+    email_campaign: 0,
   },
   pro: {
     social_post: 50,
@@ -75,6 +95,11 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     email_sequence: 50,
     vsl_script: 10,
     landing_page: 10,
+    congruence_audit: 5,
+    ad_campaign: 4,
+    deep_research: 10,
+    content_calendar: 4,
+    email_campaign: 4,
   },
   vip: {
     social_post: Infinity,
@@ -82,6 +107,11 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     email_sequence: Infinity,
     vsl_script: Infinity,
     landing_page: Infinity,
+    congruence_audit: Infinity,
+    ad_campaign: Infinity,
+    deep_research: Infinity,
+    content_calendar: Infinity,
+    email_campaign: Infinity,
   },
 };
 

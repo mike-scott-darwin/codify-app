@@ -20,6 +20,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Generate", href: "/dashboard/generate", feature: "generate:ad_copy", icon: "⚡" },
   { label: "Outputs", href: "/dashboard/outputs", feature: "output_history", icon: "▶" },
   { label: "Research", href: "/dashboard/research", feature: "research", icon: "◆" },
+  { label: "Agents", href: "/dashboard/agents", feature: "agent:congruence_audit", icon: "⬡" },
   { label: "Settings", href: "/dashboard/settings", icon: "⚙" },
 ];
 
