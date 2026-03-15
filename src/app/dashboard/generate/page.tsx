@@ -109,6 +109,26 @@ export default function GenerateHubPage() {
           );
         })}
       </div>
+
+      {/* Compounding nudge */}
+      <div className="bg-[#111111] border border-[#4a9eff] border-dashed p-4 mt-8">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#4a9eff] mb-1">
+              After generating
+            </p>
+            <p className="font-mono text-sm text-[#a0a0a0]">
+              Review outputs, publish to connected platforms, then research what to improve next
+            </p>
+          </div>
+          <Link
+            href="/dashboard/outputs"
+            className="font-mono text-xs px-4 py-2 border border-[#4a9eff] text-[#4a9eff] hover:bg-[#4a9eff] hover:text-white transition-colors"
+          >
+            View Outputs →
+          </Link>
+        </div>
+      </div>
     </>
   );
 }

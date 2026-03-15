@@ -284,6 +284,28 @@ export default function FilesPage() {
           );
         })}
       </div>
+
+      {/* Compounding nudge */}
+      {Object.keys(fileContents).length >= 2 && (
+        <div className="bg-[#111111] border border-[#8b5cf6] border-dashed p-4 mt-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8b5cf6] mb-1">
+                Next in the loop
+              </p>
+              <p className="font-mono text-sm text-[#a0a0a0]">
+                Research a topic to sharpen these files further
+              </p>
+            </div>
+            <Link
+              href="/dashboard/research"
+              className="font-mono text-xs px-4 py-2 border border-[#8b5cf6] text-[#8b5cf6] hover:bg-[#8b5cf6] hover:text-white transition-colors"
+            >
+              Start Research →
+            </Link>
+          </div>
+        </div>
+      )}
     </>
   );
 }

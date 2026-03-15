@@ -177,6 +177,54 @@ export default function DashboardPage() {
         </div>
       </div>
 
+      {/* The Compounding Loop */}
+      <div className="bg-[#111111] border border-[#1a1a1a] p-6 mb-8">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8b5cf6] mb-4">
+          How Codify Works
+        </p>
+        <p className="font-mono text-sm text-[#a0a0a0] mb-6 leading-relaxed">
+          Every cycle makes your outputs better. Research sharpens your reference files.
+          Sharper files produce better content. Better content reveals what to research next.
+        </p>
+
+        {/* Flow diagram */}
+        <div className="flex items-center justify-between gap-1 mb-6 overflow-x-auto">
+          {[
+            { step: "1", label: "Build", desc: "Reference files", color: "#22c55e", href: "/dashboard/files" },
+            { step: "2", label: "Research", desc: "Explore topics", color: "#4a9eff", href: "/dashboard/research" },
+            { step: "3", label: "Decide", desc: "Make decisions", color: "#f59e0b", href: "/dashboard/research" },
+            { step: "4", label: "Codify", desc: "Update reference", color: "#8b5cf6", href: "/dashboard/research" },
+            { step: "5", label: "Generate", desc: "Create content", color: "#22c55e", href: "/dashboard/generate" },
+            { step: "6", label: "Publish", desc: "Ship to platforms", color: "#4a9eff", href: "/dashboard/outputs" },
+          ].map((s, i) => (
+            <Link key={s.step} href={s.href} className="flex items-center gap-1 group">
+              <div className="text-center min-w-[80px]">
+                <div
+                  className="w-8 h-8 mx-auto mb-1.5 flex items-center justify-center border font-mono text-xs font-bold transition-colors group-hover:brightness-125"
+                  style={{ borderColor: s.color, color: s.color }}
+                >
+                  {s.step}
+                </div>
+                <p className="font-mono text-[11px] text-white">{s.label}</p>
+                <p className="font-mono text-[9px] text-[#6b6b6b]">{s.desc}</p>
+              </div>
+              {i < 5 && (
+                <span className="font-mono text-[#333] text-xs self-start mt-3">→</span>
+              )}
+            </Link>
+          ))}
+        </div>
+
+        {/* Loop indicator */}
+        <div className="flex items-center justify-center gap-2">
+          <div className="h-px flex-1 bg-[#1a1a1a]" />
+          <span className="font-mono text-[9px] text-[#8b5cf6] uppercase tracking-[0.2em]">
+            Loop — each cycle compounds
+          </span>
+          <div className="h-px flex-1 bg-[#1a1a1a]" />
+        </div>
+      </div>
+
       {/* Quick links */}
       <div className="grid grid-cols-2 gap-3">
         <Link
@@ -191,7 +239,7 @@ export default function DashboardPage() {
           className="bg-[#111111] border border-[#1a1a1a] p-4 hover:border-[#333] transition-colors"
         >
           <span className="font-mono text-sm text-[#a0a0a0]">Settings</span>
-          <p className="text-[11px] text-[#6b6b6b] mt-1">API keys, account</p>
+          <p className="text-[11px] text-[#6b6b6b] mt-1">API keys, integrations</p>
         </Link>
       </div>
     </>

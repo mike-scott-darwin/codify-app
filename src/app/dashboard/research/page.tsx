@@ -145,6 +145,28 @@ export default function ResearchPage() {
           ))}
         </div>
       )}
+
+      {/* Compounding nudge */}
+      {topics.some((t) => t.status === "codified") && (
+        <div className="bg-[#111111] border border-[#22c55e] border-dashed p-4 mt-8">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#22c55e] mb-1">
+                Next in the loop
+              </p>
+              <p className="font-mono text-sm text-[#a0a0a0]">
+                Your reference files are stronger. Generate content that uses them.
+              </p>
+            </div>
+            <Link
+              href="/dashboard/generate"
+              className="font-mono text-xs px-4 py-2 border border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e] hover:text-black transition-colors"
+            >
+              Generate →
+            </Link>
+          </div>
+        </div>
+      )}
     </>
   );
 }
