@@ -14,7 +14,7 @@ export function UpgradePrompt({ requiredTier, feature, description }: UpgradePro
   return (
     <div className="bg-[#111111] border border-[#1a1a1a] p-8 text-center">
       <div className="mb-4">
-        <span className="font-mono text-2xl text-[#6b6b6b]">\u26BF</span>
+        <span className="font-mono text-2xl text-[#6b6b6b]">⚿</span>
       </div>
       <p className="font-mono text-sm text-white mb-2">
         {feature} requires{" "}

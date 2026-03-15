@@ -79,7 +79,7 @@ export default function OutputsPage() {
               color: filter === f ? "#4a9eff" : "#6b6b6b",
             }}
           >
-            {f === "all" ? "All" : f === "favorites" ? "\u2605 Favorites" : TYPE_LABELS[f] || f}
+            {f === "all" ? "All" : f === "favorites" ? "★ Favorites" : TYPE_LABELS[f] || f}
           </button>
         ))}
       </div>
@@ -94,7 +94,7 @@ export default function OutputsPage() {
             href="/dashboard/generate"
             className="font-mono text-xs text-[#4a9eff] hover:text-white transition-colors"
           >
-            Generate your first output \u2192
+            Generate your first output →
           </Link>
         </div>
       ) : (
@@ -125,7 +125,7 @@ export default function OutputsPage() {
                     className="font-mono text-sm transition-colors"
                     style={{ color: output.is_favorite ? "#f59e0b" : "#6b6b6b" }}
                   >
-                    {output.is_favorite ? "\u2605" : "\u2606"}
+                    {output.is_favorite ? "★" : "☆"}
                   </button>
                   <span className="font-mono text-[10px] text-[#6b6b6b]">
                     {new Date(output.created_at).toLocaleDateString()}

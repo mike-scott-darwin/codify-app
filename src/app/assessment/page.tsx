@@ -10,7 +10,7 @@ import type { ContextScore, ReferenceFile } from "@/lib/types";
 function terminalBar(percentage: number, length: number = 20): string {
   const filled = Math.round((percentage / 100) * length);
   const empty = length - filled;
-  return "\u2588".repeat(filled) + "\u2591".repeat(empty);
+  return "█".repeat(filled) + "░".repeat(empty);
 }
 
 const STATUS_CONFIG: Record<

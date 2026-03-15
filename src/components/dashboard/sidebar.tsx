@@ -15,12 +15,12 @@ interface NavItem {
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Dashboard", href: "/dashboard", icon: "\u25A0" },
-  { label: "Reference Files", href: "/dashboard/files", icon: "\u2630" },
-  { label: "Generate", href: "/dashboard/generate", feature: "generate:ad_copy", icon: "\u26A1" },
-  { label: "Outputs", href: "/dashboard/outputs", feature: "output_history", icon: "\u25B6" },
-  { label: "Research", href: "/dashboard/research", feature: "research", icon: "\u25C6" },
-  { label: "Settings", href: "/dashboard/settings", icon: "\u2699" },
+  { label: "Dashboard", href: "/dashboard", icon: "■" },
+  { label: "Reference Files", href: "/dashboard/files", icon: "☰" },
+  { label: "Generate", href: "/dashboard/generate", feature: "generate:ad_copy", icon: "⚡" },
+  { label: "Outputs", href: "/dashboard/outputs", feature: "output_history", icon: "▶" },
+  { label: "Research", href: "/dashboard/research", feature: "research", icon: "◆" },
+  { label: "Settings", href: "/dashboard/settings", icon: "⚙" },
 ];
 
 export function Sidebar() {
@@ -68,7 +68,7 @@ export function Sidebar() {
               <span className="text-xs">{item.icon}</span>
               <span>{item.label}</span>
               {locked && (
-                <span className="ml-auto text-[10px] text-[#6b6b6b]">\u26BF</span>
+                <span className="ml-auto text-[10px] text-[#6b6b6b]">⚿</span>
               )}
             </Link>
           );

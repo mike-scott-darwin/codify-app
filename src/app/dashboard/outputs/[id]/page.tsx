@@ -73,7 +73,7 @@ export default function OutputDetailPage() {
           href="/dashboard/outputs"
           className="font-mono text-xs text-[#6b6b6b] hover:text-white transition-colors"
         >
-          \u2190 Back
+          ← Back
         </Link>
         <span className="text-[#1a1a1a]">/</span>
         <span className="font-mono text-xs text-[#4a9eff]">

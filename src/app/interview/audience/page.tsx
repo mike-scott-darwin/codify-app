@@ -31,8 +31,8 @@ export default function AudienceInterviewPage() {
   // Build terminal progress bar
   const filled = currentIndex + 1;
   const total = audienceQuestions.length;
-  const barFilled = "\u2588".repeat(filled);
-  const barEmpty = "\u2591".repeat(total - filled);
+  const barFilled = "█".repeat(filled);
+  const barEmpty = "░".repeat(total - filled);
   const progressBar = `[${barFilled}${barEmpty}] ${filled}/${total}`;
 
   const goNext = useCallback(() => {

@@ -106,7 +106,7 @@ const FILE_CONFIGS: FileConfig[] = [
 function terminalBar(percentage: number, length: number = 30): string {
   const filled = Math.round((percentage / 100) * length);
   const empty = length - filled;
-  return "\u2588".repeat(filled) + "\u2591".repeat(empty);
+  return "█".repeat(filled) + "░".repeat(empty);
 }
 
 export default function FilesPage() {
@@ -268,7 +268,7 @@ export default function FilesPage() {
                     className="font-mono text-xs font-bold px-4 py-2 hover:brightness-110 transition-all"
                     style={{ backgroundColor: "#22c55e", color: "#000", borderRadius: 0 }}
                   >
-                    Start Interview \u2192
+                    Start Interview →
                   </Link>
                 )}
               </div>

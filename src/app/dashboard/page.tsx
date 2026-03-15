@@ -33,7 +33,7 @@ const GENERATE_TYPES = [
 function terminalBar(percentage: number, length: number = 20): string {
   const filled = Math.round((percentage / 100) * length);
   const empty = length - filled;
-  return "\u2588".repeat(filled) + "\u2591".repeat(empty);
+  return "█".repeat(filled) + "░".repeat(empty);
 }
 
 export default function DashboardPage() {
@@ -76,7 +76,7 @@ export default function DashboardPage() {
       <div className="mb-10">
         <h1 className="font-mono text-xl font-bold mb-2">
           {completedCount === 0
-            ? "Let\u2019s build your context."
+            ? "Let’s build your context."
             : completedCount < 4
             ? "Keep building."
             : "Your context is live."}
@@ -97,7 +97,7 @@ export default function DashboardPage() {
             Context Power Score
           </span>
           <Link href="/dashboard/files" className="font-mono text-[10px] text-[#6b6b6b] hover:text-white transition-colors">
-            View files \u2192
+            View files →
           </Link>
         </div>
         <div className="flex items-baseline gap-2 mb-2">
@@ -140,7 +140,7 @@ export default function DashboardPage() {
             className="inline-block font-mono text-sm font-bold px-6 py-3 hover:brightness-110 transition-all"
             style={{ backgroundColor: "#22c55e", color: "#000", borderRadius: 0 }}
           >
-            Start Interview \u2192
+            Start Interview →
           </Link>
         </div>
       )}
@@ -153,7 +153,7 @@ export default function DashboardPage() {
           </span>
           {hasAccess(tier, "generate:ad_copy") && (
             <Link href="/dashboard/generate" className="font-mono text-[10px] text-[#6b6b6b] hover:text-white transition-colors">
-              View all \u2192
+              View all →
             </Link>
           )}
         </div>
@@ -168,7 +168,7 @@ export default function DashboardPage() {
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-mono text-sm text-white">{g.label}</span>
-                  {locked && <span className="font-mono text-[10px] text-[#6b6b6b]">\u26BF PRO</span>}
+                  {locked && <span className="font-mono text-[10px] text-[#6b6b6b]">⚿ PRO</span>}
                 </div>
                 <p className="text-[11px] text-[#6b6b6b]">{g.desc}</p>
               </Link>

@@ -75,7 +75,7 @@ export default function ResearchDetailPage() {
     <>
       <div className="flex items-center gap-3 mb-6">
         <Link href="/dashboard/research" className="font-mono text-xs text-[#6b6b6b] hover:text-white transition-colors">
-          \u2190 Back
+          ← Back
         </Link>
         <span className="text-[#1a1a1a]">/</span>
         <span className="font-mono text-xs text-[#4a9eff]">{topic.title}</span>

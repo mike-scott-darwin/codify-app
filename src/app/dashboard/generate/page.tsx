@@ -51,7 +51,7 @@ export default function GenerateHubPage() {
                       {TIER_LABELS[requiredTier]}
                     </span>
                   ) : (
-                    <span className="font-mono text-xs text-[#6b6b6b]">\u2192</span>
+                    <span className="font-mono text-xs text-[#6b6b6b]">→</span>
                   )}
                 </div>
               </div>

@@ -21,7 +21,7 @@ export const GENERATION_CONFIGS: GenerationConfig[] = [
     type: "ad_copy",
     label: "Ad Copy",
     description: "Headlines, hooks, and body copy for paid ads",
-    icon: "\u26A1",
+    icon: "⚡",
     options: [
       {
         id: "platform",
@@ -64,7 +64,7 @@ export const GENERATION_CONFIGS: GenerationConfig[] = [
     type: "social_post",
     label: "Social Posts",
     description: "Instagram, X, LinkedIn, TikTok captions",
-    icon: "\u25C6",
+    icon: "◆",
     options: [
       {
         id: "platform",
@@ -101,7 +101,7 @@ export const GENERATION_CONFIGS: GenerationConfig[] = [
     type: "email_sequence",
     label: "Email Sequences",
     description: "Welcome, nurture, and launch email series",
-    icon: "\u2709",
+    icon: "✉",
     options: [
       {
         id: "sequence_type",
@@ -131,7 +131,7 @@ export const GENERATION_CONFIGS: GenerationConfig[] = [
     type: "vsl_script",
     label: "VSL Scripts",
     description: "Video sales letter scripts that convert",
-    icon: "\u25B6",
+    icon: "▶",
     options: [
       {
         id: "length",
@@ -161,7 +161,7 @@ export const GENERATION_CONFIGS: GenerationConfig[] = [
     type: "landing_page",
     label: "Landing Pages",
     description: "Hero, features, CTA — full page copy",
-    icon: "\u25A0",
+    icon: "■",
     options: [
       {
         id: "page_type",

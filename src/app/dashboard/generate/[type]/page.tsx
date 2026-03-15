@@ -87,7 +87,7 @@ export default function GeneratorPage() {
           href="/dashboard/generate"
           className="font-mono text-xs text-[#6b6b6b] hover:text-white transition-colors"
         >
-          \u2190 Back
+          ← Back
         </Link>
         <span className="text-[#1a1a1a]">/</span>
         <h1 className="font-mono text-xl font-bold">{config.label}</h1>
@@ -137,7 +137,7 @@ export default function GeneratorPage() {
             className="w-full font-mono text-sm font-bold py-3 hover:brightness-110 transition-all disabled:opacity-50"
             style={{ backgroundColor: "#22c55e", color: "#000", borderRadius: 0 }}
           >
-            {generating ? "Generating..." : "Generate \u2192"}
+            {generating ? "Generating..." : "Generate →"}
           </button>
 
           {error && (

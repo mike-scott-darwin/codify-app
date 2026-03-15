@@ -123,7 +123,7 @@ export default function UpgradePage() {
               <ul className="space-y-2 mb-6 flex-1">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2">
-                    <span className="text-[#22c55e] text-xs mt-0.5">\u2713</span>
+                    <span className="text-[#22c55e] text-xs mt-0.5">✓</span>
                     <span className="text-sm text-[#a0a0a0]">{f}</span>
                   </li>
                 ))}

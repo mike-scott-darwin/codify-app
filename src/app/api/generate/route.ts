@@ -110,7 +110,7 @@ export async function POST(request: NextRequest) {
       vsl_script: "VSL Script",
       landing_page: "Landing Page",
     };
-    const title = typeLabels[outputType] + " \u2014 " + new Date().toLocaleDateString();
+    const title = typeLabels[outputType] + " — " + new Date().toLocaleDateString();
 
     await supabase.from("outputs").insert({
       user_id: user.id,
