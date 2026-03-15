@@ -21,6 +21,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Create", href: "/dashboard/generate", feature: "generate:ad_copy", icon: "3" },
   { label: "Publish", href: "/dashboard/outputs", feature: "output_history", icon: "4" },
   { label: "Automate", href: "/dashboard/agents", feature: "agent:congruence_audit", icon: "5" },
+  { label: "Terminal", href: "/dashboard/terminal", icon: "❯" },
   { label: "Help", href: "/dashboard/help", icon: "?" },
   { label: "Settings", href: "/dashboard/settings", icon: "⚙" },
 ];
