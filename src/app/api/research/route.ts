@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
     .single();
 
   const tierLevel: Record<string, number> = { free: 0, build: 1, pro: 2, vip: 3 };
-  if (tierLevel[profile?.tier || "free"] < tierLevel["build"]) {
+  if (tierLevel[profile?.tier || "vip"] < tierLevel["build"]) {
     return NextResponse.json({ error: "Upgrade to BUILD to use research." }, { status: 403 });
   }
 

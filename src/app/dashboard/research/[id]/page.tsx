@@ -40,6 +40,7 @@ export default function ResearchDetailPage() {
   const [question, setQuestion] = useState("");
   const [aiAnswer, setAiAnswer] = useState("");
   const [asking, setAsking] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Codify state
   const [targetFiles, setTargetFiles] = useState<Record<string, boolean>>({
@@ -118,14 +119,21 @@ export default function ResearchDetailPage() {
     if (!question.trim()) return;
     setAsking(true);
     setAiAnswer("");
-    const res = await fetch("/api/research/" + id + "/ai", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question }),
-    });
-    if (res.ok) {
+    setError(null);
+    try {
+      const res = await fetch("/api/research/" + id + "/ai", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }),
+      });
       const data = await res.json();
-      setAiAnswer(data.answer);
+      if (res.ok) {
+        setAiAnswer(data.answer);
+      } else {
+        setError(data.error || "AI research failed.");
+      }
+    } catch {
+      setError("Could not reach the server.");
     }
     setAsking(false);
   };
@@ -152,13 +160,15 @@ export default function ResearchDetailPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ targetFiles: selected }),
       });
+      const data = await res.json();
       if (res.ok) {
-        const data = await res.json();
         setProposals(data.proposals || {});
         setCurrentContent(data.currentContent || {});
+      } else {
+        setError(data.error || "Failed to generate proposals.");
       }
-    } catch (err) {
-      console.error("Codify error:", err);
+    } catch {
+      setError("Could not reach the server.");
     }
     setGenerating(false);
   };
