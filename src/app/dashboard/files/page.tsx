@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useAuth } from "@/lib/auth-context";
 import { loadAllAnswers } from "@/lib/db";
@@ -116,6 +116,12 @@ export default function FilesPage() {
 
   const [ghSyncStatus, setGhSyncStatus] = useState<{ synced: boolean; repoUrl?: string } | null>(null);
 
+  // Upload enhancement state
+  const [uploadingKey, setUploadingKey] = useState<string | null>(null);
+  const [proposedContent, setProposedContent] = useState<{ key: string; content: string } | null>(null);
+  const [applyingSave, setApplyingSave] = useState(false);
+  const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
+
   useEffect(() => {
     const init = async () => {
       if (user) await loadAllAnswers();
@@ -191,6 +197,51 @@ export default function FilesPage() {
     a.download = key + ".md";
     a.click();
     URL.revokeObjectURL(url);
+  };
+
+  const handleUpload = async (key: string, file: File) => {
+    setUploadingKey(key);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("fileType", key);
+      const res = await fetch("/api/reference/enhance", {
+        method: "POST",
+        body: formData,
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setProposedContent({ key, content: data.proposedContent });
+      } else {
+        const err = await res.json();
+        alert("Enhancement failed: " + (err.error || "Unknown error"));
+      }
+    } catch {
+      alert("Upload failed. Please try again.");
+    }
+    setUploadingKey(null);
+  };
+
+  const applyProposedContent = async () => {
+    if (!proposedContent) return;
+    setApplyingSave(true);
+    try {
+      const res = await fetch("/api/reference/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fileType: proposedContent.key, content: proposedContent.content }),
+      });
+      if (res.ok) {
+        setFileContents((prev) => ({ ...prev, [proposedContent.key]: proposedContent.content }));
+        sessionStorage.setItem("codify-enriched-" + proposedContent.key, proposedContent.content);
+        setProposedContent(null);
+      } else {
+        alert("Save failed. Please try again.");
+      }
+    } catch {
+      alert("Save failed. Please try again.");
+    }
+    setApplyingSave(false);
   };
 
   const downloadAll = () => {
@@ -319,6 +370,24 @@ export default function FilesPage() {
                     >
                       Download
                     </button>
+                    <button
+                      onClick={() => fileInputRefs.current[config.key]?.click()}
+                      disabled={uploadingKey === config.key}
+                      className="font-mono text-xs px-3 py-1.5 border border-[#1a1a1a] text-[#6b6b6b] hover:text-[#a0a0a0] transition-colors disabled:opacity-50"
+                    >
+                      {uploadingKey === config.key ? "Processing..." : "Upload"}
+                    </button>
+                    <input
+                      ref={(el) => { fileInputRefs.current[config.key] = el; }}
+                      type="file"
+                      accept=".txt,.md,.pdf,.docx"
+                      className="hidden"
+                      onChange={(e) => {
+                        const f = e.target.files?.[0];
+                        if (f) handleUpload(config.key, f);
+                        e.target.value = "";
+                      }}
+                    />
                   </>
                 ) : (
                   <Link
@@ -334,6 +403,43 @@ export default function FilesPage() {
           );
         })}
       </div>
+
+      {/* Proposed content preview */}
+      {proposedContent && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-8">
+          <div className="bg-[#111111] border border-[#22c55e] max-w-3xl w-full max-h-[80vh] flex flex-col">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[#1a1a1a]">
+              <div className="flex items-center gap-3">
+                <span className="w-2 h-2 rounded-full bg-[#22c55e]" />
+                <span className="font-mono text-sm text-white font-bold">
+                  Proposed update for {proposedContent.key}.md
+                </span>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={applyProposedContent}
+                  disabled={applyingSave}
+                  className="font-mono text-xs font-bold px-4 py-1.5 hover:brightness-110 transition-all disabled:opacity-50"
+                  style={{ backgroundColor: "#22c55e", color: "#000", borderRadius: 0 }}
+                >
+                  {applyingSave ? "Saving..." : "Apply"}
+                </button>
+                <button
+                  onClick={() => setProposedContent(null)}
+                  className="font-mono text-xs px-4 py-1.5 border border-[#1a1a1a] text-[#6b6b6b] hover:text-white transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+            <div className="flex-1 overflow-y-auto p-6">
+              <pre className="whitespace-pre-wrap font-mono text-xs text-[#a0a0a0] leading-relaxed">
+                {proposedContent.content}
+              </pre>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Compounding nudge */}
       {Object.keys(fileContents).length >= 2 && (

@@ -193,6 +193,21 @@ export default function AgentJobPage() {
         </div>
       )}
 
+      {/* Post-audit nudge */}
+      {job.status === "complete" && job.agent_type === "congruence_audit" && (
+        <div className="bg-[#111111] border border-[#f59e0b] p-4 mb-6 flex items-center justify-between">
+          <p className="font-mono text-sm text-[#f59e0b]">
+            Your files need work. Revisit Build to strengthen them before generating content.
+          </p>
+          <Link
+            href="/dashboard/files"
+            className="font-mono text-xs font-bold px-4 py-1.5 border border-[#f59e0b] text-[#f59e0b] hover:bg-[#f59e0b] hover:text-black transition-colors whitespace-nowrap ml-4"
+          >
+            Go to Files
+          </Link>
+        </div>
+      )}
+
       {/* Result */}
       {job.status === "complete" && job.result && (
         <>

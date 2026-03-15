@@ -54,6 +54,20 @@ export default function ResearchDetailPage() {
   const [applied, setApplied] = useState<Record<string, boolean>>({});
   const [applyingFile, setApplyingFile] = useState<string | null>(null);
 
+  // Add-to-reference state (from AI answer)
+  const [showRefPrompt, setShowRefPrompt] = useState(false);
+  const [refTargetFiles, setRefTargetFiles] = useState<Record<string, boolean>>({
+    soul: false,
+    offer: false,
+    audience: false,
+    voice: false,
+  });
+  const [refGenerating, setRefGenerating] = useState(false);
+  const [refProposals, setRefProposals] = useState<Record<string, string>>({});
+  const [refCurrentContent, setRefCurrentContent] = useState<Record<string, string>>({});
+  const [refApplied, setRefApplied] = useState<Record<string, boolean>>({});
+  const [refApplyingFile, setRefApplyingFile] = useState<string | null>(null);
+
   useEffect(() => {
     const load = async () => {
       const res = await fetch("/api/research/" + id);
@@ -216,6 +230,54 @@ export default function ResearchDetailPage() {
     }
   };
 
+  const generateRefFromAnswer = async () => {
+    const selected = Object.entries(refTargetFiles)
+      .filter(([, v]) => v)
+      .map(([k]) => k);
+    if (selected.length === 0) return;
+
+    setRefGenerating(true);
+    setRefProposals({});
+    setRefCurrentContent({});
+    setRefApplied({});
+
+    try {
+      // Use the codify endpoint with the AI answer as a synthetic decision
+      const res = await fetch("/api/research/" + id + "/codify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ targetFiles: selected }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setRefProposals(data.proposals || {});
+        setRefCurrentContent(data.currentContent || {});
+      }
+    } catch (err) {
+      console.error("Reference generation error:", err);
+    }
+    setRefGenerating(false);
+  };
+
+  const applyRefProposal = async (fileType: string) => {
+    const proposed = refProposals[fileType];
+    if (!proposed) return;
+    setRefApplyingFile(fileType);
+    try {
+      const saveRes = await fetch("/api/reference/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fileType, content: proposed }),
+      });
+      if (saveRes.ok) {
+        setRefApplied((prev) => ({ ...prev, [fileType]: true }));
+      }
+    } catch (err) {
+      console.error("Apply ref error:", err);
+    }
+    setRefApplyingFile(null);
+  };
+
   const hasDecision = topic.decision && topic.decision.trim().length > 0;
   const showCodify = (topic.status === "decided" || topic.status === "deciding" || topic.status === "codified") && hasDecision;
   const hasProposals = Object.keys(proposals).length > 0;
@@ -341,6 +403,87 @@ export default function ResearchDetailPage() {
                 >
                   + Add to notes
                 </button>
+                <button
+                  onClick={() => {
+                    // Save the AI answer as the decision so the codify endpoint can use it
+                    const decisionText = "AI Research Answer:\n\nQ: " + question + "\n\n" + aiAnswer;
+                    setTopic((prev) => prev ? { ...prev, decision: decisionText } : prev);
+                    save({ decision: decisionText, status: topic.status === "research" ? "deciding" : topic.status });
+                    setShowRefPrompt(!showRefPrompt);
+                  }}
+                  className="font-mono text-[10px] text-[#22c55e] hover:text-white mt-3 ml-4 transition-colors"
+                >
+                  + Add to reference files
+                </button>
+
+                {showRefPrompt && (
+                  <div className="mt-4 border border-[#22c55e]/30 bg-[#0a0a0a] p-4">
+                    <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#22c55e] mb-3">
+                      Update reference files with this answer
+                    </p>
+                    <div className="flex flex-wrap gap-3 mb-4">
+                      {(Object.keys(FILE_LABELS) as string[]).map((ft) => (
+                        <label key={ft} className="flex items-center gap-2 cursor-pointer group">
+                          <input
+                            type="checkbox"
+                            checked={refTargetFiles[ft] || false}
+                            onChange={(e) => setRefTargetFiles((prev) => ({ ...prev, [ft]: e.target.checked }))}
+                            className="sr-only"
+                          />
+                          <span
+                            className={"w-3 h-3 border flex items-center justify-center transition-colors " +
+                              (refTargetFiles[ft] ? "bg-[#22c55e] border-[#22c55e]" : "border-[#333] group-hover:border-[#555]")
+                            }
+                          >
+                            {refTargetFiles[ft] && (
+                              <svg width="8" height="8" viewBox="0 0 8 8" fill="none">
+                                <path d="M1 4L3 6L7 2" stroke="#000" strokeWidth="1.5" />
+                              </svg>
+                            )}
+                          </span>
+                          <span className="font-mono text-xs text-[#a0a0a0] group-hover:text-white transition-colors">
+                            {FILE_LABELS[ft]}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                    <button
+                      onClick={generateRefFromAnswer}
+                      disabled={refGenerating || Object.values(refTargetFiles).filter(Boolean).length === 0}
+                      className="font-mono text-xs font-bold px-4 py-2 hover:brightness-110 transition-all disabled:opacity-50"
+                      style={{ backgroundColor: "#22c55e", color: "#000", borderRadius: 0 }}
+                    >
+                      {refGenerating ? "Generating..." : "Generate Update"}
+                    </button>
+
+                    {Object.keys(refProposals).length > 0 && (
+                      <div className="mt-4 space-y-4">
+                        {Object.entries(refProposals).map(([fileType, proposed]) => (
+                          <div key={fileType} className="border border-[#1a1a1a]">
+                            <div className="flex items-center justify-between px-3 py-2 border-b border-[#1a1a1a] bg-[#111111]">
+                              <span className="font-mono text-xs font-bold text-white">{FILE_LABELS[fileType]}</span>
+                              {refApplied[fileType] ? (
+                                <span className="font-mono text-[10px] px-2 py-0.5 bg-[#22c55e]/20 text-[#22c55e]">APPLIED</span>
+                              ) : (
+                                <button
+                                  onClick={() => applyRefProposal(fileType)}
+                                  disabled={refApplyingFile === fileType}
+                                  className="font-mono text-[10px] font-bold px-3 py-1 hover:brightness-110 transition-all disabled:opacity-50"
+                                  style={{ backgroundColor: "#22c55e", color: "#000", borderRadius: 0 }}
+                                >
+                                  {refApplyingFile === fileType ? "Applying..." : "Apply"}
+                                </button>
+                              )}
+                            </div>
+                            <div className="p-3 max-h-[200px] overflow-y-auto">
+                              <pre className="whitespace-pre-wrap font-mono text-xs text-[#a0a0a0] leading-relaxed">{proposed}</pre>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             )}
           </div>
