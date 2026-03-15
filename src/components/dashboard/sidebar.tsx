@@ -16,11 +16,11 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: "■" },
-  { label: "Reference Files", href: "/dashboard/files", icon: "☰" },
-  { label: "Generate", href: "/dashboard/generate", feature: "generate:ad_copy", icon: "⚡" },
-  { label: "Outputs", href: "/dashboard/outputs", feature: "output_history", icon: "▶" },
-  { label: "Research", href: "/dashboard/research", feature: "research", icon: "◆" },
-  { label: "Agents", href: "/dashboard/agents", feature: "agent:congruence_audit", icon: "⬡" },
+  { label: "Build", href: "/dashboard/files", icon: "1" },
+  { label: "Research", href: "/dashboard/research", feature: "research", icon: "2" },
+  { label: "Create", href: "/dashboard/generate", feature: "generate:ad_copy", icon: "3" },
+  { label: "Publish", href: "/dashboard/outputs", feature: "output_history", icon: "4" },
+  { label: "Automate", href: "/dashboard/agents", feature: "agent:congruence_audit", icon: "5" },
   { label: "Settings", href: "/dashboard/settings", icon: "⚙" },
 ];
 
