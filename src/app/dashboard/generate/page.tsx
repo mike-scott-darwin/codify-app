@@ -59,6 +59,56 @@ export default function GenerateHubPage() {
           );
         })}
       </div>
+
+      {/* Agent-powered campaigns */}
+      <h2 className="font-mono text-sm text-[#6b6b6b] uppercase tracking-[0.2em] mt-10 mb-4">
+        Campaign Mode (Multi-Step Agents)
+      </h2>
+      <div className="space-y-4">
+        {[
+          { type: "ad_campaign", label: "Ad Campaign", icon: "🎯", description: "9 hooks, 5 full ads, compliance-checked and ranked", feature: "agent:ad_campaign" as Feature, tier: "pro" as const },
+          { type: "email_campaign", label: "Email Campaign", icon: "📧", description: "Full sequence with arc progression, subject lines, and timing", feature: "agent:email_campaign" as Feature, tier: "pro" as const },
+          { type: "content_calendar", label: "Content Calendar", icon: "📅", description: "5 days of platform-aware posts from your content pillars", feature: "agent:content_calendar" as Feature, tier: "pro" as const },
+        ].map((agent) => {
+          const locked = !hasAccess(tier, agent.feature);
+          const limit = getGenerationLimit(tier, agent.type);
+          const limitLabel = limit === Infinity ? "Unlimited" : limit + "/mo";
+
+          return (
+            <Link
+              key={agent.type}
+              href={locked ? "/dashboard/upgrade" : "/dashboard/agents?launch=" + agent.type}
+              className="block bg-[#111111] border border-[#1a1a1a] p-6 hover:border-[#333] transition-colors"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <span className="text-xl">{agent.icon}</span>
+                  <div>
+                    <span className="font-mono text-sm text-white font-bold">
+                      {agent.label}
+                    </span>
+                    <p className="text-xs text-[#6b6b6b] mt-0.5">{agent.description}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  {!locked && (
+                    <span className="font-mono text-[10px] text-[#6b6b6b]">
+                      {limitLabel}
+                    </span>
+                  )}
+                  {locked ? (
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-[#8b5cf6] border border-[#8b5cf6] px-2 py-1">
+                      {TIER_LABELS[agent.tier]}
+                    </span>
+                  ) : (
+                    <span className="font-mono text-[10px] text-[#f59e0b] border border-[#f59e0b] px-2 py-1">AGENT</span>
+                  )}
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
     </>
   );
 }

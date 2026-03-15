@@ -168,14 +168,22 @@ export default function FilesPage() {
             Your business context. Each file makes every AI output better.
           </p>
         </div>
-        {Object.keys(fileContents).length > 0 && (
-          <button
-            onClick={downloadAll}
-            className="font-mono text-xs px-4 py-2 border border-[#1a1a1a] text-[#a0a0a0] hover:text-white hover:border-[#333] transition-colors"
+        <div className="flex gap-3">
+          <Link
+            href="/dashboard/agents?launch=congruence_audit"
+            className="font-mono text-xs px-4 py-2 border border-[#f59e0b] text-[#f59e0b] hover:bg-[#f59e0b] hover:text-black transition-colors"
           >
-            Download All
-          </button>
-        )}
+            Audit My Files
+          </Link>
+          {Object.keys(fileContents).length > 0 && (
+            <button
+              onClick={downloadAll}
+              className="font-mono text-xs px-4 py-2 border border-[#1a1a1a] text-[#a0a0a0] hover:text-white hover:border-[#333] transition-colors"
+            >
+              Download All
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Context Power Score */}

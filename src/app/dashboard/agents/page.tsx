@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useTier } from "@/lib/tier-context";
 import { hasAccess, TIER_LABELS, TIER_COLORS } from "@/lib/tier";
 import { AGENT_CONFIGS } from "@/lib/agents/types";
@@ -33,16 +34,22 @@ const STATUS_COLORS: Record<string, string> = {
 
 export default function AgentsPage() {
   const { tier } = useTier();
+  const searchParams = useSearchParams();
   const [recentJobs, setRecentJobs] = useState<RecentJob[]>([]);
   const [launching, setLaunching] = useState<string | null>(null);
+  const autoLaunched = useRef(false);
 
   useEffect(() => {
-    const load = async () => {
-      const res = await fetch("/api/outputs?type=congruence_audit");
-      // We'll load from agent_jobs once we have the endpoint
-    };
-    load();
-  }, []);
+    if (autoLaunched.current) return;
+    const launchType = searchParams.get("launch") as AgentType | null;
+    if (launchType && AGENT_CONFIGS[launchType]) {
+      autoLaunched.current = true;
+      const topic = searchParams.get("topic");
+      const config: Record<string, unknown> = {};
+      if (topic) config.topic = topic;
+      launchAgent(launchType, config);
+    }
+  }, [searchParams]);
 
   const launchAgent = async (agentType: AgentType, config: Record<string, unknown> = {}) => {
     setLaunching(agentType);

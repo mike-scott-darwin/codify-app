@@ -94,6 +94,12 @@ export default function ResearchDetailPage() {
               <option key={s} value={s}>{s}</option>
             ))}
           </select>
+          <Link
+            href={"/dashboard/agents?launch=deep_research&topic=" + encodeURIComponent(topic.title)}
+            className="font-mono text-xs px-3 py-1.5 border border-[#f59e0b] text-[#f59e0b] hover:bg-[#f59e0b] hover:text-black transition-colors"
+          >
+            Deep Research
+          </Link>
           <button
             onClick={handleDelete}
             className="font-mono text-xs px-3 py-1.5 border border-[#1a1a1a] text-[#ef4444] hover:bg-[#ef4444] hover:text-white transition-colors"
