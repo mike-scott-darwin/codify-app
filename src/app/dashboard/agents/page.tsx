@@ -88,7 +88,7 @@ export default function AgentsPage() {
       )}
 
       <div className="space-y-4">
-        {(Object.entries(AGENT_CONFIGS) as [AgentType, typeof AGENT_CONFIGS[AgentType]][]).filter(([type]) => type !== "congruence_audit").map(([type, config]) => {
+        {(Object.entries(AGENT_CONFIGS) as [AgentType, typeof AGENT_CONFIGS[AgentType]][]).filter(([type]) => type !== "congruence_audit" && type !== "deep_research").map(([type, config]) => {
           const feature = AGENT_FEATURE_MAP[type];
           const locked = !hasAccess(tier, feature);
           const isLaunching = launching === type;
