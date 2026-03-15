@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getEnrichmentPrompt } from "@/lib/enrichment-prompts";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { callLLM } from "@/lib/llm/provider";
+import type { LLMConfig } from "@/lib/llm/provider";
+import { getUserLLMConfig } from "@/lib/llm/user-config";
 
 const VALID_FILE_TYPES = ["soul", "offer", "audience", "voice"] as const;
 
@@ -30,15 +33,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const googleKey = process.env.GOOGLE_API_KEY;
-
-  if (!googleKey) {
-    return NextResponse.json(
-      { error: "Enrichment not configured. GOOGLE_API_KEY missing." },
-      { status: 503 }
-    );
-  }
-
   let body: { fileType?: string; answers?: Record<string, string> };
   try {
     body = await request.json();
@@ -65,15 +59,19 @@ export async function POST(request: NextRequest) {
   const { system, user } = getEnrichmentPrompt(fileType, answers);
 
   try {
-    const genAI = new GoogleGenerativeAI(googleKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    // Try to load user's LLM config if authenticated
+    let config: LLMConfig = { provider: "gemini" };
+    try {
+      const supabase = await createServerSupabaseClient();
+      const { data: { user: authUser } } = await supabase.auth.getUser();
+      if (authUser) {
+        config = await getUserLLMConfig(authUser.id);
+      }
+    } catch {
+      // Not authenticated or config load failed — use default Gemini
+    }
 
-    const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: user }] }],
-      systemInstruction: { role: "model", parts: [{ text: system }] },
-    });
-
-    let enrichedContent = result.response.text();
+    let enrichedContent = await callLLM(config, system, user);
 
     // Strip YAML frontmatter if the model includes it
     enrichedContent = enrichedContent.replace(/^---[\s\S]*?---\s*\n/, "").trim();

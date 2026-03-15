@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
+import { callLLM } from "@/lib/llm/provider";
+import { getUserLLMConfig } from "@/lib/llm/user-config";
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const googleKey = process.env.GOOGLE_API_KEY;
-  if (!googleKey) return NextResponse.json({ error: "AI not configured." }, { status: 503 });
 
   const supabase = await createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -41,15 +40,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
   const userPrompt = `Business context:\n${refContext || "(No reference files yet)"}\n\nResearch topic: ${topic.title}\n\nExisting notes:\n${topic.content || "(none)"}\n\nQuestion: ${question}`;
 
   try {
-    const genAI = new GoogleGenerativeAI(googleKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-    const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: userPrompt }] }],
-      systemInstruction: { role: "model", parts: [{ text: system }] },
-    });
-
-    return NextResponse.json({ answer: result.response.text() });
+    const config = await getUserLLMConfig(user.id);
+    const answer = await callLLM(config, system, userPrompt);
+    return NextResponse.json({ answer });
   } catch (err: unknown) {
     console.error("Research AI error:", err instanceof Error ? err.message : err);
     return NextResponse.json({ error: "AI research failed." }, { status: 500 });

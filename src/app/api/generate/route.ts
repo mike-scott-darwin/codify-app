@@ -1,19 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { getGenerationPrompt } from "@/lib/generation-prompts";
 import { FEATURE_REQUIRED_TIER, TIER_HIERARCHY, getGenerationLimit } from "@/lib/tier";
+import { callLLM } from "@/lib/llm/provider";
+import { getUserLLMConfig } from "@/lib/llm/user-config";
 import type { OutputType } from "@/lib/generation-types";
 import type { Tier, Feature } from "@/lib/tier";
 
 const VALID_TYPES: OutputType[] = ["ad_copy", "social_post", "email_sequence", "vsl_script", "landing_page"];
 
 export async function POST(request: NextRequest) {
-  const googleKey = process.env.GOOGLE_API_KEY;
-  if (!googleKey) {
-    return NextResponse.json({ error: "Generation not configured." }, { status: 503 });
-  }
-
   const supabase = await createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
@@ -93,15 +89,8 @@ export async function POST(request: NextRequest) {
   const { system, user: userPrompt } = getGenerationPrompt(outputType as OutputType, refs, options);
 
   try {
-    const genAI = new GoogleGenerativeAI(googleKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-    const result = await model.generateContent({
-      contents: [{ role: "user", parts: [{ text: userPrompt }] }],
-      systemInstruction: { role: "model", parts: [{ text: system }] },
-    });
-
-    const content = result.response.text();
+    const config = await getUserLLMConfig(user.id);
+    const content = await callLLM(config, system, userPrompt);
 
     const typeLabels: Record<string, string> = {
       ad_copy: "Ad Copy",

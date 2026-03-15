@@ -1,24 +1,21 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { callLLM } from "@/lib/llm/provider";
+import { getUserLLMConfig } from "@/lib/llm/user-config";
+import type { LLMConfig } from "@/lib/llm/provider";
 
-let genAIInstance: GoogleGenerativeAI | null = null;
+export async function callGemini(
+  system: string,
+  prompt: string,
+  userId?: string
+): Promise<string> {
+  let config: LLMConfig = { provider: "gemini" };
 
-function getGenAI(): GoogleGenerativeAI {
-  if (!genAIInstance) {
-    const key = process.env.GOOGLE_API_KEY;
-    if (!key) throw new Error("GOOGLE_API_KEY not configured");
-    genAIInstance = new GoogleGenerativeAI(key);
+  if (userId) {
+    try {
+      config = await getUserLLMConfig(userId);
+    } catch {
+      // Fall back to default Gemini if config load fails
+    }
   }
-  return genAIInstance;
-}
 
-export async function callGemini(system: string, prompt: string): Promise<string> {
-  const genAI = getGenAI();
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
-  const result = await model.generateContent({
-    contents: [{ role: "user", parts: [{ text: prompt }] }],
-    systemInstruction: { role: "model", parts: [{ text: system }] },
-  });
-
-  return result.response.text();
+  return callLLM(config, system, prompt);
 }
