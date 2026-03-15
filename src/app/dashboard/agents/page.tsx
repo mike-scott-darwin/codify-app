@@ -37,6 +37,7 @@ export default function AgentsPage() {
   const searchParams = useSearchParams();
   const [recentJobs, setRecentJobs] = useState<RecentJob[]>([]);
   const [launching, setLaunching] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const autoLaunched = useRef(false);
 
   useEffect(() => {
@@ -53,6 +54,7 @@ export default function AgentsPage() {
 
   const launchAgent = async (agentType: AgentType, config: Record<string, unknown> = {}) => {
     setLaunching(agentType);
+    setError(null);
     try {
       const res = await fetch("/api/agent/dispatch", {
         method: "POST",
@@ -62,8 +64,12 @@ export default function AgentsPage() {
       const data = await res.json();
       if (data.jobId) {
         window.location.href = "/dashboard/agents/" + data.jobId;
+      } else {
+        setError(data.error || "Failed to launch agent. Check that supabase-schema-v3.sql has been run.");
+        setLaunching(null);
       }
-    } catch {
+    } catch (e) {
+      setError("Network error — could not reach the server.");
       setLaunching(null);
     }
   };
@@ -74,6 +80,12 @@ export default function AgentsPage() {
       <p className="text-sm text-[#6b6b6b] mb-8">
         Multi-step AI agents that go beyond single-prompt generation.
       </p>
+
+      {error && (
+        <div className="bg-[#111111] border border-[#ef4444] p-4 mb-4">
+          <p className="font-mono text-sm text-[#ef4444]">{error}</p>
+        </div>
+      )}
 
       <div className="space-y-4">
         {(Object.entries(AGENT_CONFIGS) as [AgentType, typeof AGENT_CONFIGS[AgentType]][]).map(([type, config]) => {
