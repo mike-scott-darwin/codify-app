@@ -55,7 +55,21 @@ export default function AgentJobPage() {
 
   const handleCopy = async () => {
     if (!job.result?.content) return;
-    await navigator.clipboard.writeText(job.result.content);
+    const el = document.getElementById("agent-result");
+    if (el) {
+      // Copy as rich text so it pastes formatted into Google Docs / Word
+      const html = el.innerHTML;
+      const blob = new Blob([html], { type: "text/html" });
+      const textBlob = new Blob([job.result.content], { type: "text/plain" });
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "text/html": blob,
+          "text/plain": textBlob,
+        }),
+      ]);
+    } else {
+      await navigator.clipboard.writeText(job.result.content);
+    }
     setCopied(true);
     setTimeout(() => setCopied(false), 3000);
   };
@@ -144,25 +158,25 @@ export default function AgentJobPage() {
             </div>
           </div>
 
-          <div className="bg-[#111111] border border-[#1a1a1a] p-6 prose-terminal">
+          <div id="agent-result" className="bg-white rounded shadow-lg p-8 max-w-3xl mx-auto" style={{ fontFamily: "'Georgia', 'Times New Roman', serif" }}>
             <ReactMarkdown
               components={{
-                h1: ({ children }) => <h1 className="font-mono text-lg font-bold text-white mb-4 mt-6 first:mt-0">{children}</h1>,
-                h2: ({ children }) => <h2 className="font-mono text-sm font-bold text-[#4a9eff] uppercase tracking-wider mb-3 mt-6">{children}</h2>,
-                h3: ({ children }) => <h3 className="font-mono text-sm font-bold text-[#a0a0a0] mb-2 mt-4">{children}</h3>,
-                p: ({ children }) => <p className="font-mono text-sm text-[#a0a0a0] leading-relaxed mb-3">{children}</p>,
-                ul: ({ children }) => <ul className="space-y-1 mb-4 ml-4">{children}</ul>,
-                ol: ({ children }) => <ol className="space-y-1 mb-4 ml-4 list-decimal">{children}</ol>,
-                li: ({ children }) => <li className="font-mono text-sm text-[#a0a0a0] leading-relaxed">{children}</li>,
-                strong: ({ children }) => <strong className="text-white font-bold">{children}</strong>,
-                em: ({ children }) => <em className="text-[#f59e0b] not-italic">{children}</em>,
-                hr: () => <hr className="border-[#1a1a1a] my-6" />,
-                table: ({ children }) => <div className="overflow-x-auto mb-4"><table className="w-full border-collapse font-mono text-sm">{children}</table></div>,
-                thead: ({ children }) => <thead className="border-b border-[#333]">{children}</thead>,
-                th: ({ children }) => <th className="text-left text-[#4a9eff] text-xs uppercase tracking-wider px-3 py-2">{children}</th>,
-                td: ({ children }) => <td className="text-[#a0a0a0] px-3 py-2 border-b border-[#1a1a1a]">{children}</td>,
-                code: ({ children }) => <code className="bg-[#1a1a1a] text-[#22c55e] px-1.5 py-0.5 text-xs">{children}</code>,
-                blockquote: ({ children }) => <blockquote className="border-l-2 border-[#8b5cf6] pl-4 my-4">{children}</blockquote>,
+                h1: ({ children }) => <h1 style={{ fontSize: "24px", fontWeight: "bold", color: "#1a1a1a", marginBottom: "16px", marginTop: "24px", borderBottom: "2px solid #e5e5e5", paddingBottom: "8px" }}>{children}</h1>,
+                h2: ({ children }) => <h2 style={{ fontSize: "18px", fontWeight: "bold", color: "#333", marginBottom: "12px", marginTop: "20px" }}>{children}</h2>,
+                h3: ({ children }) => <h3 style={{ fontSize: "15px", fontWeight: "bold", color: "#555", marginBottom: "8px", marginTop: "16px" }}>{children}</h3>,
+                p: ({ children }) => <p style={{ fontSize: "14px", color: "#333", lineHeight: "1.7", marginBottom: "12px" }}>{children}</p>,
+                ul: ({ children }) => <ul style={{ marginLeft: "24px", marginBottom: "16px", listStyleType: "disc" }}>{children}</ul>,
+                ol: ({ children }) => <ol style={{ marginLeft: "24px", marginBottom: "16px", listStyleType: "decimal" }}>{children}</ol>,
+                li: ({ children }) => <li style={{ fontSize: "14px", color: "#333", lineHeight: "1.7", marginBottom: "4px" }}>{children}</li>,
+                strong: ({ children }) => <strong style={{ fontWeight: "bold", color: "#1a1a1a" }}>{children}</strong>,
+                em: ({ children }) => <em style={{ fontStyle: "italic", color: "#555" }}>{children}</em>,
+                hr: () => <hr style={{ border: "none", borderTop: "1px solid #e5e5e5", margin: "24px 0" }} />,
+                table: ({ children }) => <div style={{ overflowX: "auto", marginBottom: "16px" }}><table style={{ width: "100%", borderCollapse: "collapse", fontSize: "13px" }}>{children}</table></div>,
+                thead: ({ children }) => <thead style={{ backgroundColor: "#f5f5f5" }}>{children}</thead>,
+                th: ({ children }) => <th style={{ textAlign: "left", fontWeight: "bold", color: "#333", padding: "8px 12px", borderBottom: "2px solid #ddd" }}>{children}</th>,
+                td: ({ children }) => <td style={{ color: "#444", padding: "8px 12px", borderBottom: "1px solid #eee" }}>{children}</td>,
+                code: ({ children }) => <code style={{ backgroundColor: "#f5f5f5", color: "#c7254e", padding: "2px 4px", fontSize: "13px", borderRadius: "3px" }}>{children}</code>,
+                blockquote: ({ children }) => <blockquote style={{ borderLeft: "3px solid #ddd", paddingLeft: "16px", margin: "16px 0", color: "#666" }}>{children}</blockquote>,
               }}
             >
               {job.result.content}
