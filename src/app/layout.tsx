@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import { AuthProvider } from "@/lib/auth-context";
+import { TierProvider } from "@/lib/tier-context";
 import "./globals.css";
 
 const jetbrains = JetBrains_Mono({
@@ -29,7 +30,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${jetbrains.variable} ${spaceGrotesk.variable}`}>
       <body className="antialiased">
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider><TierProvider>{children}</TierProvider></AuthProvider>
       </body>
     </html>
   );
