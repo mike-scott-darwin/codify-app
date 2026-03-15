@@ -31,6 +31,7 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
   if (body.content !== undefined) updates.content = body.content;
   if (body.decision !== undefined) updates.decision = body.decision;
   if (body.findings !== undefined) updates.findings = body.findings;
+  if (body.codify_proposals !== undefined) updates.codify_proposals = body.codify_proposals;
 
   const { error } = await supabase
     .from("research_topics")
