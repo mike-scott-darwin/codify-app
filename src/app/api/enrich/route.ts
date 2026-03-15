@@ -73,7 +73,10 @@ export async function POST(request: NextRequest) {
       systemInstruction: { role: "model", parts: [{ text: system }] },
     });
 
-    const enrichedContent = result.response.text();
+    let enrichedContent = result.response.text();
+
+    // Strip YAML frontmatter if the model includes it
+    enrichedContent = enrichedContent.replace(/^---[\s\S]*?---\s*\n/, "").trim();
 
     return NextResponse.json({ enrichedContent });
   } catch (err: unknown) {

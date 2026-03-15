@@ -5,8 +5,7 @@ RULES:
 - Concrete over abstract. Specific over vague.
 - PRESERVE the user's specific examples, stories, phrases, and numbers. Your job is to STRUCTURE their content, not replace it with generic business language.
 - Every claim, story, and detail they provide should survive into the output.
-- Output ONLY the markdown content. No code fences. No explanations. No preamble.
-- Start with YAML frontmatter (type: reference, status: draft, date: ${new Date().toISOString().split("T")[0]}).`;
+- Output ONLY the markdown content. No code fences. No explanations. No preamble. No YAML frontmatter.`;
 
 const SOUL_SYSTEM = `${SHARED_SYSTEM}
 
