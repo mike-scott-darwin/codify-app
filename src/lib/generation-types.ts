@@ -1,4 +1,4 @@
-export type OutputType = "ad_copy" | "social_post" | "email_sequence" | "vsl_script" | "landing_page";
+export type OutputType = "ad_copy" | "social_post" | "email_sequence" | "vsl_script" | "landing_page" | "newsletter";
 
 export interface GenerationOption {
   id: string;
@@ -184,6 +184,43 @@ export const GENERATION_CONFIGS: GenerationConfig[] = [
           { value: "full", label: "Full (8+ sections)" },
         ],
         defaultValue: "standard",
+      },
+    ],
+  },
+  {
+    type: "newsletter",
+    label: "Newsletter",
+    description: "Weekly or biweekly newsletters that build trust and authority",
+    icon: "◉",
+    options: [
+      {
+        id: "format",
+        label: "Format",
+        type: "select",
+        options: [
+          { value: "value_driven", label: "Value-Driven (teach + CTA)" },
+          { value: "curated", label: "Curated (links + commentary)" },
+          { value: "story", label: "Story-Based (narrative + lesson)" },
+          { value: "hybrid", label: "Hybrid (story + value + CTA)" },
+        ],
+        defaultValue: "hybrid",
+      },
+      {
+        id: "length",
+        label: "Length",
+        type: "select",
+        options: [
+          { value: "short", label: "Short (300-500 words)" },
+          { value: "medium", label: "Medium (500-800 words)" },
+          { value: "long", label: "Long (800-1200 words)" },
+        ],
+        defaultValue: "medium",
+      },
+      {
+        id: "topic",
+        label: "Topic (optional)",
+        type: "text",
+        defaultValue: "",
       },
     ],
   },

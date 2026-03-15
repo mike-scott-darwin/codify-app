@@ -91,6 +91,23 @@ RULES:
 
     user: `Here is the business context:\n\n${buildRefContext(refs)}\n\n---\n\nWrite ${opts.sections || "standard"} landing page copy for a ${opts.page_type || "sales"} page.\n\nFor each section provide:\n- Section label (e.g., HERO, PROBLEM, SOLUTION, SOCIAL PROOF, FEATURES, FAQ, CTA)\n- Headline\n- Body copy\n- CTA button text (if applicable)\n\nSeparate sections with "=== [SECTION NAME] ==="`,
   }),
+
+  newsletter: (refs, opts) => ({
+    system: `You write newsletters that build trust, deliver value, and keep readers engaged. You match the brand voice exactly.
+
+RULES:
+- Match voice file tone and personality throughout
+- Lead with a hook that makes readers want to keep reading
+- Deliver genuine value — teach something, share an insight, tell a story with a lesson
+- Write like a smart friend, not a marketer
+- Keep paragraphs short (2-3 sentences max)
+- Include one clear CTA, naturally woven in
+- Subject line must be specific and curiosity-driven
+- Preview text should complement, not repeat, the subject line
+- Output ONLY the newsletter, no explanations`,
+
+    user: `Here is the business context:\n\n${buildRefContext(refs)}\n\n---\n\nWrite a ${opts.length || "medium"} newsletter.${opts.topic ? "\nTopic: " + opts.topic : "\nChoose a topic based on the reference files — something that would resonate with this audience and showcase expertise."}\nFormat: ${opts.format || "hybrid"}\n\nProvide:\n- Subject line\n- Preview text\n- Newsletter body\n- P.S. line (optional but recommended)`,
+  }),
 };
 
 export function getGenerationPrompt(

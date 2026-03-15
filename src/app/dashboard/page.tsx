@@ -28,6 +28,7 @@ const GENERATE_TYPES = [
   { key: "social_post", label: "Social Posts", desc: "Instagram, X, LinkedIn, TikTok", feature: "generate:social_post" as const },
   { key: "ad_copy", label: "Ad Copy", desc: "Headlines, hooks, and body copy", feature: "generate:ad_copy" as const },
   { key: "email_sequence", label: "Email Sequences", desc: "Welcome, nurture, launch", feature: "generate:email_sequence" as const },
+  { key: "newsletter", label: "Newsletter", desc: "Weekly newsletters that build trust", feature: "generate:newsletter" as const },
 ];
 
 function terminalBar(percentage: number, length: number = 20): string {

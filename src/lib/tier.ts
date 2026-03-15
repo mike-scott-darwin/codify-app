@@ -43,7 +43,8 @@ export type Feature =
   | "agent:ad_campaign"
   | "agent:deep_research"
   | "agent:content_calendar"
-  | "agent:email_campaign";
+  | "agent:email_campaign"
+  | "generate:newsletter";
 
 export const FEATURE_REQUIRED_TIER: Record<Feature, Tier> = {
   enrichment: "free",
@@ -61,6 +62,7 @@ export const FEATURE_REQUIRED_TIER: Record<Feature, Tier> = {
   "agent:ad_campaign": "pro",
   "agent:content_calendar": "pro",
   "agent:email_campaign": "pro",
+  "generate:newsletter": "pro",
 };
 
 // Per-output-type monthly limits by tier
@@ -71,6 +73,7 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     email_sequence: 0,
     vsl_script: 0,
     landing_page: 0,
+    newsletter: 0,
     congruence_audit: 0,
     ad_campaign: 0,
     deep_research: 0,
@@ -83,6 +86,7 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     email_sequence: 0,
     vsl_script: 0,
     landing_page: 0,
+    newsletter: 0,
     congruence_audit: 1,
     ad_campaign: 0,
     deep_research: 2,
@@ -95,6 +99,7 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     email_sequence: 50,
     vsl_script: 10,
     landing_page: 10,
+    newsletter: 10,
     congruence_audit: 5,
     ad_campaign: 4,
     deep_research: 10,
@@ -107,6 +112,7 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     email_sequence: Infinity,
     vsl_script: Infinity,
     landing_page: Infinity,
+    newsletter: Infinity,
     congruence_audit: Infinity,
     ad_campaign: Infinity,
     deep_research: Infinity,

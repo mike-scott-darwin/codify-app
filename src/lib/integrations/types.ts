@@ -53,7 +53,7 @@ export const PLATFORM_CONFIGS: Record<Platform, PlatformConfig> = {
         required: true,
       },
     ],
-    supportedOutputTypes: ["email_sequence", "ad_copy", "vsl_script"],
+    supportedOutputTypes: ["email_sequence", "ad_copy", "vsl_script", "newsletter"],
   },
   postiz: {
     platform: "postiz",
@@ -115,7 +115,7 @@ export const PLATFORM_CONFIGS: Record<Platform, PlatformConfig> = {
         required: true,
       },
     ],
-    supportedOutputTypes: ["email_sequence", "landing_page"],
+    supportedOutputTypes: ["email_sequence", "landing_page", "newsletter"],
   },
   webhook: {
     platform: "webhook",
@@ -144,6 +144,7 @@ export const PLATFORM_CONFIGS: Record<Platform, PlatformConfig> = {
       "email_sequence",
       "vsl_script",
       "landing_page",
+      "newsletter",
     ],
   },
 };

@@ -16,6 +16,7 @@ const SKILLS = [
   { cmd: "/email", desc: "Draft email sequences and newsletters" },
   { cmd: "/audit", desc: "Run a congruence audit on your files" },
   { cmd: "/brainstorm", desc: "Brainstorm angles, hooks, or content ideas" },
+  { cmd: "/newsletter", desc: "Draft a newsletter" },
   { cmd: "/refine", desc: "Refine and improve a piece of content" },
   { cmd: "/help", desc: "Show available commands" },
   { cmd: "/files", desc: "View your current reference files" },

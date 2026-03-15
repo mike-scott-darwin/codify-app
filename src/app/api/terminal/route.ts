@@ -11,6 +11,7 @@ const SKILL_PROMPTS: Record<string, string> = {
   "/email": "You are an email marketing expert. Draft email sequences (welcome, nurture, launch, re-engagement). Match the user's voice. Include subject lines, preview text, and body copy. Suggest send timing.",
   "/audit": "You are a congruence auditor. Analyze the user's reference files for alignment: soul-offer, audience-voice, offer-audience. Flag contradictions, gaps, and missed opportunities. Be specific with fix recommendations.",
   "/brainstorm": "You are a creative brainstorming partner. Generate angles, hooks, content ideas, or campaign concepts based on the user's reference files. Produce quantity first, then help narrow down. Be bold and specific.",
+  "/newsletter": "You are a newsletter writer. Draft newsletters that build trust and deliver value. Match the user's voice. Include subject line, preview text, and body copy. Keep paragraphs short. Write like a smart friend, not a marketer. Include one clear CTA woven naturally into the content.",
   "/refine": "You are an editor and content refiner. Take a piece of content the user provides and improve it \u2014 tighten the writing, strengthen the hook, improve flow, ensure it matches their voice. Show before/after.",
   "/files": "SYSTEM_FILES",
   "/score": "SYSTEM_SCORE",
