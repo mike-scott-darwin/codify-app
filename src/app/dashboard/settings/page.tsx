@@ -5,6 +5,12 @@ import { useAuth } from "@/lib/auth-context";
 import { useTier } from "@/lib/tier-context";
 import { TierBadge } from "@/components/dashboard/tier-badge";
 import { ENRICHMENT_LIMITS } from "@/lib/tier";
+import {
+  PLATFORM_CONFIGS,
+  ALL_PLATFORMS,
+  type Platform,
+  type IntegrationConnection,
+} from "@/lib/integrations/types";
 
 const PROVIDER_OPTIONS = [
   {
@@ -54,6 +60,25 @@ export default function DashboardSettingsPage() {
   const [feedback, setFeedback] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const [loaded, setLoaded] = useState(false);
 
+  // Integration state
+  const [integrations, setIntegrations] = useState<IntegrationConnection[]>([]);
+  const [intCredentials, setIntCredentials] = useState<Record<Platform, Record<string, string>>>({
+    gohighlevel: {},
+    postiz: { instanceUrl: "https://app.postiz.com" },
+    buffer: {},
+    mailchimp: {},
+    webhook: {},
+  });
+  const [intSaving, setIntSaving] = useState<Platform | null>(null);
+  const [intTesting, setIntTesting] = useState<Platform | null>(null);
+  const [intFeedback, setIntFeedback] = useState<Record<Platform, { type: "success" | "error"; msg: string } | null>>({
+    gohighlevel: null,
+    postiz: null,
+    buffer: null,
+    mailchimp: null,
+    webhook: null,
+  });
+
   useEffect(() => {
     fetch("/api/user/llm-config")
       .then((r) => r.json())
@@ -67,6 +92,16 @@ export default function DashboardSettingsPage() {
         setLoaded(true);
       })
       .catch(() => setLoaded(true));
+
+    // Load integrations
+    fetch("/api/integrations")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.integrations) {
+          setIntegrations(data.integrations);
+        }
+      })
+      .catch(() => {});
   }, []);
 
   const selected = PROVIDER_OPTIONS.find((p) => p.value === provider) || PROVIDER_OPTIONS[0];
@@ -128,6 +163,92 @@ export default function DashboardSettingsPage() {
       setFeedback({ type: "error", msg: "Network error." });
     }
     setTesting(false);
+  }
+
+  function isConnected(platform: Platform): boolean {
+    return integrations.some((i) => i.platform === platform && i.enabled);
+  }
+
+  function updateCredential(platform: Platform, key: string, value: string) {
+    setIntCredentials((prev) => ({
+      ...prev,
+      [platform]: { ...prev[platform], [key]: value },
+    }));
+  }
+
+  function setIntPlatformFeedback(platform: Platform, fb: { type: "success" | "error"; msg: string } | null) {
+    setIntFeedback((prev) => ({ ...prev, [platform]: fb }));
+  }
+
+  async function handleIntConnect(platform: Platform) {
+    setIntSaving(platform);
+    setIntPlatformFeedback(platform, null);
+    try {
+      const res = await fetch("/api/integrations", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          platform,
+          credentials: intCredentials[platform],
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setIntPlatformFeedback(platform, { type: "success", msg: data.message || "Connected" });
+        // Reload integrations
+        const r = await fetch("/api/integrations");
+        const d = await r.json();
+        if (d.integrations) setIntegrations(d.integrations);
+      } else {
+        setIntPlatformFeedback(platform, { type: "error", msg: data.error || "Failed" });
+      }
+    } catch {
+      setIntPlatformFeedback(platform, { type: "error", msg: "Network error" });
+    }
+    setIntSaving(null);
+  }
+
+  async function handleIntTest(platform: Platform) {
+    setIntTesting(platform);
+    setIntPlatformFeedback(platform, null);
+    try {
+      const res = await fetch("/api/integrations/test", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          platform,
+          credentials: intCredentials[platform],
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setIntPlatformFeedback(platform, { type: "success", msg: data.message || "Connection works" });
+      } else {
+        setIntPlatformFeedback(platform, { type: "error", msg: data.message || "Connection failed" });
+      }
+    } catch {
+      setIntPlatformFeedback(platform, { type: "error", msg: "Network error" });
+    }
+    setIntTesting(null);
+  }
+
+  async function handleIntDisconnect(platform: Platform) {
+    setIntSaving(platform);
+    setIntPlatformFeedback(platform, null);
+    try {
+      const res = await fetch("/api/integrations", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ platform }),
+      });
+      if (res.ok) {
+        setIntPlatformFeedback(platform, { type: "success", msg: "Disconnected" });
+        setIntegrations((prev) => prev.filter((i) => i.platform !== platform));
+      }
+    } catch {
+      setIntPlatformFeedback(platform, { type: "error", msg: "Failed to disconnect" });
+    }
+    setIntSaving(null);
   }
 
   return (
@@ -275,6 +396,121 @@ export default function DashboardSettingsPage() {
               {testing ? "Testing..." : "Test Connection"}
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* Integrations */}
+      <div className="mb-6">
+        <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#4a9eff] mb-4">
+          Platform Integrations
+        </p>
+        <p className="font-mono text-xs text-[#6b6b6b] mb-6">
+          Connect platforms to publish generated content directly from Codify.
+        </p>
+
+        <div className="space-y-4">
+          {ALL_PLATFORMS.map((platform) => {
+            const config = PLATFORM_CONFIGS[platform];
+            const connected = isConnected(platform);
+            const fb = intFeedback[platform];
+
+            return (
+              <div
+                key={platform}
+                className={
+                  "bg-[#111111] border p-6 transition-colors " +
+                  (connected ? "border-[#22c55e]" : "border-[#1a1a1a]")
+                }
+              >
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-xl">{config.icon}</span>
+                    <div>
+                      <span className="font-mono text-sm font-bold text-white">
+                        {config.label}
+                      </span>
+                      <p className="font-mono text-[10px] text-[#6b6b6b]">
+                        {config.description}
+                      </p>
+                    </div>
+                  </div>
+                  {connected && (
+                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#22c55e] border border-[#22c55e] px-2 py-0.5">
+                      Connected
+                    </span>
+                  )}
+                </div>
+
+                {/* Supported types */}
+                <div className="flex gap-1.5 mb-4">
+                  {config.supportedOutputTypes.map((t) => (
+                    <span
+                      key={t}
+                      className="font-mono text-[9px] text-[#6b6b6b] bg-[#0a0a0a] px-1.5 py-0.5"
+                    >
+                      {t.replace(/_/g, " ")}
+                    </span>
+                  ))}
+                </div>
+
+                {connected ? (
+                  <button
+                    onClick={() => handleIntDisconnect(platform)}
+                    disabled={intSaving === platform}
+                    className="font-mono text-xs px-3 py-1.5 border border-[#ef4444] text-[#ef4444] hover:bg-[#ef4444] hover:text-white transition-colors disabled:opacity-50"
+                  >
+                    {intSaving === platform ? "..." : "Disconnect"}
+                  </button>
+                ) : (
+                  <div className="space-y-3">
+                    {config.fields.map((field) => (
+                      <div key={field.key}>
+                        <label className="font-mono text-xs text-[#6b6b6b] block mb-1">
+                          {field.label}
+                          {field.required && <span className="text-[#ef4444]"> *</span>}
+                        </label>
+                        <input
+                          type={field.type === "password" ? "password" : "text"}
+                          value={intCredentials[platform]?.[field.key] || ""}
+                          onChange={(e) => updateCredential(platform, field.key, e.target.value)}
+                          placeholder={field.placeholder}
+                          className="w-full bg-[#0a0a0a] border border-[#1a1a1a] text-white font-mono text-sm p-2 focus:border-[#4a9eff] focus:outline-none"
+                        />
+                      </div>
+                    ))}
+
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => handleIntConnect(platform)}
+                        disabled={intSaving === platform}
+                        className="bg-[#4a9eff] text-white font-mono text-xs font-bold px-4 py-2 hover:bg-[#4a9eff]/80 disabled:opacity-50 transition-colors"
+                      >
+                        {intSaving === platform ? "Connecting..." : "Connect"}
+                      </button>
+                      <button
+                        onClick={() => handleIntTest(platform)}
+                        disabled={intTesting === platform}
+                        className="border border-[#4a9eff] text-[#4a9eff] font-mono text-xs font-bold px-4 py-2 hover:bg-[#4a9eff]/10 disabled:opacity-50 transition-colors"
+                      >
+                        {intTesting === platform ? "Testing..." : "Test"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {fb && (
+                  <p
+                    className={
+                      "font-mono text-xs mt-3 " +
+                      (fb.type === "success" ? "text-[#22c55e]" : "text-red-400")
+                    }
+                  >
+                    {fb.msg}
+                  </p>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
     </>

@@ -6,6 +6,8 @@ import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import { AGENT_CONFIGS } from "@/lib/agents/types";
 import type { AgentType } from "@/lib/agents/types";
+import type { Platform, IntegrationConnection } from "@/lib/integrations/types";
+import { PLATFORM_CONFIGS, ALL_PLATFORMS } from "@/lib/integrations/types";
 
 interface Job {
   id: string;
@@ -17,12 +19,24 @@ interface Job {
   created_at: string;
 }
 
+// Map agent types to output types for integration matching
+const AGENT_TO_OUTPUT_TYPE: Record<string, string> = {
+  ad_campaign: "ad_copy",
+  congruence_audit: "ad_copy",
+  content_repurpose: "social_post",
+  email_sequence: "email_sequence",
+  social_media: "social_post",
+};
+
 export default function AgentJobPage() {
   const params = useParams();
   const id = params.id as string;
   const [job, setJob] = useState<Job | null>(null);
   const [copied, setCopied] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const [integrations, setIntegrations] = useState<IntegrationConnection[]>([]);
+  const [publishing, setPublishing] = useState<Platform | null>(null);
+  const [publishFeedback, setPublishFeedback] = useState<Record<string, { type: "success" | "error"; msg: string } | null>>({});
 
   useEffect(() => {
     const poll = async () => {
@@ -39,6 +53,13 @@ export default function AgentJobPage() {
 
     poll();
     intervalRef.current = setInterval(poll, 2000);
+
+    fetch("/api/integrations")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.integrations) setIntegrations(data.integrations);
+      })
+      .catch(() => {});
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
@@ -57,7 +78,6 @@ export default function AgentJobPage() {
     if (!job.result?.content) return;
     const el = document.getElementById("agent-result");
     if (el) {
-      // Copy as rich text so it pastes formatted into Google Docs / Word
       const html = el.innerHTML;
       const blob = new Blob([html], { type: "text/html" });
       const textBlob = new Blob([job.result.content], { type: "text/plain" });
@@ -85,11 +105,49 @@ export default function AgentJobPage() {
     URL.revokeObjectURL(url);
   };
 
+  const outputType = AGENT_TO_OUTPUT_TYPE[job.agent_type] || "ad_copy";
+
+  const applicablePlatforms = ALL_PLATFORMS.filter((p) => {
+    const pConfig = PLATFORM_CONFIGS[p];
+    const connected = integrations.some((i) => i.platform === p && i.enabled);
+    return connected && pConfig.supportedOutputTypes.includes(outputType);
+  });
+
+  async function handlePublish(platform: Platform) {
+    if (!job?.result?.content) return;
+    setPublishing(platform);
+    setPublishFeedback((prev) => ({ ...prev, [platform]: null }));
+    try {
+      const res = await fetch("/api/integrations/publish", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          platform,
+          content: job.result.content,
+          outputType,
+          metadata: { title: job.result.title },
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setPublishFeedback((prev) => ({ ...prev, [platform]: { type: "success", msg: data.message } }));
+      } else {
+        setPublishFeedback((prev) => ({
+          ...prev,
+          [platform]: { type: "error", msg: data.message || data.error || "Failed" },
+        }));
+      }
+    } catch {
+      setPublishFeedback((prev) => ({ ...prev, [platform]: { type: "error", msg: "Network error" } }));
+    }
+    setPublishing(null);
+  }
+
   return (
     <>
       <div className="flex items-center gap-3 mb-6">
         <Link href="/dashboard/agents" className="font-mono text-xs text-[#6b6b6b] hover:text-white transition-colors">
-          ← Agents
+          {String.fromCharCode(8592)} Agents
         </Link>
         <span className="text-[#1a1a1a]">/</span>
         <span className="font-mono text-xs text-[#4a9eff]">{config?.label || job.agent_type}</span>
@@ -182,6 +240,50 @@ export default function AgentJobPage() {
               {job.result.content}
             </ReactMarkdown>
           </div>
+
+          {/* Publish Section */}
+          {applicablePlatforms.length > 0 && (
+            <div className="bg-[#111111] border border-[#1a1a1a] p-6 mt-6">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#4a9eff] mb-4">
+                Publish
+              </p>
+              <div className="space-y-3">
+                {applicablePlatforms.map((platform) => {
+                  const pConfig = PLATFORM_CONFIGS[platform];
+                  const fb = publishFeedback[platform];
+
+                  return (
+                    <div
+                      key={platform}
+                      className="flex items-center justify-between py-2 border-b border-[#1a1a1a] last:border-0"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span className="text-lg">{pConfig.icon}</span>
+                        <span className="font-mono text-sm text-white">{pConfig.label}</span>
+                        {fb && (
+                          <span
+                            className={
+                              "font-mono text-[10px] " +
+                              (fb.type === "success" ? "text-[#22c55e]" : "text-red-400")
+                            }
+                          >
+                            {fb.msg}
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => handlePublish(platform)}
+                        disabled={publishing === platform}
+                        className="bg-[#4a9eff] text-white font-mono text-xs font-bold px-4 py-1.5 hover:bg-[#4a9eff]/80 disabled:opacity-50 transition-colors"
+                      >
+                        {publishing === platform ? "Publishing..." : "Publish"}
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </>
       )}
     </>
