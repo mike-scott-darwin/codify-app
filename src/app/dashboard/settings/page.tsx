@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useTier } from "@/lib/tier-context";
 import { TierBadge } from "@/components/dashboard/tier-badge";
-import { TIER_LIMITS } from "@/lib/tier";
+import { ENRICHMENT_LIMITS } from "@/lib/tier";
 
 export default function DashboardSettingsPage() {
   const { user } = useAuth();
@@ -41,8 +41,8 @@ export default function DashboardSettingsPage() {
             <span className="font-mono text-sm text-[#6b6b6b]">Enrichments</span>
             <span className="font-mono text-sm text-white">
               {enrichmentCount}
-              {TIER_LIMITS[tier].enrichments !== Infinity && (
-                <span className="text-[#6b6b6b]"> / {TIER_LIMITS[tier].enrichments}</span>
+              {ENRICHMENT_LIMITS[tier] !== Infinity && (
+                <span className="text-[#6b6b6b]"> / {ENRICHMENT_LIMITS[tier]}</span>
               )}
             </span>
           </div>
@@ -50,10 +50,8 @@ export default function DashboardSettingsPage() {
             <span className="font-mono text-sm text-[#6b6b6b]">Generations (this month)</span>
             <span className="font-mono text-sm text-white">
               {generationCount}
-              {TIER_LIMITS[tier].generations !== Infinity && TIER_LIMITS[tier].generations > 0 && (
-                <span className="text-[#6b6b6b]"> / {TIER_LIMITS[tier].generations}</span>
-              )}
-              {TIER_LIMITS[tier].generations === 0 && (
+
+              {tier === "free" && (
                 <span className="text-[#6b6b6b]"> (upgrade to unlock)</span>
               )}
             </span>

@@ -25,11 +25,9 @@ const STATUS_CONFIG: Record<string, { color: string; label: string }> = {
 };
 
 const GENERATE_TYPES = [
-  { key: "ad_copy", label: "Ad Copy", desc: "Headlines, hooks, and body copy", feature: "generate:ad_copy" as const },
   { key: "social_post", label: "Social Posts", desc: "Instagram, X, LinkedIn, TikTok", feature: "generate:social_post" as const },
+  { key: "ad_copy", label: "Ad Copy", desc: "Headlines, hooks, and body copy", feature: "generate:ad_copy" as const },
   { key: "email_sequence", label: "Email Sequences", desc: "Welcome, nurture, launch", feature: "generate:email_sequence" as const },
-  { key: "vsl_script", label: "VSL Scripts", desc: "Video sales letter scripts", feature: "generate:vsl_script" as const },
-  { key: "landing_page", label: "Landing Pages", desc: "Hero, features, CTA sections", feature: "generate:landing_page" as const },
 ];
 
 function terminalBar(percentage: number, length: number = 20): string {

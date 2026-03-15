@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useTier } from "@/lib/tier-context";
-import { hasAccess } from "@/lib/tier";
+import { hasAccess, FEATURE_REQUIRED_TIER, TIER_LABELS, getGenerationLimit } from "@/lib/tier";
 import { GENERATION_CONFIGS } from "@/lib/generation-types";
 import type { Feature } from "@/lib/tier";
 
@@ -20,6 +20,9 @@ export default function GenerateHubPage() {
         {GENERATION_CONFIGS.map((config) => {
           const feature = ("generate:" + config.type) as Feature;
           const locked = !hasAccess(tier, feature);
+          const requiredTier = FEATURE_REQUIRED_TIER[feature];
+          const limit = getGenerationLimit(tier, config.type);
+          const limitLabel = limit === Infinity ? "Unlimited" : limit + "/mo";
 
           return (
             <Link
@@ -37,13 +40,20 @@ export default function GenerateHubPage() {
                     <p className="text-xs text-[#6b6b6b] mt-0.5">{config.description}</p>
                   </div>
                 </div>
-                {locked ? (
-                  <span className="font-mono text-[10px] uppercase tracking-wider text-[#8b5cf6] border border-[#8b5cf6] px-2 py-1">
-                    PRO
-                  </span>
-                ) : (
-                  <span className="font-mono text-xs text-[#6b6b6b]">\u2192</span>
-                )}
+                <div className="flex items-center gap-3">
+                  {!locked && (
+                    <span className="font-mono text-[10px] text-[#6b6b6b]">
+                      {limitLabel}
+                    </span>
+                  )}
+                  {locked ? (
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-[#8b5cf6] border border-[#8b5cf6] px-2 py-1">
+                      {TIER_LABELS[requiredTier]}
+                    </span>
+                  ) : (
+                    <span className="font-mono text-xs text-[#6b6b6b]">\u2192</span>
+                  )}
+                </div>
               </div>
             </Link>
           );

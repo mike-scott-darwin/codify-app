@@ -2,12 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { getGenerationPrompt } from "@/lib/generation-prompts";
+import { FEATURE_REQUIRED_TIER, TIER_HIERARCHY, getGenerationLimit } from "@/lib/tier";
 import type { OutputType } from "@/lib/generation-types";
+import type { Tier, Feature } from "@/lib/tier";
 
 const VALID_TYPES: OutputType[] = ["ad_copy", "social_post", "email_sequence", "vsl_script", "landing_page"];
-
-const TIER_HIERARCHY: Record<string, number> = { free: 0, build: 1, pro: 2, vip: 3 };
-const GENERATION_LIMITS: Record<string, number> = { free: 0, build: 0, pro: 50, vip: Infinity };
 
 export async function POST(request: NextRequest) {
   const googleKey = process.env.GOOGLE_API_KEY;
@@ -15,14 +14,12 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Generation not configured." }, { status: 503 });
   }
 
-  // Auth check
   const supabase = await createServerSupabaseClient();
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) {
     return NextResponse.json({ error: "Sign in to generate content." }, { status: 401 });
   }
 
-  // Parse body
   let body: { outputType?: string; options?: Record<string, string> };
   try {
     body = await request.json();
@@ -35,23 +32,27 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Invalid output type." }, { status: 400 });
   }
 
-  // Tier check
+  // Get user tier
   const { data: profile } = await supabase
     .from("user_profiles")
     .select("tier")
     .eq("user_id", user.id)
     .single();
 
-  const tier = profile?.tier || "free";
-  if (TIER_HIERARCHY[tier] < TIER_HIERARCHY["pro"]) {
+  const tier = (profile?.tier || "free") as Tier;
+
+  // Check feature access (each output type has its own required tier)
+  const feature = ("generate:" + outputType) as Feature;
+  const requiredTier = FEATURE_REQUIRED_TIER[feature];
+  if (TIER_HIERARCHY[tier] < TIER_HIERARCHY[requiredTier]) {
     return NextResponse.json({
-      error: "Upgrade to PRO to generate content.",
-      requiredTier: "pro",
+      error: "Upgrade to " + requiredTier.toUpperCase() + " to generate " + outputType.replace("_", " ") + ".",
+      requiredTier,
     }, { status: 403 });
   }
 
-  // Generation limit check
-  const limit = GENERATION_LIMITS[tier];
+  // Per-type generation limit check
+  const limit = getGenerationLimit(tier, outputType);
   if (limit !== Infinity) {
     const startOfMonth = new Date();
     startOfMonth.setDate(1);
@@ -60,10 +61,13 @@ export async function POST(request: NextRequest) {
       .from("generation_log")
       .select("*", { count: "exact", head: true })
       .eq("user_id", user.id)
+      .eq("output_type", outputType)
       .gte("created_at", startOfMonth.toISOString());
 
     if ((count || 0) >= limit) {
-      return NextResponse.json({ error: "Monthly generation limit reached." }, { status: 429 });
+      return NextResponse.json({
+        error: "Monthly limit reached for " + outputType.replace("_", " ") + " (" + limit + "/mo). Upgrade for more.",
+      }, { status: 429 });
     }
   }
 
@@ -86,7 +90,6 @@ export async function POST(request: NextRequest) {
     }, { status: 400 });
   }
 
-  // Generate
   const { system, user: userPrompt } = getGenerationPrompt(outputType as OutputType, refs, options);
 
   try {
@@ -100,7 +103,6 @@ export async function POST(request: NextRequest) {
 
     const content = result.response.text();
 
-    // Build title
     const typeLabels: Record<string, string> = {
       ad_copy: "Ad Copy",
       social_post: "Social Post",
@@ -108,9 +110,8 @@ export async function POST(request: NextRequest) {
       vsl_script: "VSL Script",
       landing_page: "Landing Page",
     };
-    const title = typeLabels[outputType] + " — " + new Date().toLocaleDateString();
+    const title = typeLabels[outputType] + " \u2014 " + new Date().toLocaleDateString();
 
-    // Save output
     await supabase.from("outputs").insert({
       user_id: user.id,
       output_type: outputType,
@@ -120,7 +121,6 @@ export async function POST(request: NextRequest) {
       reference_snapshot: refs,
     });
 
-    // Log generation
     await supabase.from("generation_log").insert({
       user_id: user.id,
       output_type: outputType,

@@ -30,33 +30,73 @@ export const TIER_PRICES: Record<Tier, string> = {
 
 export type Feature =
   | "enrichment"
+  | "re_enrich"
   | "generate:ad_copy"
   | "generate:social_post"
   | "generate:email_sequence"
   | "generate:vsl_script"
   | "generate:landing_page"
   | "research"
-  | "output_history";
+  | "output_history"
+  | "file_editor";
 
 export const FEATURE_REQUIRED_TIER: Record<Feature, Tier> = {
   enrichment: "free",
+  re_enrich: "build",
+  "generate:social_post": "build",
+  research: "build",
   "generate:ad_copy": "pro",
-  "generate:social_post": "pro",
   "generate:email_sequence": "pro",
   "generate:vsl_script": "pro",
   "generate:landing_page": "pro",
-  research: "build",
   output_history: "pro",
+  file_editor: "pro",
 };
 
-export const TIER_LIMITS: Record<Tier, { enrichments: number; generations: number }> = {
-  free: { enrichments: 10, generations: 0 },
-  build: { enrichments: Infinity, generations: 0 },
-  pro: { enrichments: Infinity, generations: 50 },
-  vip: { enrichments: Infinity, generations: Infinity },
+// Per-output-type monthly limits by tier
+export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
+  free: {
+    social_post: 0,
+    ad_copy: 0,
+    email_sequence: 0,
+    vsl_script: 0,
+    landing_page: 0,
+  },
+  build: {
+    social_post: 5,
+    ad_copy: 0,
+    email_sequence: 0,
+    vsl_script: 0,
+    landing_page: 0,
+  },
+  pro: {
+    social_post: 50,
+    ad_copy: 50,
+    email_sequence: 50,
+    vsl_script: 10,
+    landing_page: 10,
+  },
+  vip: {
+    social_post: Infinity,
+    ad_copy: Infinity,
+    email_sequence: Infinity,
+    vsl_script: Infinity,
+    landing_page: Infinity,
+  },
+};
+
+export const ENRICHMENT_LIMITS: Record<Tier, number> = {
+  free: 10,
+  build: Infinity,
+  pro: Infinity,
+  vip: Infinity,
 };
 
 export function hasAccess(userTier: Tier, feature: Feature): boolean {
   const requiredTier = FEATURE_REQUIRED_TIER[feature];
   return TIER_HIERARCHY[userTier] >= TIER_HIERARCHY[requiredTier];
+}
+
+export function getGenerationLimit(tier: Tier, outputType: string): number {
+  return GENERATION_LIMITS[tier][outputType] ?? 0;
 }
