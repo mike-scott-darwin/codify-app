@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 
@@ -9,10 +9,30 @@ export default function HomePage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
+  const [checking, setChecking] = useState(true);
+
   useEffect(() => {
-    if (!loading && user) {
-      router.push("/dashboard");
+    if (loading) return;
+    if (!user) {
+      setChecking(false);
+      return;
     }
+
+    // Check if user has github_config
+    const checkConfig = async () => {
+      try {
+        const res = await fetch("/api/github/config");
+        const data = await res.json();
+        if (data.config && data.config.connected) {
+          router.push("/dashboard");
+        } else {
+          router.push("/onboarding");
+        }
+      } catch {
+        router.push("/onboarding");
+      }
+    };
+    checkConfig();
   }, [user, loading, router]);
 
   return (
