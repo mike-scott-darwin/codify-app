@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { GENERATION_CONFIGS } from "@/lib/generation-types";
+import ScoreCard from "@/components/dashboard/score-card";
 
 export default function GeneratorPage() {
   const params = useParams();
@@ -25,6 +26,7 @@ export default function GeneratorPage() {
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [outputId, setOutputId] = useState<string | null>(null);
 
   if (!config) {
     return <p className="font-mono text-sm text-[#ef4444]">Invalid generator type.</p>;
@@ -34,6 +36,7 @@ export default function GeneratorPage() {
     setGenerating(true);
     setError(null);
     setResult(null);
+    setOutputId(null);
 
     try {
       const res = await fetch("/api/generate", {
@@ -54,6 +57,7 @@ export default function GeneratorPage() {
       }
 
       setResult(data.content);
+      setOutputId(data.outputId || null);
     } catch {
       setError("Network error. Try again.");
     } finally {
@@ -188,6 +192,11 @@ export default function GeneratorPage() {
           )}
         </div>
       </div>
+
+      {/* Performance Score */}
+      {outputId && result && (
+        <ScoreCard outputId={outputId} autoScore={true} />
+      )}
     </>
   );
 }

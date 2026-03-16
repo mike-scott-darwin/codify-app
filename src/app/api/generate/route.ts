@@ -101,21 +101,21 @@ export async function POST(request: NextRequest) {
     };
     const title = typeLabels[outputType] + " — " + new Date().toLocaleDateString();
 
-    await supabase.from("outputs").insert({
+    const { data: inserted } = await supabase.from("outputs").insert({
       user_id: user.id,
       output_type: outputType,
       title,
       prompt_config: options,
       content,
       reference_snapshot: refs,
-    });
+    }).select("id").single();
 
     await supabase.from("generation_log").insert({
       user_id: user.id,
       output_type: outputType,
     });
 
-    return NextResponse.json({ content, title });
+    return NextResponse.json({ content, title, outputId: inserted?.id ?? null });
   } catch (err: unknown) {
     console.error("Generation error:", err instanceof Error ? err.message : err);
     return NextResponse.json({ error: "Generation failed. Try again." }, { status: 500 });

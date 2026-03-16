@@ -26,9 +26,18 @@ export async function PATCH(request: NextRequest, { params }: { params: Promise<
 
   const body = await request.json();
 
+  const updates: Record<string, unknown> = {};
+  if (body.is_favorite !== undefined) updates.is_favorite = body.is_favorite;
+  if (body.scheduled_date !== undefined) updates.scheduled_date = body.scheduled_date;
+  if (body.schedule_status !== undefined) updates.schedule_status = body.schedule_status;
+
+  if (Object.keys(updates).length === 0) {
+    return NextResponse.json({ error: "No fields to update" }, { status: 400 });
+  }
+
   const { error } = await supabase
     .from("outputs")
-    .update({ is_favorite: body.is_favorite })
+    .update(updates)
     .eq("id", id)
     .eq("user_id", user.id);
 

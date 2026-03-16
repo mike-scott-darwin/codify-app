@@ -5,6 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import type { Platform, IntegrationConnection, PublishLogEntry } from "@/lib/integrations/types";
 import { PLATFORM_CONFIGS, ALL_PLATFORMS } from "@/lib/integrations/types";
+import ScoreCard from "@/components/dashboard/score-card";
+import type { ScoreBreakdown } from "@/lib/score-types";
 
 interface OutputDetail {
   id: string;
@@ -15,6 +17,8 @@ interface OutputDetail {
   is_favorite: boolean;
   created_at: string;
   publish_log?: PublishLogEntry[];
+  score?: number | null;
+  score_breakdown?: ScoreBreakdown | null;
 }
 
 const TYPE_LABELS: Record<string, string> = {
@@ -186,6 +190,13 @@ export default function OutputDetailPage() {
       <p className="font-mono text-[10px] text-[#6b6b6b] mt-4 mb-6">
         Generated {new Date(output.created_at).toLocaleString()}
       </p>
+
+      {/* Performance Score */}
+      <ScoreCard
+        outputId={output.id}
+        score={output.score}
+        breakdown={output.score_breakdown}
+      />
 
       {/* Publish Section */}
       {applicablePlatforms.length > 0 && (
