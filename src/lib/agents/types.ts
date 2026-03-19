@@ -10,42 +10,7 @@ export interface AgentJob {
     step: number;
     totalSteps: number;
     currentAction: string;
-    research_scout: {
-    label: "Research Scout",
-    description: "Scout trending topics in your niche and generate a research brief with relevance scores.",
-    icon: "◈",
-    steps: 3,
-    requiredTier: "pro",
-  },
-  trend_monitor: {
-    label: "Trend Monitor",
-    description: "Scan for 5 trending topics relevant to your audience with content angles.",
-    icon: "◉",
-    steps: 2,
-    requiredTier: "pro",
-  },
-  social_post_generator: {
-    label: "Social Post Generator",
-    description: "Generate 5 platform-ready social posts using your brand voice.",
-    icon: "◫",
-    steps: 3,
-    requiredTier: "pro",
-  },
-  publisher: {
-    label: "Publisher",
-    description: "Format generated content for platform-specific publishing.",
-    icon: "▸",
-    steps: 2,
-    requiredTier: "pro",
-  },
-  audit_agent: {
-    label: "Audit Agent",
-    description: "Deep reference file audit — completeness, staleness, consistency scores and recommendations.",
-    icon: "⊘",
-    steps: 4,
-    requiredTier: "pro",
-  },
-};
+  };
   result: unknown;
   error: string | null;
   created_at: string;
@@ -106,6 +71,41 @@ export const AGENT_CONFIGS: Record<AgentType, {
     description: "Full email sequence with arc planning, subject lines, and timing.",
     icon: "✉",
     steps: 5,
+    requiredTier: "pro",
+  },
+  research_scout: {
+    label: "Research Scout",
+    description: "Scout trending topics in your niche and generate a research brief with relevance scores.",
+    icon: "◈",
+    steps: 3,
+    requiredTier: "pro",
+  },
+  trend_monitor: {
+    label: "Trend Monitor",
+    description: "Scan for 5 trending topics relevant to your audience with content angles.",
+    icon: "◉",
+    steps: 2,
+    requiredTier: "pro",
+  },
+  social_post_generator: {
+    label: "Social Post Generator",
+    description: "Generate 5 platform-ready social posts using your brand voice.",
+    icon: "◫",
+    steps: 3,
+    requiredTier: "pro",
+  },
+  publisher: {
+    label: "Publisher",
+    description: "Format generated content for platform-specific publishing.",
+    icon: "▸",
+    steps: 2,
+    requiredTier: "pro",
+  },
+  audit_agent: {
+    label: "Audit Agent",
+    description: "Deep reference file audit — completeness, staleness, consistency scores and recommendations.",
+    icon: "⊘",
+    steps: 4,
     requiredTier: "pro",
   },
 };
