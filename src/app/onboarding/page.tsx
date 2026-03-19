@@ -183,8 +183,9 @@ export default function OnboardingPage() {
         return;
       }
 
-      setCreatingStatus("Ready!");
-      await new Promise((r) => setTimeout(r, 800));
+      setCreatingStatus("workspace_created");
+      // Show the file tree for 4 seconds before moving on
+      await new Promise((r) => setTimeout(r, 4000));
       setCreating(false);
       setCreatingStatus("");
       transitionTo(3);
@@ -385,14 +386,40 @@ export default function OnboardingPage() {
               )}
             </div>
 
-            {creating && creatingStatus && (
+            {creating && creatingStatus && creatingStatus !== "workspace_created" && (
               <div className="flex items-center gap-3 mb-6 text-sm text-[#a0a0a0]">
-                {creatingStatus === "Ready!" ? (
-                  <span className="text-[#22c55e]">&#10003;</span>
-                ) : (
-                  <PulsingDots />
-                )}
+                <PulsingDots />
                 <span>{creatingStatus}</span>
+              </div>
+            )}
+
+            {creating && creatingStatus === "workspace_created" && (
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-4">
+                  <span className="text-[#22c55e] text-lg">&#10003;</span>
+                  <span className="text-sm text-[#22c55e] font-bold">Workspace created</span>
+                </div>
+                <div className="bg-[#111111] border border-[#1a1a1a] p-4 text-xs leading-6">
+                  <div className="text-[#4a9eff] mb-1">{workspaceName}/</div>
+                  <div className="ml-4">
+                    <div className="text-[#8b5cf6]">reference/</div>
+                    <div className="ml-4">
+                      <div className="text-[#6b6b6b]">core/</div>
+                      <div className="ml-4 space-y-0.5">
+                        <div className="flex items-center gap-2"><span className="text-[#22c55e] animate-pulse" style={{animationDelay: '0ms'}}>+</span> <span className="text-white">soul.md</span> <span className="text-[#6b6b6b] text-[10px]">why you exist</span></div>
+                        <div className="flex items-center gap-2"><span className="text-[#22c55e] animate-pulse" style={{animationDelay: '200ms'}}>+</span> <span className="text-white">offer.md</span> <span className="text-[#6b6b6b] text-[10px]">what you sell</span></div>
+                        <div className="flex items-center gap-2"><span className="text-[#22c55e] animate-pulse" style={{animationDelay: '400ms'}}>+</span> <span className="text-white">audience.md</span> <span className="text-[#6b6b6b] text-[10px]">who you serve</span></div>
+                        <div className="flex items-center gap-2"><span className="text-[#22c55e] animate-pulse" style={{animationDelay: '600ms'}}>+</span> <span className="text-white">voice.md</span> <span className="text-[#6b6b6b] text-[10px]">how you sound</span></div>
+                      </div>
+                    </div>
+                    <div className="mt-2">
+                      <div className="text-[#6b6b6b]">research/</div>
+                      <div className="text-[#6b6b6b]">decisions/</div>
+                      <div className="text-[#6b6b6b]">outputs/</div>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-[10px] text-[#6b6b6b] mt-3 text-center">These files get smarter as you use Codify</p>
               </div>
             )}
 
