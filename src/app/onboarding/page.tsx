@@ -105,6 +105,7 @@ export default function OnboardingPage() {
   const [saving, setSaving] = useState(false);
   const [showCheckmark, setShowCheckmark] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const [fadeIn, setFadeIn] = useState(true);
 
   // Redirect if not authenticated
@@ -150,6 +151,32 @@ export default function OnboardingPage() {
 
   const handleWorkspaceNameChange = (value: string) => {
     setWorkspaceName(slugify(value));
+  };
+
+  // Handle file upload to enhance answer
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+
+    try {
+      const text = await file.text();
+      // Append file content to current answer
+      const existing = answers[currentFileType]?.[question?.id] || "";
+      const separator = existing ? "\n\n--- Uploaded from " + file.name + " ---\n\n" : "";
+      setAnswers((prev) => ({
+        ...prev,
+        [currentFileType]: {
+          ...prev[currentFileType],
+          [question.id]: existing + separator + text.slice(0, 5000),
+        },
+      }));
+    } catch {
+      setError("Could not read file. Try a text file (.txt, .md, .doc).");
+    }
+    setUploading(false);
+    // Reset the input
+    e.target.value = "";
   };
 
   // Step 2: Create workspace
@@ -523,6 +550,22 @@ export default function OnboardingPage() {
                       {currentAnswer.split(/\s+/).filter(Boolean).length} words
                     </span>
                   )}
+                </div>
+
+                {/* Upload support */}
+                <div className="flex items-center gap-3 mb-6">
+                  <label className="flex items-center gap-2 text-xs text-[#6b6b6b] hover:text-[#4a9eff] cursor-pointer transition-colors">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+                    {uploading ? "Reading..." : "Upload a file to help answer this"}
+                    <input
+                      type="file"
+                      accept=".txt,.md,.doc,.docx,.pdf,.csv"
+                      onChange={handleFileUpload}
+                      className="hidden"
+                      disabled={uploading}
+                    />
+                  </label>
+                  <span className="text-[10px] text-[#333]">.txt, .md, .doc, .csv</span>
                 </div>
 
                 {/* Actions */}
