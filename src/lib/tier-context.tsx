@@ -38,7 +38,7 @@ export function TierProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch("/api/user/tier");
       if (res.ok) {
         const data = await res.json();
-        setTier(data.tier || "free");
+        setTier(data.tier || "vip");
         setEnrichmentCount(data.enrichmentCount || 0);
         setGenerationCount(data.generationCount || 0);
       }
