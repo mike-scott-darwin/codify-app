@@ -46,17 +46,25 @@ export async function POST(request: NextRequest) {
     }),
   });
 
+  let owner = existingConfig.owner;
+  let repo = repoName;
+
   if (!createRes.ok) {
     const err = await createRes.json().catch(() => ({}));
-    return NextResponse.json(
-      { error: err.message || `Failed to create workspace: ${createRes.status}` },
-      { status: createRes.status }
-    );
+    // If repo already exists (422), connect to it instead
+    if (createRes.status === 422 && err.errors?.some((e: { message?: string }) => e.message?.includes("already exists"))) {
+      // Repo exists — just use it
+    } else {
+      return NextResponse.json(
+        { error: err.message || "Repository creation failed." },
+        { status: createRes.status }
+      );
+    }
+  } else {
+    const repoData = await createRes.json();
+    owner = repoData.owner.login;
+    repo = repoData.name;
   }
-
-  const repoData = await createRes.json();
-  const owner = repoData.owner.login;
-  const repo = repoData.name;
 
   // Update config with repo name
   const ghConfig = { token, owner, repo, branch: "main" };
