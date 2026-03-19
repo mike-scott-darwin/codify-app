@@ -93,13 +93,13 @@ export async function GET(request: NextRequest) {
   // Save partial config — repo gets set when they name their workspace
   const { error } = await supabase
     .from("user_profiles")
-    .update({
+    .upsert({
+      user_id: user.id,
       github_config: {
         token: accessToken,
         owner: githubUsername,
       },
-    })
-    .eq("id", user.id);
+    }, { onConflict: "user_id" });
 
   if (error) {
     return NextResponse.redirect(
