@@ -18,7 +18,7 @@ export async function POST(request: NextRequest) {
   const { data: profile } = await supabase
     .from("user_profiles")
     .select("github_config")
-    .eq("id", user.id)
+    .eq("user_id", user.id)
     .single();
 
   const existingConfig = profile?.github_config as { token?: string; owner?: string } | null;
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
   const { error } = await supabase
     .from("user_profiles")
     .update({ github_config: ghConfig })
-    .eq("id", user.id);
+    .eq("user_id", user.id);
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });

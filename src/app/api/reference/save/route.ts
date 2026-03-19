@@ -51,7 +51,7 @@ export async function POST(request: NextRequest) {
     const { data: profile } = await supabase
       .from("user_profiles")
       .select("github_config")
-      .eq("id", user.id)
+      .eq("user_id", user.id)
       .single();
     if (profile?.github_config) {
       const { writeFileToRepo } = await import("@/lib/github");

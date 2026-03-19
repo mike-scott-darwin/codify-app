@@ -11,7 +11,7 @@ export async function POST() {
   const { data: profile } = await supabase
     .from("user_profiles")
     .select("github_config")
-    .eq("id", user.id)
+    .eq("user_id", user.id)
     .single();
 
   if (!profile?.github_config) {

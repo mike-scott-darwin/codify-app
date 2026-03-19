@@ -14,7 +14,7 @@ async function getGitHubConfig(supabase: ReturnType<Awaited<ReturnType<typeof cr
   const { data: profile } = await sb
     .from("user_profiles")
     .select("github_config")
-    .eq("id", user.id)
+    .eq("user_id", user.id)
     .single();
 
   if (!profile?.github_config) return null;
@@ -29,7 +29,7 @@ export async function GET() {
   const { data: profile } = await supabase
     .from("user_profiles")
     .select("github_config")
-    .eq("id", user.id)
+    .eq("user_id", user.id)
     .single();
 
   if (!profile?.github_config) {
@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
   const { data: profile } = await supabase
     .from("user_profiles")
     .select("github_config")
-    .eq("id", user.id)
+    .eq("user_id", user.id)
     .single();
 
   if (!profile?.github_config) {
