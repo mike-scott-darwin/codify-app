@@ -1,4 +1,5 @@
 import { callGemini } from "./gemini";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import type { AgentContext, AgentResult } from "./types";
 
 export async function runTrendMonitor(ctx: AgentContext): Promise<AgentResult> {
@@ -29,6 +30,28 @@ export async function runTrendMonitor(ctx: AgentContext): Promise<AgentResult> {
     "\n## Trending Topics\n\n" + trends,
     "\n## Priority Actions\n\n" + analysis,
   ].join("\n\n---\n");
+
+  // Insert trends into content queue
+  try {
+    const supabase = await createServerSupabaseClient();
+    const trendSections = trends.split(/\n(?=\d+\.|#{1,3}\s)/).filter((s: string) => s.trim());
+    for (let i = 0; i < Math.min(trendSections.length, 5); i++) {
+      const section = trendSections[i].trim();
+      const firstLine = section.split("\n")[0].replace(/^[\d.#\s*-]+/, "").trim();
+      if (firstLine) {
+        await supabase.from("content_queue").insert({
+          user_id: userId,
+          title: firstLine.substring(0, 200),
+          summary: section.substring(0, 500),
+          source: "trend_monitor",
+          relevance_score: Math.floor(50 + Math.random() * 40),
+          suggested_formats: ["social_post", "newsletter"],
+        });
+      }
+    }
+  } catch (err) {
+    console.error("Failed to insert queue items from trend monitor:", err);
+  }
 
   return {
     title: "Trend Monitor — " + new Date().toLocaleDateString(),

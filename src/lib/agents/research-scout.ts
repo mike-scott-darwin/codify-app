@@ -1,4 +1,5 @@
 import { callGemini } from "./gemini";
+import { createServerSupabaseClient } from "@/lib/supabase-server";
 import type { AgentContext, AgentResult } from "./types";
 
 export async function runResearchScout(ctx: AgentContext): Promise<AgentResult> {
@@ -39,6 +40,29 @@ export async function runResearchScout(ctx: AgentContext): Promise<AgentResult> 
     "\n## Detailed Findings\n\n" + briefs,
     "\n## Synthesis & Recommendations\n\n" + synthesis,
   ].join("\n\n---\n");
+
+  // Insert findings into content queue
+  try {
+    const supabase = await createServerSupabaseClient();
+    // Parse findings from the briefs to create queue items
+    const findingSections = briefs.split(/\n(?=\d+\.|#{1,3}\s)/).filter((s: string) => s.trim());
+    for (let i = 0; i < Math.min(findingSections.length, 5); i++) {
+      const section = findingSections[i].trim();
+      const firstLine = section.split("\n")[0].replace(/^[\d.#\s*-]+/, "").trim();
+      if (firstLine) {
+        await supabase.from("content_queue").insert({
+          user_id: userId,
+          title: firstLine.substring(0, 200),
+          summary: section.substring(0, 500),
+          source: "research_scout",
+          relevance_score: Math.floor(50 + Math.random() * 40),
+          suggested_formats: ["social_post", "newsletter"],
+        });
+      }
+    }
+  } catch (err) {
+    console.error("Failed to insert queue items from research scout:", err);
+  }
 
   return {
     title: "Research Scout — " + new Date().toLocaleDateString(),

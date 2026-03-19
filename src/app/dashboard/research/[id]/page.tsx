@@ -57,6 +57,8 @@ export default function ResearchDetailPage() {
 
   // Add-to-reference state (from AI answer)
   const [showRefPrompt, setShowRefPrompt] = useState(false);
+  const [sendingToQueue, setSendingToQueue] = useState(false);
+  const [sentToQueue, setSentToQueue] = useState(false);
   const [refTargetFiles, setRefTargetFiles] = useState<Record<string, boolean>>({
     soul: false,
     offer: false,
@@ -424,6 +426,31 @@ export default function ResearchDetailPage() {
                   className="font-mono text-[10px] text-[#22c55e] hover:text-white mt-3 ml-4 transition-colors"
                 >
                   + Add to reference files
+                </button>
+                <button
+                  onClick={async () => {
+                    setSendingToQueue(true);
+                    try {
+                      const res = await fetch("/api/content-queue/from-research", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                          research_id: id,
+                          title: topic.title + " — " + question.substring(0, 60),
+                          summary: aiAnswer.substring(0, 500),
+                        }),
+                      });
+                      if (res.ok) setSentToQueue(true);
+                    } catch (err) {
+                      console.error("Send to queue error:", err);
+                    }
+                    setSendingToQueue(false);
+                  }}
+                  disabled={sendingToQueue || sentToQueue}
+                  className="font-mono text-[10px] hover:text-white mt-3 ml-4 transition-colors disabled:opacity-50"
+                  style={{ color: sentToQueue ? "#22c55e" : "#f59e0b" }}
+                >
+                  {sentToQueue ? "Sent to Queue" : sendingToQueue ? "Sending..." : "+ Send to Queue"}
                 </button>
 
                 {showRefPrompt && (
