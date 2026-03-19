@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import {
@@ -83,7 +83,7 @@ function PulsingDots() {
   );
 }
 
-export default function OnboardingPage() {
+function OnboardingContent() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -657,5 +657,13 @@ export default function OnboardingPage() {
         )}
       </div>
     </div>
+  );
+}
+
+export default function OnboardingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a]" />}>
+      <OnboardingContent />
+    </Suspense>
   );
 }
