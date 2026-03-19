@@ -8,6 +8,7 @@ interface PlanCard {
   tier: Tier;
   price: string;
   period: string;
+  annual: string;
   tagline: string;
   features: string[];
   highlight?: boolean;
@@ -18,18 +19,21 @@ const PLANS: PlanCard[] = [
     tier: "free",
     price: "0",
     period: "",
+    annual: "",
     tagline: "Build your foundation",
     features: [
       "4 reference file interviews",
       "10 AI enrichments",
+      "Read-only dashboard access",
       "Download files",
       "Copy-paste AI context block",
     ],
   },
   {
     tier: "build",
-    price: "99",
+    price: "47",
     period: "/mo",
+    annual: "$397/yr (save 30%)",
     tagline: "The thinking engine",
     features: [
       "Everything in Free",
@@ -37,32 +41,38 @@ const PLANS: PlanCard[] = [
       "Re-enrich files anytime",
       "Research workspace + AI assistant",
       "Social post generation (5/mo)",
+      "Congruence Audit agent",
+      "Deep Research agent (2/mo)",
       "Community access",
     ],
   },
   {
     tier: "pro",
-    price: "199",
+    price: "147",
     period: "/mo",
+    annual: "$1,197/yr (save 32%)",
     tagline: "Turn context into revenue",
     highlight: true,
     features: [
       "Everything in Build",
+      "All 10 AI agents",
       "Ad copy generation (50/mo)",
       "Email sequences (50/mo)",
       "VSL scripts (10/mo)",
       "Landing page copy (10/mo)",
       "Social posts (50/mo)",
+      "Content scheduling + publishing",
       "Output history + favorites",
       "Inline file editor",
       "Guided onboarding sprint",
     ],
   },
   {
-    tier: "vip",
-    price: "497",
+    tier: "agency",
+    price: "397",
     period: "/mo",
-    tagline: "Unlimited. No limits. No quotas.",
+    annual: "$2,997/yr (save 37%)",
+    tagline: "Unlimited. Multi-client. Direct access.",
     features: [
       "Everything in Pro",
       "Unlimited generations (all types)",
@@ -117,6 +127,10 @@ export default function UpgradePage() {
                   <span className="font-mono text-sm text-[#6b6b6b]">{plan.period}</span>
                 )}
               </div>
+
+              {plan.annual && (
+                <p className="text-[10px] text-[#4a9eff] mb-1">{plan.annual}</p>
+              )}
 
               <p className="text-xs text-[#6b6b6b] mb-5">{plan.tagline}</p>
 

@@ -36,7 +36,7 @@ export const AGENT_CONFIGS: Record<AgentType, {
   description: string;
   icon: string;
   steps: number;
-  requiredTier: "build" | "pro" | "vip";
+  requiredTier: "build" | "pro" | "agency";
 }> = {
   congruence_audit: {
     label: "Congruence Audit",

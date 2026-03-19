@@ -1,31 +1,31 @@
-export type Tier = "free" | "build" | "pro" | "vip";
+export type Tier = "free" | "build" | "pro" | "agency";
 
 export const TIER_HIERARCHY: Record<Tier, number> = {
   free: 0,
   build: 1,
   pro: 2,
-  vip: 3,
+  agency: 3,
 };
 
 export const TIER_LABELS: Record<Tier, string> = {
   free: "FREE",
   build: "BUILD",
   pro: "PRO",
-  vip: "VIP",
+  agency: "AGENCY",
 };
 
 export const TIER_COLORS: Record<Tier, string> = {
   free: "#6b6b6b",
   build: "#4a9eff",
   pro: "#8b5cf6",
-  vip: "#f59e0b",
+  agency: "#f59e0b",
 };
 
 export const TIER_PRICES: Record<Tier, string> = {
   free: "Free",
-  build: "99/mo",
-  pro: "199/mo",
-  vip: "497/mo",
+  build: "47/mo",
+  pro: "147/mo",
+  agency: "397/mo",
 };
 
 export type Feature =
@@ -138,7 +138,7 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     audit_agent: 4,
     scheduled_runs: 30,
   },
-  vip: {
+  agency: {
     social_post: Infinity,
     ad_copy: Infinity,
     email_sequence: Infinity,
@@ -163,7 +163,7 @@ export const ENRICHMENT_LIMITS: Record<Tier, number> = {
   free: 10,
   build: Infinity,
   pro: Infinity,
-  vip: Infinity,
+  agency: Infinity,
 };
 
 export function hasAccess(userTier: Tier, feature: Feature): boolean {

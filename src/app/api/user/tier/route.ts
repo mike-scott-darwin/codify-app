@@ -7,7 +7,7 @@ export async function GET() {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ tier: "vip", enrichmentCount: 0, generationCount: 0 });
+      return NextResponse.json({ tier: "agency", enrichmentCount: 0, generationCount: 0 });
     }
 
     // Get user profile (tier)
@@ -35,11 +35,11 @@ export async function GET() {
       .gte("created_at", startOfMonth.toISOString());
 
     return NextResponse.json({
-      tier: profile?.tier || "vip",
+      tier: profile?.tier || "agency",
       enrichmentCount: enrichmentCount || 0,
       generationCount: generationCount || 0,
     });
   } catch {
-    return NextResponse.json({ tier: "vip", enrichmentCount: 0, generationCount: 0 });
+    return NextResponse.json({ tier: "agency", enrichmentCount: 0, generationCount: 0 });
   }
 }
