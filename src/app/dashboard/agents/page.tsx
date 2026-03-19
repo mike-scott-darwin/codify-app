@@ -23,6 +23,11 @@ const AGENT_FEATURE_MAP: Record<AgentType, Feature> = {
   ad_campaign: "generate:ad_copy",
   content_calendar: "generate:social_post",
   email_campaign: "generate:email_sequence",
+  research_scout: "agent:research_scout",
+  trend_monitor: "agent:trend_monitor",
+  social_post_generator: "agent:social_post_generator",
+  publisher: "agent:publisher",
+  audit_agent: "agent:audit_agent",
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -31,6 +36,13 @@ const STATUS_COLORS: Record<string, string> = {
   complete: "#22c55e",
   failed: "#ef4444",
 };
+
+const TABS = [
+  { key: "agents", label: "Agents", href: "/dashboard/agents" },
+  { key: "schedules", label: "Schedules", href: "/dashboard/agents/schedules" },
+  { key: "chains", label: "Chains", href: "/dashboard/agents/chains" },
+  { key: "usage", label: "Usage", href: "/dashboard/agents/usage" },
+];
 
 export default function AgentsPage() {
   const { tier } = useTier();
@@ -74,12 +86,33 @@ export default function AgentsPage() {
     }
   };
 
+  // Separate chain-only agents from direct-launch agents
+  const chainOnlyAgents: AgentType[] = ["research_scout", "trend_monitor", "social_post_generator", "publisher", "audit_agent"];
+
   return (
     <>
       <h1 className="font-mono text-xl font-bold mb-2">Agents</h1>
-      <p className="text-sm text-[#6b6b6b] mb-8">
+      <p className="text-sm text-[#6b6b6b] mb-6">
         Multi-step AI agents that go beyond single-prompt generation.
       </p>
+
+      {/* Tab Bar */}
+      <div className="flex gap-0 border-b border-[#1a1a1a] mb-8">
+        {TABS.map((tab) => (
+          <Link
+            key={tab.key}
+            href={tab.href}
+            className={
+              "font-mono text-xs px-4 py-2.5 border-b-2 transition-colors " +
+              (tab.key === "agents"
+                ? "border-[#22c55e] text-[#22c55e]"
+                : "border-transparent text-[#6b6b6b] hover:text-white")
+            }
+          >
+            {tab.label}
+          </Link>
+        ))}
+      </div>
 
       {error && (
         <div className="bg-[#111111] border border-[#ef4444] p-4 mb-4">
@@ -88,51 +121,82 @@ export default function AgentsPage() {
       )}
 
       <div className="space-y-4">
-        {(Object.entries(AGENT_CONFIGS) as [AgentType, typeof AGENT_CONFIGS[AgentType]][]).filter(([type]) => type !== "congruence_audit" && type !== "deep_research").map(([type, config]) => {
-          const feature = AGENT_FEATURE_MAP[type];
-          const locked = !hasAccess(tier, feature);
-          const isLaunching = launching === type;
+        {(Object.entries(AGENT_CONFIGS) as [AgentType, typeof AGENT_CONFIGS[AgentType]][])
+          .filter(([type]) => !chainOnlyAgents.includes(type))
+          .filter(([type]) => type !== "congruence_audit" && type !== "deep_research")
+          .map(([type, config]) => {
+            const feature = AGENT_FEATURE_MAP[type];
+            const locked = !hasAccess(tier, feature);
+            const isLaunching = launching === type;
 
-          return (
-            <div key={type} className="bg-[#111111] border border-[#1a1a1a] p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <span className="text-xl">{config.icon}</span>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-sm text-white font-bold">
-                        {config.label}
-                      </span>
-                      <span className="font-mono text-[9px] text-[#6b6b6b]">
-                        {config.steps} steps
-                      </span>
+            return (
+              <div key={type} className="bg-[#111111] border border-[#1a1a1a] p-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <span className="text-xl">{config.icon}</span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-mono text-sm text-white font-bold">
+                          {config.label}
+                        </span>
+                        <span className="font-mono text-[9px] text-[#6b6b6b]">
+                          {config.steps} steps
+                        </span>
+                      </div>
+                      <p className="text-xs text-[#6b6b6b] mt-0.5">{config.description}</p>
                     </div>
-                    <p className="text-xs text-[#6b6b6b] mt-0.5">{config.description}</p>
                   </div>
-                </div>
 
-                {locked ? (
-                  <Link
-                    href="/dashboard/upgrade"
-                    className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border"
-                    style={{ color: TIER_COLORS[config.requiredTier], borderColor: TIER_COLORS[config.requiredTier] }}
-                  >
-                    {TIER_LABELS[config.requiredTier]}
-                  </Link>
-                ) : (
-                  <button
-                    onClick={() => launchAgent(type)}
-                    disabled={isLaunching}
-                    className="font-mono text-xs font-bold px-4 py-2 hover:brightness-110 transition-all disabled:opacity-50"
-                    style={{ backgroundColor: "#22c55e", color: "#000", borderRadius: 0 }}
-                  >
-                    {isLaunching ? "Launching..." : "Launch →"}
-                  </button>
-                )}
+                  {locked ? (
+                    <Link
+                      href="/dashboard/upgrade"
+                      className="font-mono text-[10px] uppercase tracking-wider px-3 py-1.5 border"
+                      style={{ color: TIER_COLORS[config.requiredTier], borderColor: TIER_COLORS[config.requiredTier] }}
+                    >
+                      {TIER_LABELS[config.requiredTier]}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => launchAgent(type)}
+                      disabled={isLaunching}
+                      className="font-mono text-xs font-bold px-4 py-2 hover:brightness-110 transition-all disabled:opacity-50"
+                      style={{ backgroundColor: "#22c55e", color: "#000", borderRadius: 0 }}
+                    >
+                      {isLaunching ? "Launching..." : "Launch →"}
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+      </div>
+
+      {/* Chain-only agents section */}
+      <div className="mt-8">
+        <h2 className="font-mono text-sm font-bold text-[#8b5cf6] mb-4">Chain Agents</h2>
+        <p className="text-xs text-[#6b6b6b] mb-4">
+          These agents run as part of automated chains. Activate them from the{" "}
+          <Link href="/dashboard/agents/chains" className="text-[#4a9eff] hover:underline">
+            Chains
+          </Link>{" "}
+          tab.
+        </p>
+        <div className="space-y-2">
+          {(Object.entries(AGENT_CONFIGS) as [AgentType, typeof AGENT_CONFIGS[AgentType]][])
+            .filter(([type]) => chainOnlyAgents.includes(type))
+            .map(([type, config]) => (
+              <div key={type} className="bg-[#111111] border border-[#1a1a1a] p-4 flex items-center gap-4">
+                <span className="text-lg">{config.icon}</span>
+                <div className="flex-1">
+                  <span className="font-mono text-xs text-white font-bold">{config.label}</span>
+                  <p className="text-[10px] text-[#6b6b6b] mt-0.5">{config.description}</p>
+                </div>
+                <span className="font-mono text-[9px] text-[#8b5cf6] border border-[#8b5cf6]/30 px-2 py-0.5">
+                  CHAIN
+                </span>
+              </div>
+            ))}
+        </div>
       </div>
     </>
   );

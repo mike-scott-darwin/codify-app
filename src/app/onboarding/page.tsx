@@ -17,20 +17,20 @@ type FileType = (typeof FILE_TYPES)[number];
 
 const FILE_INTROS: Record<FileType, { title: string; subtitle: string }> = {
   soul: {
-    title: "Let's start with the heart of your business",
-    subtitle: "Why does this exist? What drives you?",
+    title: "Let's start with why your business exists",
+    subtitle: "This helps AI understand your mission and values.",
   },
   offer: {
-    title: "Now let's talk about what you sell",
-    subtitle: "What do people get when they work with you?",
+    title: "What do you offer?",
+    subtitle: "This helps AI describe your products and services accurately.",
   },
   audience: {
-    title: "Who are your people?",
-    subtitle: "The real humans you help, not demographics.",
+    title: "Who do you help?",
+    subtitle: "This helps AI speak directly to the people you serve.",
   },
   voice: {
-    title: "How do you sound?",
-    subtitle: "Your personality is your brand. Let's capture it.",
+    title: "What's your style?",
+    subtitle: "This helps AI write in your voice, not a generic one.",
   },
 };
 
@@ -88,7 +88,7 @@ export default function OnboardingPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(2);
   const [workspaceName, setWorkspaceName] = useState("");
   const [creating, setCreating] = useState(false);
   const [creatingStatus, setCreatingStatus] = useState("");
@@ -114,11 +114,8 @@ export default function OnboardingPage() {
     }
   }, [user, authLoading, router]);
 
-  // Auto-advance if GitHub just connected
+  // Auto-advance — always start at step 2 since GitHub OAuth handles step 1
   useEffect(() => {
-    if (searchParams.get("github") === "connected") {
-      setStep(2);
-    }
     const oauthError = searchParams.get("error");
     if (oauthError) {
       const messages: Record<string, string> = {
@@ -162,7 +159,7 @@ export default function OnboardingPage() {
     setCreating(true);
 
     try {
-      setCreatingStatus("Creating workspace...");
+      setCreatingStatus("Setting up your business folder...");
       const createRes = await fetch("/api/github/create-repo", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -176,7 +173,7 @@ export default function OnboardingPage() {
         return;
       }
 
-      setCreatingStatus("Setting up folders...");
+      setCreatingStatus("Creating your files...");
       const initRes = await fetch("/api/github/init", { method: "POST" });
       const initData = await initRes.json();
       if (!initRes.ok) {
@@ -365,10 +362,10 @@ export default function OnboardingPage() {
         {step === 2 && (
           <div>
             <h1 className="text-2xl font-bold mb-2 text-center">
-              What should we call your workspace?
+              Name your business
             </h1>
             <p className="text-sm text-[#a0a0a0] mb-8 text-center">
-              This is where your business brain lives.
+              This becomes the name of your secure folder where all your business files are stored.
             </p>
 
             <div className="mb-6">
@@ -376,7 +373,7 @@ export default function OnboardingPage() {
                 type="text"
                 value={workspaceName}
                 onChange={(e) => handleWorkspaceNameChange(e.target.value)}
-                placeholder="e.g. my-coaching-business"
+                placeholder="e.g. janes-bakery"
                 autoFocus
                 disabled={creating}
                 className="w-full bg-[#111111] border border-[#1a1a1a] px-4 py-3 text-sm text-white placeholder:text-[#6b6b6b] focus:outline-none focus:border-[#22c55e] transition-colors disabled:opacity-50"
@@ -542,10 +539,10 @@ export default function OnboardingPage() {
         {step === 4 && (
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-3">
-              Your business brain is ready
+              You're all set
             </h1>
             <p className="text-sm text-[#a0a0a0] mb-8">
-              These files get smarter every time you research and create.
+              Your business files are saved. The more you use Codify, the better AI understands your business.
             </p>
 
             {/* File cards grid */}
@@ -577,7 +574,7 @@ export default function OnboardingPage() {
             </div>
 
             <p className="text-xs text-[#6b6b6b] mb-8">
-              Research topics, create content, and everything feeds back into your business brain.
+              You can update these files anytime as your business evolves.
             </p>
 
             <button

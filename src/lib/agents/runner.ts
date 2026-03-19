@@ -5,6 +5,12 @@ import { runAdCampaign } from "./ad-campaign";
 import { runDeepResearch } from "./deep-research";
 import { runContentCalendar } from "./content-calendar";
 import { runEmailCampaign } from "./email-campaign";
+import { runResearchScout } from "./research-scout";
+import { runTrendMonitor } from "./trend-monitor";
+import { runSocialPostGenerator } from "./social-post-generator";
+import { runPublisher } from "./publisher-agent";
+import { runAuditAgent } from "./audit-agent";
+import { advanceChain } from "./chain-runner";
 
 const AGENT_RUNNERS: Record<AgentType, (ctx: AgentContext) => Promise<AgentResult>> = {
   congruence_audit: runCongruenceAudit,
@@ -12,6 +18,11 @@ const AGENT_RUNNERS: Record<AgentType, (ctx: AgentContext) => Promise<AgentResul
   deep_research: runDeepResearch,
   content_calendar: runContentCalendar,
   email_campaign: runEmailCampaign,
+  research_scout: runResearchScout,
+  trend_monitor: runTrendMonitor,
+  social_post_generator: runSocialPostGenerator,
+  publisher: runPublisher,
+  audit_agent: runAuditAgent,
 };
 
 export async function executeAgent(jobId: string): Promise<void> {
@@ -89,6 +100,30 @@ export async function executeAgent(jobId: string): Promise<void> {
       content: result.content,
       reference_snapshot: refs,
     });
+
+    // If this job is part of a chain, advance to the next step
+    if (job.chain_run_id) {
+      try {
+        await advanceChain(job.chain_run_id, jobId, supabase);
+
+        // Find the next pending job in this chain and kick it off
+        const { data: nextJob } = await supabase
+          .from("agent_jobs")
+          .select("id")
+          .eq("chain_run_id", job.chain_run_id)
+          .eq("status", "pending")
+          .order("created_at", { ascending: true })
+          .limit(1)
+          .single();
+
+        if (nextJob) {
+          // Recursively execute the next job in the chain
+          await executeAgent(nextJob.id);
+        }
+      } catch (chainErr) {
+        console.error("Chain advancement error:", chainErr);
+      }
+    }
   } catch (err: unknown) {
     const errorMsg = err instanceof Error ? err.message : "Agent failed";
     console.error("Agent error:", errorMsg);
@@ -100,5 +135,14 @@ export async function executeAgent(jobId: string): Promise<void> {
         updated_at: new Date().toISOString(),
       })
       .eq("id", jobId);
+
+    // If part of a chain, mark chain as partial
+    if (job.chain_run_id) {
+      try {
+        await advanceChain(job.chain_run_id, jobId, supabase);
+      } catch {
+        // Best effort
+      }
+    }
   }
 }

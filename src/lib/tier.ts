@@ -44,7 +44,14 @@ export type Feature =
   | "agent:deep_research"
   | "agent:content_calendar"
   | "agent:email_campaign"
-  | "generate:newsletter";
+  | "generate:newsletter"
+  | "agent:schedules"
+  | "agent:chains"
+  | "agent:research_scout"
+  | "agent:trend_monitor"
+  | "agent:social_post_generator"
+  | "agent:publisher"
+  | "agent:audit_agent";
 
 export const FEATURE_REQUIRED_TIER: Record<Feature, Tier> = {
   enrichment: "free",
@@ -63,6 +70,13 @@ export const FEATURE_REQUIRED_TIER: Record<Feature, Tier> = {
   "agent:content_calendar": "pro",
   "agent:email_campaign": "pro",
   "generate:newsletter": "pro",
+  "agent:schedules": "pro",
+  "agent:chains": "pro",
+  "agent:research_scout": "pro",
+  "agent:trend_monitor": "pro",
+  "agent:social_post_generator": "pro",
+  "agent:publisher": "pro",
+  "agent:audit_agent": "pro",
 };
 
 // Per-output-type monthly limits by tier
@@ -79,6 +93,12 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     deep_research: 0,
     content_calendar: 0,
     email_campaign: 0,
+    research_scout: 0,
+    trend_monitor: 0,
+    social_post_generator: 0,
+    publisher: 0,
+    audit_agent: 0,
+    scheduled_runs: 0,
   },
   build: {
     social_post: 5,
@@ -92,6 +112,12 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     deep_research: 2,
     content_calendar: 0,
     email_campaign: 0,
+    research_scout: 0,
+    trend_monitor: 0,
+    social_post_generator: 0,
+    publisher: 0,
+    audit_agent: 0,
+    scheduled_runs: 0,
   },
   pro: {
     social_post: 50,
@@ -105,6 +131,12 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     deep_research: 10,
     content_calendar: 4,
     email_campaign: 4,
+    research_scout: 10,
+    trend_monitor: 20,
+    social_post_generator: 20,
+    publisher: 20,
+    audit_agent: 4,
+    scheduled_runs: 30,
   },
   vip: {
     social_post: Infinity,
@@ -118,6 +150,12 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     deep_research: Infinity,
     content_calendar: Infinity,
     email_campaign: Infinity,
+    research_scout: Infinity,
+    trend_monitor: Infinity,
+    social_post_generator: Infinity,
+    publisher: Infinity,
+    audit_agent: Infinity,
+    scheduled_runs: Infinity,
   },
 };
 

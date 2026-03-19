@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get("code");
 
   if (code) {
-    const response = NextResponse.redirect(`${origin}/`);
+    const response = NextResponse.redirect(`${origin}/onboarding`);
 
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -25,7 +25,42 @@ export async function GET(request: NextRequest) {
       }
     );
 
-    await supabase.auth.exchangeCodeForSession(code);
+    const { data } = await supabase.auth.exchangeCodeForSession(code);
+
+    // If GitHub OAuth, save the provider token to user_profiles
+    if (data?.session?.provider_token && data?.user) {
+      const providerToken = data.session.provider_token;
+
+      // Get GitHub username from the user metadata
+      const githubUsername =
+        data.user.user_metadata?.user_name ||
+        data.user.user_metadata?.preferred_username ||
+        "";
+
+      if (githubUsername) {
+        // Check if user already has a github_config with a repo
+        const { data: profile } = await supabase
+          .from("user_profiles")
+          .select("github_config")
+          .eq("id", data.user.id)
+          .single();
+
+        const existingConfig = (profile?.github_config as Record<string, string> | null) || {};
+
+        await supabase
+          .from("user_profiles")
+          .upsert({
+            id: data.user.id,
+            email: data.user.email,
+            github_config: {
+              ...existingConfig,
+              token: providerToken,
+              owner: githubUsername,
+            },
+          });
+      }
+    }
+
     return response;
   }
 

@@ -1,4 +1,4 @@
-export type AgentType = "ad_campaign" | "deep_research" | "content_calendar" | "congruence_audit" | "email_campaign";
+export type AgentType = "ad_campaign" | "deep_research" | "content_calendar" | "congruence_audit" | "email_campaign" | "research_scout" | "trend_monitor" | "social_post_generator" | "publisher" | "audit_agent";
 
 export interface AgentJob {
   id: string;
@@ -10,7 +10,42 @@ export interface AgentJob {
     step: number;
     totalSteps: number;
     currentAction: string;
-  };
+    research_scout: {
+    label: "Research Scout",
+    description: "Scout trending topics in your niche and generate a research brief with relevance scores.",
+    icon: "◈",
+    steps: 3,
+    requiredTier: "pro",
+  },
+  trend_monitor: {
+    label: "Trend Monitor",
+    description: "Scan for 5 trending topics relevant to your audience with content angles.",
+    icon: "◉",
+    steps: 2,
+    requiredTier: "pro",
+  },
+  social_post_generator: {
+    label: "Social Post Generator",
+    description: "Generate 5 platform-ready social posts using your brand voice.",
+    icon: "◫",
+    steps: 3,
+    requiredTier: "pro",
+  },
+  publisher: {
+    label: "Publisher",
+    description: "Format generated content for platform-specific publishing.",
+    icon: "▸",
+    steps: 2,
+    requiredTier: "pro",
+  },
+  audit_agent: {
+    label: "Audit Agent",
+    description: "Deep reference file audit — completeness, staleness, consistency scores and recommendations.",
+    icon: "⊘",
+    steps: 4,
+    requiredTier: "pro",
+  },
+};
   result: unknown;
   error: string | null;
   created_at: string;
