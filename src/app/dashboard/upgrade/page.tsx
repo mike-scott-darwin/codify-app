@@ -12,7 +12,15 @@ interface PlanCard {
   tagline: string;
   features: string[];
   highlight?: boolean;
+  checkoutUrl?: string;
 }
+
+// GHL checkout URLs — update these once funnel pages are built
+const GHL_CHECKOUT: Record<string, string> = {
+  build: process.env.NEXT_PUBLIC_GHL_CHECKOUT_BUILD || "",
+  pro: process.env.NEXT_PUBLIC_GHL_CHECKOUT_PRO || "",
+  agency: process.env.NEXT_PUBLIC_GHL_CHECKOUT_AGENCY || "",
+};
 
 const PLANS: PlanCard[] = [
   {
@@ -35,6 +43,7 @@ const PLANS: PlanCard[] = [
     period: "/mo",
     annual: "$397/yr (save 30%)",
     tagline: "The thinking engine",
+    checkoutUrl: GHL_CHECKOUT.build,
     features: [
       "Everything in Free",
       "Unlimited enrichments",
@@ -53,6 +62,7 @@ const PLANS: PlanCard[] = [
     annual: "$1,197/yr (save 32%)",
     tagline: "Turn context into revenue",
     highlight: true,
+    checkoutUrl: GHL_CHECKOUT.pro,
     features: [
       "Everything in Build",
       "All 10 AI agents",
@@ -73,6 +83,7 @@ const PLANS: PlanCard[] = [
     period: "/mo",
     annual: "$2,997/yr (save 37%)",
     tagline: "Unlimited. Multi-client. Direct access.",
+    checkoutUrl: GHL_CHECKOUT.agency,
     features: [
       "Everything in Pro",
       "Unlimited generations (all types)",
@@ -147,9 +158,12 @@ export default function UpgradePage() {
                 <span className="font-mono text-sm text-center py-3 border border-[#1a1a1a] text-[#6b6b6b]">
                   Current Plan
                 </span>
-              ) : isUpgrade ? (
-                <button
-                  className="font-mono text-sm font-bold py-3 hover:brightness-110 transition-all"
+              ) : isUpgrade && plan.checkoutUrl ? (
+                <a
+                  href={plan.checkoutUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-mono text-sm font-bold py-3 text-center hover:brightness-110 transition-all block"
                   style={{
                     backgroundColor: TIER_COLORS[plan.tier],
                     color: "#000",
@@ -157,7 +171,11 @@ export default function UpgradePage() {
                   }}
                 >
                   Upgrade to {plan.tier.toUpperCase()}
-                </button>
+                </a>
+              ) : isUpgrade ? (
+                <span className="font-mono text-sm text-center py-3 border border-[#1a1a1a] text-[#6b6b6b]">
+                  Coming Soon
+                </span>
               ) : (
                 <span className="font-mono text-sm text-center py-3 text-[#6b6b6b]">
                   &mdash;
