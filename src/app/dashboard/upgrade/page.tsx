@@ -1,7 +1,7 @@
 "use client";
 
 import { useTier } from "@/lib/tier-context";
-import { TIER_COLORS, TIER_HIERARCHY } from "@/lib/tier";
+import { TIER_COLORS, TIER_HIERARCHY, TIER_PRICES } from "@/lib/tier";
 import type { Tier } from "@/lib/tier";
 
 interface PlanCard {
@@ -17,9 +17,9 @@ interface PlanCard {
 
 // GHL checkout URLs — update these once funnel pages are built
 const GHL_CHECKOUT: Record<string, string> = {
-  build: process.env.NEXT_PUBLIC_GHL_CHECKOUT_BUILD || "",
-  pro: process.env.NEXT_PUBLIC_GHL_CHECKOUT_PRO || "",
-  agency: process.env.NEXT_PUBLIC_GHL_CHECKOUT_AGENCY || "",
+  base: process.env.NEXT_PUBLIC_GHL_CHECKOUT_BASE || "",
+  opp_engine: process.env.NEXT_PUBLIC_GHL_CHECKOUT_OPP || "",
+  scale_partner: process.env.NEXT_PUBLIC_GHL_CHECKOUT_SCALE || "",
 };
 
 const PLANS: PlanCard[] = [
@@ -31,66 +31,58 @@ const PLANS: PlanCard[] = [
     tagline: "Build your foundation",
     features: [
       "4 reference file interviews",
-      "10 AI enrichments",
       "Read-only dashboard access",
-      "Download files",
-      "Copy-paste AI context block",
+      "Download sovereign files",
+      "One-time AI context block",
     ],
   },
   {
-    tier: "build",
-    price: "47",
+    tier: "base",
+    price: "147",
     period: "/mo",
-    annual: "$397/yr (save 30%)",
-    tagline: "The thinking engine",
-    checkoutUrl: GHL_CHECKOUT.build,
+    annual: "$1,497/yr (save $267)",
+    tagline: "Identity & Context Persistence",
+    checkoutUrl: GHL_CHECKOUT.base,
     features: [
-      "Everything in Free",
+      "Full Context Vault access",
+      "Monthly 'Brain Sync' Audit",
       "Unlimited enrichments",
-      "Re-enrich files anytime",
-      "Research workspace + AI assistant",
-      "Social post generation (5/mo)",
-      "Congruence Audit agent",
-      "Deep Research agent (2/mo)",
+      "Research workspace + AI",
+      "Context drift alerts",
       "Community access",
     ],
   },
   {
-    tier: "pro",
-    price: "147",
+    tier: "opp_engine",
+    price: "497",
     period: "/mo",
-    annual: "$1,197/yr (save 32%)",
-    tagline: "Turn context into revenue",
+    annual: "$4,997/yr (save $967)",
+    tagline: "Growth Discovery & Scale",
     highlight: true,
-    checkoutUrl: GHL_CHECKOUT.pro,
+    checkoutUrl: GHL_CHECKOUT.opp_engine,
     features: [
-      "Everything in Build",
-      "All 10 AI agents",
-      "Ad copy generation (50/mo)",
-      "Email sequences (50/mo)",
-      "VSL scripts (10/mo)",
-      "Landing page copy (10/mo)",
-      "Social posts (50/mo)",
-      "Content scheduling + publishing",
-      "Output history + favorites",
-      "Inline file editor",
-      "Guided onboarding sprint",
+      "Everything in Base Brain",
+      "Weekly 'Opportunity Scout' Reports",
+      "All Output Skills (Ads, VSL, Social)",
+      "Daily Content Queue + Approval",
+      "Calendar & Auto-Publishing",
+      "Guided 4-week Onboarding Sprint",
     ],
   },
   {
-    tier: "agency",
-    price: "397",
+    tier: "scale_partner",
+    price: "1,497",
     period: "/mo",
-    annual: "$2,997/yr (save 37%)",
-    tagline: "Unlimited. Multi-client. Direct access.",
-    checkoutUrl: GHL_CHECKOUT.agency,
+    annual: "$14,997/yr (save $2,967)",
+    tagline: "Institutional Memory Insurance",
+    checkoutUrl: GHL_CHECKOUT.scale_partner,
     features: [
-      "Everything in Pro",
-      "Unlimited generations (all types)",
-      "Done-for-you onboarding",
-      "Direct access to builder",
-      "Agency multi-client support",
-      "Priority support",
+      "Everything in Opportunity Engine",
+      "Legacy Codification (Senior Experts)",
+      "Done-For-You Stack Build",
+      "Direct Strategic Oversight",
+      "Organization/Agency Multi-Workspace",
+      "Unlimited agent throughput",
     ],
   },
 ];
@@ -100,9 +92,9 @@ export default function UpgradePage() {
 
   return (
     <>
-      <h1 className="font-mono text-xl font-bold mb-2">Upgrade Your Plan</h1>
+      <h1 className="font-mono text-xl font-bold mb-2">Upgrade Your Business Brain</h1>
       <p className="text-sm text-[#6b6b6b] mb-10">
-        Build context. Generate outputs. Compound results.
+        Insure your wisdom. Find the revenue gaps. Scale your identity.
       </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -123,7 +115,7 @@ export default function UpgradePage() {
                   className="font-mono text-[10px] uppercase tracking-[0.15em]"
                   style={{ color: TIER_COLORS[plan.tier] }}
                 >
-                  {plan.tier}
+                  {plan.tier.replace('_', ' ')}
                 </span>
                 {plan.highlight && (
                   <span className="font-mono text-[9px] uppercase tracking-wider text-[#8b5cf6]">
@@ -170,7 +162,7 @@ export default function UpgradePage() {
                     borderRadius: 0,
                   }}
                 >
-                  Upgrade to {plan.tier.toUpperCase()}
+                  UPGRADE TO {plan.tier.replace('_', ' ').toUpperCase()}
                 </a>
               ) : isUpgrade ? (
                 <span className="font-mono text-sm text-center py-3 border border-[#1a1a1a] text-[#6b6b6b]">

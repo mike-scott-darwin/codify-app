@@ -18,8 +18,10 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: "\u25A0" },
-  { label: "Build", href: "/dashboard/files", icon: "1" },
+  { label: "The Vault", href: "/dashboard/files", icon: "1" },
+  { label: "Brain Sync", href: "/dashboard/sync", feature: "brain_sync", icon: "\u21CC", requiredFiles: 4 },
   { label: "Research", href: "/dashboard/research", feature: "research", icon: "2", requiredFiles: 2 },
+  { label: "Scout", href: "/dashboard/scout", feature: "opportunity_scout", icon: "\u2316", requiredFiles: 4 },
   { label: "Queue", href: "/dashboard/queue", feature: "research", icon: "▸", requiredFiles: 2 },
   { label: "Create", href: "/dashboard/generate", feature: "generate:ad_copy", icon: "3", requiredFiles: 4 },
   { label: "Publish", href: "/dashboard/outputs", feature: "output_history", icon: "4" },
@@ -59,7 +61,7 @@ export function Sidebar() {
       <div className="px-5 py-3 border-b border-[#1a1a1a]">
         <div className="flex items-center justify-between mb-1.5">
           <span className="font-mono text-[9px] uppercase tracking-[0.15em] text-[#6b6b6b]">
-            Core files
+            Context Fidelity
           </span>
           <span className="font-mono text-[9px] text-[#a0a0a0]">
             {fileCompleteness}/4
@@ -101,7 +103,7 @@ export function Sidebar() {
                 </div>
                 {fileLocked && filesNeeded > 0 && (
                   <span className="font-mono text-[8px] text-[#333] ml-7 mt-0.5">
-                    Complete {filesNeeded} more file{filesNeeded !== 1 ? "s" : ""}
+                    Fidelity: {fileCompleteness}/4
                   </span>
                 )}
               </div>
@@ -125,14 +127,14 @@ export function Sidebar() {
         })}
       </nav>
 
-      {/* Upgrade CTA for free users */}
-      {tier === "free" && (
+      {/* Upgrade CTA for base users */}
+      {tier === "base" && (
         <div className="px-3 pb-3">
           <Link
             href="/dashboard/upgrade"
             className="block text-center font-mono text-xs px-3 py-2 border border-[#8b5cf6] text-[#8b5cf6] hover:bg-[#8b5cf6] hover:text-white transition-colors"
           >
-            Upgrade Plan
+            Activate Opp. Engine
           </Link>
         </div>
       )}
