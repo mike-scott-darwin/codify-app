@@ -8,375 +8,342 @@ export const siteConfig = {
   metadata: {
     title: "Codify — Stop Prompting. Start Codifying.",
     description:
-      "Your business has knowledge that makes it unique. AI can't use any of it. We fix that. Structure your expertise into reference files AI reads before generating anything.",
+      "Your business has knowledge that makes it unique. AI can't use any of it. We fix that. Insure your institutional memory and build your strategic growth engine.",
   },
   hero: {
-    eyebrow: "FOR BUSINESS OWNERS USING AI",
-    headline: "Context compounds.\nPrompts don't.",
-    subhead: "The context layer between your business and AI.\nLess time. Less tools. Better output.",
-    ctaText: "Get Your Free Starter Kit",
-    ctaUrl: "/codify-starter-kit.zip",
-    badge: { text: "48 files · 322 commits · 9 hrs/week", dot: true },
-  },
-  problem: {
-    eyebrow: "THE PROBLEM",
-    headline: "Generic in, generic out.",
-    items: [
-      {
-        title: "The Prompt Trap",
-        description:
-          "Better prompts. Prompt packs. Courses. The outputs are still generic. Because prompts are disposable — you use them once and start over.",
-        stat: "95%",
-        statLabel: "of AI pilots fail",
-      },
-      {
-        title: "The Context Gap",
-        description:
-          "Every AI session starts from zero. Your beliefs, offer, audience, voice — none of it carries forward. You re-explain your business every single time.",
-        stat: "42%",
-        statLabel: "of knowledge is undocumented",
-      },
-      {
-        title: "The Knowledge Walkout",
-        description:
-          "Your knowledge lives in people's heads. When they leave, it leaves with them. No AI tool can use knowledge it can't access.",
-        stat: "$31.5B",
-        statLabel: "lost annually to knowledge gaps",
-      },
-      {
-        title: "The Market Is Moving",
-        description:
-          "47% year-over-year growth. Your competitors aren't waiting for better prompts — they're structuring their knowledge now. Every quarter you don't, the gap widens.",
-        stat: "47%",
-        statLabel: "YoY market growth",
-      },
-    ],
+    eyebrow: "FOR SENIOR LEADERS & EXPERTS",
+    headline: "Don't Just Automate.\nCodify Your Legacy.",
+    subhead:
+      "Turn 30 years of expertise into a proprietary AI Strategic Engine.\nInsure your institutional memory before it walks out the door.",
+    ctaText: "Get the Knowledge Risk Calculator",
+    ctaUrl: "#calculator",
+    badge: {
+      dot: true,
+      text: "Strategic Intelligence · Legacy Preservation · Growth Partner",
+    },
   },
   thesis: {
     eyebrow: "THE THESIS",
-    headline: "Context > Prompts.",
+    headline: "Upstream Wisdom > Downstream Noise.",
+    kicker: "Most AI implementation is just fixing the plumbing. We focus on the reservoir.",
     description:
-      "Everyone is optimizing the vehicle. Nobody is checking the fuel.",
+      "Everyone is buying prompt packs and getting generic outputs. The businesses that lead are those that structured their proprietary context first.",
     comparison: [
       {
-        market: "Write a better prompt, get a better output",
-        codify: "Structure your knowledge once, get better outputs forever",
+        market: "Automate tactical tasks",
+        codify: "Codify strategic moats",
       },
       {
         market: "Every session starts from zero",
-        codify: "Every session builds on the last — 322 commits and counting",
+        codify: "Every session compounds your expertise",
       },
       {
-        market: "Your AI sounds like everyone else's AI",
-        codify: "Your AI sounds like YOU from the first draft",
+        market: "Generic 'AI Slop' outputs",
+        codify: "High-fidelity strategic intelligence",
       },
       {
-        market: "Switch tools, lose everything",
-        codify: "Switch tools, keep everything — it's markdown in your repo",
+        market: "Platform-locked context",
+        codify: "Sovereign markdown in your own repo",
       },
       {
-        market: "Pay a consultant $10K for a report",
-        codify: "Build the skill yourself — the system keeps compounding",
+        market: "Pay a consultant for a report",
+        codify: "Build a perpetual consulting engine",
       },
       {
-        market: "Upload docs and pray the AI figures it out",
-        codify: "Structure your identity — beliefs, voice, offer, audience",
+        market: "Knowledge walks out with experts",
+        codify: "Wisdom is codified and permanent",
       },
       {
-        market: "Your knowledge is scattered across 15 apps",
-        codify: "Your knowledge is in 4 files any AI can read",
+        market: "Scattered data in 15 apps",
+        codify: "A single, versioned Reservoir of truth",
       },
     ],
-    kicker: "The bottleneck isn't the tool. It's what the tool knows about you.",
+  },
+  problem: {
+    eyebrow: "THE PROBLEM",
+    headline: "The $2M Knowledge Walkout.",
+    items: [
+      {
+        title: "The Retirement Cliff",
+        stat: "10,000+",
+        statLabel: "executives retire daily",
+        description:
+          "When a 30-year veteran leaves, their tribal knowledge and 'gut-level' logic leave with them. Most succession plans fail to capture the reservoir.",
+      },
+      {
+        title: "The Context Gap",
+        stat: "42%",
+        statLabel: "of knowledge is undocumented",
+        description:
+          "Every AI session starts from zero. Your beliefs, offer, and unique logic aren't in the machine—so the machine outputs generic slop.",
+      },
+      {
+        title: "The Prompt Trap",
+        stat: "95%",
+        statLabel: "of AI pilots fail",
+        description:
+          "Prompt packs are disposable. Better vehicles with no fuel still won't move. You don't need better prompts; you need richer context.",
+      },
+      {
+        title: "The Market Is Moving",
+        stat: "47%",
+        statLabel: "YoY market growth",
+        description:
+          "Mature industries (Finance, Legal, Ops) are already saturated with tools. The winners are those using AI to find the strategic gaps.",
+      },
+    ],
   },
   mechanism: {
     eyebrow: "THE MECHANISM",
-    headline: "Extract → Codify → Generate → Compound",
+    headline: "Extract → Codify → Scout → Scale",
     steps: [
       {
         label: "Extract",
         command: "codify extract",
         description:
-          "Pull the knowledge out of your head. The beliefs, expertise, decisions, and voice that make your business yours.",
+          "Mission-critical interview to pull out the frameworks and 'war stories' that define your competitive moat.",
       },
       {
         label: "Codify",
         command: "codify structure",
         description:
-          "Turn it into reference files: soul.md, offer.md, audience.md, voice.md. Plain markdown any AI can read. No platform lock. No vendor risk. Yours forever.",
+          "Turn your soul into your Reference Stack. Sovereign markdown files that insure your institutional memory forever.",
       },
       {
-        label: "Generate",
-        command: "codify generate",
+        label: "Scout",
+        command: "codify scout",
         description:
-          "Every output — ads, emails, scripts, content — reads your reference stack first. No re-explaining. No generic. Everything sounds like you.",
+          "Max cross-references your 'Brain' against market shifts to find weekly revenue opportunities and strategic gaps.",
       },
       {
-        label: "Compound",
-        command: "codify compound",
+        label: "Scale",
+        command: "codify scale",
         description:
-          "Each research session enriches the stack. Each decision sharpens positioning. The system gets smarter without you getting busier. That's the moat.",
+          "Your expert logic becomes a high-fidelity automation engine. Scale your impact without increasing your manual hours.",
+      },
+    ],
+  },
+  product: {
+    eyebrow: "THE ENGINE",
+    headline: "Insure. Grow. Scale.",
+    description:
+      "Same architecture, more intelligence. Every tier compounds on the last.",
+    tiers: [
+      {
+        name: "The Base Brain",
+        price: "$147",
+        period: "/mo",
+        description:
+          "Context Persistence & Identity Maintenance. Ensure your AI never forgets your business soul.",
+        skills: ["/start", "/think", "/help"],
+        features: [
+          "Full Thinking Engine access",
+          "Monthly 'Brain Sync' Audit",
+          "Structured Reference Vault",
+          "Community access · Group calls",
+        ],
+        cta: "Start Building",
+        ctaUrl: "#base",
+        highlight: false,
+        command: "codify sync",
+        annualPrice: "$1,497/yr",
+        annualSavings: "Save $267",
+      },
+      {
+        name: "The Opportunity Engine",
+        price: "$497",
+        period: "/mo",
+        description:
+          "Discovery & Automated Outputs. Find the revenue gaps and capture them instantly.",
+        skills: ["/scout", "/ads", "/organic", "/vsl", "/site"],
+        features: [
+          "Everything in Base Brain",
+          "Weekly 'Opportunity Scout' Reports",
+          "Full Content Queue + Approval",
+          "Guided 4-week Onboarding Sprint",
+          "Priority Agent Architecture",
+        ],
+        cta: "Scale Now",
+        ctaUrl: "#pro",
+        highlight: true,
+        command: "codify scout",
+        annualPrice: "$4,997/yr",
+        annualSavings: "Save $967",
+      },
+      {
+        name: "The Scale Partner",
+        price: "$1,497",
+        period: "/mo",
+        description:
+          "Strategic Leverage & Custom Skills. Full DFY architecting for enterprises and agencies.",
+        skills: ["All Skills", "Custom Agents", "Legacy Extraction"],
+        features: [
+          "Everything in Opportunity Engine",
+          "Legacy Codification (Senior Experts)",
+          "Institutional Knowledge Insurance",
+          "Done-For-You Stack Build",
+          "Direct Async Access · Bi-weekly Strategy",
+        ],
+        cta: "Apply for Partner",
+        ctaUrl: "#vip",
+        highlight: false,
+        command: "codify scale",
+        annualPrice: "$14,997/yr",
+        annualSavings: "Save $2,967",
       },
     ],
   },
   proof: {
     eyebrow: "THE PROOF",
-    headline: "We eat our own cooking.",
+    headline: "Architecture > Automation.",
     description:
-      "Client Ready is Case Study #1. Every metric below is real. Every piece of content you see on this page was generated from reference files.",
+      "Client Ready is an Architecture Success Story. Every piece of intelligence on this site came from a codified Reference Stack.",
     stats: [
       { value: "48", label: "Reference files", suffix: "" },
       { value: "322", label: "Git commits", suffix: "+" },
       { value: "9", label: "Hours per week", suffix: "hrs" },
-      { value: "7", label: "Months daily use", suffix: "mo" },
+      { value: "7", label: "Months compounding", suffix: "mo" },
     ],
     before: [
       "Re-explain the business every AI session",
-      "Generic outputs that sound like everyone else",
-      "Hours of editing to make AI copy sound human",
-      "Knowledge locked in one person's head",
+      "Generic outputs that sound like 'AI Slop'",
+      "Knowledge locked in one retiring head",
+      "Piecemeal automation, fractured results",
     ],
     after: [
-      "AI reads 48 reference files before generating",
-      "Every output sounds like the brand from first draft",
-      "Minutes to generate an entire ad batch",
-      "Knowledge codified, versioned, compounding daily",
+      "AI reads your entire Soul before acting",
+      "Expert-level first drafts, every time",
+      "Permanent, versioned Institutional memory",
+      "Holistic architecture, compounding ROI",
     ],
-  },
-  product: {
-    eyebrow: "THE STACK",
-    headline: "Think. Create. Scale.",
-    description:
-      "Same engine, more skills. Every tier compounds on the last.",
-    tiers: [
-      {
-        name: "Build",
-        command: "codify think",
-        price: "$99",
-        period: "/mo",
-        annualPrice: "$699/yr",
-        annualSavings: "Save $489",
-        description:
-          "The thinking engine. Research, decide, and codify your business knowledge into structured reference files.",
-        skills: ["/start", "/think", "/help"],
-        features: [
-          "Unlimited research sessions + AI generations",
-          "Parallel AI agents + MCP routing",
-          "Full thinking engine — research, decide, codify",
-          "Community access + classroom",
-          "Group calls",
-        ],
-        cta: "Start Building",
-        ctaUrl: "#build",
-        highlight: false,
-      },
-      {
-        name: "Pro",
-        command: "codify generate",
-        price: "$199",
-        period: "/mo",
-        annualPrice: "$1,497/yr",
-        annualSavings: "Save $891",
-        description:
-          "Everything in Build — plus the output skills that turn your reference stack into ads, content, sites, and scripts.",
-        skills: ["/start", "/think", "/help", "/ads", "/organic", "/vsl", "/site", "/wiki"],
-        features: [
-          "Everything in Build",
-          "Unlimited output generation — ads, organic, VSL, site, wiki",
-          "Compliance lenses + brand templates",
-          "Guided onboarding sprint (first 4 weeks)",
-          "Monthly co-working sessions",
-        ],
-        cta: "Go Pro",
-        ctaUrl: "#pro",
-        highlight: true,
-      },
-      {
-        name: "VIP",
-        command: "codify scale",
-        price: "$497",
-        period: "/mo",
-        annualPrice: "$2,997/yr",
-        annualSavings: "Save $2,967",
-        description:
-          "Everything in Pro — plus direct access, internal research, and the infrastructure to scale across clients.",
-        skills: ["All skills", "Internal research library", "Decision archive", "Advanced automations"],
-        features: [
-          "Everything in Pro",
-          "Unlimited everything — no caps, no throttling",
-          "Internal research + decision library",
-          "Advanced automations + agent workflows",
-          "Weekly co-working sessions",
-          "Direct access — async + calls",
-          "Agency multi-client support",
-        ],
-        cta: "Apply for VIP",
-        ctaUrl: "#vip",
-        highlight: false,
-      },
-    ],
-  },
-  urgency: {
-    eyebrow: "THE WINDOW",
-    headline: "The market won’t wait for you.",
-    terminal: {
-      command: "codify market --status",
-      lines: [
-        { type: "info", text: "AI knowledge management market ........... $4.8B → $16.2B by 2028" },
-        { type: "growth", text: "Year-over-year growth rate ............... 47%" },
-        { type: "info", text: "Businesses codifying their knowledge ..... pulling away" },
-        { type: "warning", text: "Businesses still prompting from scratch .. getting buried" },
-        { type: "blank", text: "" },
-        { type: "result", text: "VERDICT: The window is open. It won't be for long." },
-      ],
-    },
-    cards: [
-      {
-        label: "Today",
-        title: "You move first",
-        description: "You lock in your knowledge now. Every AI output carries your identity. Your competitors are still re-explaining themselves to ChatGPT every morning.",
-        status: "green",
-      },
-      {
-        label: "6 months",
-        title: "The gap becomes a canyon",
-        description: "50+ reference files deep. Your AI knows your business cold. Competitors wake up — but you've been compounding for six months. They can't catch you.",
-        status: "green",
-      },
-      {
-        label: "12 months",
-        title: "The moat is permanent",
-        description: "Your context IS the business. New entrants need a year just to stand where you are — and you're still pulling ahead.",
-        status: "green",
-      },
-    ],
-    closingLine: "First movers build moats. Everyone else pays to catch up.",
   },
   testimonials: {
-    eyebrow: "FROM THE COMMUNITY",
-    headline: "Real people. Real timelines. Real results.",
+    eyebrow: "STRATEGIC IMPACT",
+    headline: "Wisdom, Codified.",
     description:
-      "These are members using the same engine that powers Codify. Same reference architecture. Same compounding system. Their words, not ours.",
+      "Our partners are no longer just 'using AI.' They are owning their architecture.",
+    featured: {
+      name: "Strategy Consultant",
+      quote:
+        "By articulating my decision logic into a Reference Stack, Max now audits my clients' businesses with 90% accuracy before I even log on. I've moved from 'Doing' to 'Advising' in weeks.",
+      result: "90% reduction in manual audit time",
+      context: "Strategic Partner Tier",
+    },
     items: [
       {
         name: "Alex Reisch",
-        context: "VIP — Skool community builder",
-        result: "Complete Skool community in days, not months",
         quote:
-          "21+ lessons across 3 courses, 22 email triggers, all built in hours not weeks. The reference files mean every piece of content sounds like me. I’ve never experienced anything like this in 15+ years of building online.",
+          "Built a master-level Skool community in record time. The Reference Stack ensured every lesson and email trigger sounded like me, not a machine.",
+        result: "Complete IP codification in days",
+        context: "Opportunity Engine Tier",
+      },
+      {
+        name: "Joe DeFilippo",
+        quote:
+          "Moved from tactical fixes to architectural growth. 63 PRs in 26 days. The Reference files kept my team aligned and honest.",
+        result: "60% faster team throughput",
+        context: "Scale Partner Tier",
       },
       {
         name: "Joshua Breaux",
-        context: "4 days in — blog strategy",
+        quote:
+          "No more starting over. Every decision codified today makes my scout report better tomorrow. That's the compounding I was missing.",
         result: "Full content strategy in 5 hours",
-        quote:
-          "Validated 105 keywords in Ahrefs. Mapped 5 pillar articles, 15+ cluster articles, and the full internal linking architecture between them. The part I’m most pumped about is the compounding. Every decision codified in my reference files feeds the next session. No more starting over every time with a different AI Stranger.",
-      },
-      {
-        name: "Mark Schreiber",
-        context: "Built a SaaS tool in 4 hours",
-        result: "Mailing tool + AI readiness widget from scratch",
-        quote:
-          "Scraped 1,500 websites, built an AI readiness scoring widget, and created a mailing tool — all in about 4 hours. I would’ve never tried this two months ago. The reference stack gave me the confidence to just build.",
-      },
-      {
-        name: "Josh Ballard",
-        context: "New GHL agency — busy dad, 9-5 job",
-        result: "New business stood up in a day",
-        quote:
-          "Stood up a brand new GHL agency with a landing page in a single day. As a busy dad working a 9-5, this would have taken triple the time without the reference architecture guiding every output.",
-      },
-      {
-        name: "Joel Neupane",
-        context: "Full funnel automation",
-        result: "Saved $500–1,500/mo replacing paid tools",
-        quote:
-          "Built a complete Stripe + CRM automation that replaced Zapier entirely. Full funnel — payment processing, email triggers, contact management. Saving $500–1,500 a month on tools I no longer need.",
-      },
-      {
-        name: "Grant Sparks",
-        context: "Sales team automation",
-        result: "Built a working AI agent from scratch",
-        quote:
-          "My sales team burns too much time looking for the right business networking events. Claude whipped it up, built the repo, did the initial searches. We refined the queries. It’s functional and working, and takes that effort off of the team.",
-      },
-      {
-        name: "Joe DeFilippo",
-        context: "SaaS developer — 26 days in",
-        result: "Moving 60% faster with 5x more tests",
-        quote:
-          "63 pull requests merged in 26 days. The previous 63 took me 43 days. And quality didn’t slip — we went from 75 automated tests to 395. The reference architecture doesn’t just speed you up, it keeps you honest.",
-      },
-      {
-        name: "Joe DeFilippo",
-        context: "Helped brother-in-law start a business",
-        result: "Full business reference built in 1 hour",
-        quote:
-          "My brother-in-law Frank is starting a personal training business. I researched his local competition, identified his advantages, and built his full reference — offer, audience, voice, brand. Sent him a summary email. His response: ‘Joe, I am blown away.’ Not bad for about an hour of work.",
-      },
-      {
-        name: "Jordan Watkins",
-        context: "Content creator — video production",
-        result: "3–4 hour animation done in 20 minutes",
-        quote:
-          "Created an animation using a reference file and my own stored assets. This would normally take three to four hours — I completed it in about 20 minutes. I can see the potential of introducing this into my content creation workflow and making really cool video ads.",
+        context: "Opportunity Engine Tier",
       },
     ],
-    featured: {
-      name: "Community Member",
-      context: "Canceled every other SaaS subscription",
-      result: "Hundreds of ad variations, converting",
-      quote:
-        "Once you articulate your offer, your audience, your voice, and your proof into structured reference, everything downstream gets better. Ads. Content. Sales pages. Everything. I ran the ad skill and it made hundreds of ad variations. We put them in the ad account and it\u2019s converting. I canceled every other subscription. This is the only tool I need.",
-    },
   },
   objections: {
-    eyebrow: "OBJECTIONS",
+    eyebrow: "REMAINING RISK",
     headline: "You're thinking...",
     items: [
       {
         question: '"I can just use ChatGPT Projects"',
         answer:
-          "Projects are a filing cabinet. This is an architecture. Projects don't compound, don't generate from structured context, and lock you to one platform.",
+          "Projects are a filing cabinet. Codify is an architecture. Projects don't scout, don't compound, and lock your wisdom to one platform.",
       },
       {
-        question: '"Why not just write good prompts?"',
+        question: '"Why not just hire an AI consultant?"',
         answer:
-          "Because prompts are disposable. You write them once, they work once. Reference files inform every output, forever. Context > Prompts.",
+          "Consultants give you a report that dies. We build a permanent engine that lives. One costs $20k for a PDF; the other is your business OS starting at $147.",
       },
       {
-        question: '"I\'m not technical"',
+        question: '"I am not ready to retire yet"',
         answer:
-          "Neither are most of our members. Build tier walks you through it. Pro tier includes guided onboarding — your stack built with you in the first 4 weeks.",
+          "The best time to codify is when you are at your peak. Codification builds the moat that keeps you at the top while reducing your screen time.",
       },
       {
-        question: '"Why pay monthly when AI tools are free?"',
+        question: '"Why monthly maintenance?"',
         answer:
-          "Free AI gives you generic outputs. The engine gives you outputs that know your business. The difference is the reference stack, the skills that read it, and the community that helps you build it.",
+          "Your business evolves every week. If your AI context doesn't, the outputs drift into generic slop. We insure your context freshness.",
       },
       {
-        question: '"What if I want to cancel?"',
+        question: '"Is my knowledge safe?"',
         answer:
-          "Month-to-month. Cancel anytime. Your reference files are yours — markdown files in your own git repo. You keep everything you built. We don't hold your data hostage.",
-      },
-      {
-        question: '"How is this different from hiring an AI consultant?"',
-        answer:
-          "Consultants give you a report. We give you a system. Consultants leave after the engagement. The engine keeps compounding. Consultants cost $5-20K. Build starts at $99/mo.",
+          "Your Reference Stack lives in your private repository. Sovereign markdown. You own it forever, regardless of the tools you use.",
       },
     ],
   },
   cta: {
-    headline: "The window is open.\nNot for long.",
+    headline: "Wisdom is your Moat.\nDon't let it drain.",
     subhead:
-      "Download the 4 reference files. Fill them in. Start your first AI session with full context today.",
-    ctaText: "Get Your Free Starter Kit",
-    ctaUrl: "/codify-starter-kit.zip",
+      "Structure your expertise today. Compound your ROI forever.\nStop settle for generic AI.",
+    ctaText: "Calculate Your Knowledge Risk",
+    ctaUrl: "#calculator",
+    microcopy: "soul.md · offer.md · audience.md · voice.md — ready in 5 min.",
     files: ["soul.md", "offer.md", "audience.md", "voice.md"],
-    microcopy: "soul.md · offer.md · audience.md · voice.md — yours in 5 minutes.",
+  },
+  urgency: {
+    eyebrow: "THE WINDOW",
+    headline: "The Cliff is Coming.",
+    closingLine: "First movers build reservoirs. Everyone else pays for the drought.",
+    cards: [
+      {
+        label: "Today",
+        title: "Risk Quantification",
+        description:
+          "You identify the $[ROC] risk in your experts' heads. You start the extraction sprint.",
+        status: "green",
+      },
+      {
+        label: "6 Months",
+        title: "Architectural Moat",
+        description:
+          "50+ reference files deep. Your AI knows your business cold. Your competitors are still re-writing prompts.",
+        status: "green",
+      },
+      {
+        label: "12 Months",
+        title: "Legacy Immortality",
+        description:
+          "Your context IS the business. Experts retire, but the engine continues. The moat is permanent.",
+        status: "green",
+      },
+    ],
+    terminal: {
+      command: "codify market --status",
+      lines: [
+        {
+          type: "info",
+          text: "Senior Expert Retirement rate ......... 10k/day",
+        },
+        {
+          type: "warning",
+          text: "Knowledge management leakage ............ $31.5B/yr",
+        },
+        {
+          type: "growth",
+          text: "Strategic Codification leaders ........... Pulling ahead",
+        },
+        {
+          type: "result",
+          text: "VERDICT: The window is open. Codify before you exit.",
+        },
+      ],
+    },
   },
   footer: {
-    tagline: "context > prompts",
+    tagline: "upstream wisdom > downstream noise",
     copyright: `© ${new Date().getFullYear()} Codify`,
     links: [
       { label: "Privacy", url: "/privacy" },
