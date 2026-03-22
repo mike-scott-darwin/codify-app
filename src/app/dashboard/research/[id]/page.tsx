@@ -61,6 +61,7 @@ export default function ResearchDetailPage() {
   const [aiAnswer, setAiAnswer] = useState("");
   const [asking, setAsking] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
 
   // Codify state
   const [targetFiles, setTargetFiles] = useState<Record<string, boolean>>({
@@ -197,6 +198,27 @@ export default function ResearchDetailPage() {
   const handleDelete = async () => {
     await fetch("/api/research/" + id, { method: "DELETE" });
     router.push("/dashboard/research");
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    setError(null);
+
+    try {
+      const text = await file.text();
+      const trimmed = text.slice(0, 10000);
+      const separator = topic.content ? "\n\n---\n\n" : "";
+      const label = "**Uploaded: " + file.name + "**\n\n";
+      const updated = topic.content + separator + label + trimmed;
+      setTopic((prev) => prev ? { ...prev, content: updated } : prev);
+      save({ content: updated });
+    } catch {
+      setError("Could not read file. Try a text file (.txt, .md, .csv, .pdf).");
+    }
+    setUploading(false);
+    e.target.value = "";
   };
 
   const generateProposals = async () => {
@@ -449,7 +471,20 @@ export default function ResearchDetailPage() {
             className="w-full min-h-[30vh] bg-[#111111] border border-[#1a1a1a] p-4 font-mono text-sm text-[#a0a0a0] leading-relaxed resize-y focus:outline-none focus:border-[#4a9eff]"
             placeholder="Write your research notes here..."
           />
-          {saving && <p className="font-mono text-[10px] text-[#4a9eff] mt-1">Saving...</p>}
+          <div className="flex items-center justify-between mt-2">
+            {saving && <p className="font-mono text-[10px] text-[#4a9eff]">Saving...</p>}
+            <label className="flex items-center gap-2 font-mono text-[10px] text-[#6b6b6b] hover:text-[#4a9eff] cursor-pointer transition-colors ml-auto">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+              {uploading ? "Reading..." : "Upload a file"}
+              <input
+                type="file"
+                accept=".txt,.md,.csv,.doc,.docx,.pdf,.json"
+                onChange={handleFileUpload}
+                className="hidden"
+                disabled={uploading}
+              />
+            </label>
+          </div>
 
           {/* Decision field — always visible */}
           <div className="mt-4">
