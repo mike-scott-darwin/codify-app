@@ -46,7 +46,7 @@ export default function ResearchPage() {
       <>
         <h1 className="font-mono text-xl font-bold mb-8">Research</h1>
         <UpgradePrompt
-          requiredTier="build"
+          requiredTier="focus"
           feature="Research Workspace"
           description="Explore topics, make decisions, and codify insights into your reference files."
         />

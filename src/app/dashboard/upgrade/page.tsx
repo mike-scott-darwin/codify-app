@@ -1,181 +1,140 @@
 "use client";
 
 import { useTier } from "@/lib/tier-context";
-import { TIER_COLORS, TIER_HIERARCHY, TIER_PRICES } from "@/lib/tier";
-import type { Tier } from "@/lib/tier";
-
-interface PlanCard {
-  tier: Tier;
-  price: string;
-  period: string;
-  annual: string;
-  tagline: string;
-  features: string[];
-  highlight?: boolean;
-  checkoutUrl?: string;
-}
-
-// GHL checkout URLs — update these once funnel pages are built
-const GHL_CHECKOUT: Record<string, string> = {
-  base: process.env.NEXT_PUBLIC_GHL_CHECKOUT_BASE || "",
-  opp_engine: process.env.NEXT_PUBLIC_GHL_CHECKOUT_OPP || "",
-  scale_partner: process.env.NEXT_PUBLIC_GHL_CHECKOUT_SCALE || "",
-};
-
-const PLANS: PlanCard[] = [
-  {
-    tier: "free",
-    price: "0",
-    period: "",
-    annual: "",
-    tagline: "Build your foundation",
-    features: [
-      "4 reference file interviews",
-      "Read-only dashboard access",
-      "Download sovereign files",
-      "One-time AI context block",
-    ],
-  },
-  {
-    tier: "base",
-    price: "147",
-    period: "/mo",
-    annual: "$1,497/yr (save $267)",
-    tagline: "Identity & Context Persistence",
-    checkoutUrl: GHL_CHECKOUT.base,
-    features: [
-      "Full Context Vault access",
-      "Monthly 'Brain Sync' Audit",
-      "Unlimited enrichments",
-      "Research workspace + AI",
-      "Context drift alerts",
-      "Community access",
-    ],
-  },
-  {
-    tier: "opp_engine",
-    price: "497",
-    period: "/mo",
-    annual: "$4,997/yr (save $967)",
-    tagline: "Growth Discovery & Scale",
-    highlight: true,
-    checkoutUrl: GHL_CHECKOUT.opp_engine,
-    features: [
-      "Everything in Base Brain",
-      "Weekly 'Opportunity Scout' Reports",
-      "All Output Skills (Ads, VSL, Social)",
-      "Daily Content Queue + Approval",
-      "Calendar & Auto-Publishing",
-      "Guided 4-week Onboarding Sprint",
-    ],
-  },
-  {
-    tier: "scale_partner",
-    price: "1,497",
-    period: "/mo",
-    annual: "$14,997/yr (save $2,967)",
-    tagline: "Institutional Memory Insurance",
-    checkoutUrl: GHL_CHECKOUT.scale_partner,
-    features: [
-      "Everything in Opportunity Engine",
-      "Legacy Codification (Senior Experts)",
-      "Done-For-You Stack Build",
-      "Direct Strategic Oversight",
-      "Organization/Agency Multi-Workspace",
-      "Unlimited agent throughput",
-    ],
-  },
-];
+import { TIER_COLORS } from "@/lib/tier";
 
 export default function UpgradePage() {
   const { tier: currentTier } = useTier();
 
   return (
     <>
-      <h1 className="font-mono text-xl font-bold mb-2">Upgrade Your Business Brain</h1>
+      <h1 className="font-mono text-xl font-bold mb-2">
+        Want us to build it for you?
+      </h1>
       <p className="text-sm text-[#6b6b6b] mb-10">
-        Insure your wisdom. Find the revenue gaps. Scale your identity.
+        You can build your reference files yourself for free.
+        Or let us extract and structure your institutional knowledge.
       </p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {PLANS.map((plan) => {
-          const isCurrent = plan.tier === currentTier;
-          const isUpgrade = TIER_HIERARCHY[plan.tier] > TIER_HIERARCHY[currentTier];
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl">
+        {/* Focus Engagement */}
+        <div
+          className="bg-[#111111] border p-6 flex flex-col"
+          style={{ borderColor: TIER_COLORS.focus }}
+        >
+          <span
+            className="font-mono text-[10px] uppercase tracking-[0.15em] mb-3"
+            style={{ color: TIER_COLORS.focus }}
+          >
+            Focus Engagement
+          </span>
 
-          return (
-            <div
-              key={plan.tier}
-              className="bg-[#111111] border p-6 flex flex-col"
-              style={{
-                borderColor: plan.highlight ? TIER_COLORS[plan.tier] : "#1a1a1a",
-              }}
+          <div className="flex items-baseline gap-1 mb-1">
+            <span className="font-mono text-3xl font-bold">1,497</span>
+          </div>
+          <p className="text-xs text-[#6b6b6b] mb-5">
+            One-time. Your knowledge extracted and codified.
+          </p>
+
+          <ul className="space-y-2 mb-6 flex-1">
+            {[
+              "Soul Mining — strategic interview",
+              "Full reference stack built for you",
+              "Opportunity Scout configured",
+              "First batch of automated outputs",
+              "All app features unlocked",
+              "You own everything — your files, your repo",
+            ].map((f) => (
+              <li key={f} className="flex items-start gap-2">
+                <span className="text-[#22c55e] text-xs mt-0.5">✓</span>
+                <span className="text-sm text-[#a0a0a0]">{f}</span>
+              </li>
+            ))}
+          </ul>
+
+          {currentTier === "focus" || currentTier === "brain_sync" ? (
+            <span className="font-mono text-sm text-center py-3 border border-[#1a1a1a] text-[#6b6b6b]">
+              Active
+            </span>
+          ) : (
+            <a
+              href="https://calendly.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-sm font-bold py-3 text-center hover:brightness-110 transition-all block"
+              style={{ backgroundColor: TIER_COLORS.focus, color: "#000" }}
             >
-              <div className="flex items-center justify-between mb-1">
-                <span
-                  className="font-mono text-[10px] uppercase tracking-[0.15em]"
-                  style={{ color: TIER_COLORS[plan.tier] }}
-                >
-                  {plan.tier.replace('_', ' ')}
-                </span>
-                {plan.highlight && (
-                  <span className="font-mono text-[9px] uppercase tracking-wider text-[#8b5cf6]">
-                    Most Popular
-                  </span>
-                )}
-              </div>
+              Book a Call
+            </a>
+          )}
+        </div>
 
-              <div className="flex items-baseline gap-1 mb-1">
-                <span className="font-mono text-3xl font-bold">{plan.price}</span>
-                {plan.period && (
-                  <span className="font-mono text-sm text-[#6b6b6b]">{plan.period}</span>
-                )}
-              </div>
+        {/* Brain Sync */}
+        <div
+          className="bg-[#111111] border p-6 flex flex-col"
+          style={{ borderColor: TIER_COLORS.brain_sync }}
+        >
+          <span
+            className="font-mono text-[10px] uppercase tracking-[0.15em] mb-3"
+            style={{ color: TIER_COLORS.brain_sync }}
+          >
+            Brain Sync
+          </span>
 
-              {plan.annual && (
-                <p className="text-[10px] text-[#4a9eff] mb-1">{plan.annual}</p>
-              )}
+          <div className="flex items-baseline gap-1 mb-1">
+            <span className="font-mono text-3xl font-bold">497</span>
+            <span className="font-mono text-sm text-[#6b6b6b]">/mo</span>
+          </div>
+          <p className="text-xs text-[#6b6b6b] mb-5">
+            Ongoing. Your context stays aligned and compounds.
+          </p>
 
-              <p className="text-xs text-[#6b6b6b] mb-5">{plan.tagline}</p>
+          <ul className="space-y-2 mb-6 flex-1">
+            {[
+              "Monthly context fidelity audit",
+              "Market alignment updates",
+              "Unlimited AI generations",
+              "Automated scheduling + publishing",
+              "Opportunity Scout active weekly",
+              "Direct access to your Context Architect",
+            ].map((f) => (
+              <li key={f} className="flex items-start gap-2">
+                <span className="text-[#4a9eff] text-xs mt-0.5">✓</span>
+                <span className="text-sm text-[#a0a0a0]">{f}</span>
+              </li>
+            ))}
+          </ul>
 
-              <ul className="space-y-2 mb-6 flex-1">
-                {plan.features.map((f) => (
-                  <li key={f} className="flex items-start gap-2">
-                    <span className="text-[#22c55e] text-xs mt-0.5">✓</span>
-                    <span className="text-sm text-[#a0a0a0]">{f}</span>
-                  </li>
-                ))}
-              </ul>
+          {currentTier === "brain_sync" ? (
+            <span className="font-mono text-sm text-center py-3 border border-[#1a1a1a] text-[#6b6b6b]">
+              Active
+            </span>
+          ) : (
+            <a
+              href="https://calendly.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-mono text-sm font-bold py-3 text-center hover:brightness-110 transition-all block"
+              style={{ backgroundColor: TIER_COLORS.brain_sync, color: "#000" }}
+            >
+              Book a Call
+            </a>
+          )}
+        </div>
+      </div>
 
-              {isCurrent ? (
-                <span className="font-mono text-sm text-center py-3 border border-[#1a1a1a] text-[#6b6b6b]">
-                  Current Plan
-                </span>
-              ) : isUpgrade && plan.checkoutUrl ? (
-                <a
-                  href={plan.checkoutUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-mono text-sm font-bold py-3 text-center hover:brightness-110 transition-all block"
-                  style={{
-                    backgroundColor: TIER_COLORS[plan.tier],
-                    color: "#000",
-                    borderRadius: 0,
-                  }}
-                >
-                  UPGRADE TO {plan.tier.replace('_', ' ').toUpperCase()}
-                </a>
-              ) : isUpgrade ? (
-                <span className="font-mono text-sm text-center py-3 border border-[#1a1a1a] text-[#6b6b6b]">
-                  Coming Soon
-                </span>
-              ) : (
-                <span className="font-mono text-sm text-center py-3 text-[#6b6b6b]">
-                  &mdash;
-                </span>
-              )}
-            </div>
-          );
-        })}
+      {/* Free tier reminder */}
+      <div className="mt-10 max-w-2xl">
+        <div className="bg-[#111111] border border-[#1a1a1a] p-6">
+          <p className="font-mono text-sm text-white mb-2">
+            Building it yourself? That&apos;s free.
+          </p>
+          <p className="text-sm text-[#6b6b6b]">
+            Answer the interview questions, build your reference files, and use
+            AI enrichment to strengthen them. Your files are stored in your own
+            secure folder. No credit card needed.
+          </p>
+        </div>
       </div>
     </>
   );

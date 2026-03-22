@@ -104,3 +104,65 @@ Use the same key in both Vercel (OPENCLAW_API_KEY) and M1 (CODIFY_API_KEY).
 - Service role key bypasses RLS (only used server-side on Vercel)
 - Never expose the API key in client-side code
 - The M1 connects outbound only — no ports exposed
+
+---
+
+## Codify to Git — Telegram → GitHub Bridge
+
+### What This Does
+
+When decisions or research happen in Telegram conversations, this skill commits them directly to the user's GitHub repo as dated markdown files.
+
+### Flow
+
+```
+Telegram conversation (with Max / Codify_bot)
+  → You say "codify this" or Max identifies a decision
+    → OpenClaw runs codify-to-git.js
+      → POST /api/openclaw/codify
+        → Commits dated file to GitHub repo
+          → decisions/2026-03-22-pivot-to-senior-executives.md
+```
+
+### Setup on M1
+
+Same env vars as codify-queue — no new setup needed.
+
+```bash
+mkdir -p ~/.openclaw/skills/codify-to-git
+cp codify-to-git.js ~/.openclaw/skills/codify-to-git/index.js
+```
+
+### Add to OpenClaw Workspace Instructions
+
+```
+## Codify to Git
+
+When I make a decision or discuss strategy in Telegram, capture it:
+
+When I say "codify this", "save this decision", or "log this":
+1. Extract the title (short summary) and content (full context)
+2. Run: node ~/.openclaw/skills/codify-to-git/index.js decide "Title" "Content..."
+
+When I share research findings or analysis:
+1. Run: node ~/.openclaw/skills/codify-to-git/index.js research "Title" "Content..."
+
+When Max (Codify_bot) identifies a strategic decision in conversation:
+1. Ask me: "Should I codify this decision to your repo?"
+2. If I say yes, run the decide command
+
+Always confirm after codifying: "Saved to decisions/YYYY-MM-DD-title.md"
+```
+
+### Commands
+
+```bash
+# Commit a decision
+node codify-to-git.js decide "Pivot to senior executives" "Targeting shifted to..."
+
+# Commit research
+node codify-to-git.js research "Operational architecture" "5-phase model: Extraction..."
+
+# Auto-detect type
+node codify-to-git.js codify "Title" "Content..."
+```

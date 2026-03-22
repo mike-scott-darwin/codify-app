@@ -13,7 +13,7 @@ interface TierContextType {
 }
 
 const TierContext = createContext<TierContextType>({
-  tier: "agency",
+  tier: "brain_sync",
   loading: true,
   enrichmentCount: 0,
   generationCount: 0,
@@ -22,14 +22,14 @@ const TierContext = createContext<TierContextType>({
 
 export function TierProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
-  const [tier, setTier] = useState<Tier>("agency");
+  const [tier, setTier] = useState<Tier>("brain_sync");
   const [loading, setLoading] = useState(true);
   const [enrichmentCount, setEnrichmentCount] = useState(0);
   const [generationCount, setGenerationCount] = useState(0);
 
   const refresh = useCallback(async () => {
     if (!user) {
-      setTier("agency");
+      setTier("brain_sync");
       setLoading(false);
       return;
     }
@@ -38,7 +38,7 @@ export function TierProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch("/api/user/tier");
       if (res.ok) {
         const data = await res.json();
-        setTier(data.tier || "agency");
+        setTier(data.tier || "brain_sync");
         setEnrichmentCount(data.enrichmentCount || 0);
         setGenerationCount(data.generationCount || 0);
       }

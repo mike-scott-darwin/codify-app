@@ -66,9 +66,9 @@ export default function GenerateHubPage() {
       </h2>
       <div className="space-y-4">
         {[
-          { type: "ad_campaign", label: "Ad Campaign", icon: "🎯", description: "9 hooks, 5 full ads, compliance-checked and ranked", feature: "agent:ad_campaign" as Feature, tier: "pro" as const },
-          { type: "email_campaign", label: "Email Campaign", icon: "📧", description: "Full sequence with arc progression, subject lines, and timing", feature: "agent:email_campaign" as Feature, tier: "pro" as const },
-          { type: "content_calendar", label: "Content Calendar", icon: "📅", description: "5 days of platform-aware posts from your content pillars", feature: "agent:content_calendar" as Feature, tier: "pro" as const },
+          { type: "ad_campaign", label: "Ad Campaign", icon: "🎯", description: "9 hooks, 5 full ads, compliance-checked and ranked", feature: "agent:ad_campaign" as Feature, tier: "focus" as const },
+          { type: "email_campaign", label: "Email Campaign", icon: "📧", description: "Full sequence with arc progression, subject lines, and timing", feature: "agent:email_campaign" as Feature, tier: "focus" as const },
+          { type: "content_calendar", label: "Content Calendar", icon: "📅", description: "5 days of platform-aware posts from your content pillars", feature: "agent:content_calendar" as Feature, tier: "focus" as const },
         ].map((agent) => {
           const locked = !hasAccess(tier, agent.feature);
           const limit = getGenerationLimit(tier, agent.type);

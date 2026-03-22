@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     .eq("user_id", user.id)
     .single();
 
-  const tier = (profile?.tier || "agency") as Tier;
+  const tier = (profile?.tier || "brain_sync") as Tier;
 
   // Check feature access (each output type has its own required tier)
   const feature = ("generate:" + outputType) as Feature;

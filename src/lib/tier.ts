@@ -1,31 +1,27 @@
-export type Tier = "free" | "base" | "opp_engine" | "scale_partner";
+export type Tier = "free" | "focus" | "brain_sync";
 
 export const TIER_HIERARCHY: Record<Tier, number> = {
   free: 0,
-  base: 1,
-  opp_engine: 2,
-  scale_partner: 3,
+  focus: 1,
+  brain_sync: 2,
 };
 
 export const TIER_LABELS: Record<Tier, string> = {
   free: "FREE",
-  base: "BASE BRAIN",
-  opp_engine: "OPP. ENGINE",
-  scale_partner: "SCALE PARTNER",
+  focus: "FOCUS",
+  brain_sync: "BRAIN SYNC",
 };
 
 export const TIER_COLORS: Record<Tier, string> = {
   free: "#6b6b6b",
-  base: "#4a9eff",
-  opp_engine: "#8b5cf6",
-  scale_partner: "#f59e0b",
+  focus: "#22c55e",
+  brain_sync: "#4a9eff",
 };
 
 export const TIER_PRICES: Record<Tier, string> = {
   free: "Free",
-  base: "147/mo",
-  opp_engine: "497/mo",
-  scale_partner: "1,497/mo",
+  focus: "$1,497",
+  brain_sync: "$497/mo",
 };
 
 export type Feature =
@@ -36,58 +32,52 @@ export type Feature =
   | "generate:email_sequence"
   | "generate:vsl_script"
   | "generate:landing_page"
+  | "generate:newsletter"
   | "research"
   | "output_history"
   | "file_editor"
-  | "brain_sync"
-  | "opportunity_scout"
   | "agent:congruence_audit"
   | "agent:ad_campaign"
   | "agent:deep_research"
   | "agent:content_calendar"
   | "agent:email_campaign"
-  | "generate:newsletter"
   | "agent:schedules"
   | "agent:chains"
   | "agent:research_scout"
   | "agent:trend_monitor"
   | "agent:social_post_generator"
   | "agent:publisher"
-  | "agent:audit_agent"
-  | "custom_skills"
-  | "legacy_extraction";
+  | "agent:audit_agent";
 
+// Free: onboarding + reference files + basic enrichment
+// Focus: everything unlocked (one-time engagement)
+// Brain Sync: everything unlocked + ongoing support
 export const FEATURE_REQUIRED_TIER: Record<Feature, Tier> = {
   enrichment: "free",
-  re_enrich: "base",
-  "generate:social_post": "opp_engine",
-  research: "base",
-  "generate:ad_copy": "opp_engine",
-  "generate:email_sequence": "opp_engine",
-  "generate:vsl_script": "opp_engine",
-  "generate:landing_page": "opp_engine",
-  output_history: "opp_engine",
-  file_editor: "base",
-  brain_sync: "base",
-  opportunity_scout: "opp_engine",
-  "agent:congruence_audit": "base",
-  "agent:deep_research": "base",
-  "agent:ad_campaign": "opp_engine",
-  "agent:content_calendar": "opp_engine",
-  "agent:email_campaign": "opp_engine",
-  "generate:newsletter": "opp_engine",
-  "agent:schedules": "opp_engine",
-  "agent:chains": "opp_engine",
-  "agent:research_scout": "opp_engine",
-  "agent:trend_monitor": "opp_engine",
-  "agent:social_post_generator": "opp_engine",
-  "agent:publisher": "opp_engine",
-  "agent:audit_agent": "opp_engine",
-  custom_skills: "scale_partner",
-  legacy_extraction: "scale_partner",
+  re_enrich: "focus",
+  "generate:social_post": "focus",
+  research: "focus",
+  "generate:ad_copy": "focus",
+  "generate:email_sequence": "focus",
+  "generate:vsl_script": "focus",
+  "generate:landing_page": "focus",
+  output_history: "focus",
+  file_editor: "focus",
+  "agent:congruence_audit": "focus",
+  "agent:deep_research": "focus",
+  "agent:ad_campaign": "focus",
+  "agent:content_calendar": "focus",
+  "agent:email_campaign": "focus",
+  "generate:newsletter": "focus",
+  "agent:schedules": "brain_sync",
+  "agent:chains": "brain_sync",
+  "agent:research_scout": "brain_sync",
+  "agent:trend_monitor": "brain_sync",
+  "agent:social_post_generator": "brain_sync",
+  "agent:publisher": "brain_sync",
+  "agent:audit_agent": "brain_sync",
 };
 
-// Per-output-type monthly limits by tier
 export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
   free: {
     social_post: 0,
@@ -108,18 +98,18 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     audit_agent: 0,
     scheduled_runs: 0,
   },
-  base: {
-    social_post: 0,
-    ad_copy: 0,
-    email_sequence: 0,
-    vsl_script: 0,
-    landing_page: 0,
-    newsletter: 0,
+  focus: {
+    social_post: 50,
+    ad_copy: 50,
+    email_sequence: 50,
+    vsl_script: 10,
+    landing_page: 10,
+    newsletter: 10,
     congruence_audit: 5,
-    ad_campaign: 0,
+    ad_campaign: 4,
     deep_research: 10,
-    content_calendar: 0,
-    email_campaign: 0,
+    content_calendar: 4,
+    email_campaign: 4,
     research_scout: 0,
     trend_monitor: 0,
     social_post_generator: 0,
@@ -127,26 +117,7 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
     audit_agent: 0,
     scheduled_runs: 0,
   },
-  opp_engine: {
-    social_post: 100,
-    ad_copy: 100,
-    email_sequence: 100,
-    vsl_script: 20,
-    landing_page: 20,
-    newsletter: 20,
-    congruence_audit: 20,
-    ad_campaign: 10,
-    deep_research: 25,
-    content_calendar: 10,
-    email_campaign: 10,
-    research_scout: 25,
-    trend_monitor: 50,
-    social_post_generator: 50,
-    publisher: 50,
-    audit_agent: 10,
-    scheduled_runs: 100,
-  },
-  scale_partner: {
+  brain_sync: {
     social_post: Infinity,
     ad_copy: Infinity,
     email_sequence: Infinity,
@@ -169,18 +140,15 @@ export const GENERATION_LIMITS: Record<Tier, Record<string, number>> = {
 
 export const ENRICHMENT_LIMITS: Record<Tier, number> = {
   free: 10,
-  base: Infinity,
-  opp_engine: Infinity,
-  scale_partner: Infinity,
+  focus: Infinity,
+  brain_sync: Infinity,
 };
 
 export function hasAccess(userTier: Tier, feature: Feature): boolean {
-  const tierSlug = userTier?.toLowerCase() as Tier;
   const requiredTier = FEATURE_REQUIRED_TIER[feature];
-  return TIER_HIERARCHY[tierSlug] >= TIER_HIERARCHY[requiredTier];
+  return TIER_HIERARCHY[userTier] >= TIER_HIERARCHY[requiredTier];
 }
 
 export function getGenerationLimit(tier: Tier, outputType: string): number {
-  const tierSlug = tier?.toLowerCase() as Tier;
-  return GENERATION_LIMITS[tierSlug][outputType] ?? 0;
+  return GENERATION_LIMITS[tier][outputType] ?? 0;
 }
