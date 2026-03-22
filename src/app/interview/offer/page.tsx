@@ -135,6 +135,33 @@ export default function OfferInterviewPage() {
             }}
           />
 
+          {/* File upload to enrich answer */}
+          <div className="mt-3">
+            <label className="inline-flex items-center gap-2 cursor-pointer font-mono text-xs text-[#6b6b6b] hover:text-[#a0a0a0] transition-colors">
+              <span>+ Upload a file to enrich this answer</span>
+              <input
+                type="file"
+                accept=".txt,.md,.doc,.docx,.csv,.pdf"
+                className="hidden"
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  try {
+                    const text = await file.text();
+                    const trimmed = text.substring(0, 10000);
+                    setAnswers((prev) => ({
+                      ...prev,
+                      [question.id]: (prev[question.id] || "") + "\n\n--- Uploaded from " + file.name + " ---\n" + trimmed,
+                    }));
+                  } catch {
+                    // Silent fail
+                  }
+                  e.target.value = "";
+                }}
+              />
+            </label>
+          </div>
+
           {/* Footer: word count + nav */}
           <div className="mt-6 flex items-center justify-between">
             <div className="font-mono text-xs" style={{ color: "#6b6b6b" }}>
