@@ -171,17 +171,17 @@ export default function DashboardPage() {
       <div className="mb-8">
         <h1 className="font-mono text-xl font-bold mb-2">
           {allStrong
-            ? "Your knowledge engine is running."
+            ? "Your business brain is compounding."
             : hasExpertise
-            ? "Your expertise is taking shape."
-            : "Let\u2019s capture your expertise."}
+            ? "Your business brain is taking shape."
+            : "Let\u2019s build your business brain."}
         </h1>
         <p className="text-sm text-[#6b6b6b]">
           {allStrong
-            ? "Your institutional knowledge is structured and compounding."
+            ? "Every output is informed by who you actually are."
             : hasExpertise
-            ? fileCompleteness + " of 4 knowledge areas captured. Keep going \u2014 each one makes every output better."
-            : "Start with your first knowledge file. 30 years of expertise, structured for AI."}
+            ? fileCompleteness + " of 4 areas codified. Each one makes your business brain sharper."
+            : "Start codifying. 30 years of expertise, structured into your business brain."}
         </p>
         {error && <p className="font-mono text-xs text-[#ef4444] mt-2">{error}</p>}
       </div>
@@ -191,7 +191,7 @@ export default function DashboardPage() {
         {/* Context Power Score */}
         <div className="bg-[#111111] border border-[#1a1a1a] p-5">
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#4a9eff] block mb-3">
-            Knowledge Depth
+            Business Brain
           </span>
           <div className="flex items-baseline gap-2 mb-2">
             <span className="font-mono text-3xl font-bold tabular-nums">{contextScore}</span>
@@ -234,8 +234,8 @@ export default function DashboardPage() {
           </div>
           <p className="font-mono text-[10px] text-[#6b6b6b] leading-relaxed">
             {outputCount === 0
-              ? "Generate your first output from your knowledge files."
-              : "Informed by your expertise. Every output sounds like you."}
+              ? "Your business brain generates outputs that sound like you."
+              : "Every output sounds like you. Your brain is working."}
           </p>
           <Link href="/dashboard/generate" className="font-mono text-[10px] text-[#22c55e] hover:text-white transition-colors mt-2 inline-block">
             Create output &rarr;
@@ -252,8 +252,8 @@ export default function DashboardPage() {
           </div>
           <p className="font-mono text-[10px] text-[#6b6b6b] leading-relaxed">
             {opportunities.length === 0
-              ? "Scout opportunities matched to your expertise."
-              : "Matched to your unique knowledge. Review and approve."}
+              ? "Your brain spots opportunities others miss."
+              : "Matched to your brain. Review and approve."}
           </p>
           <Link href="/dashboard/queue" className="font-mono text-[10px] text-[#f59e0b] hover:text-white transition-colors mt-2 inline-block">
             View queue &rarr;
@@ -280,10 +280,10 @@ export default function DashboardPage() {
             {hasAnyFile ? (
               <>
                 <p className="font-mono text-sm text-white mb-2">
-                  Your knowledge files are ready.
+                  Your business brain is ready.
                 </p>
                 <p className="font-mono text-xs text-[#6b6b6b] mb-5">
-                  The Opportunity Scout analyzes your expertise and finds content gaps only you can fill.
+                  The Opportunity Scout cross-references your brain against market gaps only you can fill.
                 </p>
                 {scoutError && (
                   <p className="font-mono text-[10px] text-[#ef4444] mb-3">{scoutError}</p>
@@ -294,7 +294,7 @@ export default function DashboardPage() {
                   className="font-mono text-sm font-bold px-6 py-3 transition-all disabled:opacity-50"
                   style={{ backgroundColor: "#f59e0b", color: "#000", borderRadius: 0 }}
                 >
-                  {scouting ? "Scanning your expertise..." : "Scout My Expertise \u2192"}
+                  {scouting ? "Scanning your brain..." : "Scout My Brain \u2192"}
                 </button>
                 <p className="font-mono text-[10px] text-[#6b6b6b] mt-4">
                   Research deepens and refines these over time.
@@ -303,7 +303,7 @@ export default function DashboardPage() {
             ) : (
               <>
                 <p className="font-mono text-xs text-[#6b6b6b] mb-3">
-                  Complete at least one knowledge file to activate the Opportunity Scout.
+                  Codify at least one area to activate the Opportunity Scout.
                 </p>
                 <Link
                   href="/interview/soul"
@@ -478,11 +478,11 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Knowledge file detail — below the fold */}
+      {/* Brain files — below the fold */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6b6b6b]">
-            Knowledge Files
+            Your Brain
           </span>
           <Link href="/dashboard/files" className="font-mono text-[10px] text-[#6b6b6b] hover:text-white transition-colors">
             Manage files &rarr;
@@ -525,7 +525,7 @@ export default function DashboardPage() {
                 Want us to take it from here?
               </p>
               <p className="font-mono text-xs text-[#6b6b6b]">
-                Our Focus Engagement extracts 30+ years of expertise and builds your complete knowledge engine.
+                Our Focus Engagement extracts 30+ years of expertise and builds your complete business brain.
               </p>
             </div>
             <Link
