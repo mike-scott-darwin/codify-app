@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRepo } from "@/lib/repo-context";
 import { useTier } from "@/lib/tier-context";
+import { CORE_FILE_KEYS } from "@/lib/types";
 
 const CORE_FILES = [
   { key: "soul", label: "Soul", description: "Why you exist" },
@@ -11,6 +12,13 @@ const CORE_FILES = [
   { key: "audience", label: "Audience", description: "Who you serve" },
   { key: "voice", label: "Voice", description: "How you sound" },
 ];
+
+const CATEGORY_LABELS: Record<string, { label: string; color: string }> = {
+  core: { label: "Core", color: "#4a9eff" },
+  domain: { label: "Domain", color: "#22c55e" },
+  proof: { label: "Proof", color: "#f59e0b" },
+  brand: { label: "Brand", color: "#8b5cf6" },
+};
 
 function fileStatus(wordCount: number, exists: boolean): { label: string; color: string } {
   if (!exists) return { label: "MISSING", color: "#ef4444" };
@@ -60,7 +68,7 @@ const FORMAT_LABELS: Record<string, string> = {
 };
 
 export default function DashboardPage() {
-  const { connected, loading, files, fileCompleteness, contextScore, error } = useRepo();
+  const { connected, loading, files, fileCompleteness, contextScore, totalFiles, categoryCounts, error } = useRepo();
   const { tier } = useTier();
 
   const [outputs, setOutputs] = useState<Output[]>([]);
@@ -138,11 +146,16 @@ export default function DashboardPage() {
   const hasExpertise = fileCompleteness >= 2;
   const hasAnyFile = fileCompleteness >= 1;
 
-  // Find weakest file for CTA
+  // Find weakest core file for CTA
   const weakest = CORE_FILES.find((f) => {
     const file = files[f.key];
     return !file || !file.exists || file.wordCount < 50;
   });
+
+  // Group non-core files by category
+  const nonCoreFiles = Object.entries(files).filter(
+    ([key]) => !CORE_FILE_KEYS.includes(key as typeof CORE_FILE_KEYS[number])
+  );
 
   // Merge recent activity
   const recentActivity: Array<{ type: string; title: string; date: string; href: string; status?: string }> = [];
@@ -178,9 +191,9 @@ export default function DashboardPage() {
         </h1>
         <p className="text-sm text-[#6b6b6b]">
           {allStrong
-            ? "Every output is informed by who you actually are."
+            ? totalFiles + " files. Every output is informed by who you actually are."
             : hasExpertise
-            ? fileCompleteness + " of 4 areas codified. Each one makes your business brain sharper."
+            ? fileCompleteness + " of 4 core areas codified. " + totalFiles + " total files in your brain."
             : "Start codifying. 30 years of expertise, structured into your business brain."}
         </p>
         {error && <p className="font-mono text-xs text-[#ef4444] mt-2">{error}</p>}
@@ -200,7 +213,7 @@ export default function DashboardPage() {
           <div className="font-mono text-[10px] text-[#4a9eff] tracking-wider mb-3">
             {terminalBar(contextScore, 20)}
           </div>
-          <div className="flex gap-1.5">
+          <div className="flex gap-1.5 flex-wrap">
             {CORE_FILES.map((f) => {
               const file = files[f.key];
               const s = fileStatus(file?.wordCount ?? 0, file?.exists ?? false);
@@ -211,6 +224,18 @@ export default function DashboardPage() {
                 </div>
               );
             })}
+            {/* Category counts for non-core */}
+            {(["domain", "proof", "brand"] as const).map((cat) => {
+              const count = categoryCounts[cat] || 0;
+              if (count === 0) return null;
+              const info = CATEGORY_LABELS[cat];
+              return (
+                <div key={cat} className="flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: info.color }} />
+                  <span className="font-mono text-[9px] text-[#6b6b6b]">{info.label} ({count})</span>
+                </div>
+              );
+            })}
           </div>
           {weakest && (
             <Link
@@ -218,8 +243,8 @@ export default function DashboardPage() {
               className="font-mono text-[10px] text-[#22c55e] hover:text-white transition-colors mt-3 block"
             >
               {files[weakest.key]?.exists
-                ? "Strengthen " + weakest.label.toLowerCase() + " →"
-                : "Add " + weakest.label.toLowerCase() + " →"}
+                ? "Strengthen " + weakest.label.toLowerCase() + " \u2192"
+                : "Add " + weakest.label.toLowerCase() + " \u2192"}
             </Link>
           )}
         </div>
@@ -478,17 +503,19 @@ export default function DashboardPage() {
         )}
       </div>
 
-      {/* Brain files — below the fold */}
+      {/* Brain files — core files + dynamic files by category */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6b6b6b]">
-            Your Brain
+            Your Brain — {totalFiles} files
           </span>
           <Link href="/dashboard/files" className="font-mono text-[10px] text-[#6b6b6b] hover:text-white transition-colors">
             Manage files &rarr;
           </Link>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+
+        {/* Core files — always shown */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
           {CORE_FILES.map((f) => {
             const file = files[f.key];
             const exists = file?.exists ?? false;
@@ -514,6 +541,40 @@ export default function DashboardPage() {
             );
           })}
         </div>
+
+        {/* Non-core files by category */}
+        {nonCoreFiles.length > 0 && (
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {nonCoreFiles.map(([key, file]) => {
+              const catInfo = CATEGORY_LABELS[file.category] || CATEGORY_LABELS.domain;
+              const status = fileStatus(file.wordCount, file.exists);
+              return (
+                <Link
+                  key={key}
+                  href={"/dashboard/files/" + key + "/edit"}
+                  className="bg-[#111111] border border-[#1a1a1a] p-3 hover:border-[#333] transition-colors"
+                >
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-mono text-xs text-white font-bold">
+                      {key.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
+                    </span>
+                    <span className="font-mono text-[9px] uppercase" style={{ color: status.color }}>
+                      {status.label}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="font-mono text-[10px] text-[#6b6b6b]">
+                      {file.exists ? file.wordCount + " words" : "Empty"}
+                    </span>
+                    <span className="font-mono text-[9px]" style={{ color: catInfo.color }}>
+                      {catInfo.label}
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Upgrade CTA for free users */}

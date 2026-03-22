@@ -1,94 +1,80 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
-import { readFileFromRepo, writeFileToRepo, listFilesInRepo } from "@/lib/github";
+import { readFileFromRepo, writeFileToRepo, listFilesAcrossDirectories } from "@/lib/github";
+import { REFERENCE_CATEGORIES } from "@/lib/types";
 import type { GitHubConfig } from "@/lib/github";
 
-const VALID_FILE_TYPES = ["soul", "offer", "audience", "voice"] as const;
-
-async function getGitHubConfig(supabase: ReturnType<Awaited<ReturnType<typeof createServerSupabaseClient>> extends infer T ? () => T : never>): Promise<GitHubConfig | null> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const sb = supabase as any;
-  const { data: { user } } = await sb.auth.getUser();
+async function getConfig(): Promise<{ config: GitHubConfig; userId: string } | null> {
+  const supabase = await createServerSupabaseClient();
+  const { data: { user } } = await supabase.auth.getUser();
   if (!user) return null;
 
-  const { data: profile } = await sb
+  const { data: profile } = await supabase
     .from("user_profiles")
     .select("github_config")
     .eq("user_id", user.id)
     .single();
 
   if (!profile?.github_config) return null;
-  return profile.github_config as GitHubConfig;
+  return { config: profile.github_config as GitHubConfig, userId: user.id };
 }
 
 export async function GET() {
-  const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await getConfig();
+  if (!auth) return NextResponse.json({ error: "Unauthorized or GitHub not connected" }, { status: 401 });
 
-  const { data: profile } = await supabase
-    .from("user_profiles")
-    .select("github_config")
-    .eq("user_id", user.id)
-    .single();
+  const { config } = auth;
 
-  if (!profile?.github_config) {
-    return NextResponse.json({ error: "GitHub not connected" }, { status: 400 });
-  }
+  // Discover all .md files across reference categories
+  const allFiles = await listFilesAcrossDirectories(config, "reference", [...REFERENCE_CATEGORIES]);
 
-  const config = profile.github_config as GitHubConfig;
+  // Read content for each file
+  const files: Record<string, string> = {};
+  const fileMeta: Array<{ name: string; path: string; category: string }> = [];
 
-  // List files in reference/core/
-  const files = await listFilesInRepo(config, "reference/core");
-  const result: Record<string, string> = {};
-
-  for (const file of files) {
-    if (file.name.endsWith(".md")) {
-      const key = file.name.replace(".md", "");
-      if (VALID_FILE_TYPES.includes(key as (typeof VALID_FILE_TYPES)[number])) {
-        const content = await readFileFromRepo(config, file.path);
-        if (content) result[key] = content;
+  await Promise.all(
+    allFiles.map(async (file) => {
+      const content = await readFileFromRepo(config, file.path);
+      if (content) {
+        const key = file.name.replace(".md", "");
+        files[key] = content;
+        fileMeta.push({ name: file.name, path: file.path, category: file.category });
       }
-    }
-  }
+    })
+  );
 
-  return NextResponse.json({ files: result });
+  return NextResponse.json({ files, fileMeta });
 }
 
 export async function POST(request: NextRequest) {
-  const supabase = await createServerSupabaseClient();
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const auth = await getConfig();
+  if (!auth) return NextResponse.json({ error: "Unauthorized or GitHub not connected" }, { status: 401 });
 
-  const { data: profile } = await supabase
-    .from("user_profiles")
-    .select("github_config")
-    .eq("user_id", user.id)
-    .single();
-
-  if (!profile?.github_config) {
-    return NextResponse.json({ error: "GitHub not connected" }, { status: 400 });
-  }
-
-  const config = profile.github_config as GitHubConfig;
+  const { config } = auth;
   const body = await request.json();
-  const { fileType, content, message } = body;
-
-  if (!fileType || !VALID_FILE_TYPES.includes(fileType as (typeof VALID_FILE_TYPES)[number])) {
-    return NextResponse.json(
-      { error: "Invalid fileType. Must be: " + VALID_FILE_TYPES.join(", ") },
-      { status: 400 }
-    );
-  }
+  const { fileType, content, message, path: customPath } = body;
 
   if (typeof content !== "string" || !content.trim()) {
     return NextResponse.json({ error: "Content is required." }, { status: 400 });
   }
 
-  const commitMessage = message || `[codify] Update ${fileType}.md`;
-  const path = `reference/core/${fileType}.md`;
+  // Support either a custom path or fileType (backwards compatible)
+  let filePath: string;
+  if (customPath) {
+    // Validate it's under an allowed directory
+    if (!customPath.startsWith("reference/") && !customPath.startsWith("research/") && !customPath.startsWith("decisions/")) {
+      return NextResponse.json({ error: "Path must be under reference/, research/, or decisions/" }, { status: 400 });
+    }
+    filePath = customPath;
+  } else if (fileType) {
+    // Legacy: assume reference/core/
+    filePath = `reference/core/${fileType}.md`;
+  } else {
+    return NextResponse.json({ error: "Either fileType or path is required." }, { status: 400 });
+  }
 
-  const result = await writeFileToRepo(config, path, content, commitMessage);
+  const commitMessage = message || `[codify] Update ${filePath}`;
+  const result = await writeFileToRepo(config, filePath, content, commitMessage);
 
   if (!result.success) {
     return NextResponse.json({ error: result.error }, { status: 500 });

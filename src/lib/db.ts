@@ -4,7 +4,7 @@ function hasSupabase(): boolean {
   return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY);
 }
 
-export type FileType = "soul" | "offer" | "audience" | "voice";
+export type FileType = string; // Dynamic — core files: soul, offer, audience, voice; extensible to domain, proof, brand
 
 interface SavedAnswers {
   file_type: FileType;

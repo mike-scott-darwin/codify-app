@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 import { saveAnswers, loadAllAnswers } from "@/lib/db";
 import type { FileType } from "@/lib/db";
+import { CORE_FILE_KEYS } from "@/lib/types";
 
 export default function EditFilePage() {
   const params = useParams();
@@ -16,8 +17,8 @@ export default function EditFilePage() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
-  const validTypes = ["soul", "offer", "audience", "voice"];
-  const isValid = validTypes.includes(fileType);
+  const validTypes = [...CORE_FILE_KEYS];
+  const isValid = validTypes.includes(fileType as typeof CORE_FILE_KEYS[number]);
 
   useEffect(() => {
     if (!isValid) return;
