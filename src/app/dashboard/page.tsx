@@ -35,6 +35,7 @@ interface Output {
 interface QueueItem {
   id: string;
   title: string;
+  summary?: string;
   relevance_score?: number;
   source?: string;
   status: string;
@@ -57,6 +58,8 @@ export default function DashboardPage() {
   const [opportunities, setOpportunities] = useState<QueueItem[]>([]);
   const [recentResearch, setRecentResearch] = useState<ResearchTopic[]>([]);
   const [dataLoaded, setDataLoaded] = useState(false);
+  const [scouting, setScouting] = useState(false);
+  const [scoutError, setScoutError] = useState("");
 
   // Fetch dashboard data
   useEffect(() => {
@@ -72,7 +75,6 @@ export default function DashboardPage() {
           const d = await outputsRes.json();
           const allOutputs: Output[] = d.outputs || [];
           setOutputs(allOutputs.slice(0, 5));
-          // Count this month's outputs
           const now = new Date();
           const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
           setOutputCount(allOutputs.filter((o) => o.created_at >= monthStart).length);
@@ -88,17 +90,43 @@ export default function DashboardPage() {
           setRecentResearch((d.topics || []).slice(0, 5));
         }
       } catch {
-        // Silently fail — dashboard still works with repo data
+        // Dashboard still works with repo data
       }
       setDataLoaded(true);
     };
     loadData();
   }, []);
 
+  // Scout opportunities from reference files
+  const runScout = async () => {
+    setScouting(true);
+    setScoutError("");
+    try {
+      const res = await fetch("/api/content-queue/scout", { method: "POST" });
+      if (!res.ok) {
+        const d = await res.json();
+        setScoutError(d.error || "Scout failed");
+        return;
+      }
+      const d = await res.json();
+      // Reload opportunities
+      const queueRes = await fetch("/api/content-queue?status=pending");
+      if (queueRes.ok) {
+        const q = await queueRes.json();
+        setOpportunities((q.items || []).slice(0, 5));
+      }
+    } catch {
+      setScoutError("Could not reach the server.");
+    } finally {
+      setScouting(false);
+    }
+  };
+
   if (loading) return null;
 
   const allStrong = fileCompleteness === 4;
   const hasExpertise = fileCompleteness >= 2;
+  const hasAnyFile = fileCompleteness >= 1;
 
   // Find weakest file for CTA
   const weakest = CORE_FILES.find((f) => {
@@ -204,7 +232,7 @@ export default function DashboardPage() {
           </div>
           <p className="font-mono text-[10px] text-[#6b6b6b] leading-relaxed">
             {opportunities.length === 0
-              ? "Research topics to surface opportunities matched to your expertise."
+              ? "Scout opportunities matched to your expertise."
               : "Matched to your unique knowledge. Review and approve."}
           </p>
           <Link href="/dashboard/queue" className="font-mono text-[10px] text-[#f59e0b] hover:text-white transition-colors mt-2 inline-block">
@@ -277,15 +305,39 @@ export default function DashboardPage() {
 
           {opportunities.length === 0 ? (
             <div className="bg-[#111111] border border-[#1a1a1a] p-6 text-center">
-              <p className="font-mono text-xs text-[#6b6b6b] mb-3">
-                The Opportunity Scout finds revenue gaps matched to your unique knowledge.
-              </p>
-              <Link
-                href="/dashboard/research"
-                className="font-mono text-[10px] text-[#f59e0b] hover:text-white transition-colors"
-              >
-                Start researching to activate &rarr;
-              </Link>
+              {hasAnyFile ? (
+                <>
+                  <p className="font-mono text-xs text-[#6b6b6b] mb-4">
+                    Your knowledge files are ready. Let the Opportunity Scout find content gaps matched to your expertise.
+                  </p>
+                  {scoutError && (
+                    <p className="font-mono text-[10px] text-[#ef4444] mb-3">{scoutError}</p>
+                  )}
+                  <button
+                    onClick={runScout}
+                    disabled={scouting}
+                    className="font-mono text-xs font-bold px-5 py-2.5 transition-all disabled:opacity-50"
+                    style={{ backgroundColor: "#f59e0b", color: "#000", borderRadius: 0 }}
+                  >
+                    {scouting ? "Scouting..." : "Scout My Expertise \u2192"}
+                  </button>
+                  <p className="font-mono text-[10px] text-[#6b6b6b] mt-3">
+                    Research deepens these over time.
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="font-mono text-xs text-[#6b6b6b] mb-3">
+                    Complete at least one knowledge file to activate the Opportunity Scout.
+                  </p>
+                  <Link
+                    href="/interview/soul"
+                    className="font-mono text-[10px] text-[#f59e0b] hover:text-white transition-colors"
+                  >
+                    Start with Soul &rarr;
+                  </Link>
+                </>
+              )}
             </div>
           ) : (
             <div className="bg-[#111111] border border-[#1a1a1a] divide-y divide-[#0a0a0a]">
@@ -298,12 +350,28 @@ export default function DashboardPage() {
                   <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b] mt-1.5 shrink-0" />
                   <div className="flex-1 min-w-0">
                     <span className="font-mono text-xs text-white block truncate">{opp.title}</span>
-                    {opp.source && (
-                      <span className="font-mono text-[10px] text-[#6b6b6b]">{opp.source}</span>
+                    {opp.summary && (
+                      <span className="font-mono text-[10px] text-[#6b6b6b] block truncate mt-0.5">
+                        {opp.summary.substring(0, 100)}
+                      </span>
                     )}
                   </div>
+                  {opp.relevance_score && (
+                    <span className="font-mono text-[10px] text-[#f59e0b] shrink-0">
+                      {opp.relevance_score}%
+                    </span>
+                  )}
                 </Link>
               ))}
+              <div className="px-4 py-2">
+                <button
+                  onClick={runScout}
+                  disabled={scouting}
+                  className="font-mono text-[10px] text-[#6b6b6b] hover:text-[#f59e0b] transition-colors disabled:opacity-50"
+                >
+                  {scouting ? "Scouting..." : "Scout for more \u2192"}
+                </button>
+              </div>
             </div>
           )}
         </div>
@@ -353,7 +421,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Knowledge file detail — collapsible, below the fold */}
+      {/* Knowledge file detail — below the fold */}
       <div className="mt-8">
         <div className="flex items-center justify-between mb-3">
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6b6b6b]">
