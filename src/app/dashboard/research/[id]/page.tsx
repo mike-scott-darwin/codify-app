@@ -10,6 +10,13 @@ interface Finding {
   date: string;
 }
 
+interface Connection {
+  related: Array<{ id: string; title: string; reason: string }>;
+  gaps: string[];
+  strengthens: Array<{ file: string; reason: string }>;
+  connection_count: number;
+}
+
 interface Topic {
   id: string;
   title: string;
@@ -84,6 +91,10 @@ export default function ResearchDetailPage() {
   const [refApplied, setRefApplied] = useState<Record<string, boolean>>({});
   const [refApplyingFile, setRefApplyingFile] = useState<string | null>(null);
 
+  // Connections state
+  const [connections, setConnections] = useState<Connection | null>(null);
+  const [loadingConnections, setLoadingConnections] = useState(false);
+
   useEffect(() => {
     const load = async () => {
       const res = await fetch("/api/research/" + id);
@@ -102,6 +113,14 @@ export default function ResearchDetailPage() {
         if (t.codify_proposals) {
           setProposals(t.codify_proposals);
         }
+
+        // Load connections
+        setLoadingConnections(true);
+        fetch("/api/research/" + id + "/connections", { method: "POST" })
+          .then((r) => r.ok ? r.json() : null)
+          .then((data) => { if (data) setConnections(data); })
+          .catch(() => {})
+          .finally(() => setLoadingConnections(false));
       }
     };
     load();
@@ -596,6 +615,101 @@ export default function ResearchDetailPage() {
               </div>
             </div>
           )}
+
+          {/* Connections — compounding intelligence */}
+          <div className="mt-6">
+            <div className="flex items-center justify-between mb-3">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6b6b6b]">
+                Connections
+              </p>
+              {connections && connections.connection_count > 0 && (
+                <span className="font-mono text-[10px] px-2 py-0.5 bg-[#22c55e]/10 text-[#22c55e] border border-[#22c55e]/20">
+                  {connections.connection_count} connection{connections.connection_count !== 1 ? "s" : ""}
+                </span>
+              )}
+            </div>
+
+            {loadingConnections && (
+              <div className="bg-[#111111] border border-[#1a1a1a] p-4">
+                <p className="font-mono text-xs text-[#6b6b6b] animate-pulse">Finding connections across your research...</p>
+              </div>
+            )}
+
+            {connections && !loadingConnections && (
+              <div className="space-y-3">
+                {/* Related topics */}
+                {connections.related.length > 0 && (
+                  <div className="bg-[#111111] border border-[#1a1a1a]">
+                    <div className="px-3 py-2 border-b border-[#1a1a1a]">
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-[#4a9eff]">Related Research</span>
+                    </div>
+                    <div className="divide-y divide-[#0a0a0a]">
+                      {connections.related.map((r) => (
+                        <Link
+                          key={r.id}
+                          href={"/dashboard/research/" + r.id}
+                          className="flex items-start gap-3 px-3 py-2.5 hover:bg-[#1a1a1a] transition-colors"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#4a9eff] mt-1.5 shrink-0" />
+                          <div>
+                            <span className="font-mono text-xs text-white">{r.title}</span>
+                            <p className="font-mono text-[10px] text-[#6b6b6b] mt-0.5">{r.reason}</p>
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Strengthens reference files */}
+                {connections.strengthens.length > 0 && (
+                  <div className="bg-[#111111] border border-[#1a1a1a]">
+                    <div className="px-3 py-2 border-b border-[#1a1a1a]">
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-[#22c55e]">Strengthens</span>
+                    </div>
+                    <div className="divide-y divide-[#0a0a0a]">
+                      {connections.strengthens.map((s) => (
+                        <div key={s.file} className="flex items-start gap-3 px-3 py-2.5">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#22c55e] mt-1.5 shrink-0" />
+                          <div>
+                            <span className="font-mono text-xs text-white">{s.file}.md</span>
+                            <p className="font-mono text-[10px] text-[#6b6b6b] mt-0.5">{s.reason}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Gaps to explore */}
+                {connections.gaps.length > 0 && (
+                  <div className="bg-[#111111] border border-[#1a1a1a]">
+                    <div className="px-3 py-2 border-b border-[#1a1a1a]">
+                      <span className="font-mono text-[10px] uppercase tracking-wider text-[#f59e0b]">Worth Exploring</span>
+                    </div>
+                    <div className="divide-y divide-[#0a0a0a]">
+                      {connections.gaps.map((gap, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setQuestion(gap)}
+                          className="w-full flex items-start gap-3 px-3 py-2.5 hover:bg-[#1a1a1a] transition-colors text-left"
+                        >
+                          <span className="font-mono text-[10px] text-[#f59e0b] mt-0.5 shrink-0">?</span>
+                          <span className="font-mono text-xs text-[#a0a0a0]">{gap}</span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {connections.related.length === 0 && connections.gaps.length === 0 && connections.strengthens.length === 0 && (
+                  <div className="bg-[#111111] border border-[#1a1a1a] p-4">
+                    <p className="font-mono text-xs text-[#6b6b6b]">Start researching to build connections.</p>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
