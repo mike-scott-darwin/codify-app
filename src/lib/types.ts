@@ -1,6 +1,14 @@
+export type ReferenceCategory = "core" | "domain" | "proof" | "brand";
+
+export const REFERENCE_CATEGORIES: ReferenceCategory[] = ["core", "domain", "proof", "brand"];
+
+export const CORE_FILE_KEYS = ["soul", "offer", "audience", "voice"] as const;
+export type CoreFileKey = (typeof CORE_FILE_KEYS)[number];
+
 export interface ReferenceFile {
   name: string;
   path: string;
+  category: ReferenceCategory;
   exists: boolean;
   content?: string;
   wordCount: number;
@@ -17,6 +25,7 @@ export interface ContextScore {
   grade: string;
   files: ReferenceFile[];
   recommendations: string[];
+  categoryCounts: Record<ReferenceCategory, number>;
 }
 
 export interface InterviewQuestion {

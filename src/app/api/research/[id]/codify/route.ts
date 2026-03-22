@@ -3,8 +3,6 @@ import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { callLLM } from "@/lib/llm/provider";
 import { getUserLLMConfig } from "@/lib/llm/user-config";
 
-const VALID_FILE_TYPES = ["soul", "offer", "audience", "voice"] as const;
-type RefFileType = (typeof VALID_FILE_TYPES)[number];
 
 export async function POST(
   request: NextRequest,
@@ -33,12 +31,10 @@ export async function POST(
     );
   }
 
-  const validTargets = targetFiles.filter((f) =>
-    VALID_FILE_TYPES.includes(f as RefFileType)
-  ) as RefFileType[];
+  const validTargets = targetFiles.filter((f) => typeof f === "string" && f.trim().length > 0);
   if (validTargets.length === 0) {
     return NextResponse.json(
-      { error: "No valid target files. Must be: " + VALID_FILE_TYPES.join(", ") },
+      { error: "No valid target files provided." },
       { status: 400 }
     );
   }

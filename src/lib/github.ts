@@ -96,6 +96,32 @@ export async function listFilesInRepo(
     }));
 }
 
+/**
+ * List all .md files across multiple subdirectories under a base path.
+ * e.g. listFilesAcrossDirectories(config, "reference", ["core", "domain", "proof", "brand"])
+ * returns files from reference/core/, reference/domain/, etc.
+ */
+export async function listFilesAcrossDirectories(
+  config: GitHubConfig,
+  basePath: string,
+  subdirs: string[]
+): Promise<Array<{ name: string; path: string; sha: string; category: string }>> {
+  const results: Array<{ name: string; path: string; sha: string; category: string }> = [];
+
+  await Promise.all(
+    subdirs.map(async (subdir) => {
+      const files = await listFilesInRepo(config, `${basePath}/${subdir}`);
+      for (const file of files) {
+        if (file.name.endsWith(".md") && file.name !== ".gitkeep") {
+          results.push({ ...file, category: subdir });
+        }
+      }
+    })
+  );
+
+  return results;
+}
+
 export async function verifyRepo(
   config: GitHubConfig
 ): Promise<{ valid: boolean; message: string }> {
@@ -127,6 +153,9 @@ export async function initRepoStructure(
 ): Promise<{ success: boolean; message: string }> {
   const dirs = [
     "reference/core",
+    "reference/domain",
+    "reference/proof",
+    "reference/brand",
     "research",
     "decisions",
     "outputs",

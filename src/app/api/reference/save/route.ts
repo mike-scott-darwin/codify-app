@@ -12,8 +12,8 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   const { fileType, content } = body;
 
-  const validTypes = ["soul", "offer", "audience", "voice"];
-  if (!validTypes.includes(fileType)) {
+  // Any reference file type is valid — validated by path
+  if (!fileType || typeof fileType !== "string") {
     return NextResponse.json({ error: "Invalid file type." }, { status: 400 });
   }
   if (!content || typeof content !== "string") {

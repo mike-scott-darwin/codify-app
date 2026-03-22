@@ -1,18 +1,22 @@
 import type { OutputType } from "./generation-types";
 
-interface ReferenceFiles {
-  soul?: string;
-  offer?: string;
-  audience?: string;
-  voice?: string;
-}
+// Accept any reference files — core (soul, offer, audience, voice) and extended (domain, proof, brand)
+type ReferenceFiles = Record<string, string | undefined>;
+
+const CORE_LABELS: Record<string, string> = {
+  soul: "SOUL (Why this business exists)",
+  offer: "OFFER (What they sell)",
+  audience: "AUDIENCE (Who they serve)",
+  voice: "VOICE (How they sound)",
+};
 
 function buildRefContext(refs: ReferenceFiles): string {
   const parts: string[] = [];
-  if (refs.soul) parts.push("=== SOUL (Why this business exists) ===\n" + refs.soul);
-  if (refs.offer) parts.push("=== OFFER (What they sell) ===\n" + refs.offer);
-  if (refs.audience) parts.push("=== AUDIENCE (Who they serve) ===\n" + refs.audience);
-  if (refs.voice) parts.push("=== VOICE (How they sound) ===\n" + refs.voice);
+  for (const [key, content] of Object.entries(refs)) {
+    if (!content) continue;
+    const label = CORE_LABELS[key] || key.toUpperCase().replace(/-/g, " ");
+    parts.push("=== " + label + " ===\n" + content);
+  }
   return parts.join("\n\n");
 }
 

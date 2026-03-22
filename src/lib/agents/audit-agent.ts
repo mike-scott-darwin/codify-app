@@ -1,10 +1,11 @@
 import { callGemini } from "./gemini";
 import type { AgentContext, AgentResult } from "./types";
+import { CORE_FILE_KEYS } from "@/lib/types";
 
 export async function runAuditAgent(ctx: AgentContext): Promise<AgentResult> {
   const { refs, userId, updateProgress } = ctx;
 
-  const coreFiles = ["soul", "offer", "audience", "voice"];
+  const coreFiles = [...CORE_FILE_KEYS];
   const present = coreFiles.filter((f) => refs[f] && refs[f].trim().length > 0);
   const missing = coreFiles.filter((f) => !refs[f] || refs[f].trim().length === 0);
 

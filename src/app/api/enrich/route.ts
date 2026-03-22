@@ -5,7 +5,6 @@ import { callLLM } from "@/lib/llm/provider";
 import type { LLMConfig } from "@/lib/llm/provider";
 import { getUserLLMConfig } from "@/lib/llm/user-config";
 
-const VALID_FILE_TYPES = ["soul", "offer", "audience", "voice"] as const;
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
@@ -42,12 +41,9 @@ export async function POST(request: NextRequest) {
 
   const { fileType, answers } = body;
 
-  if (
-    !fileType ||
-    !VALID_FILE_TYPES.includes(fileType as (typeof VALID_FILE_TYPES)[number])
-  ) {
+  if (!fileType || typeof fileType !== "string") {
     return NextResponse.json(
-      { error: "Invalid fileType. Must be: " + VALID_FILE_TYPES.join(", ") },
+      { error: "fileType is required." },
       { status: 400 }
     );
   }

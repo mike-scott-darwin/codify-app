@@ -20,7 +20,8 @@ interface Topic {
   codify_proposals: Record<string, string> | null;
 }
 
-const FILE_LABELS: Record<string, string> = {
+// Core files are always available for codification; dynamic files from the repo context will also appear
+const CORE_FILE_LABELS: Record<string, string> = {
   soul: "soul.md",
   offer: "offer.md",
   audience: "audience.md",
@@ -34,7 +35,7 @@ function formatDate(iso: string) {
 }
 
 function parseDecision(raw: string): { summary: string; options: string; rationale: string; impact: string } {
-  const sections: Record<string, string> = { summary: "", options: "", rationale: "", impact: "" };
+  const sections = { summary: "", options: "", rationale: "", impact: "" };
   if (!raw) return sections;
 
   // Try to parse structured format
@@ -103,7 +104,7 @@ function DecisionForm({ decision, onSave, saving }: { decision: string; onSave: 
         <textarea
           value={summary}
           onChange={mark(setSummary)}
-          placeholder="One clear statement. e.g. \"We will position the offer as a business brain, not a knowledge tool.\""
+          placeholder={"One clear statement. e.g. We will position the offer as a business brain, not a knowledge tool."}
           className="w-full bg-[#0a0a0a] border border-[#1a1a1a] px-3 py-2.5 font-mono text-sm text-white focus:outline-none focus:border-[#22c55e] resize-none"
           rows={2}
         />
@@ -490,7 +491,7 @@ export default function ResearchDetailPage() {
                 Which files should this decision update?
               </p>
               <div className="flex flex-wrap gap-3 mb-4">
-                {(Object.keys(FILE_LABELS) as string[]).map((ft) => (
+                {(Object.keys(CORE_FILE_LABELS) as string[]).map((ft) => (
                   <label key={ft} className="flex items-center gap-2 cursor-pointer group">
                     <input
                       type="checkbox"
@@ -506,7 +507,7 @@ export default function ResearchDetailPage() {
                         <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1 4L3 6L7 2" stroke="#fff" strokeWidth="1.5" /></svg>
                       )}
                     </span>
-                    <span className="font-mono text-xs text-[#a0a0a0] group-hover:text-white transition-colors">{FILE_LABELS[ft]}</span>
+                    <span className="font-mono text-xs text-[#a0a0a0] group-hover:text-white transition-colors">{CORE_FILE_LABELS[ft] || ft + ".md"}</span>
                   </label>
                 ))}
               </div>
@@ -527,7 +528,7 @@ export default function ResearchDetailPage() {
               {Object.entries(proposals).map(([ft, content]) => (
                 <div key={ft} className="bg-[#111111] border border-[#1a1a1a]">
                   <div className="flex items-center justify-between px-4 py-3 border-b border-[#1a1a1a]">
-                    <span className="font-mono text-xs text-white font-bold">{FILE_LABELS[ft]}</span>
+                    <span className="font-mono text-xs text-white font-bold">{CORE_FILE_LABELS[ft] || ft + ".md"}</span>
                     {applied[ft] ? (
                       <span className="font-mono text-[10px] text-[#22c55e]">Applied</span>
                     ) : (
