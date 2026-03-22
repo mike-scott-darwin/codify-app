@@ -212,6 +212,16 @@ export default function DashboardPage() {
               );
             })}
           </div>
+          {weakest && (
+            <Link
+              href={files[weakest.key]?.exists ? "/dashboard/files/" + weakest.key + "/edit" : "/interview/" + weakest.key}
+              className="font-mono text-[10px] text-[#22c55e] hover:text-white transition-colors mt-3 block"
+            >
+              {files[weakest.key]?.exists
+                ? "Strengthen " + weakest.label.toLowerCase() + " →"
+                : "Add " + weakest.label.toLowerCase() + " →"}
+            </Link>
+          )}
         </div>
 
         {/* Outputs This Month */}
@@ -251,52 +261,6 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Smart Next Step */}
-      {weakest && (
-        <div className="bg-white/[0.03] border border-[#22c55e] p-5 mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#22c55e] block mb-1">
-                Next Step
-              </span>
-              <p className="font-mono text-sm text-white">
-                {files[weakest.key]?.exists
-                  ? "Your " + weakest.label.toLowerCase() + " file needs more depth. Enrich it to strengthen every output."
-                  : "Capture your " + weakest.label.toLowerCase() + " \u2014 " + weakest.description.toLowerCase() + "."}
-              </p>
-            </div>
-            <Link
-              href={files[weakest.key]?.exists ? "/dashboard/files/" + weakest.key + "/edit" : "/interview/" + weakest.key}
-              className="shrink-0 font-mono text-sm font-bold px-5 py-2.5 hover:brightness-110 transition-all"
-              style={{ backgroundColor: "#22c55e", color: "#000", borderRadius: 0 }}
-            >
-              {files[weakest.key]?.exists ? "Enrich \u2192" : "Start \u2192"}
-            </Link>
-          </div>
-        </div>
-      )}
-
-      {allStrong && recentResearch.length === 0 && (
-        <div className="bg-white/[0.03] border border-[#8b5cf6] p-5 mb-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8b5cf6] block mb-1">
-                Start Compounding
-              </span>
-              <p className="font-mono text-sm text-white">
-                All 4 knowledge areas captured. Research a topic to start making your files smarter over time.
-              </p>
-            </div>
-            <Link
-              href="/dashboard/research"
-              className="shrink-0 font-mono text-sm font-bold px-5 py-2.5 hover:brightness-110 transition-all"
-              style={{ backgroundColor: "#8b5cf6", color: "#fff", borderRadius: 0 }}
-            >
-              Research &rarr;
-            </Link>
-          </div>
-        </div>
-      )}
 
       {/* Opportunities — full width with summary + detail */}
       <div className="mb-8">
