@@ -3,9 +3,9 @@ import { createClient } from "@supabase/supabase-js";
 
 // Map GHL product IDs to app tiers
 const PRODUCT_TIER_MAP: Record<string, string> = {
-  "69bce9658eef3089bc4dc95c": "focus",   // Codify Build
-  "69bce96c806bfe4141eae56d": "focus",     // Codify Pro
-  "69bce96dadd325142185b3a7": "brain_sync",  // Codify Agency
+  "69bce9658eef3089bc4dc95c": "focus",   // Focus Engagement
+  "69bce96c806bfe4141eae56d": "focus",     // Focus Engagement
+  "69bce96dadd325142185b3a7": "brain_sync",  // Brain Sync
 };
 
 function getServiceClient() {

@@ -18,9 +18,9 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: "\u25A0" },
-  { label: "Build", href: "/dashboard/files", icon: "1" },
-  { label: "Research", href: "/dashboard/research", feature: "research", icon: "2", requiredFiles: 2 },
-  { label: "Queue", href: "/dashboard/queue", feature: "research", icon: "▸", requiredFiles: 2 },
+  { label: "Extract", href: "/dashboard/files", icon: "1" },
+  { label: "Research", href: "/dashboard/research", icon: "2" },
+  { label: "Queue", href: "/dashboard/queue", icon: "▸" },
   { label: "Create", href: "/dashboard/generate", feature: "generate:ad_copy", icon: "3", requiredFiles: 4 },
   { label: "Publish", href: "/dashboard/outputs", feature: "output_history", icon: "4" },
   { label: "Calendar", href: "/dashboard/calendar", feature: "agent:content_calendar", icon: "\u25A6", requiredFiles: 4 },

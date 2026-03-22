@@ -649,10 +649,25 @@ function OnboardingContent() {
 
             <button
               onClick={() => router.push("/dashboard")}
-              className="w-full bg-[#22c55e] text-black font-bold text-sm py-3.5 hover:brightness-110 transition-all"
+              className="w-full bg-[#22c55e] text-black font-bold text-sm py-3.5 hover:brightness-110 transition-all mb-4"
             >
-              Start Building &#8594;
+              Go to Dashboard &#8594;
             </button>
+
+            <div className="bg-[#111111] border border-[#1a1a1a] p-5 text-left">
+              <p className="text-sm text-white font-bold mb-2">
+                Want us to build it for you?
+              </p>
+              <p className="text-xs text-[#6b6b6b] mb-4 leading-relaxed">
+                Our Focus Engagement extracts 30+ years of expertise in a single strategic interview. We build your complete reference stack so AI knows your business from day one.
+              </p>
+              <button
+                onClick={() => router.push("/dashboard/upgrade")}
+                className="w-full border border-[#8b5cf6] text-[#8b5cf6] font-bold text-sm py-2.5 hover:bg-[#8b5cf6] hover:text-white transition-all"
+              >
+                Learn About Focus Engagement &#8594;
+              </button>
+            </div>
           </div>
         )}
       </div>

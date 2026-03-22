@@ -208,7 +208,7 @@ export default function DashboardPage() {
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="font-mono text-sm text-white">{g.label}</span>
-                  {locked && <span className="font-mono text-[10px] text-[#6b6b6b]">&loz; PRO</span>}
+                  {locked && <span className="font-mono text-[10px] text-[#6b6b6b]">&loz; FOCUS</span>}
                 </div>
                 <p className="text-[11px] text-[#6b6b6b]">{g.desc}</p>
               </Link>

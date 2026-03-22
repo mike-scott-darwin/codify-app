@@ -16,51 +16,51 @@ const HELP_SECTIONS: HelpSection[] = [
     items: [
       {
         q: "What is Codify?",
-        a: "Codify turns your business knowledge into AI-powered content. You build reference files (your soul, offer, audience, and voice), then every output — ads, emails, social posts — is informed by who you actually are. Not generic. Yours.",
+        a: "Codify captures your business knowledge — what you know, who you serve, how you talk — and structures it so AI can use it. Instead of starting from scratch every time, AI reads your files first and produces work that sounds like you.",
       },
       {
         q: "What are reference files?",
-        a: "Four core files that teach AI about your business. Soul (why you exist), Offer (what you sell), Audience (who you serve), Voice (how you sound). The stronger these files, the better every output.",
+        a: "Four core files that teach AI about your business. Soul (why you exist and what makes you different), Offer (what you do for clients), Audience (who you serve), and Voice (how you communicate). The more detail in these files, the better every output.",
       },
       {
         q: "How do I start?",
-        a: "Go to Build and complete the interview for each file. The interview asks guided questions, then AI enriches your answers into a full reference file. Start with Soul — it's the foundation.",
+        a: "Go to Extract and complete the guided interview for each file. We ask questions about your business, and your answers become structured reference files. Start with Soul — it's the foundation everything else builds on.",
       },
     ],
   },
   {
-    title: "The Compounding Loop",
-    icon: "↻",
+    title: "The 5-Phase Architecture",
+    icon: "5",
     items: [
       {
-        q: "What is the compounding loop?",
-        a: "Build → Research → Create → Publish → Automate. Each cycle makes your reference files stronger, which makes every future output better. The sidebar follows this exact order.",
+        q: "What are the 5 phases?",
+        a: "Phase 1: Extraction (capture your expertise through guided interviews). Phase 2: Architecture (your knowledge structured into reference files you own). Phase 3: Scouting (AI finds opportunities by cross-referencing your expertise against market shifts). Phase 4: Scale (generate outputs — ads, proposals, content — informed by your files). Phase 5: Continuity (monthly Brain Sync keeps your files current as your business evolves).",
       },
       {
-        q: "How does research improve my files?",
-        a: "In Research, you explore topics and make decisions. When you mark a topic as 'decided', you can Codify it — AI proposes updates to your reference files based on what you learned. Apply the updates, and your files get sharper.",
+        q: "How does the compounding work?",
+        a: "Every research session, every decision, every file update makes all future outputs better. Your reference files get richer over time. An ad generated today is good. The same ad generated after 3 months of compounding is exceptional — because AI has deeper context about your business.",
       },
       {
-        q: "What does Codify mean?",
-        a: "Codify means turning a research decision into a reference file update. AI reads your decision and your current files, then proposes how to weave the new insight in. You review and apply per file.",
+        q: "What is the Opportunity Scout?",
+        a: "The Opportunity Scout cross-references your unique expertise against weekly market shifts. It surfaces revenue gaps that only someone with your specific knowledge could fill. These aren't generic opportunities — they're matches between what you know and what the market needs.",
       },
     ],
   },
   {
-    title: "Build (Reference Files)",
+    title: "Extract (Reference Files)",
     icon: "1",
     items: [
       {
         q: "How do I build a reference file?",
-        a: "Click Build in the sidebar, then Start Interview on any file. Answer the guided questions. When done, preview your file and click Enrich with AI to expand it.",
+        a: "Click Extract in the sidebar, then Start Interview on any file. Answer the guided questions about your business. When done, preview your file and save it. Each file captures a different aspect of your expertise.",
       },
       {
         q: "Can I edit files directly?",
-        a: "Yes. Click Edit on any file to open the markdown editor. Changes save to your GitHub repo if connected.",
+        a: "Yes. Click Edit on any file to open the editor. Changes save to your secure workspace. You can always refine your files as your business evolves.",
       },
       {
         q: "What is the Context Power Score?",
-        a: "A score from 0-100 measuring how complete your reference files are. Higher scores mean better AI outputs. It checks word count, structure, specificity, and depth.",
+        a: "A score from 0-100 measuring how complete your reference files are. Higher scores mean AI has more context to work with, which means better outputs. It checks depth, specificity, and completeness across all four files.",
       },
     ],
   },
@@ -70,11 +70,11 @@ const HELP_SECTIONS: HelpSection[] = [
     items: [
       {
         q: "How does research work?",
-        a: "Create a topic, take notes, and use the AI Research Assistant to explore questions. Move topics through the pipeline: Research → Deciding → Decided → Codified.",
+        a: "Create a topic, explore it with the AI Research Assistant, and make decisions. When you decide something, you can Codify it — AI proposes updates to your reference files based on what you learned. This is how your files compound over time.",
       },
       {
         q: "What is Deep Research?",
-        a: "A multi-step agent that generates research questions, answers them from multiple angles, synthesizes findings, and provides recommendations. Find it on any research topic or in Automate.",
+        a: "A multi-step research process that explores a question from multiple angles, synthesizes findings, and gives you actionable recommendations. It's like having a research team that already knows your business.",
       },
     ],
   },
@@ -84,57 +84,47 @@ const HELP_SECTIONS: HelpSection[] = [
     items: [
       {
         q: "What can I generate?",
-        a: "Social posts, ad copy, email sequences, VSL scripts, and landing pages. Each uses your reference files so the output sounds like you.",
+        a: "Social posts, ad copy, email sequences, VSL scripts, and landing pages. Each output uses your reference files, so the result sounds like you — not like generic AI content.",
       },
       {
-        q: "What is Campaign Mode?",
-        a: "Multi-step agents that produce complete campaigns instead of single outputs. Ad Campaign gives you 9 hooks and 5 ranked ads. Email Campaign builds a full sequence with timing.",
+        q: "Why do outputs sound like me?",
+        a: "Because AI reads your soul, offer, audience, and voice files before generating anything. It knows your expertise, your audience's language, and your communication style. That's the difference between prompting and codifying.",
       },
     ],
   },
   {
-    title: "Publish",
-    icon: "4",
+    title: "Tiers & Engagement",
+    icon: "$",
     items: [
       {
-        q: "How do I publish content?",
-        a: "Connect platforms in Settings (GoHighLevel, Postiz, Buffer, Mailchimp, or Webhooks). Then on any output, click Publish to send it directly to that platform.",
+        q: "What can I do for free?",
+        a: "Extract your knowledge (build all 4 reference files), research topics, and make decisions. The free tier demonstrates the compounding effect — your files get better every time you use the system.",
       },
       {
-        q: "Can I publish to multiple platforms?",
-        a: "Yes. Each output shows all your connected platforms that support that content type. Publish to as many as you want.",
+        q: "What is the Focus Engagement?",
+        a: "A $1,497 engagement where we extract your expertise through a high-fidelity strategic interview and build your complete reference stack for you. You get Phases 1-4: extraction, architecture, opportunity scouting, and your first batch of outputs. It's the difference between building it yourself and having a Context Architect do it with you.",
+      },
+      {
+        q: "What is Brain Sync?",
+        a: "A $497/month ongoing engagement that keeps your reference files aligned as your business evolves. Monthly audits, opportunity scouting, and automated outputs. This is Phase 5 — the system that compounds without you getting busier.",
       },
     ],
   },
   {
-    title: "Automate (Agents)",
-    icon: "5",
+    title: "Settings & Security",
+    icon: "\u2699",
     items: [
       {
-        q: "What are agents?",
-        a: "Multi-step AI workflows that go beyond single prompts. They run 4-5 steps automatically: analyzing, generating, reviewing, and ranking. You see live progress and get a complete result.",
+        q: "Where are my files stored?",
+        a: "In a private GitHub repository that you own. Think of it as a secure folder with a complete history of every change. You keep everything — even if you stop using Codify.",
       },
-      {
-        q: "What agents are available?",
-        a: "Congruence Audit (checks your files for alignment), Ad Campaign (9 hooks, 5 ranked ads), Deep Research (multi-angle exploration), Content Calendar (5 days of posts), Email Campaign (full sequence with arc).",
-      },
-    ],
-  },
-  {
-    title: "Settings & Integrations",
-    icon: "⚙",
-    items: [
       {
         q: "Can I use my own AI model?",
-        a: "Yes. In Settings > AI Provider, choose OpenAI, Anthropic, or Ollama (local). Bring your own API key and every feature uses your chosen model.",
+        a: "Yes. In Settings, choose OpenAI, Anthropic, or Ollama (local). Bring your own API key and every feature uses your chosen model. Your files work with any AI tool — that's platform independence.",
       },
       {
-        q: "How do I connect GitHub?",
-        a: "In Settings > GitHub Repository, enter a Personal Access Token (with repo scope), your username, and repo name. Click Connect. Your reference files will be committed to reference/core/ in your repo.",
-      },
-      {
-        q: "What platforms can I connect?",
-        a: "GoHighLevel (email/SMS), Postiz (social scheduling), Buffer (social), Mailchimp (email campaigns), and generic Webhooks. Each needs an API key configured in Settings.",
+        q: "Is my data private?",
+        a: "Yes. Your reference files live in your own private repository. We don't store your business knowledge on our servers. You own your data, your context, and your outputs.",
       },
     ],
   },
@@ -148,7 +138,7 @@ export default function HelpPage() {
     <>
       <h1 className="font-mono text-xl font-bold mb-2">Help</h1>
       <p className="text-sm text-[#6b6b6b] mb-8">
-        How Codify works, step by step.
+        How Codify works — from extraction to compounding.
       </p>
 
       <div className="space-y-3">
@@ -167,7 +157,7 @@ export default function HelpPage() {
                 <span className="font-mono text-sm text-white font-bold">{section.title}</span>
               </div>
               <span className="font-mono text-xs text-[#6b6b6b]">
-                {openSection === si ? "−" : "+"}
+                {openSection === si ? "\u2212" : "+"}
               </span>
             </button>
 
@@ -183,7 +173,7 @@ export default function HelpPage() {
                         className="w-full flex items-center justify-between py-3 text-left"
                       >
                         <span className="font-mono text-sm text-[#a0a0a0]">{item.q}</span>
-                        <span className="font-mono text-xs text-[#333] ml-4">{isOpen ? "−" : "+"}</span>
+                        <span className="font-mono text-xs text-[#333] ml-4">{isOpen ? "\u2212" : "+"}</span>
                       </button>
                       {isOpen && (
                         <p className="font-mono text-sm text-[#6b6b6b] leading-relaxed pb-3">
@@ -206,16 +196,16 @@ export default function HelpPage() {
         </p>
         <div className="grid grid-cols-2 gap-3">
           <Link href="/dashboard/files" className="font-mono text-sm text-[#a0a0a0] hover:text-white transition-colors">
-            1. Start building reference files →
+            1. Extract your knowledge &rarr;
           </Link>
           <Link href="/dashboard/research" className="font-mono text-sm text-[#a0a0a0] hover:text-white transition-colors">
-            2. Start a research topic →
+            2. Start a research topic &rarr;
           </Link>
           <Link href="/dashboard/generate" className="font-mono text-sm text-[#a0a0a0] hover:text-white transition-colors">
-            3. Generate your first output →
+            3. Generate your first output &rarr;
           </Link>
-          <Link href="/dashboard/settings" className="font-mono text-sm text-[#a0a0a0] hover:text-white transition-colors">
-            Connect platforms →
+          <Link href="/dashboard/upgrade" className="font-mono text-sm text-[#a0a0a0] hover:text-white transition-colors">
+            Learn about Focus Engagement &rarr;
           </Link>
         </div>
       </div>
