@@ -4,13 +4,14 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { loadAllAnswers } from "@/lib/db";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { calculateContextScore } from "@/lib/scoring";
 import type { ContextScore, ReferenceFile } from "@/lib/types";
 
 function terminalBar(percentage: number, length: number = 20): string {
   const filled = Math.round((percentage / 100) * length);
   const empty = length - filled;
-  return "█".repeat(filled) + "░".repeat(empty);
+  return "\u2588".repeat(filled) + "\u2591".repeat(empty);
 }
 
 const STATUS_CONFIG: Record<
@@ -102,100 +103,85 @@ const FILE_CONFIGS: FileConfig[] = [
   },
 ];
 
-function buildUseWithAIBlock(fileContents: Record<string, string>): string {
-  const files = Object.entries(fileContents);
-  if (files.length === 0) return "";
-
-  const fileBlock = files
-    .map(([name, content]) => `--- ${name} ---\n${content}`)
-    .join("\n\n");
-
-  return `Before responding to any request, read these reference files. They define who I am, what I sell, who I serve, and how I sound. Every response should be informed by this context.
-
-${fileBlock}
-
----
-
-Now you know my business. Use this context for everything I ask. Match my voice. Reference my offer. Speak to my audience. Never sound generic.`;
+interface ScoutItem {
+  id: string;
+  title: string;
+  summary: string;
 }
 
 export default function AssessmentPage() {
   const { user } = useAuth();
+  const router = useRouter();
   const [score, setScore] = useState<ContextScore | null>(null);
-  const [fileContents, setFileContents] = useState<Record<string, string>>({});
   const [completedFiles, setCompletedFiles] = useState<string[]>([]);
   const [missingFiles, setMissingFiles] = useState<FileConfig[]>([]);
-  const [showUseWithAI, setShowUseWithAI] = useState(false);
-  const [copiedAI, setCopiedAI] = useState(false);
+  const [scoutItems, setScoutItems] = useState<ScoutItem[]>([]);
+  const [scouting, setScouting] = useState(false);
+  const [scoutDone, setScoutDone] = useState(false);
 
   useEffect(() => {
     const init = async () => {
-      // If logged in, sync from DB to sessionStorage first
       if (user) {
         await loadAllAnswers();
       }
 
-    const contents: Record<string, string> = {};
-    const completed: string[] = [];
-    const missing: FileConfig[] = [];
+      const completed: string[] = [];
+      const missing: FileConfig[] = [];
 
-    const files = FILE_CONFIGS.map((config) => {
-      const raw = sessionStorage.getItem(config.storageKey);
-      const answers = raw ? JSON.parse(raw) : null;
+      const files = FILE_CONFIGS.map((config) => {
+        const raw = sessionStorage.getItem(config.storageKey);
+        const answers = raw ? JSON.parse(raw) : null;
 
-      let content = "";
-      if (answers) {
-        content = config.buildContent(answers);
-        contents[config.name] = content;
-        completed.push(config.name);
-      } else {
-        missing.push(config);
+        let content = "";
+        if (answers) {
+          content = config.buildContent(answers);
+          completed.push(config.name);
+        } else {
+          missing.push(config);
+        }
+
+        return {
+          name: config.name,
+          path: config.path,
+          ...(content
+            ? { content, lastModified: new Date().toISOString().split("T")[0] }
+            : {}),
+        };
+      });
+
+      setCompletedFiles(completed);
+      setMissingFiles(missing);
+      setScore(calculateContextScore(files));
+
+      // Auto-scout if user is logged in and has files
+      if (user && completed.length > 0) {
+        autoScout();
       }
-
-      return {
-        name: config.name,
-        path: config.path,
-        ...(content
-          ? { content, lastModified: new Date().toISOString().split("T")[0] }
-          : {}),
-      };
-    });
-
-    setFileContents(contents);
-    setCompletedFiles(completed);
-    setMissingFiles(missing);
-    setScore(calculateContextScore(files));
     };
     init();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+
+  const autoScout = async () => {
+    setScouting(true);
+    try {
+      const res = await fetch("/api/content-queue/scout", { method: "POST" });
+      if (res.ok) {
+        const d = await res.json();
+        setScoutItems(d.items || []);
+      }
+    } catch {
+      // Silent — dashboard will still work
+    } finally {
+      setScouting(false);
+      setScoutDone(true);
+    }
+  };
 
   if (!score) return null;
 
   const completedCount = score.files.filter((f) => f.status !== "missing").length;
   const allComplete = missingFiles.length === 0;
-  const aiBlock = buildUseWithAIBlock(fileContents);
-
-  const copyAIBlock = async () => {
-    await navigator.clipboard.writeText(aiBlock);
-    setCopiedAI(true);
-    setTimeout(() => setCopiedAI(false), 3000);
-  };
-
-  const downloadSingleFile = (name: string, content: string) => {
-    const blob = new Blob([content], { type: "text/markdown" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = name;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
-  const downloadAllFiles = () => {
-    Object.entries(fileContents).forEach(([name, content]) => {
-      downloadSingleFile(name, content);
-    });
-  };
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col">
@@ -237,70 +223,66 @@ export default function AssessmentPage() {
           </div>
 
           <p className="text-sm text-[#a0a0a0]">
-            {completedCount} of {score.files.length} core files built
+            {completedCount} of {score.files.length} knowledge areas captured
           </p>
         </div>
 
-        {/* USE WITH AI — The killer feature */}
+        {/* What your knowledge unlocked — replaces "paste into AI" */}
         {completedCount > 0 && (
           <div className="mb-10">
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#22c55e] mb-4">
-              Use with Any AI
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#f59e0b] mb-4">
+              {scouting
+                ? "Scanning Your Expertise..."
+                : scoutDone
+                ? "Matched to Your Expertise"
+                : "Opportunities"}
             </p>
-            <div className="bg-[#111111] border border-[#1a1a1a] p-8">
-              <p className="font-mono text-sm text-white mb-2">
-                Paste this into any AI chat — Claude, ChatGPT, Gemini, whatever you use.
-              </p>
-              <p className="text-sm text-[#6b6b6b] mb-6">
-                This single block contains all your reference files. The AI will read it
-                and produce output that matches your business — your voice, your offer,
-                your audience. Works everywhere.
-              </p>
 
-              {!showUseWithAI ? (
-                <button
-                  onClick={() => setShowUseWithAI(true)}
-                  className="font-mono text-sm font-bold px-6 py-3 hover:brightness-110 transition-all"
-                  style={{ backgroundColor: "#22c55e", color: "#000000", borderRadius: 0 }}
-                >
-                  Show AI Context Block
-                </button>
-              ) : (
-                <>
-                  <div
-                    className="bg-[#0a0a0a] border border-[#1a1a1a] p-4 mb-4 max-h-64 overflow-y-auto"
-                  >
-                    <pre className="whitespace-pre-wrap font-mono text-xs text-[#a0a0a0] leading-relaxed">
-                      {aiBlock}
-                    </pre>
-                  </div>
-                  <div className="flex gap-3">
-                    <button
-                      onClick={copyAIBlock}
-                      className="font-mono text-sm font-bold px-6 py-3 hover:brightness-110 transition-all"
-                      style={{ backgroundColor: "#22c55e", color: "#000000", borderRadius: 0 }}
-                    >
-                      {copiedAI ? "Copied!" : "Copy to Clipboard"}
-                    </button>
-                    <button
-                      onClick={() => setShowUseWithAI(false)}
-                      className="font-mono text-sm px-4 py-3 border border-[#1a1a1a] text-[#6b6b6b] hover:text-white transition-colors"
-                    >
-                      Hide
-                    </button>
-                  </div>
-                  <p className="font-mono text-xs text-[#6b6b6b] mt-4">
-                    Works with: Claude &middot; ChatGPT &middot; Gemini &middot; Grok &middot; Any AI
+            {scouting ? (
+              <div className="bg-[#111111] border border-[#1a1a1a] p-8">
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 border-2 border-[#f59e0b] border-t-transparent rounded-full animate-spin" />
+                  <p className="font-mono text-sm text-[#a0a0a0]">
+                    The Opportunity Scout is analyzing your knowledge files and finding content gaps matched to your expertise...
                   </p>
-                </>
-              )}
-            </div>
+                </div>
+              </div>
+            ) : scoutItems.length > 0 ? (
+              <div className="bg-[#111111] border border-[#1a1a1a] divide-y divide-[#0a0a0a]">
+                {scoutItems.map((item, i) => (
+                  <div key={item.id || i} className="px-5 py-4">
+                    <div className="flex items-start gap-3">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b] mt-2 shrink-0" />
+                      <div>
+                        <p className="font-mono text-sm text-white mb-1">{item.title}</p>
+                        {item.summary && (
+                          <p className="text-xs text-[#6b6b6b] leading-relaxed">
+                            {item.summary.substring(0, 200)}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+                <div className="px-5 py-4 bg-white/[0.02]">
+                  <p className="font-mono text-xs text-[#a0a0a0]">
+                    These opportunities are waiting in your dashboard. Research deepens them over time.
+                  </p>
+                </div>
+              </div>
+            ) : scoutDone ? (
+              <div className="bg-[#111111] border border-[#1a1a1a] p-8">
+                <p className="font-mono text-sm text-[#a0a0a0]">
+                  Opportunities will appear in your dashboard once you sign in and complete your knowledge files.
+                </p>
+              </div>
+            ) : null}
           </div>
         )}
 
-        {/* File breakdown */}
+        {/* Knowledge file breakdown */}
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-4">
-          Reference Files
+          Knowledge Files
         </p>
 
         <div className="space-y-3 mb-10">
@@ -347,43 +329,26 @@ export default function AssessmentPage() {
           })}
         </div>
 
-        {/* Build Next File / All Complete */}
+        {/* All complete — go to dashboard */}
         {allComplete ? (
-          <>
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#22c55e] mb-4">
-              All Files Complete
+          <div className="bg-white/[0.03] border border-[#22c55e] p-8 mb-10">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#22c55e] mb-3">
+              Your Knowledge Engine is Live
             </p>
-            <div className="bg-[#111111] border border-[#1a1a1a] p-8 mb-10">
-              <p className="font-mono text-sm text-white mb-2">
-                Your context foundation is built.
-              </p>
-              <p className="text-sm text-[#a0a0a0] mb-6">
-                All 4 core reference files are ready. Every AI tool you use from here
-                will produce better output because it knows your soul, offer, audience,
-                and voice.
-              </p>
-
-              <div className="flex flex-wrap gap-2 mb-6">
-                {Object.entries(fileContents).map(([name, content]) => (
-                  <button
-                    key={name}
-                    onClick={() => downloadSingleFile(name, content)}
-                    className="font-mono text-xs px-4 py-2 border border-[#1a1a1a] text-[#a0a0a0] hover:text-white hover:border-[#333] transition-colors"
-                  >
-                    {name}
-                  </button>
-                ))}
-              </div>
-
-              <button
-                onClick={downloadAllFiles}
-                className="font-mono text-sm font-bold px-6 py-3 hover:brightness-110 transition-all"
-                style={{ backgroundColor: "#22c55e", color: "#000000", borderRadius: 0 }}
-              >
-                Download All Files
-              </button>
-            </div>
-          </>
+            <p className="font-mono text-sm text-white mb-2">
+              All 4 knowledge areas captured.
+            </p>
+            <p className="text-sm text-[#a0a0a0] mb-6">
+              Every output from here is informed by your expertise — your voice, your offer, your audience. The more you research and refine, the smarter it gets.
+            </p>
+            <button
+              onClick={() => router.push("/dashboard")}
+              className="font-mono text-sm font-bold px-8 py-3 hover:brightness-110 transition-all"
+              style={{ backgroundColor: "#22c55e", color: "#000000", borderRadius: 0 }}
+            >
+              Go to Dashboard &rarr;
+            </button>
+          </div>
         ) : (
           <>
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-4">
@@ -411,14 +376,29 @@ export default function AssessmentPage() {
                 </div>
               ))}
             </div>
+
+            {/* Partial completion — still push toward dashboard */}
+            {completedCount >= 2 && (
+              <div className="bg-white/[0.03] border border-[#1a1a1a] p-6 mb-10">
+                <p className="font-mono text-xs text-[#a0a0a0] mb-3">
+                  You can start using your dashboard now. Completing all 4 files makes every output stronger.
+                </p>
+                <button
+                  onClick={() => router.push("/dashboard")}
+                  className="font-mono text-xs px-5 py-2 border border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e] hover:text-black transition-colors"
+                >
+                  Go to Dashboard &rarr;
+                </button>
+              </div>
+            )}
           </>
         )}
 
-        {/* Next steps */}
+        {/* Recommendations */}
         {score.recommendations.length > 0 && (
           <>
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-[#4a9eff] mb-4">
-              Next Steps
+              Ways to Strengthen
             </p>
             <div className="bg-[#111111] border border-[#1a1a1a] p-5 space-y-3 mb-10">
               {score.recommendations.map((rec, i) => (
@@ -430,28 +410,6 @@ export default function AssessmentPage() {
             </div>
           </>
         )}
-
-        {/* Actions */}
-        <div className="flex flex-col sm:flex-row gap-3">
-          {completedFiles.map((name) => {
-            const config = FILE_CONFIGS.find((fc) => fc.name === name);
-            if (!config) return null;
-            return (
-              <Link key={name} href={config.previewPath}>
-                <button className="font-mono text-sm px-6 py-3 border border-[#1a1a1a] text-[#a0a0a0] hover:text-white hover:border-[#333] transition-colors w-full sm:w-auto">
-                  View {name}
-                </button>
-              </Link>
-            );
-          })}
-          {!allComplete && (
-            <Link href={missingFiles[0]?.interviewPath || "/"}>
-              <button className="font-mono text-sm font-bold bg-[#22c55e] text-black px-6 py-3 hover:brightness-110 transition-all w-full sm:w-auto">
-                Build next file &#8594;
-              </button>
-            </Link>
-          )}
-        </div>
       </div>
 
       {/* Footer */}
