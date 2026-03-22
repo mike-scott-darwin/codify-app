@@ -4,17 +4,23 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 
+interface Finding {
+  question: string;
+  answer: string;
+  date: string;
+}
+
 interface Topic {
   id: string;
   title: string;
   status: string;
   content: string;
-  findings: Array<{ source: string; summary: string; date: string }>;
+  findings: Finding[];
   decision: string | null;
   codify_proposals: Record<string, string> | null;
 }
 
-const STATUSES = ["research", "deciding", "decided", "codified"];
+const STATUSES = ["research", "decision", "codified"];
 
 const FILE_LABELS: Record<string, string> = {
   soul: "soul.md",
@@ -25,10 +31,17 @@ const FILE_LABELS: Record<string, string> = {
 
 const STATUS_COLORS: Record<string, string> = {
   research: "#4a9eff",
-  deciding: "#f59e0b",
-  decided: "#22c55e",
+  decision: "#22c55e",
   codified: "#8b5cf6",
 };
+
+function formatDate(iso: string) {
+  const d = new Date(iso);
+  const month = d.toLocaleString("en-US", { month: "short" });
+  const day = d.getDate();
+  const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+  return `${month} ${day} at ${time}`;
+}
 
 export default function ResearchDetailPage() {
   const params = useParams();
@@ -76,10 +89,18 @@ export default function ResearchDetailPage() {
       const res = await fetch("/api/research/" + id);
       if (res.ok) {
         const data = await res.json();
-        setTopic(data.topic);
-        // Restore saved proposals if they exist
-        if (data.topic.codify_proposals) {
-          setProposals(data.topic.codify_proposals);
+        const t = data.topic;
+        // Normalize legacy statuses
+        if (t.status === "deciding" || t.status === "decided") {
+          t.status = "decision";
+        }
+        // Normalize findings format
+        if (!Array.isArray(t.findings)) {
+          t.findings = [];
+        }
+        setTopic(t);
+        if (t.codify_proposals) {
+          setProposals(t.codify_proposals);
         }
       }
     };
@@ -96,7 +117,6 @@ export default function ResearchDetailPage() {
       audience: /audience|customer|client|people|who|segment|avatar|market/.test(d),
       voice: /voice|tone|brand|style|language|personality|writing/.test(d),
     };
-    // Only auto-suggest if no targets are selected yet
     const anySelected = Object.values(targetFiles).some(Boolean);
     if (!anySelected) {
       const hasSuggestion = Object.values(suggestions).some(Boolean);
@@ -106,10 +126,15 @@ export default function ResearchDetailPage() {
 
   const save = useCallback(async (updates: Partial<Topic>) => {
     setSaving(true);
+    // Map "decision" back to "decided" for DB compatibility
+    const dbUpdates = { ...updates };
+    if (dbUpdates.status === "decision") {
+      dbUpdates.status = "decided";
+    }
     await fetch("/api/research/" + id, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updates),
+      body: JSON.stringify(dbUpdates),
     });
     setTopic((prev) => prev ? { ...prev, ...updates } : prev);
     setSaving(false);
@@ -131,6 +156,16 @@ export default function ResearchDetailPage() {
       const data = await res.json();
       if (res.ok) {
         setAiAnswer(data.answer);
+
+        // Add to findings history
+        const newFinding: Finding = {
+          question,
+          answer: data.answer,
+          date: new Date().toISOString(),
+        };
+        const updatedFindings = [...(topic.findings || []), newFinding];
+        setTopic((prev) => prev ? { ...prev, findings: updatedFindings } : prev);
+        save({ findings: updatedFindings as Topic["findings"] });
       } else {
         setError(data.error || "AI research failed.");
       }
@@ -181,11 +216,8 @@ export default function ResearchDetailPage() {
 
     setApplyingFile(fileType);
 
-    // Save via the enrich/save mechanism — update enriched_content in interview_answers
-    // We use sessionStorage + saveAnswers pattern from the edit page
     try {
-      // Call a PATCH to update the enriched content directly via supabase
-      const res = await fetch("/api/research/" + id + "/codify", {
+      await fetch("/api/research/" + id + "/codify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -194,12 +226,6 @@ export default function ResearchDetailPage() {
         }),
       });
 
-      // Actually, we should save the reference file content through an API
-      // Let us use the existing save mechanism
-      // The edit page uses saveAnswers from lib/db which writes to interview_answers
-      // But we are server-side here. Let us call a simpler approach via a dedicated save call.
-
-      // For now, save via a direct API approach
       const saveRes = await fetch("/api/reference/save", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -209,7 +235,6 @@ export default function ResearchDetailPage() {
       if (saveRes.ok) {
         setApplied((prev) => ({ ...prev, [fileType]: true }));
 
-        // Check if all proposals are applied
         const newApplied = { ...applied, [fileType]: true };
         const allApplied = Object.keys(proposals).every((k) => newApplied[k]);
         if (allApplied) {
@@ -254,7 +279,6 @@ export default function ResearchDetailPage() {
     setRefApplied({});
 
     try {
-      // Use the codify endpoint with the AI answer as a synthetic decision
       const res = await fetch("/api/research/" + id + "/codify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -291,10 +315,11 @@ export default function ResearchDetailPage() {
   };
 
   const hasDecision = topic.decision && topic.decision.trim().length > 0;
-  const showCodify = (topic.status === "decided" || topic.status === "deciding" || topic.status === "codified") && hasDecision;
+  const showCodify = (topic.status === "decision" || topic.status === "codified") && hasDecision;
   const hasProposals = Object.keys(proposals).length > 0;
   const allApplied = hasProposals && Object.keys(proposals).every((k) => applied[k]);
   const selectedCount = Object.values(targetFiles).filter(Boolean).length;
+  const findings = topic.findings || [];
 
   return (
     <>
@@ -339,7 +364,7 @@ export default function ResearchDetailPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Notes editor */}
+        {/* Left column: Notes + Decision */}
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#4a9eff] mb-3">
             Notes
@@ -348,29 +373,33 @@ export default function ResearchDetailPage() {
             value={topic.content}
             onChange={(e) => setTopic((prev) => prev ? { ...prev, content: e.target.value } : prev)}
             onBlur={() => save({ content: topic.content })}
-            className="w-full min-h-[40vh] bg-[#111111] border border-[#1a1a1a] p-4 font-mono text-sm text-[#a0a0a0] leading-relaxed resize-y focus:outline-none focus:border-[#4a9eff]"
+            className="w-full min-h-[30vh] bg-[#111111] border border-[#1a1a1a] p-4 font-mono text-sm text-[#a0a0a0] leading-relaxed resize-y focus:outline-none focus:border-[#4a9eff]"
             placeholder="Write your research notes here..."
           />
           {saving && <p className="font-mono text-[10px] text-[#4a9eff] mt-1">Saving...</p>}
 
-          {/* Decision field */}
-          {(topic.status === "deciding" || topic.status === "decided" || topic.status === "codified") && (
-            <div className="mt-4">
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#22c55e] mb-2">
-                Decision
-              </p>
-              <textarea
-                value={topic.decision || ""}
-                onChange={(e) => setTopic((prev) => prev ? { ...prev, decision: e.target.value } : prev)}
-                onBlur={() => save({ decision: topic.decision })}
-                className="w-full min-h-[100px] bg-[#111111] border border-[#22c55e] p-4 font-mono text-sm text-[#a0a0a0] resize-y focus:outline-none"
-                placeholder="What did you decide?"
-              />
-            </div>
-          )}
+          {/* Decision field — always visible */}
+          <div className="mt-4">
+            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#22c55e] mb-2">
+              Decision
+            </p>
+            <textarea
+              value={topic.decision || ""}
+              onChange={(e) => setTopic((prev) => prev ? { ...prev, decision: e.target.value } : prev)}
+              onBlur={() => {
+                save({ decision: topic.decision });
+                // Auto-advance to decision status when first decision is written
+                if (topic.decision && topic.decision.trim().length > 0 && topic.status === "research") {
+                  save({ status: "decision" });
+                }
+              }}
+              className="w-full min-h-[100px] bg-[#111111] border border-[#22c55e] p-4 font-mono text-sm text-[#a0a0a0] resize-y focus:outline-none"
+              placeholder="What did you decide? Writing a decision lets you codify it into your reference files."
+            />
+          </div>
         </div>
 
-        {/* AI Research Assistant */}
+        {/* Right column: AI Research Assistant + Findings History */}
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#8b5cf6] mb-3">
             AI Research Assistant
@@ -399,59 +428,60 @@ export default function ResearchDetailPage() {
             )}
 
             {aiAnswer && (
-              <div className="bg-[#0a0a0a] border border-[#1a1a1a] p-4 max-h-[50vh] overflow-y-auto">
+              <div className="bg-[#0a0a0a] border border-[#1a1a1a] p-4 max-h-[50vh] overflow-y-auto mb-4">
                 <pre className="whitespace-pre-wrap font-mono text-sm text-[#a0a0a0] leading-relaxed">
                   {aiAnswer}
                 </pre>
-                <button
-                  onClick={() => {
-                    const updated = topic.content + "\n\n---\n\n**Q: " + question + "**\n\n" + aiAnswer;
-                    setTopic((prev) => prev ? { ...prev, content: updated } : prev);
-                    save({ content: updated });
-                    setAiAnswer("");
-                    setQuestion("");
-                  }}
-                  className="font-mono text-[10px] text-[#8b5cf6] hover:text-white mt-3 transition-colors"
-                >
-                  + Add to notes
-                </button>
-                <button
-                  onClick={() => {
-                    // Save the AI answer as the decision so the codify endpoint can use it
-                    const decisionText = "AI Research Answer:\n\nQ: " + question + "\n\n" + aiAnswer;
-                    setTopic((prev) => prev ? { ...prev, decision: decisionText } : prev);
-                    save({ decision: decisionText, status: topic.status === "research" ? "deciding" : topic.status });
-                    setShowRefPrompt(!showRefPrompt);
-                  }}
-                  className="font-mono text-[10px] text-[#22c55e] hover:text-white mt-3 ml-4 transition-colors"
-                >
-                  + Add to reference files
-                </button>
-                <button
-                  onClick={async () => {
-                    setSendingToQueue(true);
-                    try {
-                      const res = await fetch("/api/content-queue/from-research", {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({
-                          research_id: id,
-                          title: topic.title + " — " + question.substring(0, 60),
-                          summary: aiAnswer.substring(0, 500),
-                        }),
-                      });
-                      if (res.ok) setSentToQueue(true);
-                    } catch (err) {
-                      console.error("Send to queue error:", err);
-                    }
-                    setSendingToQueue(false);
-                  }}
-                  disabled={sendingToQueue || sentToQueue}
-                  className="font-mono text-[10px] hover:text-white mt-3 ml-4 transition-colors disabled:opacity-50"
-                  style={{ color: sentToQueue ? "#22c55e" : "#f59e0b" }}
-                >
-                  {sentToQueue ? "Sent to Queue" : sendingToQueue ? "Sending..." : "+ Send to Queue"}
-                </button>
+                <div className="flex gap-3 mt-3 pt-3 border-t border-[#1a1a1a]">
+                  <button
+                    onClick={() => {
+                      const updated = topic.content + "\n\n---\n\n**Q: " + question + "**\n\n" + aiAnswer;
+                      setTopic((prev) => prev ? { ...prev, content: updated } : prev);
+                      save({ content: updated });
+                      setAiAnswer("");
+                      setQuestion("");
+                    }}
+                    className="font-mono text-[10px] text-[#8b5cf6] hover:text-white transition-colors"
+                  >
+                    + Add to notes
+                  </button>
+                  <button
+                    onClick={() => {
+                      const decisionText = "AI Research Answer:\n\nQ: " + question + "\n\n" + aiAnswer;
+                      setTopic((prev) => prev ? { ...prev, decision: decisionText } : prev);
+                      save({ decision: decisionText, status: "decision" });
+                      setShowRefPrompt(!showRefPrompt);
+                    }}
+                    className="font-mono text-[10px] text-[#22c55e] hover:text-white transition-colors"
+                  >
+                    + Add to reference files
+                  </button>
+                  <button
+                    onClick={async () => {
+                      setSendingToQueue(true);
+                      try {
+                        const res = await fetch("/api/content-queue/from-research", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            research_id: id,
+                            title: topic.title + " — " + question.substring(0, 60),
+                            summary: aiAnswer.substring(0, 500),
+                          }),
+                        });
+                        if (res.ok) setSentToQueue(true);
+                      } catch (err) {
+                        console.error("Send to queue error:", err);
+                      }
+                      setSendingToQueue(false);
+                    }}
+                    disabled={sendingToQueue || sentToQueue}
+                    className="font-mono text-[10px] hover:text-white transition-colors disabled:opacity-50"
+                    style={{ color: sentToQueue ? "#22c55e" : "#f59e0b" }}
+                  >
+                    {sentToQueue ? "Sent to Queue" : sendingToQueue ? "Sending..." : "+ Send to Queue"}
+                  </button>
+                </div>
 
                 {showRefPrompt && (
                   <div className="mt-4 border border-[#22c55e]/30 bg-[#0a0a0a] p-4">
@@ -524,6 +554,48 @@ export default function ResearchDetailPage() {
               </div>
             )}
           </div>
+
+          {/* Research History — GitHub commit style */}
+          {findings.length > 0 && (
+            <div className="mt-6">
+              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6b6b6b] mb-3">
+                Research History
+              </p>
+              <div className="relative">
+                {/* Vertical timeline line */}
+                <div className="absolute left-[7px] top-2 bottom-2 w-px bg-[#1a1a1a]" />
+
+                <div className="space-y-0">
+                  {[...findings].reverse().map((f, i) => (
+                    <div key={i} className="relative pl-7 pb-4">
+                      {/* Commit dot */}
+                      <div className="absolute left-0 top-1.5 w-[15px] h-[15px] rounded-full border-2 border-[#1a1a1a] bg-[#0a0a0a] flex items-center justify-center">
+                        <div className="w-[5px] h-[5px] rounded-full bg-[#4a9eff]" />
+                      </div>
+
+                      <div className="bg-[#111111] border border-[#1a1a1a] overflow-hidden">
+                        {/* Commit header */}
+                        <div className="flex items-center justify-between px-3 py-2 border-b border-[#1a1a1a] bg-[#0a0a0a]">
+                          <span className="font-mono text-xs text-white font-bold truncate flex-1 mr-2">
+                            {f.question}
+                          </span>
+                          <span className="font-mono text-[10px] text-[#6b6b6b] whitespace-nowrap">
+                            {formatDate(f.date)}
+                          </span>
+                        </div>
+                        {/* Commit body */}
+                        <div className="p-3 max-h-[200px] overflow-y-auto">
+                          <pre className="whitespace-pre-wrap font-mono text-xs text-[#6b6b6b] leading-relaxed">
+                            {f.answer}
+                          </pre>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

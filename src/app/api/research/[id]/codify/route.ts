@@ -55,9 +55,9 @@ export async function POST(
     return NextResponse.json({ error: "Topic not found." }, { status: 404 });
 
   // Must be in decided or deciding status with a decision written
-  if (!["decided", "deciding"].includes(topic.status)) {
+  if (!["decided", "deciding", "decision"].includes(topic.status)) {
     return NextResponse.json(
-      { error: "Topic must be in decided or deciding status to codify." },
+      { error: "Topic must have a decision before you can codify." },
       { status: 400 }
     );
   }

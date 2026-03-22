@@ -16,7 +16,7 @@ interface Topic {
 
 const STATUS_COLORS: Record<string, string> = {
   research: "#4a9eff",
-  deciding: "#f59e0b",
+  decision: "#22c55e",
   decided: "#22c55e",
   codified: "#8b5cf6",
 };
@@ -98,8 +98,8 @@ export default function ResearchPage() {
 
       {/* Status pipeline */}
       <div className="flex gap-2 mb-6">
-        {["research", "deciding", "decided", "codified"].map((s) => {
-          const count = topics.filter((t) => t.status === s).length;
+        {["research", "decision", "codified"].map((s) => {
+          const count = s === "decision" ? topics.filter((t) => t.status === "decided" || t.status === "deciding" || t.status === "decision").length : topics.filter((t) => t.status === s).length;
           return (
             <div key={s} className="flex items-center gap-1.5">
               <span
