@@ -38,6 +38,7 @@ interface QueueItem {
   summary?: string;
   relevance_score?: number;
   source?: string;
+  suggested_formats?: string[];
   status: string;
   created_at: string;
 }
@@ -48,6 +49,15 @@ interface ResearchTopic {
   status: string;
   updated_at: string;
 }
+
+const FORMAT_LABELS: Record<string, string> = {
+  social_post: "Social Post",
+  newsletter: "Newsletter",
+  email_sequence: "Email Sequence",
+  ad_copy: "Ad Copy",
+  landing_page: "Landing Page",
+  vsl_script: "VSL Script",
+};
 
 export default function DashboardPage() {
   const { connected, loading, files, fileCompleteness, contextScore, error } = useRepo();
@@ -60,6 +70,7 @@ export default function DashboardPage() {
   const [dataLoaded, setDataLoaded] = useState(false);
   const [scouting, setScouting] = useState(false);
   const [scoutError, setScoutError] = useState("");
+  const [expandedOpp, setExpandedOpp] = useState<string | null>(null);
 
   // Fetch dashboard data
   useEffect(() => {
@@ -108,7 +119,6 @@ export default function DashboardPage() {
         setScoutError(d.error || "Scout failed");
         return;
       }
-      const d = await res.json();
       // Reload opportunities
       const queueRes = await fetch("/api/content-queue?status=pending");
       if (queueRes.ok) {
@@ -288,141 +298,224 @@ export default function DashboardPage() {
         </div>
       )}
 
-      {/* Two-column: Opportunities + Recent Activity */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Opportunities matched to expertise */}
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#f59e0b]">
-              Matched to Your Expertise
-            </span>
-            {opportunities.length > 0 && (
-              <Link href="/dashboard/queue" className="font-mono text-[10px] text-[#6b6b6b] hover:text-white transition-colors">
-                View all &rarr;
-              </Link>
-            )}
-          </div>
+      {/* Opportunities — full width with summary + detail */}
+      <div className="mb-8">
+        <div className="flex items-center justify-between mb-3">
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#f59e0b]">
+            Matched to Your Expertise
+          </span>
+          {opportunities.length > 0 && (
+            <Link href="/dashboard/queue" className="font-mono text-[10px] text-[#6b6b6b] hover:text-white transition-colors">
+              Manage queue &rarr;
+            </Link>
+          )}
+        </div>
 
-          {opportunities.length === 0 ? (
-            <div className="bg-[#111111] border border-[#1a1a1a] p-6 text-center">
-              {hasAnyFile ? (
-                <>
-                  <p className="font-mono text-xs text-[#6b6b6b] mb-4">
-                    Your knowledge files are ready. Let the Opportunity Scout find content gaps matched to your expertise.
-                  </p>
-                  {scoutError && (
-                    <p className="font-mono text-[10px] text-[#ef4444] mb-3">{scoutError}</p>
-                  )}
-                  <button
-                    onClick={runScout}
-                    disabled={scouting}
-                    className="font-mono text-xs font-bold px-5 py-2.5 transition-all disabled:opacity-50"
-                    style={{ backgroundColor: "#f59e0b", color: "#000", borderRadius: 0 }}
-                  >
-                    {scouting ? "Scouting..." : "Scout My Expertise \u2192"}
-                  </button>
-                  <p className="font-mono text-[10px] text-[#6b6b6b] mt-3">
-                    Research deepens these over time.
-                  </p>
-                </>
-              ) : (
-                <>
-                  <p className="font-mono text-xs text-[#6b6b6b] mb-3">
-                    Complete at least one knowledge file to activate the Opportunity Scout.
-                  </p>
-                  <Link
-                    href="/interview/soul"
-                    className="font-mono text-[10px] text-[#f59e0b] hover:text-white transition-colors"
-                  >
-                    Start with Soul &rarr;
-                  </Link>
-                </>
-              )}
-            </div>
-          ) : (
-            <div className="bg-[#111111] border border-[#1a1a1a] divide-y divide-[#0a0a0a]">
-              {opportunities.map((opp) => (
-                <Link
-                  key={opp.id}
-                  href="/dashboard/queue"
-                  className="flex items-start gap-3 px-4 py-3 hover:bg-[#1a1a1a] transition-colors"
-                >
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b] mt-1.5 shrink-0" />
-                  <div className="flex-1 min-w-0">
-                    <span className="font-mono text-xs text-white block truncate">{opp.title}</span>
-                    {opp.summary && (
-                      <span className="font-mono text-[10px] text-[#6b6b6b] block truncate mt-0.5">
-                        {opp.summary.substring(0, 100)}
-                      </span>
-                    )}
-                  </div>
-                  {opp.relevance_score && (
-                    <span className="font-mono text-[10px] text-[#f59e0b] shrink-0">
-                      {opp.relevance_score}%
-                    </span>
-                  )}
-                </Link>
-              ))}
-              <div className="px-4 py-2">
+        {opportunities.length === 0 ? (
+          <div className="bg-[#111111] border border-[#1a1a1a] p-8 text-center">
+            {hasAnyFile ? (
+              <>
+                <p className="font-mono text-sm text-white mb-2">
+                  Your knowledge files are ready.
+                </p>
+                <p className="font-mono text-xs text-[#6b6b6b] mb-5">
+                  The Opportunity Scout analyzes your expertise and finds content gaps only you can fill.
+                </p>
+                {scoutError && (
+                  <p className="font-mono text-[10px] text-[#ef4444] mb-3">{scoutError}</p>
+                )}
                 <button
                   onClick={runScout}
                   disabled={scouting}
-                  className="font-mono text-[10px] text-[#6b6b6b] hover:text-[#f59e0b] transition-colors disabled:opacity-50"
+                  className="font-mono text-sm font-bold px-6 py-3 transition-all disabled:opacity-50"
+                  style={{ backgroundColor: "#f59e0b", color: "#000", borderRadius: 0 }}
                 >
-                  {scouting ? "Scouting..." : "Scout for more \u2192"}
+                  {scouting ? "Scanning your expertise..." : "Scout My Expertise \u2192"}
                 </button>
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Recent Activity */}
-        <div>
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6b6b6b] block mb-3">
-            Recent Activity
-          </span>
-
-          {recentActivity.length === 0 ? (
-            <div className="bg-[#111111] border border-[#1a1a1a] p-6 text-center">
-              <p className="font-mono text-xs text-[#6b6b6b]">
-                Activity appears here as you build, research, and generate outputs.
-              </p>
-            </div>
-          ) : (
-            <div className="bg-[#111111] border border-[#1a1a1a] divide-y divide-[#0a0a0a]">
-              {recentActivity.slice(0, 6).map((item, i) => (
+                <p className="font-mono text-[10px] text-[#6b6b6b] mt-4">
+                  Research deepens and refines these over time.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="font-mono text-xs text-[#6b6b6b] mb-3">
+                  Complete at least one knowledge file to activate the Opportunity Scout.
+                </p>
                 <Link
-                  key={i}
-                  href={item.href}
-                  className="flex items-center gap-3 px-4 py-3 hover:bg-[#1a1a1a] transition-colors"
+                  href="/interview/soul"
+                  className="font-mono text-[10px] text-[#f59e0b] hover:text-white transition-colors"
                 >
-                  <span
-                    className="w-5 h-5 flex items-center justify-center font-mono text-[10px] border shrink-0"
-                    style={{
-                      borderColor: item.type === "output" ? "#22c55e" : "#4a9eff",
-                      color: item.type === "output" ? "#22c55e" : "#4a9eff",
-                    }}
+                  Start with Soul &rarr;
+                </Link>
+              </>
+            )}
+          </div>
+        ) : (
+          <>
+            <div className="space-y-3">
+              {opportunities.map((opp) => {
+                const isExpanded = expandedOpp === opp.id;
+                return (
+                  <div
+                    key={opp.id}
+                    className="bg-[#111111] border border-[#1a1a1a] transition-colors"
                   >
-                    {item.type === "output" ? "\u2713" : "R"}
-                  </span>
-                  <div className="flex-1 min-w-0">
-                    <span className="font-mono text-xs text-white block truncate">{item.title}</span>
-                    {item.status && (
-                      <span className="font-mono text-[10px] text-[#6b6b6b]">{item.status}</span>
+                    {/* Summary row — always visible */}
+                    <button
+                      onClick={() => setExpandedOpp(isExpanded ? null : opp.id)}
+                      className="w-full text-left px-5 py-4 flex items-start gap-4 hover:bg-[#1a1a1a]/50 transition-colors"
+                    >
+                      <span className="w-2 h-2 rounded-full bg-[#f59e0b] mt-1.5 shrink-0" />
+                      <div className="flex-1 min-w-0">
+                        <p className="font-mono text-sm text-white font-bold mb-1">{opp.title}</p>
+                        <p className="font-mono text-xs text-[#6b6b6b] leading-relaxed">
+                          {isExpanded
+                            ? opp.summary
+                            : opp.summary
+                            ? opp.summary.substring(0, 150) + (opp.summary.length > 150 ? "..." : "")
+                            : ""}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0 mt-0.5">
+                        {opp.relevance_score && opp.relevance_score > 0 && (
+                          <span
+                            className="font-mono text-xs font-bold"
+                            style={{ color: opp.relevance_score > 70 ? "#22c55e" : "#f59e0b" }}
+                          >
+                            {opp.relevance_score}%
+                          </span>
+                        )}
+                        <span className="font-mono text-[10px] text-[#6b6b6b]">
+                          {isExpanded ? "\u25B2" : "\u25BC"}
+                        </span>
+                      </div>
+                    </button>
+
+                    {/* Expanded detail */}
+                    {isExpanded && (
+                      <div className="px-5 pb-4 border-t border-[#1a1a1a]">
+                        <div className="pt-4">
+                          {/* Suggested formats */}
+                          {opp.suggested_formats && opp.suggested_formats.length > 0 && (
+                            <div className="mb-4">
+                              <span className="font-mono text-[9px] uppercase tracking-wider text-[#6b6b6b] block mb-2">
+                                Suggested formats
+                              </span>
+                              <div className="flex flex-wrap gap-2">
+                                {opp.suggested_formats.map((fmt, i) => (
+                                  <span
+                                    key={i}
+                                    className="font-mono text-[10px] px-2.5 py-1 border border-[#1a1a1a] text-[#a0a0a0]"
+                                  >
+                                    {FORMAT_LABELS[fmt] || fmt}
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Source + date */}
+                          <div className="flex items-center gap-4 mb-4">
+                            {opp.source && (
+                              <span className="font-mono text-[9px] uppercase tracking-wider text-[#4a9eff]">
+                                {opp.source === "opportunity_scout" ? "Opportunity Scout" :
+                                 opp.source === "research_scout" ? "Research Scout" :
+                                 opp.source === "trend_monitor" ? "Trend Monitor" :
+                                 opp.source}
+                              </span>
+                            )}
+                            <span className="font-mono text-[9px] text-[#6b6b6b]">
+                              {new Date(opp.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                            </span>
+                          </div>
+
+                          {/* Actions */}
+                          <div className="flex gap-2">
+                            <Link
+                              href="/dashboard/queue"
+                              className="font-mono text-[10px] font-bold px-4 py-2 hover:brightness-110 transition-all"
+                              style={{ backgroundColor: "#22c55e", color: "#000", borderRadius: 0 }}
+                            >
+                              Approve &amp; Create &rarr;
+                            </Link>
+                            <Link
+                              href={"/dashboard/research?topic=" + encodeURIComponent(opp.title)}
+                              className="font-mono text-[10px] px-4 py-2 border border-[#4a9eff] text-[#4a9eff] hover:bg-[#4a9eff] hover:text-black transition-colors"
+                            >
+                              Research First &rarr;
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
                     )}
                   </div>
-                  <span className="font-mono text-[10px] text-[#6b6b6b] shrink-0">
-                    {new Date(item.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-                  </span>
-                </Link>
-              ))}
+                );
+              })}
             </div>
-          )}
-        </div>
+
+            {/* Scout for more */}
+            <div className="mt-3 flex items-center justify-between">
+              <button
+                onClick={runScout}
+                disabled={scouting}
+                className="font-mono text-[10px] text-[#6b6b6b] hover:text-[#f59e0b] transition-colors disabled:opacity-50"
+              >
+                {scouting ? "Scanning..." : "Scout for more opportunities \u2192"}
+              </button>
+              <span className="font-mono text-[10px] text-[#6b6b6b]">
+                Research deepens these over time
+              </span>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Recent Activity */}
+      <div className="mb-8">
+        <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6b6b6b] block mb-3">
+          Recent Activity
+        </span>
+
+        {recentActivity.length === 0 ? (
+          <div className="bg-[#111111] border border-[#1a1a1a] p-6 text-center">
+            <p className="font-mono text-xs text-[#6b6b6b]">
+              Activity appears here as you build, research, and generate outputs.
+            </p>
+          </div>
+        ) : (
+          <div className="bg-[#111111] border border-[#1a1a1a] divide-y divide-[#0a0a0a]">
+            {recentActivity.slice(0, 6).map((item, i) => (
+              <Link
+                key={i}
+                href={item.href}
+                className="flex items-center gap-3 px-4 py-3 hover:bg-[#1a1a1a] transition-colors"
+              >
+                <span
+                  className="w-5 h-5 flex items-center justify-center font-mono text-[10px] border shrink-0"
+                  style={{
+                    borderColor: item.type === "output" ? "#22c55e" : "#4a9eff",
+                    color: item.type === "output" ? "#22c55e" : "#4a9eff",
+                  }}
+                >
+                  {item.type === "output" ? "\u2713" : "R"}
+                </span>
+                <div className="flex-1 min-w-0">
+                  <span className="font-mono text-xs text-white block truncate">{item.title}</span>
+                  {item.status && (
+                    <span className="font-mono text-[10px] text-[#6b6b6b]">{item.status}</span>
+                  )}
+                </div>
+                <span className="font-mono text-[10px] text-[#6b6b6b] shrink-0">
+                  {new Date(item.date).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                </span>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Knowledge file detail — below the fold */}
-      <div className="mt-8">
+      <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
           <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#6b6b6b]">
             Knowledge Files
@@ -461,7 +554,7 @@ export default function DashboardPage() {
 
       {/* Upgrade CTA for free users */}
       {tier === "free" && allStrong && (
-        <div className="mt-8 bg-white/[0.03] border border-[#8b5cf6] p-6">
+        <div className="bg-white/[0.03] border border-[#8b5cf6] p-6">
           <div className="flex items-center justify-between">
             <div>
               <p className="font-mono text-sm text-white font-bold mb-1">
