@@ -17,20 +17,20 @@ type FileType = (typeof FILE_TYPES)[number];
 
 const FILE_INTROS: Record<FileType, { title: string; subtitle: string }> = {
   soul: {
-    title: "Let's start with why your business exists",
-    subtitle: "This helps AI understand your mission and values.",
+    title: "Let's capture what makes you different",
+    subtitle: "Your experience, your frameworks, your principles — the knowledge that took decades to build.",
   },
   offer: {
-    title: "What do you offer?",
-    subtitle: "This helps AI describe your products and services accurately.",
+    title: "What do you do for your clients?",
+    subtitle: "How you help, who you help, and the results you deliver.",
   },
   audience: {
-    title: "Who do you help?",
-    subtitle: "This helps AI speak directly to the people you serve.",
+    title: "Who do you do your best work for?",
+    subtitle: "The real people you serve — their problems, their language, their stakes.",
   },
   voice: {
-    title: "What's your style?",
-    subtitle: "This helps AI write in your voice, not a generic one.",
+    title: "How do you show up?",
+    subtitle: "Your tone, your phrases, your personality — so AI sounds like you, not like everyone else.",
   },
 };
 
