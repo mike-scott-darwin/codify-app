@@ -33,6 +33,136 @@ function formatDate(iso: string) {
     " at " + d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
 }
 
+function parseDecision(raw: string): { summary: string; options: string; rationale: string; impact: string } {
+  const sections: Record<string, string> = { summary: "", options: "", rationale: "", impact: "" };
+  if (!raw) return sections;
+
+  // Try to parse structured format
+  const summaryMatch = raw.match(/## Decision\n\n([\s\S]*?)(?=\n## |$)/);
+  const optionsMatch = raw.match(/## Options Considered\n\n([\s\S]*?)(?=\n## |$)/);
+  const rationaleMatch = raw.match(/## Rationale\n\n([\s\S]*?)(?=\n## |$)/);
+  const impactMatch = raw.match(/## Impact\n\n([\s\S]*?)(?=\n## |$)/);
+
+  if (summaryMatch) {
+    sections.summary = summaryMatch[1].trim();
+    sections.options = optionsMatch ? optionsMatch[1].trim() : "";
+    sections.rationale = rationaleMatch ? rationaleMatch[1].trim() : "";
+    sections.impact = impactMatch ? impactMatch[1].trim() : "";
+  } else {
+    // Legacy: entire text is the summary
+    sections.summary = raw.trim();
+  }
+  return sections;
+}
+
+function buildDecision(fields: { summary: string; options: string; rationale: string; impact: string }): string {
+  const parts: string[] = [];
+  if (fields.summary.trim()) parts.push("## Decision\n\n" + fields.summary.trim());
+  if (fields.options.trim()) parts.push("## Options Considered\n\n" + fields.options.trim());
+  if (fields.rationale.trim()) parts.push("## Rationale\n\n" + fields.rationale.trim());
+  if (fields.impact.trim()) parts.push("## Impact\n\n" + fields.impact.trim());
+  return parts.join("\n\n");
+}
+
+function DecisionForm({ decision, onSave, saving }: { decision: string; onSave: (text: string) => void; saving: boolean }) {
+  const parsed = parseDecision(decision);
+  const [summary, setSummary] = useState(parsed.summary);
+  const [options, setOptions] = useState(parsed.options);
+  const [rationale, setRationale] = useState(parsed.rationale);
+  const [impact, setImpact] = useState(parsed.impact);
+  const [dirty, setDirty] = useState(false);
+
+  const handleSave = () => {
+    const text = buildDecision({ summary, options, rationale, impact });
+    onSave(text);
+    setDirty(false);
+  };
+
+  const mark = (setter: (v: string) => void) => (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setter(e.target.value);
+    setDirty(true);
+  };
+
+  const hasContent = summary.trim().length > 0;
+
+  return (
+    <div className="bg-[#111111] border border-[#1a1a1a]">
+      {/* Decision header — like a commit title */}
+      <div className="px-4 py-3 border-b border-[#1a1a1a]">
+        <div className="flex items-center gap-2 mb-2">
+          <span className="w-2 h-2 rounded-full" style={{ backgroundColor: hasContent ? "#22c55e" : "#333" }} />
+          <span className="font-mono text-[10px] uppercase tracking-wider text-[#22c55e]">
+            {hasContent ? "Decision Recorded" : "Pending Decision"}
+          </span>
+        </div>
+      </div>
+
+      {/* Decision summary — the one-liner */}
+      <div className="px-4 py-3 border-b border-[#1a1a1a]">
+        <label className="font-mono text-[10px] text-[#6b6b6b] block mb-1.5">What did you decide?</label>
+        <textarea
+          value={summary}
+          onChange={mark(setSummary)}
+          placeholder="One clear statement. e.g. \"We will position the offer as a business brain, not a knowledge tool.\""
+          className="w-full bg-[#0a0a0a] border border-[#1a1a1a] px-3 py-2.5 font-mono text-sm text-white focus:outline-none focus:border-[#22c55e] resize-none"
+          rows={2}
+        />
+      </div>
+
+      {/* Options considered */}
+      <div className="px-4 py-3 border-b border-[#1a1a1a]">
+        <label className="font-mono text-[10px] text-[#6b6b6b] block mb-1.5">Options considered</label>
+        <textarea
+          value={options}
+          onChange={mark(setOptions)}
+          placeholder={"Option A: ...\nOption B: ...\nOption C: ..."}
+          className="w-full bg-[#0a0a0a] border border-[#1a1a1a] px-3 py-2 font-mono text-xs text-[#a0a0a0] focus:outline-none focus:border-[#22c55e] resize-y"
+          rows={3}
+        />
+      </div>
+
+      {/* Rationale */}
+      <div className="px-4 py-3 border-b border-[#1a1a1a]">
+        <label className="font-mono text-[10px] text-[#6b6b6b] block mb-1.5">Why this option?</label>
+        <textarea
+          value={rationale}
+          onChange={mark(setRationale)}
+          placeholder="The reasoning behind this decision..."
+          className="w-full bg-[#0a0a0a] border border-[#1a1a1a] px-3 py-2 font-mono text-xs text-[#a0a0a0] focus:outline-none focus:border-[#22c55e] resize-y"
+          rows={2}
+        />
+      </div>
+
+      {/* Impact on brain files */}
+      <div className="px-4 py-3 border-b border-[#1a1a1a]">
+        <label className="font-mono text-[10px] text-[#6b6b6b] block mb-1.5">Impact on your brain files</label>
+        <textarea
+          value={impact}
+          onChange={mark(setImpact)}
+          placeholder="e.g. Updates offer.md positioning, changes voice.md tone guidelines..."
+          className="w-full bg-[#0a0a0a] border border-[#1a1a1a] px-3 py-2 font-mono text-xs text-[#a0a0a0] focus:outline-none focus:border-[#22c55e] resize-y"
+          rows={2}
+        />
+      </div>
+
+      {/* Save */}
+      <div className="px-4 py-3 flex items-center justify-between">
+        <span className="font-mono text-[10px] text-[#6b6b6b]">
+          {saving ? "Saving..." : dirty ? "Unsaved changes" : hasContent ? "Saved" : ""}
+        </span>
+        <button
+          onClick={handleSave}
+          disabled={!dirty || !summary.trim()}
+          className="font-mono text-xs font-bold px-5 py-2 hover:brightness-110 transition-all disabled:opacity-30"
+          style={{ backgroundColor: "#22c55e", color: "#000", borderRadius: 0 }}
+        >
+          Save Decision
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function ResearchDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -331,27 +461,20 @@ export default function ResearchDetailPage() {
         </div>
       )}
 
-      {/* Step 2: Decision — what did you decide? */}
+      {/* Step 2: Decision — structured like a git commit */}
       <div className="mb-8">
         <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-[#22c55e] mb-3">
           Decision
         </p>
-        <div className="bg-[#111111] border border-[#1a1a1a] p-4">
-          <textarea
-            value={topic.decision || ""}
-            onChange={(e) => setTopic((prev) => prev ? { ...prev, decision: e.target.value } : prev)}
-            onBlur={() => {
-              if (topic.decision !== null) {
-                const newStatus = topic.decision.trim() ? "decision" : "research";
-                save({ decision: topic.decision, status: newStatus });
-              }
-            }}
-            placeholder="What did you decide based on your research? This drives how your brain files get updated."
-            className="w-full bg-[#0a0a0a] border border-[#1a1a1a] px-3 py-2.5 font-mono text-sm text-white focus:outline-none focus:border-[#22c55e] resize-y"
-            style={{ minHeight: "100px" }}
-          />
-          {saving && <span className="font-mono text-[10px] text-[#6b6b6b] mt-2 block">Saving...</span>}
-        </div>
+        <DecisionForm
+          decision={topic.decision || ""}
+          onSave={(text) => {
+            setTopic((prev) => prev ? { ...prev, decision: text } : prev);
+            const newStatus = text.trim() ? "decision" : "research";
+            save({ decision: text, status: newStatus });
+          }}
+          saving={saving}
+        />
       </div>
 
       {/* Step 3: Codify — update your brain */}
