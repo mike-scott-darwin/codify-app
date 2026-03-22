@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 
-const VALID_FILE_TYPES = ["soul", "offer", "audience", "voice"] as const;
-
 export async function POST(request: NextRequest) {
   const supabase = await createServerSupabaseClient();
   const {
@@ -14,59 +12,75 @@ export async function POST(request: NextRequest) {
   const body = await request.json();
   const { fileType, content } = body;
 
-  if (
-    !fileType ||
-    !VALID_FILE_TYPES.includes(fileType as (typeof VALID_FILE_TYPES)[number])
-  ) {
-    return NextResponse.json(
-      { error: "Invalid fileType. Must be: " + VALID_FILE_TYPES.join(", ") },
-      { status: 400 }
-    );
+  const validTypes = ["soul", "offer", "audience", "voice"];
+  if (!validTypes.includes(fileType)) {
+    return NextResponse.json({ error: "Invalid file type." }, { status: 400 });
+  }
+  if (!content || typeof content !== "string") {
+    return NextResponse.json({ error: "Content required." }, { status: 400 });
   }
 
-  if (typeof content !== "string") {
-    return NextResponse.json(
-      { error: "Content must be a string." },
-      { status: 400 }
+  // Upsert the enriched content into interview_answers
+  const { error } = await supabase
+    .from("interview_answers")
+    .upsert(
+      {
+        user_id: user.id,
+        file_type: fileType,
+        enriched_content: content,
+        updated_at: new Date().toISOString(),
+      },
+      { onConflict: "user_id,file_type" }
     );
-  }
-
-  const { error } = await supabase.from("interview_answers").upsert(
-    {
-      user_id: user.id,
-      file_type: fileType,
-      enriched_content: content,
-      updated_at: new Date().toISOString(),
-    },
-    { onConflict: "user_id,file_type" }
-  );
 
   if (error) {
+    console.error("Reference save error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-
-  // Non-blocking: commit to GitHub if connected
+  // Also push to GitHub if user has a connected repo
   try {
     const { data: profile } = await supabase
       .from("user_profiles")
       .select("github_config")
       .eq("user_id", user.id)
       .single();
-    if (profile?.github_config) {
-      const { writeFileToRepo } = await import("@/lib/github");
-      const ghConfig = profile.github_config as { token: string; owner: string; repo: string; branch?: string };
-      writeFileToRepo(
-        ghConfig,
-        `reference/core/${fileType}.md`,
-        content,
-        `[codify] Apply codified content to ${fileType}.md`
-      ).catch((err: unknown) => {
-        console.error("GitHub commit failed (non-blocking):", err instanceof Error ? err.message : err);
+
+    if (profile?.github_config?.token && profile.github_config.repo) {
+      const { token, username, repo } = profile.github_config;
+      const path = `reference/core/${fileType}.md`;
+      const apiUrl = `https://api.github.com/repos/${username}/${repo}/contents/${path}`;
+
+      // Get current file SHA if it exists
+      let sha: string | undefined;
+      try {
+        const getRes = await fetch(apiUrl, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (getRes.ok) {
+          const existing = await getRes.json();
+          sha = existing.sha;
+        }
+      } catch {
+        // File doesn't exist yet, that's fine
+      }
+
+      await fetch(apiUrl, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: `[codify] Update ${fileType}.md via research codification`,
+          content: Buffer.from(content).toString("base64"),
+          ...(sha ? { sha } : {}),
+        }),
       });
     }
-  } catch {
-    // GitHub commit is non-blocking
+  } catch (err) {
+    // GitHub push is best-effort, don't fail the save
+    console.error("GitHub push error:", err);
   }
 
   return NextResponse.json({ success: true });

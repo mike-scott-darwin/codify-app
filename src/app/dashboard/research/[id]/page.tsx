@@ -382,6 +382,60 @@ export default function ResearchDetailPage() {
         </div>
       </div>
 
+      {/* Process guide */}
+      <div className="mb-6">
+        <p className="font-mono text-xs text-[#a0a0a0] mb-4">
+          Research makes your reference files smarter. Ask questions, make a decision, then codify it into your files.
+        </p>
+        <div className="flex items-center gap-0">
+          {[
+            { step: 1, label: "Research", desc: "Ask AI questions", status: "research", color: "#4a9eff" },
+            { step: 2, label: "Decide", desc: "Write what you decided", status: "decision", color: "#22c55e" },
+            { step: 3, label: "Codify", desc: "Update your reference files", status: "codified", color: "#8b5cf6" },
+          ].map((s, i) => {
+            const isActive =
+              (s.status === "research" && topic.status === "research") ||
+              (s.status === "decision" && topic.status === "decision") ||
+              (s.status === "codified" && topic.status === "codified");
+            const isPast =
+              (s.status === "research" && (topic.status === "decision" || topic.status === "codified")) ||
+              (s.status === "decision" && topic.status === "codified");
+            const opacity = isActive ? "1" : isPast ? "0.5" : "0.25";
+
+            return (
+              <div key={s.step} className="flex items-center flex-1">
+                <div
+                  className="flex items-center gap-2 flex-1 px-3 py-2 border transition-colors"
+                  style={{
+                    borderColor: isActive ? s.color : "#1a1a1a",
+                    backgroundColor: isActive ? s.color + "10" : "#111111",
+                    opacity,
+                  }}
+                >
+                  <span
+                    className="w-5 h-5 flex items-center justify-center font-mono text-[10px] font-bold border rounded-full shrink-0"
+                    style={{
+                      borderColor: isPast ? "#22c55e" : s.color,
+                      color: isPast ? "#22c55e" : s.color,
+                      backgroundColor: isPast ? "#22c55e20" : "transparent",
+                    }}
+                  >
+                    {isPast ? "\u2713" : s.step}
+                  </span>
+                  <div>
+                    <span className="font-mono text-xs text-white font-bold block">{s.label}</span>
+                    <span className="font-mono text-[10px] text-[#6b6b6b]">{s.desc}</span>
+                  </div>
+                </div>
+                {i < 2 && (
+                  <span className="font-mono text-[#333] text-xs px-1">&rarr;</span>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left column: Notes + Decision */}
         <div>
