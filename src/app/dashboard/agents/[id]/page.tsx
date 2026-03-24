@@ -146,7 +146,7 @@ export default function AgentJobPage() {
   return (
     <>
       <div className="flex items-center gap-3 mb-6">
-        <Link href="/dashboard/agents" className="font-mono text-xs text-[#6b6b6b] hover:text-white transition-colors">
+        <Link href="/dashboard" className="font-mono text-xs text-[#6b6b6b] hover:text-white transition-colors">
           {String.fromCharCode(8592)} Agents
         </Link>
         <span className="text-[#1a1a1a]">/</span>

@@ -7,13 +7,13 @@ export async function GET() {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ tier: "brain_sync", enrichmentCount: 0, generationCount: 0 });
+      return NextResponse.json({ tier: "free", mode: "diy", enrichmentCount: 0, generationCount: 0 });
     }
 
-    // Get user profile (tier)
+    // Get user profile (tier + mode)
     const { data: profile } = await supabase
       .from("user_profiles")
-      .select("tier")
+      .select("tier, mode")
       .eq("user_id", user.id)
       .single();
 
@@ -35,11 +35,12 @@ export async function GET() {
       .gte("created_at", startOfMonth.toISOString());
 
     return NextResponse.json({
-      tier: profile?.tier || "brain_sync",
+      tier: profile?.tier || "free",
+      mode: profile?.mode || "diy",
       enrichmentCount: enrichmentCount || 0,
       generationCount: generationCount || 0,
     });
   } catch {
-    return NextResponse.json({ tier: "brain_sync", enrichmentCount: 0, generationCount: 0 });
+    return NextResponse.json({ tier: "free", mode: "diy", enrichmentCount: 0, generationCount: 0 });
   }
 }

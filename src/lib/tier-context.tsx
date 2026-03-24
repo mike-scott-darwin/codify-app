@@ -6,6 +6,7 @@ import type { Tier } from "@/lib/tier";
 
 interface TierContextType {
   tier: Tier;
+  mode: "diy" | "dfy";
   loading: boolean;
   enrichmentCount: number;
   generationCount: number;
@@ -13,7 +14,8 @@ interface TierContextType {
 }
 
 const TierContext = createContext<TierContextType>({
-  tier: "brain_sync",
+  tier: "free",
+  mode: "diy",
   loading: true,
   enrichmentCount: 0,
   generationCount: 0,
@@ -22,14 +24,16 @@ const TierContext = createContext<TierContextType>({
 
 export function TierProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
-  const [tier, setTier] = useState<Tier>("brain_sync");
+  const [tier, setTier] = useState<Tier>("free");
+  const [mode, setMode] = useState<"diy" | "dfy">("diy");
   const [loading, setLoading] = useState(true);
   const [enrichmentCount, setEnrichmentCount] = useState(0);
   const [generationCount, setGenerationCount] = useState(0);
 
   const refresh = useCallback(async () => {
     if (!user) {
-      setTier("brain_sync");
+      setTier("free");
+      setMode("diy");
       setLoading(false);
       return;
     }
@@ -38,7 +42,8 @@ export function TierProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch("/api/user/tier");
       if (res.ok) {
         const data = await res.json();
-        setTier(data.tier || "brain_sync");
+        setTier(data.tier || "free");
+        setMode(data.mode || "diy");
         setEnrichmentCount(data.enrichmentCount || 0);
         setGenerationCount(data.generationCount || 0);
       }
@@ -54,7 +59,7 @@ export function TierProvider({ children }: { children: React.ReactNode }) {
   }, [refresh]);
 
   return (
-    <TierContext.Provider value={{ tier, loading, enrichmentCount, generationCount, refresh }}>
+    <TierContext.Provider value={{ tier, mode, loading, enrichmentCount, generationCount, refresh }}>
       {children}
     </TierContext.Provider>
   );

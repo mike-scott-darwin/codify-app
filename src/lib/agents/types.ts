@@ -36,76 +36,76 @@ export const AGENT_CONFIGS: Record<AgentType, {
   description: string;
   icon: string;
   steps: number;
-  requiredTier: "focus" | "brain_sync";
+  requiredTier: "pro" | "vip";
 }> = {
   congruence_audit: {
     label: "Congruence Audit",
     description: "Check alignment across all 4 reference files. Flag contradictions and gaps.",
     icon: "✓",
     steps: 4,
-    requiredTier: "focus",
+    requiredTier: "pro",
   },
   deep_research: {
     label: "Deep Research",
     description: "Multi-angle research on any topic, tailored to your business context.",
     icon: "◆",
     steps: 5,
-    requiredTier: "focus",
+    requiredTier: "pro",
   },
   ad_campaign: {
     label: "Ad Campaign",
     description: "Generate a full campaign: angles, hooks, body copy, compliance check, ranking.",
     icon: "⚡",
     steps: 5,
-    requiredTier: "focus",
+    requiredTier: "pro",
   },
   content_calendar: {
     label: "Content Calendar",
     description: "Plan a week of content: pillars, posts, platform assignments.",
     icon: "☰",
     steps: 5,
-    requiredTier: "focus",
+    requiredTier: "pro",
   },
   email_campaign: {
     label: "Email Campaign",
     description: "Full email sequence with arc planning, subject lines, and timing.",
     icon: "✉",
     steps: 5,
-    requiredTier: "focus",
+    requiredTier: "pro",
   },
   research_scout: {
     label: "Research Scout",
     description: "Scout trending topics in your niche and generate a research brief with relevance scores.",
     icon: "◈",
     steps: 3,
-    requiredTier: "focus",
+    requiredTier: "pro",
   },
   trend_monitor: {
     label: "Trend Monitor",
     description: "Scan for 5 trending topics relevant to your audience with content angles.",
     icon: "◉",
     steps: 2,
-    requiredTier: "focus",
+    requiredTier: "pro",
   },
   social_post_generator: {
     label: "Social Post Generator",
     description: "Generate 5 platform-ready social posts using your brand voice.",
     icon: "◫",
     steps: 3,
-    requiredTier: "focus",
+    requiredTier: "pro",
   },
   publisher: {
     label: "Publisher",
     description: "Format generated content for platform-specific publishing.",
     icon: "▸",
     steps: 2,
-    requiredTier: "focus",
+    requiredTier: "pro",
   },
   audit_agent: {
     label: "Audit Agent",
     description: "Deep reference file audit — completeness, staleness, consistency scores and recommendations.",
     icon: "⊘",
     steps: 4,
-    requiredTier: "focus",
+    requiredTier: "pro",
   },
 };

@@ -1,13 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase-server";
 import { getGenerationPrompt } from "@/lib/generation-prompts";
-import { FEATURE_REQUIRED_TIER, TIER_HIERARCHY, getGenerationLimit } from "@/lib/tier";
+import { hasAccess } from "@/lib/tier";
 import { callLLM } from "@/lib/llm/provider";
 import { getUserLLMConfig } from "@/lib/llm/user-config";
 import type { OutputType } from "@/lib/generation-types";
 import type { Tier, Feature } from "@/lib/tier";
 
 const VALID_TYPES: OutputType[] = ["ad_copy", "social_post", "email_sequence", "vsl_script", "landing_page"];
+
+// Map legacy output types to new feature names
+const OUTPUT_TO_FEATURE: Record<string, Feature> = {
+  ad_copy: "ads",
+  social_post: "organic",
+  email_sequence: "email",
+  vsl_script: "vsl",
+  landing_page: "ads",
+};
 
 export async function POST(request: NextRequest) {
   const supabase = await createServerSupabaseClient();
@@ -35,36 +44,15 @@ export async function POST(request: NextRequest) {
     .eq("user_id", user.id)
     .single();
 
-  const tier = (profile?.tier || "brain_sync") as Tier;
+  const tier = (profile?.tier || "free") as Tier;
 
-  // Check feature access (each output type has its own required tier)
-  const feature = ("generate:" + outputType) as Feature;
-  const requiredTier = FEATURE_REQUIRED_TIER[feature];
-  if (TIER_HIERARCHY[tier] < TIER_HIERARCHY[requiredTier]) {
+  // Check feature access
+  const feature = OUTPUT_TO_FEATURE[outputType];
+  if (feature && !hasAccess(tier, feature)) {
     return NextResponse.json({
-      error: "Upgrade to " + requiredTier.toUpperCase() + " to generate " + outputType.replace("_", " ") + ".",
-      requiredTier,
+      error: "Upgrade to use " + outputType.replace("_", " ") + ".",
+      requiredTier: feature,
     }, { status: 403 });
-  }
-
-  // Per-type generation limit check
-  const limit = getGenerationLimit(tier, outputType);
-  if (limit !== Infinity) {
-    const startOfMonth = new Date();
-    startOfMonth.setDate(1);
-    startOfMonth.setHours(0, 0, 0, 0);
-    const { count } = await supabase
-      .from("generation_log")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", user.id)
-      .eq("output_type", outputType)
-      .gte("created_at", startOfMonth.toISOString());
-
-    if ((count || 0) >= limit) {
-      return NextResponse.json({
-        error: "Monthly limit reached for " + outputType.replace("_", " ") + " (" + limit + "/mo). Upgrade for more.",
-      }, { status: 429 });
-    }
   }
 
   // Load reference files

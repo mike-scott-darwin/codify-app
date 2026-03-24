@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     .eq("user_id", user.id)
     .single();
 
-  const tier = (profile?.tier || "brain_sync") as Tier;
+  const tier = (profile?.tier || "free") as Tier;
   const agentConfig = AGENT_CONFIGS[agentType as AgentType];
   if (TIER_HIERARCHY[tier] < TIER_HIERARCHY[agentConfig.requiredTier]) {
     return NextResponse.json({

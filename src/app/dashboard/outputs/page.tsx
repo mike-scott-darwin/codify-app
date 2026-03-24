@@ -91,7 +91,7 @@ export default function OutputsPage() {
         <div className="bg-[#111111] border border-[#1a1a1a] p-8 text-center">
           <p className="font-mono text-sm text-[#6b6b6b] mb-4">No outputs yet</p>
           <Link
-            href="/dashboard/generate"
+            href="/dashboard"
             className="font-mono text-xs text-[#4a9eff] hover:text-white transition-colors"
           >
             Generate your first output →

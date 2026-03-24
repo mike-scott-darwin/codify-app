@@ -46,7 +46,7 @@ export default function ResearchPage() {
       <>
         <h1 className="font-mono text-xl font-bold mb-8">Research</h1>
         <UpgradePrompt
-          requiredTier="focus"
+          requiredTier="pro"
           feature="Research Workspace"
           description="Explore topics, make decisions, and codify insights into your reference files."
         />
@@ -159,7 +159,7 @@ export default function ResearchPage() {
               </p>
             </div>
             <Link
-              href="/dashboard/generate"
+              href="/dashboard"
               className="font-mono text-xs px-4 py-2 border border-[#22c55e] text-[#22c55e] hover:bg-[#22c55e] hover:text-black transition-colors"
             >
               Generate →

@@ -201,7 +201,7 @@ export default function HelpPage() {
           <Link href="/dashboard/research" className="font-mono text-sm text-[#a0a0a0] hover:text-white transition-colors">
             2. Start a research topic &rarr;
           </Link>
-          <Link href="/dashboard/generate" className="font-mono text-sm text-[#a0a0a0] hover:text-white transition-colors">
+          <Link href="/dashboard" className="font-mono text-sm text-[#a0a0a0] hover:text-white transition-colors">
             3. Generate your first output &rarr;
           </Link>
           <Link href="/dashboard/upgrade" className="font-mono text-sm text-[#a0a0a0] hover:text-white transition-colors">

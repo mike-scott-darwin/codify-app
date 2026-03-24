@@ -70,16 +70,30 @@ export default function DashboardPage() {
 
     if (cmd === "/help") {
       add("assistant",
-        "/extract     Build your reference files (soul, offer, audience, voice)\n" +
-        "/think       Research, decide, codify\n" +
-        "/ads         Ad copy and hooks\n" +
-        "/organic     Social content\n" +
-        "/email       Email sequences\n" +
-        "/audit       Congruence check across files\n" +
-        "/brainstorm  Angles and ideas\n" +
-        "/scout       Find opportunities from your brain\n" +
-        "/files       View your reference files\n" +
-        "/score       Business brain score\n\n" +
+        "FREE\n" +
+        "  /extract     Build your reference files\n" +
+        "  /files       View your reference files\n" +
+        "  /score       Business brain score\n" +
+        "  /help        Show this menu\n\n" +
+        "BUILD — $99/mo\n" +
+        "  /think       Research, decide, codify\n" +
+        "  /audit       Congruence check across files\n" +
+        "  /refine      Improve and tighten content\n" +
+        "  /voice       Transcript → reference extraction\n\n" +
+        "PRO — $199/mo\n" +
+        "  /ads         Ad copy and hooks\n" +
+        "  /organic     Social content\n" +
+        "  /email       Email sequences\n" +
+        "  /newsletter  Newsletter writing\n" +
+        "  /brainstorm  Angles and ideas\n" +
+        "  /seo         Score content for search\n" +
+        "  /blog        End-to-end blog post\n" +
+        "  /repurpose   One content → 5 formats\n\n" +
+        "VIP — $497/mo\n" +
+        "  /scout       Opportunities from your brain\n" +
+        "  /vsl         Camera-ready VSL scripts\n" +
+        "  /proposal    Client proposal generation\n" +
+        "  /report      Monthly context health report\n\n" +
         "Or just ask a question. Drop files to enrich."
       );
       return;

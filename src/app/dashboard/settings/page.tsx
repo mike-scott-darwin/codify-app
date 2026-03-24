@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/lib/auth-context";
 import { useTier } from "@/lib/tier-context";
 import { TierBadge } from "@/components/dashboard/tier-badge";
-import { ENRICHMENT_LIMITS } from "@/lib/tier";
+
 import {
   PLATFORM_CONFIGS,
   ALL_PLATFORMS,
@@ -356,8 +356,8 @@ export default function DashboardSettingsPage() {
             <span className="font-mono text-sm text-[#6b6b6b]">Enrichments</span>
             <span className="font-mono text-sm text-white">
               {enrichmentCount}
-              {ENRICHMENT_LIMITS[tier] !== Infinity && (
-                <span className="text-[#6b6b6b]"> / {ENRICHMENT_LIMITS[tier]}</span>
+              { false && (
+                <span className="text-[#6b6b6b]"></span>
               )}
             </span>
           </div>

@@ -303,7 +303,7 @@ export default function VoicePreviewPage() {
         )}
         {/* Go to assessment */}
         <div className="mt-8 text-center">
-          <Link href="/assessment">
+          <Link href="/dashboard">
             <button
               className="font-mono text-sm font-bold px-8 py-3 hover:brightness-110 transition-all"
               style={{ backgroundColor: "#22c55e", color: "#000000", borderRadius: 0 }}
