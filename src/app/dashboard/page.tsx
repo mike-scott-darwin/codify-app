@@ -79,7 +79,8 @@ export default function DashboardPage() {
         "  /think       Research, decide, codify\n" +
         "  /audit       Congruence check across files\n" +
         "  /refine      Improve and tighten content\n" +
-        "  /voice       Transcript → reference extraction\n\n" +
+        "  /voice       Transcript → reference extraction\n" +
+        "  /end         Session crystallize — capture what compounded\n\n" +
         "PRO — $199/mo\n" +
         "  /ads         Ad copy and hooks\n" +
         "  /organic     Social content\n" +
@@ -88,7 +89,8 @@ export default function DashboardPage() {
         "  /brainstorm  Angles and ideas\n" +
         "  /seo         Score content for search\n" +
         "  /blog        End-to-end blog post\n" +
-        "  /repurpose   One content → 5 formats\n\n" +
+        "  /repurpose   One content → 5 formats\n" +
+        "  /site        Generate a landing page from your brain\n\n" +
         "VIP — $497/mo\n" +
         "  /scout       Opportunities from your brain\n" +
         "  /vsl         Camera-ready VSL scripts\n" +

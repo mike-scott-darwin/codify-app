@@ -57,7 +57,9 @@ export type Feature =
   | "proposal"
   | "report"
   | "scheduled_automation"
-  | "output_history";
+  | "output_history"
+  | "end"
+  | "site";
 
 export const FEATURE_REQUIRED_TIER: Record<Feature, Tier> = {
   // Free tier skills
@@ -68,12 +70,14 @@ export const FEATURE_REQUIRED_TIER: Record<Feature, Tier> = {
 
   // Build tier skills
   think: "build",
+  end: "build",
   audit: "build",
   refine: "build",
   voice: "build",
 
   // Pro tier skills
   ads: "pro",
+  site: "pro",
   organic: "pro",
   email: "pro",
   newsletter: "pro",
