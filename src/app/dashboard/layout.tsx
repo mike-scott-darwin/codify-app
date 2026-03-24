@@ -6,14 +6,17 @@ import { useAuth } from "@/lib/auth-context";
 import { RepoProvider } from "@/lib/repo-context";
 import { Sidebar } from "@/components/dashboard/sidebar";
 
+const isDevBypass = process.env.NEXT_PUBLIC_DEV_BYPASS_AUTH === "true";
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
-  const [hasConfig, setHasConfig] = useState<boolean | null>(null);
+  const [hasConfig, setHasConfig] = useState<boolean | null>(isDevBypass ? true : null);
 
   useEffect(() => {
+    if (isDevBypass) return;
     if (!loading && !user) {
       router.push("/login");
       return;

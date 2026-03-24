@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/lib/auth-context";
 
+const isDevBypass = process.env.NEXT_PUBLIC_DEV_BYPASS_AUTH === "true";
+
 function GithubIcon() {
   return (
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="inline-block">
@@ -36,6 +38,10 @@ export default function HomePage() {
   const [connecting, setConnecting] = useState(false);
 
   useEffect(() => {
+    if (isDevBypass) {
+      router.push("/dashboard");
+      return;
+    }
     if (loading) return;
     if (!user) return;
 

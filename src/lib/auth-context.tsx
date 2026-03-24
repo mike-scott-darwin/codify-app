@@ -20,16 +20,27 @@ const AuthContext = createContext<AuthContextType>({
   signOut: async () => {},
 });
 
+const DEV_USER: User = {
+  id: "dev-local-user",
+  email: "dev@localhost",
+  app_metadata: {},
+  user_metadata: { user_name: "dev" },
+  aud: "authenticated",
+  created_at: new Date().toISOString(),
+} as User;
+
+const isDevBypass = process.env.NEXT_PUBLIC_DEV_BYPASS_AUTH === "true";
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User | null>(isDevBypass ? DEV_USER : null);
+  const [loading, setLoading] = useState(!isDevBypass);
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const hasSupabase = !!(supabaseUrl && supabaseKey);
 
   useEffect(() => {
-    if (!hasSupabase) {
+    if (isDevBypass || !hasSupabase) {
       setLoading(false);
       return;
     }
@@ -44,6 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [hasSupabase]);
 
   const signInWithEmail = useCallback(async (email: string) => {
+    if (isDevBypass) return { error: null };
     if (!hasSupabase) return { error: "Auth not configured" };
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
@@ -56,6 +68,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [hasSupabase]);
 
   const signInWithGitHub = useCallback(async () => {
+    if (isDevBypass) return { error: null };
     if (!hasSupabase) return { error: "Auth not configured" };
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
@@ -69,6 +82,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [hasSupabase]);
 
   const signOut = useCallback(async () => {
+    if (isDevBypass) return;
     if (!hasSupabase) return;
     const supabase = createClient();
     await supabase.auth.signOut();
