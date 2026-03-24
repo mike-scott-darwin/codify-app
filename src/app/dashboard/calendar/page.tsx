@@ -61,7 +61,6 @@ export default function CalendarPage() {
   const todayStr = toDateStr(new Date());
 
   const fetchOutputs = useCallback(async () => {
-    setLoading(true);
     const year = currentMonth.getFullYear();
     const month = currentMonth.getMonth();
     // Fetch a wider range to cover the visible grid
@@ -81,6 +80,7 @@ export default function CalendarPage() {
   }, [currentMonth]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchOutputs();
   }, [fetchOutputs]);
 

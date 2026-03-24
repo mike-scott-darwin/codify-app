@@ -69,7 +69,6 @@ export default function QueuePage() {
   const [genProgress, setGenProgress] = useState<string>("");
 
   const loadItems = async (status?: string) => {
-    setLoading(true);
     const params = new URLSearchParams();
     if (status) params.set("status", status);
     const res = await fetch("/api/content-queue?" + params.toString());
@@ -82,6 +81,7 @@ export default function QueuePage() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadItems(activeTab);
   }, [activeTab]);
 

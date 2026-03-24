@@ -214,7 +214,7 @@ export default function ResearchDetailPage() {
     const anySelected = Object.values(targetFiles).some(Boolean);
     if (!anySelected) {
       const hasSuggestion = Object.values(suggestions).some(Boolean);
-      setTargetFiles(hasSuggestion ? suggestions : { soul: false, offer: true, audience: false, voice: false });
+      queueMicrotask(() => setTargetFiles(hasSuggestion ? suggestions : { soul: false, offer: true, audience: false, voice: false }));
     }
   }, [topic?.decision]); // eslint-disable-line react-hooks/exhaustive-deps
 

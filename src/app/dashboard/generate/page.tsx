@@ -18,9 +18,10 @@ export default function GenerateHubPage() {
 
       <div className="space-y-4">
         {GENERATION_CONFIGS.map((config) => {
-          const feature = ("generate:" + config.type) as Feature;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const feature = ("generate:" + config.type) as any;
           const locked = !hasAccess(tier, feature);
-          const requiredTier = FEATURE_REQUIRED_TIER[feature];
+          const requiredTier = (FEATURE_REQUIRED_TIER as Record<string, string>)[feature] ?? "focus";
           const limit = getGenerationLimit(tier, config.type);
           const limitLabel = limit === Infinity ? "Unlimited" : limit + "/mo";
 
@@ -48,7 +49,7 @@ export default function GenerateHubPage() {
                   )}
                   {locked ? (
                     <span className="font-mono text-[10px] uppercase tracking-wider text-[#8b5cf6] border border-[#8b5cf6] px-2 py-1">
-                      {TIER_LABELS[requiredTier]}
+                      {(TIER_LABELS as Record<string, string>)[requiredTier] ?? "Focus"}
                     </span>
                   ) : (
                     <span className="font-mono text-xs text-[#6b6b6b]">→</span>
@@ -66,9 +67,9 @@ export default function GenerateHubPage() {
       </h2>
       <div className="space-y-4">
         {[
-          { type: "ad_campaign", label: "Ad Campaign", icon: "🎯", description: "9 hooks, 5 full ads, compliance-checked and ranked", feature: "agent:ad_campaign" as Feature, tier: "focus" as const },
-          { type: "email_campaign", label: "Email Campaign", icon: "📧", description: "Full sequence with arc progression, subject lines, and timing", feature: "agent:email_campaign" as Feature, tier: "focus" as const },
-          { type: "content_calendar", label: "Content Calendar", icon: "📅", description: "5 days of platform-aware posts from your content pillars", feature: "agent:content_calendar" as Feature, tier: "focus" as const },
+          { type: "ad_campaign", label: "Ad Campaign", icon: "🎯", description: "9 hooks, 5 full ads, compliance-checked and ranked", feature: "ads" as Feature, tier: "focus" as const },
+          { type: "email_campaign", label: "Email Campaign", icon: "📧", description: "Full sequence with arc progression, subject lines, and timing", feature: "email" as Feature, tier: "focus" as const },
+          { type: "content_calendar", label: "Content Calendar", icon: "📅", description: "5 days of platform-aware posts from your content pillars", feature: "organic" as Feature, tier: "focus" as const },
         ].map((agent) => {
           const locked = !hasAccess(tier, agent.feature);
           const limit = getGenerationLimit(tier, agent.type);

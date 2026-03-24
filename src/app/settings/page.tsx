@@ -59,17 +59,7 @@ export default function SettingsPage() {
   const [removing, setRemoving] = useState<Provider | null>(null);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-  useEffect(() => {
-    if (!loading && !user) {
-      router.push("/login");
-      return;
-    }
-    if (user) {
-      loadSavedKeys();
-    }
-  }, [user, loading, router]);
-
-  const loadSavedKeys = async () => {
+  async function loadSavedKeys() {
     try {
       const supabase = createClient();
       const { data } = await supabase
@@ -84,6 +74,17 @@ export default function SettingsPage() {
       // Table might not exist yet
     }
   };
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+      return;
+    }
+    if (user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      loadSavedKeys();
+    }
+  }, [user, loading, router]);
 
   const saveKey = async (provider: Provider) => {
     const key = keys[provider].trim();

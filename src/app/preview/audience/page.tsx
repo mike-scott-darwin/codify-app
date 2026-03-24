@@ -83,7 +83,7 @@ export default function AudiencePreviewPage() {
   useEffect(() => {
     const stored = sessionStorage.getItem("codify-interview-audience");
     if (stored) {
-      setAnswers(JSON.parse(stored));
+      queueMicrotask(() => setAnswers(JSON.parse(stored)));
     }
   }, []);
 

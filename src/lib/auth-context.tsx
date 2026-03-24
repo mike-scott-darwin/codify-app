@@ -32,18 +32,17 @@ const DEV_USER: User = {
 const isDevBypass = process.env.NEXT_PUBLIC_DEV_BYPASS_AUTH === "true";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(isDevBypass ? DEV_USER : null);
-  const [loading, setLoading] = useState(!isDevBypass);
-
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   const hasSupabase = !!(supabaseUrl && supabaseKey);
 
+  const shouldSkipAuth = isDevBypass || !hasSupabase;
+
+  const [user, setUser] = useState<User | null>(isDevBypass ? DEV_USER : null);
+  const [loading, setLoading] = useState(!shouldSkipAuth);
+
   useEffect(() => {
-    if (isDevBypass || !hasSupabase) {
-      setLoading(false);
-      return;
-    }
+    if (shouldSkipAuth) return;
 
     const supabase = createClient();
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -52,11 +51,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return () => subscription.unsubscribe();
-  }, [hasSupabase]);
+  }, [shouldSkipAuth]);
 
   const signInWithEmail = useCallback(async (email: string) => {
-    if (isDevBypass) return { error: null };
-    if (!hasSupabase) return { error: "Auth not configured" };
+    if (shouldSkipAuth) return { error: isDevBypass ? null : "Auth not configured" };
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOtp({
       email,
@@ -65,11 +63,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
     });
     return { error: error?.message ?? null };
-  }, [hasSupabase]);
+  }, [shouldSkipAuth]);
 
   const signInWithGitHub = useCallback(async () => {
-    if (isDevBypass) return { error: null };
-    if (!hasSupabase) return { error: "Auth not configured" };
+    if (shouldSkipAuth) return { error: isDevBypass ? null : "Auth not configured" };
     const supabase = createClient();
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "github",
@@ -79,15 +76,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
     });
     return { error: error?.message ?? null };
-  }, [hasSupabase]);
+  }, [shouldSkipAuth]);
 
   const signOut = useCallback(async () => {
-    if (isDevBypass) return;
-    if (!hasSupabase) return;
+    if (shouldSkipAuth) return;
     const supabase = createClient();
     await supabase.auth.signOut();
     setUser(null);
-  }, [hasSupabase]);
+  }, [shouldSkipAuth]);
 
   return (
     <AuthContext.Provider value={{ user, loading, signInWithEmail, signInWithGitHub, signOut }}>

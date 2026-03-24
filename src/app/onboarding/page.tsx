@@ -127,7 +127,7 @@ function OnboardingContent() {
         user_fetch_failed: "Could not verify your GitHub account. Please try again.",
         save_failed: "Could not save your connection. Please try again.",
       };
-      setError(messages[oauthError] || "Something went wrong. Please try again.");
+      queueMicrotask(() => setError(messages[oauthError] || "Something went wrong. Please try again."));
     }
   }, [searchParams]);
 
@@ -609,7 +609,7 @@ function OnboardingContent() {
         {step === 4 && (
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-3">
-              You're all set
+              You&apos;re all set
             </h1>
             <p className="text-sm text-[#a0a0a0] mb-8">
               Your business files are saved. The more you use Codify, the better AI understands your business.

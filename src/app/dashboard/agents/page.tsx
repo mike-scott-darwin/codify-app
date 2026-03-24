@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTier } from "@/lib/tier-context";
@@ -18,16 +18,16 @@ interface RecentJob {
 }
 
 const AGENT_FEATURE_MAP: Record<AgentType, Feature> = {
-  congruence_audit: "research",
-  deep_research: "research",
-  ad_campaign: "generate:ad_copy",
-  content_calendar: "generate:social_post",
-  email_campaign: "generate:email_sequence",
-  research_scout: "agent:research_scout",
-  trend_monitor: "agent:trend_monitor",
-  social_post_generator: "agent:social_post_generator",
-  publisher: "agent:publisher",
-  audit_agent: "agent:audit_agent",
+  congruence_audit: "audit",
+  deep_research: "think",
+  ad_campaign: "ads",
+  content_calendar: "organic",
+  email_campaign: "email",
+  research_scout: "scout",
+  trend_monitor: "scout",
+  social_post_generator: "organic",
+  publisher: "organic",
+  audit_agent: "audit",
 };
 
 const STATUS_COLORS: Record<string, string> = {
@@ -44,25 +44,13 @@ const TABS = [
   { key: "usage", label: "Usage", href: "/dashboard/agents/usage" },
 ];
 
-export default function AgentsPage() {
+function AgentsPageContent() {
   const { tier } = useTier();
   const searchParams = useSearchParams();
   const [recentJobs, setRecentJobs] = useState<RecentJob[]>([]);
   const [launching, setLaunching] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const autoLaunched = useRef(false);
-
-  useEffect(() => {
-    if (autoLaunched.current) return;
-    const launchType = searchParams.get("launch") as AgentType | null;
-    if (launchType && AGENT_CONFIGS[launchType]) {
-      autoLaunched.current = true;
-      const topic = searchParams.get("topic");
-      const config: Record<string, unknown> = {};
-      if (topic) config.topic = topic;
-      launchAgent(launchType, config);
-    }
-  }, [searchParams]);
 
   const launchAgent = async (agentType: AgentType, config: Record<string, unknown> = {}) => {
     setLaunching(agentType);
@@ -85,6 +73,19 @@ export default function AgentsPage() {
       setLaunching(null);
     }
   };
+  useEffect(() => {
+    if (autoLaunched.current) return;
+    const launchType = searchParams.get("launch") as AgentType | null;
+    if (launchType && AGENT_CONFIGS[launchType]) {
+      autoLaunched.current = true;
+      const topic = searchParams.get("topic");
+      const config: Record<string, unknown> = {};
+      if (topic) config.topic = topic;
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      launchAgent(launchType, config);
+    }
+  }, [searchParams]);
+
 
   // Separate chain-only agents from direct-launch agents
   const chainOnlyAgents: AgentType[] = ["research_scout", "trend_monitor", "social_post_generator", "publisher", "audit_agent"];
@@ -199,5 +200,13 @@ export default function AgentsPage() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function AgentsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center"><span className="font-mono text-sm text-[#6b6b6b] animate-pulse">Loading...</span></div>}>
+      <AgentsPageContent />
+    </Suspense>
   );
 }

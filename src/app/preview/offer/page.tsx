@@ -83,7 +83,7 @@ export default function OfferPreviewPage() {
   useEffect(() => {
     const stored = sessionStorage.getItem("codify-interview-offer");
     if (stored) {
-      setAnswers(JSON.parse(stored));
+      queueMicrotask(() => setAnswers(JSON.parse(stored)));
     }
   }, []);
 

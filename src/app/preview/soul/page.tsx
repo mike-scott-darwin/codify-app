@@ -97,7 +97,7 @@ export default function SoulPreviewPage() {
   useEffect(() => {
     const stored = sessionStorage.getItem("codify-interview-soul");
     if (stored) {
-      setAnswers(JSON.parse(stored));
+      queueMicrotask(() => setAnswers(JSON.parse(stored)));
     }
   }, []);
 

@@ -11,7 +11,9 @@ interface Message {
 export default function DashboardPage() {
   const { contextScore, totalFiles } = useRepo();
 
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+    return [];
+  });
   const [input, setInput] = useState("");
   const [processing, setProcessing] = useState(false);
   const [dragOver, setDragOver] = useState(false);
@@ -20,6 +22,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     const score = totalFiles > 0 ? contextScore + "/100 · " + totalFiles + " files" : "no files yet";
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMessages([{
       role: "system",
       content: "codify — " + score + "\nType /help or ask anything.",

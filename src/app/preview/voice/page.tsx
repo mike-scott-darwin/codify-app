@@ -83,7 +83,7 @@ export default function VoicePreviewPage() {
   useEffect(() => {
     const stored = sessionStorage.getItem("codify-interview-voice");
     if (stored) {
-      setAnswers(JSON.parse(stored));
+      queueMicrotask(() => setAnswers(JSON.parse(stored)));
     }
   }, []);
 

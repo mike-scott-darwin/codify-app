@@ -133,7 +133,7 @@ export default function DashboardSettingsPage() {
 
   useEffect(() => {
     if (loaded) {
-      setModel(selected.models[0]);
+      queueMicrotask(() => setModel(selected.models[0]));
     }
   }, [provider]);
 

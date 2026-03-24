@@ -27,7 +27,7 @@ export default function ResearchPage() {
   const [newTitle, setNewTitle] = useState("");
   const [creating, setCreating] = useState(false);
 
-  const canAccess = hasAccess(tier, "research");
+  const canAccess = hasAccess(tier, "think");
 
   useEffect(() => {
     if (!canAccess) return;
