@@ -7,7 +7,7 @@ export async function GET() {
     const { data: { user } } = await supabase.auth.getUser();
 
     if (!user) {
-      return NextResponse.json({ tier: "free", mode: "diy", enrichmentCount: 0, generationCount: 0 });
+      return NextResponse.json({ tier: "explore", mode: "diy", enrichmentCount: 0, generationCount: 0 });
     }
 
     // Get user profile (tier + mode)
@@ -35,12 +35,12 @@ export async function GET() {
       .gte("created_at", startOfMonth.toISOString());
 
     return NextResponse.json({
-      tier: profile?.tier || "free",
+      tier: profile?.tier || "explore",
       mode: profile?.mode || "diy",
       enrichmentCount: enrichmentCount || 0,
       generationCount: generationCount || 0,
     });
   } catch {
-    return NextResponse.json({ tier: "free", mode: "diy", enrichmentCount: 0, generationCount: 0 });
+    return NextResponse.json({ tier: "explore", mode: "diy", enrichmentCount: 0, generationCount: 0 });
   }
 }

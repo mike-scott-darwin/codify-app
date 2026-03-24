@@ -70,18 +70,17 @@ export default function DashboardPage() {
 
     if (cmd === "/help") {
       add("assistant",
-        "FREE\n" +
-        "  /extract     Build your reference files\n" +
+        "EXPLORE (Free)\n" +
+        "  /extract     Build your reference files (3x)\n" +
         "  /files       View your reference files\n" +
         "  /score       Business brain score\n" +
         "  /help        Show this menu\n\n" +
-        "BUILD — $99/mo\n" +
+        "ARCHITECT ($497/mo) — All skills unlocked\n" +
         "  /think       Research, decide, codify\n" +
         "  /audit       Congruence check across files\n" +
         "  /refine      Improve and tighten content\n" +
         "  /voice       Transcript → reference extraction\n" +
-        "  /end         Session crystallize — capture what compounded\n\n" +
-        "PRO — $199/mo\n" +
+        "  /end         Session crystallize\n" +
         "  /ads         Ad copy and hooks\n" +
         "  /organic     Social content\n" +
         "  /email       Email sequences\n" +
@@ -90,13 +89,12 @@ export default function DashboardPage() {
         "  /seo         Score content for search\n" +
         "  /blog        End-to-end blog post\n" +
         "  /repurpose   One content → 5 formats\n" +
-        "  /site        Generate a landing page from your brain\n\n" +
-        "VIP — $497/mo\n" +
+        "  /site        Generate a landing page\n" +
         "  /scout       Opportunities from your brain\n" +
         "  /vsl         Camera-ready VSL scripts\n" +
         "  /proposal    Client proposal generation\n" +
         "  /report      Monthly context health report\n\n" +
-        "Or just ask a question. Drop files to enrich."
+        "Type /upgrade to see plans"
       );
       return;
     }

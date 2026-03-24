@@ -27,9 +27,9 @@ export async function POST(request: NextRequest) {
     .eq("user_id", user.id)
     .single();
 
-  const tierLevel: Record<string, number> = { free: 0, build: 1, pro: 2, vip: 3 };
-  if (tierLevel[profile?.tier || "free"] < tierLevel["build"]) {
-    return NextResponse.json({ error: "Upgrade to BUILD to use research." }, { status: 403 });
+  const tierLevel: Record<string, number> = { explore: 0, architect: 1, focus: 2 };
+  if (tierLevel[profile?.tier || "explore"] < tierLevel["architect"]) {
+    return NextResponse.json({ error: "Upgrade to ARCHITECT to use research." }, { status: 403 });
   }
 
   const body = await request.json();

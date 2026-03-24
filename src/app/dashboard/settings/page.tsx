@@ -365,7 +365,7 @@ export default function DashboardSettingsPage() {
             <span className="font-mono text-sm text-[#6b6b6b]">Generations (this month)</span>
             <span className="font-mono text-sm text-white">
               {generationCount}
-              {tier === "free" && (
+              {tier === "explore" && (
                 <span className="text-[#6b6b6b]"> (upgrade to unlock)</span>
               )}
             </span>

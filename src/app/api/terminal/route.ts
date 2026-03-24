@@ -202,17 +202,14 @@ const COMMAND_TO_FEATURE: Record<string, Feature> = {
 
 const UPGRADE_RESPONSE = `## Plans
 
-**Free** — $0
-  /extract, /files, /score, /help
+**Explore** — Free
+  /extract (3x), /files, /score, /help
 
-**Build** — $99/mo
-  + /think, /audit, /refine, /voice
+**Architect** — $497/mo — The Brain Sync
+  All 19 skills unlocked. Full DIY access.
 
-**Pro** — $199/mo
-  + /ads, /organic, /email, /newsletter, /brainstorm, /seo, /blog, /repurpose
-
-**VIP** — $497/mo
-  + /scout, /vsl, /proposal, /report, scheduled automation
+**Focus** — $1,497 + $497/mo — The Focus Engagement
+  Done-for-you delivery + all skills.
 
 Visit codify.build/settings to upgrade your plan.`;
 
@@ -241,19 +238,14 @@ export async function POST(request: NextRequest) {
     .eq("user_id", user.id)
     .single();
 
-  const userTier: Tier = (profile?.tier as Tier) || "free";
+  const userTier: Tier = (profile?.tier as Tier) || "explore";
   const userMode: "diy" | "dfy" = (profile?.mode as "diy" | "dfy") || "diy";
 
   // Tier gating — check access before executing any skill
   const feature = COMMAND_TO_FEATURE[cmd];
   if (feature && !hasAccessWithMode(userTier, feature, userMode)) {
-    const requiredTier = cmd === "/scout" || cmd === "/vsl" || cmd === "/proposal" || cmd === "/report"
-      ? "VIP"
-      : cmd === "/ads" || cmd === "/organic" || cmd === "/email" || cmd === "/newsletter" || cmd === "/brainstorm" || cmd === "/seo" || cmd === "/blog" || cmd === "/repurpose"
-        ? "PRO"
-        : "BUILD";
     return NextResponse.json({
-      response: `This skill requires the ${requiredTier} tier. Type /upgrade to see plans.`,
+      response: `This skill requires the ARCHITECT tier. Type /upgrade to see plans.`,
     });
   }
 

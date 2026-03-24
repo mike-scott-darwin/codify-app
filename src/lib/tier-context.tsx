@@ -14,7 +14,7 @@ interface TierContextType {
 }
 
 const TierContext = createContext<TierContextType>({
-  tier: "free",
+  tier: "explore",
   mode: "diy",
   loading: true,
   enrichmentCount: 0,
@@ -24,7 +24,7 @@ const TierContext = createContext<TierContextType>({
 
 export function TierProvider({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
-  const [tier, setTier] = useState<Tier>("free");
+  const [tier, setTier] = useState<Tier>("explore");
   const [mode, setMode] = useState<"diy" | "dfy">("diy");
   const [loading, setLoading] = useState(true);
   const [enrichmentCount, setEnrichmentCount] = useState(0);
@@ -32,7 +32,7 @@ export function TierProvider({ children }: { children: React.ReactNode }) {
 
   const refresh = useCallback(async () => {
     if (!user) {
-      setTier("free");
+      setTier("explore");
       setMode("diy");
       setLoading(false);
       return;
@@ -42,7 +42,7 @@ export function TierProvider({ children }: { children: React.ReactNode }) {
       const res = await fetch("/api/user/tier");
       if (res.ok) {
         const data = await res.json();
-        setTier(data.tier || "free");
+        setTier(data.tier || "explore");
         setMode(data.mode || "diy");
         setEnrichmentCount(data.enrichmentCount || 0);
         setGenerationCount(data.generationCount || 0);

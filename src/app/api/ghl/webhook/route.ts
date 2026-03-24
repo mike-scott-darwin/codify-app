@@ -3,10 +3,9 @@ import { createClient } from "@supabase/supabase-js";
 
 // Map GHL product IDs to app tiers
 const PRODUCT_TIER_MAP: Record<string, string> = {
-  "placeholder_build_product_id": "build",     // Build
-  "69bce9658eef3089bc4dc95c": "pro",           // Pro (Focus Engagement)
-  "69bce96c806bfe4141eae56d": "pro",           // Pro (Focus Engagement)
-  "69bce96dadd325142185b3a7": "vip",           // VIP (Brain Sync)
+  "69bce9658eef3089bc4dc95c": "architect",   // Architect (Brain Sync)
+  "69bce96c806bfe4141eae56d": "architect",   // Architect (Brain Sync)
+  "69bce96dadd325142185b3a7": "focus",       // Focus (Focus Engagement)
 };
 
 function getServiceClient() {
@@ -80,9 +79,9 @@ export async function POST(request: NextRequest) {
       if (user) {
         await supabase
           .from("user_profiles")
-          .update({ tier: "free" })
+          .update({ tier: "explore" })
           .eq("user_id", user.id);
-        console.log(`GHL webhook: ${contactEmail} downgraded to free`);
+        console.log(`GHL webhook: ${contactEmail} downgraded to explore`);
       }
 
       return NextResponse.json({ status: "ok", action: "downgraded" });

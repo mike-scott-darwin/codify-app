@@ -1,38 +1,33 @@
-export type Tier = "free" | "build" | "pro" | "vip";
+export type Tier = "explore" | "architect" | "focus";
 
 export const TIER_HIERARCHY: Record<Tier, number> = {
-  free: 0,
-  build: 1,
-  pro: 2,
-  vip: 3,
+  explore: 0,
+  architect: 1,
+  focus: 2,
 };
 
 export const TIER_LABELS: Record<Tier, string> = {
-  free: "FREE",
-  build: "BUILD",
-  pro: "PRO",
-  vip: "VIP",
+  explore: "EXPLORE",
+  architect: "ARCHITECT",
+  focus: "FOCUS",
 };
 
 export const TIER_COLORS: Record<Tier, string> = {
-  free: "#6b6b6b",
-  build: "#a78bfa",
-  pro: "#22c55e",
-  vip: "#4a9eff",
+  explore: "#6b6b6b",
+  architect: "#4a9eff",
+  focus: "#22c55e",
 };
 
 export const TIER_PRICES: Record<Tier, string> = {
-  free: "Free",
-  build: "$99/mo",
-  pro: "$199/mo",
-  vip: "$497/mo",
+  explore: "Free",
+  architect: "$497/mo",
+  focus: "$1,497 + $497/mo",
 };
 
 export const TIER_DESCRIPTIONS: Record<Tier, string> = {
-  free: "Start building your business brain",
-  build: "Research, decide, improve",
-  pro: "Full content engine",
-  vip: "Your compounding machine",
+  explore: "Demo the system. See what codification feels like.",
+  architect: "The Brain Sync. Full access to every skill. Your context compounds monthly.",
+  focus: "The Focus Engagement. Done-for-you extraction + architecture + ongoing Brain Sync.",
 };
 
 export type Feature =
@@ -62,37 +57,33 @@ export type Feature =
   | "site";
 
 export const FEATURE_REQUIRED_TIER: Record<Feature, Tier> = {
-  // Free tier skills
-  extract: "free",
-  files: "free",
-  score: "free",
-  help: "free",
+  // Explore tier skills
+  extract: "explore",
+  files: "explore",
+  score: "explore",
+  help: "explore",
 
-  // Build tier skills
-  think: "build",
-  end: "build",
-  audit: "build",
-  refine: "build",
-  voice: "build",
-
-  // Pro tier skills
-  ads: "pro",
-  site: "pro",
-  organic: "pro",
-  email: "pro",
-  newsletter: "pro",
-  brainstorm: "pro",
-  output_history: "pro",
-  seo: "pro",
-  blog: "pro",
-  repurpose: "pro",
-
-  // VIP tier skills
-  scout: "vip",
-  vsl: "vip",
-  scheduled_automation: "vip",
-  proposal: "vip",
-  report: "vip",
+  // Architect tier skills (all paid skills)
+  think: "architect",
+  end: "architect",
+  audit: "architect",
+  refine: "architect",
+  voice: "architect",
+  ads: "architect",
+  site: "architect",
+  organic: "architect",
+  email: "architect",
+  newsletter: "architect",
+  brainstorm: "architect",
+  output_history: "architect",
+  seo: "architect",
+  blog: "architect",
+  repurpose: "architect",
+  scout: "architect",
+  vsl: "architect",
+  scheduled_automation: "architect",
+  proposal: "architect",
+  report: "architect",
 };
 
 export function hasAccess(userTier: Tier, feature: Feature): boolean {

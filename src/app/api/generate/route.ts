@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
     .eq("user_id", user.id)
     .single();
 
-  const tier = (profile?.tier || "free") as Tier;
+  const tier = (profile?.tier || "explore") as Tier;
 
   // Check feature access
   const feature = OUTPUT_TO_FEATURE[outputType];
