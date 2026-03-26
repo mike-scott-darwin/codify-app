@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { siteConfig } from "../site-config";
 import { useInView } from "./use-in-view";
 
 function AnimatedNumber({
@@ -33,115 +34,83 @@ function AnimatedNumber({
 
 export function Proof() {
   const { ref, inView } = useInView(0.1);
+  const { proof } = siteConfig;
 
   return (
     <section id="proof" ref={ref} className="py-16 md:py-20 border-t border-border">
-      <div className="max-w-[1000px] mx-auto px-6 md:px-12">
+      <div className="max-w-[1100px] mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
-          <p className="font-mono text-xs tracking-[0.2em] uppercase text-blue mb-4">
-            THE PROOF
+          <p className="text-xs tracking-[0.2em] uppercase text-blue mb-4">
+            {proof.eyebrow}
           </p>
           <h2
-            className="font-mono font-bold text-white mb-6"
+            className="font-bold text-white mb-4"
             style={{ fontSize: "var(--text-3xl)" }}
           >
-            Same prompt. Different context.
-            <br />
-            <span className="text-green">Different business.</span>
+            {proof.headline}
           </h2>
           <p className="text-muted text-lg max-w-[640px] mx-auto leading-relaxed">
-            One business. Seven months. Every metric below is real. Every piece of
-            content on this page was generated from the same system we sell.
+            {proof.description}
           </p>
         </div>
 
-        {/* Case study terminal */}
+        {/* Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+          {proof.stats.map((stat, i) => (
+            <div
+              key={stat.label}
+              className={`text-center transition-all duration-600 ${
+                inView
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-6"
+              }`}
+              style={{ transitionDelay: `${i * 100}ms` }}
+            >
+              <div className="text-4xl md:text-5xl font-bold text-white mb-2">
+                <AnimatedNumber
+                  value={parseInt(stat.value)}
+                  active={inView}
+                />
+                <span className="text-blue">{stat.suffix}</span>
+              </div>
+              <div className="text-sm text-muted">{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Before / After */}
         <div
-          className={`bg-surface border border-border overflow-hidden mb-12 transition-all duration-600 ${
+          className={`grid md:grid-cols-2 gap-6 transition-all duration-600 ${
             inView ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
           }`}
+          style={{ transitionDelay: "400ms" }}
         >
-          <div className="flex items-center gap-2 px-4 py-3 bg-[#1a1a1a] border-b border-border">
-            <span className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-            <span className="w-3 h-3 rounded-full bg-[#febc2e]" />
-            <span className="w-3 h-3 rounded-full bg-[#28c840]" />
-            <span className="font-mono text-xs text-dim ml-2">
-              codify status --live
-            </span>
+          <div className="bg-surface border border-border rounded-xl p-8">
+            <h3 className="text-sm font-semibold text-red uppercase tracking-wider mb-6">
+              Before Codify
+            </h3>
+            <ul className="space-y-4">
+              {proof.before.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-sm">
+                  <span className="text-red shrink-0 mt-0.5">&#x2717;</span>
+                  <span className="text-muted">{item}</span>
+                </li>
+              ))}
+            </ul>
           </div>
 
-          <div className="p-8">
-            <div className="font-mono text-sm text-green mb-8 text-center">
-              ✓ System active — 7 months daily use, compounding
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8 pb-8 border-b border-border text-center">
-              {[
-                { value: 48, label: "reference files" },
-                { value: 322, label: "git commits", plus: true },
-                { value: 73, label: "research docs" },
-                { value: 43, label: "decisions logged" },
-              ].map((stat, i) => (
-                <div
-                  key={stat.label}
-                  className={`transition-all duration-600 ${
-                    inView
-                      ? "opacity-100 translate-y-0"
-                      : "opacity-0 translate-y-6"
-                  }`}
-                  style={{ transitionDelay: `${200 + i * 100}ms` }}
-                >
-                  <div className="font-mono text-5xl font-bold text-white mb-1">
-                    <AnimatedNumber value={stat.value} active={inView} />
-                    {stat.plus && (
-                      <span className="text-blue text-3xl">+</span>
-                    )}
-                  </div>
-                  <div className="font-mono text-[11px] text-dim uppercase tracking-wider">
-                    {stat.label}
-                  </div>
-                </div>
+          <div className="bg-surface border border-green/20 rounded-xl p-8">
+            <h3 className="text-sm font-semibold text-green uppercase tracking-wider mb-6">
+              After Codify
+            </h3>
+            <ul className="space-y-4">
+              {proof.after.map((item) => (
+                <li key={item} className="flex items-start gap-3 text-sm">
+                  <span className="text-green shrink-0 mt-0.5">&#x2713;</span>
+                  <span className="text-foreground">{item}</span>
+                </li>
               ))}
-            </div>
-
-            <div className="font-mono text-sm space-y-3 max-w-[600px] mx-auto">
-              <div className="flex items-start gap-3">
-                <span className="text-green shrink-0">→</span>
-                <div>
-                  <span className="text-white font-bold">9 hours/week</span>
-                  <span className="text-dim">
-                    {" "}to run the entire business — ads, content, email, landing pages
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="text-green shrink-0">→</span>
-                <div>
-                  <span className="text-white font-bold">Minutes per ad batch</span>
-                  <span className="text-dim">
-                    {" "}— not hours. Context does the heavy lifting.
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="text-green shrink-0">→</span>
-                <div>
-                  <span className="text-white font-bold">Zero platform lock</span>
-                  <span className="text-dim">
-                    {" "}— markdown files work with Claude, GPT, Gemini, whatever comes next
-                  </span>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <span className="text-green shrink-0">→</span>
-                <div>
-                  <span className="text-white font-bold">Every output improves the next</span>
-                  <span className="text-dim">
-                    {" "}— research feeds reference, reference feeds outputs, outputs feed decisions
-                  </span>
-                </div>
-              </div>
-            </div>
+            </ul>
           </div>
         </div>
       </div>

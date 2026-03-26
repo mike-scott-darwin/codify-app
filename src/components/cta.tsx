@@ -16,37 +16,36 @@ export function CTA() {
           }`}
         >
           <h2
-            className="font-mono font-bold text-white mb-6 whitespace-pre-line"
+            className="font-bold text-white mb-6 whitespace-pre-line"
             style={{ fontSize: "var(--text-4xl)" }}
           >
             {cta.headline}
           </h2>
-          <p className="text-muted text-lg max-w-[540px] mx-auto mb-8 leading-relaxed">
+          <p className="text-muted text-lg max-w-[540px] mx-auto mb-10 leading-relaxed whitespace-pre-line">
             {cta.subhead}
           </p>
 
-          {/* Starter kit file preview */}
-          {"files" in cta && (
-            <div className="flex flex-wrap items-center justify-center gap-3 mb-8">
-              {(cta as { files: string[] }).files.map((file) => (
-                <span
-                  key={file}
-                  className="font-mono text-xs bg-surface border border-border px-3 py-1.5 text-green"
-                >
-                  {file}
-                </span>
-              ))}
-            </div>
-          )}
-
           <a
             href={cta.ctaUrl}
-            className="inline-flex items-center gap-2 bg-green text-black font-mono font-bold text-sm px-10 py-4 hover:brightness-110 transition-all"
+            className="inline-flex items-center gap-2 bg-blue text-black font-semibold text-base px-10 py-4 rounded-lg hover:brightness-110 transition-all"
           >
-            <span>❯</span>
             {cta.ctaText}
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              className="ml-1"
+            >
+              <path
+                d="M3 8h10M9 4l4 4-4 4"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </a>
-          <p className="font-mono text-xs text-dim mt-4">{cta.microcopy}</p>
         </div>
       </div>
     </section>

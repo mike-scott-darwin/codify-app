@@ -14,83 +14,64 @@ export function Hero() {
   const { hero } = siteConfig;
 
   return (
-    <section className="pt-24 md:pt-32 pb-12 relative overflow-hidden">
-      {/* Scanline overlay */}
-      <div
-        className="absolute inset-0 pointer-events-none opacity-[0.03]"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.05) 2px, rgba(255,255,255,0.05) 4px)",
-        }}
-      />
-
+    <section className="pt-28 pb-16 md:pt-40 md:pb-28 relative overflow-hidden">
       <div className="max-w-[900px] mx-auto px-6 md:px-12 text-center relative z-10">
+        <p
+          className={`text-xs tracking-[0.2em] uppercase text-blue mb-6 transition-all duration-700 ${
+            revealed ? "opacity-100" : "opacity-0 translate-y-4"
+          }`}
+        >
+          {hero.eyebrow}
+        </p>
+
+        <h1
+          className={`font-bold text-white leading-[1.08] tracking-tight mb-6 whitespace-pre-line transition-all duration-700 ${
+            revealed ? "opacity-100" : "opacity-0 translate-y-6"
+          }`}
+          style={{
+            fontSize: "var(--text-hero)",
+            transitionDelay: "150ms",
+          }}
+        >
+          {hero.headline}
+        </h1>
+
+        <p
+          className={`text-lg md:text-xl text-muted max-w-[640px] mx-auto mb-10 leading-relaxed whitespace-pre-line transition-all duration-700 ${
+            revealed ? "opacity-100" : "opacity-0 translate-y-6"
+          }`}
+          style={{ transitionDelay: "300ms" }}
+        >
+          {hero.subhead}
+        </p>
+
         <div
           className={`transition-all duration-700 ${
             revealed ? "opacity-100" : "opacity-0 translate-y-6"
           }`}
+          style={{ transitionDelay: "450ms" }}
         >
-          {/* Brand mark */}
-          <div className="flex items-center justify-center gap-2 mb-10">
-            <span className="text-green font-mono text-lg">❯</span>
-            <span className="font-mono text-lg font-bold text-white">
-              codify
-            </span>
-            <span className="w-[14px] h-[22px] bg-blue animate-blink" />
-          </div>
-        </div>
-
-        <div
-          className={`transition-all duration-700 delay-300 ${
-            revealed ? "opacity-100" : "opacity-0 translate-y-6"
-          }`}
-        >
-          <h1
-            className="font-mono font-bold text-white leading-[1.05] tracking-tight mb-6 whitespace-pre-line"
-            style={{ fontSize: "var(--text-hero)" }}
+          <a
+            href={hero.ctaUrl}
+            className="inline-flex items-center gap-2 bg-blue text-black font-semibold text-base px-8 py-4 rounded-lg hover:brightness-110 transition-all"
           >
-            {hero.headline}
-          </h1>
-        </div>
-
-        <div
-          className={`transition-all duration-700 delay-500 ${
-            revealed ? "opacity-100" : "opacity-0 translate-y-6"
-          }`}
-        >
-          <p className="text-lg md:text-xl text-muted max-w-[640px] mx-auto mb-10 leading-relaxed whitespace-pre-line">
-            {hero.subhead}
-          </p>
-        </div>
-
-        <div
-          className={`flex flex-col items-center gap-3 transition-all duration-700 delay-700 ${
-            revealed ? "opacity-100" : "opacity-0 translate-y-6"
-          }`}
-        >
-          {/* Inline email capture */}
-          <div className="flex items-center w-full max-w-[480px] border border-border bg-surface overflow-hidden">
-            <input
-              type="email"
-              placeholder="What's your email?"
-              className="flex-1 bg-transparent px-5 py-3.5 font-mono text-sm text-white placeholder:text-dim outline-none"
-            />
-            <a
-              href={hero.ctaUrl}
-              className="inline-flex items-center gap-2 bg-green text-black font-mono font-bold text-sm px-6 py-3.5 hover:brightness-110 transition-all shrink-0"
+            {hero.ctaText}
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              className="ml-1"
             >
-              {hero.ctaText}
-              <span>→</span>
-            </a>
-          </div>
-          {hero.badge && (
-            <div className="flex items-center gap-2 font-mono text-xs text-dim">
-              {hero.badge.dot && (
-                <span className="w-2 h-2 rounded-full bg-green shadow-[0_0_8px_rgba(34,197,94,0.4)]" />
-              )}
-              {hero.badge.text}
-            </div>
-          )}
+              <path
+                d="M3 8h10M9 4l4 4-4 4"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </a>
         </div>
       </div>
     </section>

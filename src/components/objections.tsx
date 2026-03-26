@@ -13,22 +13,22 @@ export function Objections() {
     <section id="faq" ref={ref} className="py-16 md:py-20 border-t border-border">
       <div className="max-w-[800px] mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
-          <p className="font-mono text-xs tracking-[0.2em] uppercase text-blue mb-4">
-            FAQ
+          <p className="text-xs tracking-[0.2em] uppercase text-blue mb-4">
+            {objections.eyebrow}
           </p>
           <h2
-            className="font-mono font-bold text-white"
+            className="font-bold text-white"
             style={{ fontSize: "var(--text-3xl)" }}
           >
             {objections.headline}
           </h2>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           {objections.items.map((item, i) => (
             <div
               key={i}
-              className={`border border-border transition-all duration-600 ${
+              className={`border border-border rounded-xl overflow-hidden transition-all duration-600 ${
                 inView
                   ? "opacity-100 translate-y-0"
                   : "opacity-0 translate-y-6"
@@ -37,13 +37,13 @@ export function Objections() {
             >
               <button
                 onClick={() => setOpenIndex(openIndex === i ? null : i)}
-                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-surface transition-colors"
+                className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 hover:bg-surface/50 transition-colors"
               >
-                <span className="font-mono text-sm text-foreground">
+                <span className="text-base md:text-lg text-foreground font-medium">
                   {item.question}
                 </span>
                 <span
-                  className={`font-mono text-blue text-lg shrink-0 transition-transform duration-300 ${
+                  className={`text-blue text-lg shrink-0 transition-transform duration-300 ${
                     openIndex === i ? "rotate-45" : ""
                   }`}
                 >
@@ -56,7 +56,7 @@ export function Objections() {
                 }`}
               >
                 <div className="px-6 pb-5 border-t border-border pt-4">
-                  <p className="text-sm text-muted leading-relaxed">
+                  <p className="text-base text-muted leading-relaxed">
                     {item.answer}
                   </p>
                 </div>

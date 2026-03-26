@@ -8,343 +8,270 @@ export const siteConfig = {
   metadata: {
     title: "Codify — Stop Prompting. Start Codifying.",
     description:
-      "Your business has knowledge that makes it unique. AI can't use any of it. We fix that. Insure your institutional memory and build your strategic growth engine.",
+      "Your business knowledge is your moat — but only if AI can use it. Codify extracts, structures, and operationalizes your expertise so AI actually works for your business.",
   },
   hero: {
-    eyebrow: "FOR SENIOR LEADERS & EXPERTS",
-    headline: "Don't Just Automate.\nCodify Your Legacy.",
+    eyebrow: "FOR BUSINESS OWNERS ALREADY USING AI",
+    headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
-      "Turn 30 years of expertise into a proprietary AI Strategic Engine.\nInsure your institutional memory before it walks out the door.",
-    ctaText: "Get the Knowledge Risk Calculator",
-    ctaUrl: "#calculator",
-    badge: {
-      dot: true,
-      text: "Strategic Intelligence · Legacy Preservation · Growth Partner",
-    },
-  },
-  thesis: {
-    eyebrow: "THE THESIS",
-    headline: "Upstream Wisdom > Downstream Noise.",
-    kicker: "Most AI implementation is just fixing the plumbing. We focus on the reservoir.",
-    description:
-      "Everyone is buying prompt packs and getting generic outputs. The businesses that lead are those that structured their proprietary context first.",
-    comparison: [
-      {
-        market: "Automate tactical tasks",
-        codify: "Codify strategic moats",
-      },
-      {
-        market: "Every session starts from zero",
-        codify: "Every session compounds your expertise",
-      },
-      {
-        market: "Generic 'AI Slop' outputs",
-        codify: "High-fidelity strategic intelligence",
-      },
-      {
-        market: "Platform-locked context",
-        codify: "Sovereign markdown in your own repo",
-      },
-      {
-        market: "Pay a consultant for a report",
-        codify: "Build a perpetual consulting engine",
-      },
-      {
-        market: "Knowledge walks out with experts",
-        codify: "Wisdom is codified and permanent",
-      },
-      {
-        market: "Scattered data in 15 apps",
-        codify: "A single, versioned Reservoir of truth",
-      },
-    ],
+      "Every AI output sounds generic because it has zero context about your business.\nFix that permanently.",
+    ctaText: "Start Free Trial",
+    ctaUrl: "https://app.codify.build",
   },
   problem: {
     eyebrow: "THE PROBLEM",
-    headline: "The $2M Knowledge Walkout.",
+    headline: "Generic In. Generic Out.",
     items: [
       {
-        title: "The Retirement Cliff",
-        stat: "10,000+",
-        statLabel: "executives retire daily",
-        description:
-          "When a 30-year veteran leaves, their tribal knowledge and 'gut-level' logic leave with them. Most succession plans fail to capture the reservoir.",
-      },
-      {
         title: "The Context Gap",
-        stat: "42%",
-        statLabel: "of knowledge is undocumented",
-        description:
-          "Every AI session starts from zero. Your beliefs, offer, and unique logic aren't in the machine—so the machine outputs generic slop.",
-      },
-      {
-        title: "The Prompt Trap",
         stat: "95%",
         statLabel: "of AI pilots fail",
         description:
-          "Prompt packs are disposable. Better vehicles with no fuel still won't move. You don't need better prompts; you need richer context.",
+          "Not because the AI is bad — because it has zero context about your business. You keep re-explaining the same things every session.",
       },
       {
-        title: "The Market Is Moving",
-        stat: "47%",
-        statLabel: "YoY market growth",
+        title: "The Copy-Paste Loop",
+        stat: "42%",
+        statLabel: "of knowledge is undocumented",
         description:
-          "Mature industries (Finance, Legal, Ops) are already saturated with tools. The winners are those using AI to find the strategic gaps.",
+          "Your expertise lives in your head. Every AI session starts from zero. The outputs sound like everyone else's because the input is missing what makes you different.",
+      },
+      {
+        title: "The Tool Trap",
+        stat: "$31.5B",
+        statLabel: "lost to knowledge inefficiency",
+        description:
+          "Better tools don't fix the problem. Prompt packs, custom GPTs, AI consultants — none of them work without your business context structured first.",
       },
     ],
   },
   mechanism: {
-    eyebrow: "THE MECHANISM",
-    headline: "Extract → Codify → Scout → Scale",
+    eyebrow: "HOW IT WORKS",
+    headline: "Extract. Codify. Generate. Compound.",
     steps: [
       {
-        label: "Extract",
-        command: "codify extract",
+        label: "01",
+        title: "Extract",
         description:
-          "Mission-critical interview to pull out the frameworks and 'war stories' that define your competitive moat.",
+          "Capture the knowledge that lives in your head — your decisions, frameworks, beliefs, and the logic behind how you run your business. Not what's on your website. What's behind it.",
+        outcome: "Your expertise captured in structured files",
       },
       {
-        label: "Codify",
-        command: "codify structure",
+        label: "02",
+        title: "Codify",
         description:
-          "Turn your soul into your Reference Stack. Sovereign markdown files that insure your institutional memory forever.",
+          "Your knowledge becomes reference files — soul.md, offer.md, audience.md, voice.md — stored in a private repository you own. Platform-agnostic. Works with Claude, GPT, Gemini, whatever comes next.",
+        outcome: "AI reads your context before every output",
       },
       {
-        label: "Scout",
-        command: "codify scout",
+        label: "03",
+        title: "Generate",
         description:
-          "Max cross-references your 'Brain' against market shifts to find weekly revenue opportunities and strategic gaps.",
+          "Ads, content, proposals, audits, strategy — all generated from your reference files. 90% accuracy on first drafts because the AI finally knows your business.",
+        outcome: "High-fidelity outputs that sound like you",
       },
       {
-        label: "Scale",
-        command: "codify scale",
+        label: "04",
+        title: "Compound",
         description:
-          "Your expert logic becomes a high-fidelity automation engine. Scale your impact without increasing your manual hours.",
-      },
-    ],
-  },
-  product: {
-    eyebrow: "THE ENGINE",
-    headline: "Insure. Grow. Scale.",
-    description:
-      "Same architecture, more intelligence. Every tier compounds on the last.",
-    tiers: [
-      {
-        name: "The Base Brain",
-        price: "$147",
-        period: "/mo",
-        description:
-          "Context Persistence & Identity Maintenance. Ensure your AI never forgets your business soul.",
-        skills: ["/start", "/think", "/help"],
-        features: [
-          "Full Thinking Engine access",
-          "Monthly 'Brain Sync' Audit",
-          "Structured Reference Vault",
-          "Community access · Group calls",
-        ],
-        cta: "Start Building",
-        ctaUrl: "#base",
-        highlight: false,
-        command: "codify sync",
-        annualPrice: "$1,497/yr",
-        annualSavings: "Save $267",
-      },
-      {
-        name: "The Opportunity Engine",
-        price: "$497",
-        period: "/mo",
-        description:
-          "Discovery & Automated Outputs. Find the revenue gaps and capture them instantly.",
-        skills: ["/scout", "/ads", "/organic", "/vsl", "/site"],
-        features: [
-          "Everything in Base Brain",
-          "Weekly 'Opportunity Scout' Reports",
-          "Full Content Queue + Approval",
-          "Guided 4-week Onboarding Sprint",
-          "Priority Agent Architecture",
-        ],
-        cta: "Scale Now",
-        ctaUrl: "#pro",
-        highlight: true,
-        command: "codify scout",
-        annualPrice: "$4,997/yr",
-        annualSavings: "Save $967",
-      },
-      {
-        name: "The Scale Partner",
-        price: "$1,497",
-        period: "/mo",
-        description:
-          "Strategic Leverage & Custom Skills. Full DFY architecting for enterprises and agencies.",
-        skills: ["All Skills", "Custom Agents", "Legacy Extraction"],
-        features: [
-          "Everything in Opportunity Engine",
-          "Legacy Codification (Senior Experts)",
-          "Institutional Knowledge Insurance",
-          "Done-For-You Stack Build",
-          "Direct Async Access · Bi-weekly Strategy",
-        ],
-        cta: "Apply for Partner",
-        ctaUrl: "#vip",
-        highlight: false,
-        command: "codify scale",
-        annualPrice: "$14,997/yr",
-        annualSavings: "Save $2,967",
+          "Every research session, decision, and file update makes the next output better. The system gets smarter every week without you getting busier.",
+        outcome: "The system compounds — permanently",
       },
     ],
   },
   proof: {
-    eyebrow: "THE PROOF",
-    headline: "Architecture > Automation.",
+    eyebrow: "EAT YOUR OWN COOKING",
+    headline: "We Run This System Every Day.",
     description:
-      "Client Ready is an Architecture Success Story. Every piece of intelligence on this site came from a codified Reference Stack.",
+      "Every piece of content on this site was generated from the same system we sell. 48 reference files. 322+ commits. This isn't theory.",
     stats: [
       { value: "48", label: "Reference files", suffix: "" },
       { value: "322", label: "Git commits", suffix: "+" },
-      { value: "9", label: "Hours per week", suffix: "hrs" },
-      { value: "7", label: "Months compounding", suffix: "mo" },
+      { value: "90", label: "First-draft accuracy", suffix: "%" },
+      { value: "9", label: "Hours/week to run it all", suffix: "h" },
     ],
     before: [
-      "Re-explain the business every AI session",
-      "Generic outputs that sound like 'AI Slop'",
-      "Knowledge locked in one retiring head",
-      "Piecemeal automation, fractured results",
+      "Re-explain your business every AI session",
+      "Generic outputs that sound like everyone else",
+      "Knowledge locked in one person's head",
+      "16+ hours/week on content and strategy",
     ],
     after: [
-      "AI reads your entire Soul before acting",
-      "Expert-level first drafts, every time",
-      "Permanent, versioned Institutional memory",
-      "Holistic architecture, compounding ROI",
+      "AI reads your full context before writing anything",
+      "Outputs that sound like you from the first draft",
+      "Permanent, versioned business knowledge",
+      "9 hours/week — the system does the rest",
     ],
   },
   testimonials: {
-    eyebrow: "STRATEGIC IMPACT",
-    headline: "Wisdom, Codified.",
+    eyebrow: "REAL RESULTS",
+    headline: "From Generic to Codified.",
     description:
-      "Our partners are no longer just 'using AI.' They are owning their architecture.",
-    featured: {
-      name: "Strategy Consultant",
-      quote:
-        "By articulating my decision logic into a Reference Stack, Max now audits my clients' businesses with 90% accuracy before I even log on. I've moved from 'Doing' to 'Advising' in weeks.",
-      result: "90% reduction in manual audit time",
-      context: "Strategic Partner Tier",
-    },
+      "Same engine. Same reference architecture. Their words, not ours.",
     items: [
       {
-        name: "Alex Reisch",
+        name: "Joshua Breaux",
+        context: "4 days in",
         quote:
-          "Built a master-level Skool community in record time. The Reference Stack ensured every lesson and email trigger sounded like me, not a machine.",
+          "Validated 105 keywords in Ahrefs. Mapped 5 pillar articles, 15+ cluster articles, and the full internal linking architecture. The part I\u2019m most pumped about is the compounding. Every decision codified feeds the next session. No more starting over with a different AI stranger.",
+        result: "Full content strategy in 5 hours",
+      },
+      {
+        name: "Josh Ballard",
+        context: "Busy dad, 9-5 job",
+        quote:
+          "Giving Claude Code an organizational structure to work within, and being able to build out my business frameworks have been truly incredible. As a busy dad working a 9-5, this is great.",
+        result: "Business frameworks built in 2 days",
+      },
+      {
+        name: "Grant Sparks",
+        context: "Sales team automation",
+        quote:
+          "My sales team burns too much time looking for the right business networking events. Claude whipped it up, built the repo, did the initial searches. It\u2019s functional and working, and takes that effort off of the team.",
+        result: "Built a working AI agent from scratch",
+      },
+      {
+        name: "Alex Reisch",
+        context: "Skool community builder",
+        quote:
+          "Built a master-level Skool community in record time. Every lesson and email trigger sounded like me, not a machine.",
         result: "Complete IP codification in days",
-        context: "Opportunity Engine Tier",
       },
       {
         name: "Joe DeFilippo",
+        context: "Team lead",
         quote:
-          "Moved from tactical fixes to architectural growth. 63 PRs in 26 days. The Reference files kept my team aligned and honest.",
+          "Moved from tactical fixes to architectural growth. 63 PRs in 26 days. The structured files kept my team aligned and honest.",
         result: "60% faster team throughput",
-        context: "Scale Partner Tier",
       },
       {
-        name: "Joshua Breaux",
+        name: "Community Member",
+        context: "Ad campaigns",
         quote:
-          "No more starting over. Every decision codified today makes my scout report better tomorrow. That's the compounding I was missing.",
-        result: "Full content strategy in 5 hours",
-        context: "Opportunity Engine Tier",
+          "Once you articulate your offer, audience, voice, and proof into structured reference, everything downstream gets better. Ads. Content. Sales pages. I ran the ad skill and it made hundreds of variations. We put them in the account and it\u2019s converting.",
+        result: "Hundreds of ad variations, converting",
       },
     ],
   },
+  product: {
+    eyebrow: "PRICING",
+    headline: "Start Free. Scale When Ready.",
+    description:
+      "Begin with the free starter kit. Upgrade when you're ready to codify your full business.",
+    tiers: [
+      {
+        name: "Build",
+        price: "$99",
+        period: "/mo",
+        annual: "$699/yr",
+        description:
+          "The thinking engine. Extract, research, and codify — every session makes the next one smarter.",
+        features: [
+          "Context extraction: /extract /import /enrich",
+          "Content creation: /content /research /brief",
+          "Vault health: /audit /start",
+          "Parallel AI agents + MCP routing",
+          "Compounding — every file makes future outputs better",
+          "WhatsApp support",
+        ],
+        cta: "Start Free Trial",
+        ctaUrl: "https://app.codify.build",
+        highlight: false,
+      },
+      {
+        name: "Pro",
+        price: "$199",
+        period: "/mo",
+        annual: "$1,497/yr",
+        description:
+          "Full output skill library — ads, emails, proposals, landing pages, case studies. Client ready from day one.",
+        features: [
+          "Everything in Build",
+          "Output skills: /ad /email /landing /proposal /pitch",
+          "Client skills: /case-study /follow-up /objection",
+          "Compliance lenses + brand templates",
+          "Onboarding + ongoing support via WhatsApp",
+          "Compounding — outputs improve as your context deepens",
+        ],
+        cta: "Start Free Trial",
+        ctaUrl: "https://app.codify.build",
+        highlight: true,
+      },
+      {
+        name: "VIP",
+        price: "$497",
+        period: "/mo",
+        annual: "$2,997/yr",
+        badge: "Sovereign Vault",
+        description:
+          "The Digital Fortress. Done-for-you build, autonomous operations, and your IP secured on infrastructure you own.",
+        features: [
+          "Everything in Pro",
+          "Done-for-you stack build",
+          "Distribution: /publish /campaign /repurpose",
+          "Sovereign Vault — private VPS, self-hosted, full IP ownership",
+          "Direct access via WhatsApp + calls",
+          "Compounding — the system runs and improves while you sleep",
+        ],
+        cta: "Start Free Trial",
+        ctaUrl: "https://app.codify.build",
+        highlight: false,
+      },
+    ],
+    guarantee:
+      "Start with a free trial. Your files are always yours — plain text in your own repository. Cancel anytime. Your system keeps working.",
+  },
   objections: {
-    eyebrow: "REMAINING RISK",
+    eyebrow: "FAQ",
     headline: "You're thinking...",
     items: [
       {
         question: '"I can just use ChatGPT Projects"',
         answer:
-          "Projects are a filing cabinet. Codify is an architecture. Projects don't scout, don't compound, and lock your wisdom to one platform.",
+          "Projects are a filing cabinet. This is an architecture. Projects don't compound, don't generate from structured context, and lock you to one platform.",
       },
       {
-        question: '"Why not just hire an AI consultant?"',
+        question: '"Why not just write good prompts?"',
         answer:
-          "Consultants give you a report that dies. We build a permanent engine that lives. One costs $20k for a PDF; the other is your business OS starting at $147.",
+          "Prompts are disposable. You write them once, they work once. Reference files inform every output, forever. Context > Prompts.",
       },
       {
-        question: '"I am not ready to retire yet"',
+        question: '"I\'m not technical"',
         answer:
-          "The best time to codify is when you are at your peak. Codification builds the moat that keeps you at the top while reducing your screen time.",
+          "Neither are most of our users. Build tier walks you through it. Pro tier includes onboarding and ongoing support — you're client ready from day one.",
       },
       {
-        question: '"Why monthly maintenance?"',
+        question: '"Why pay monthly when AI tools are free?"',
         answer:
-          "Your business evolves every week. If your AI context doesn't, the outputs drift into generic slop. We insure your context freshness.",
+          "Free AI gives you generic outputs. Codify gives you outputs that know your business. The difference is the reference architecture and the skills that read it. Build starts at $99/mo.",
       },
       {
-        question: '"Is my knowledge safe?"',
+        question: '"What if I want to cancel?"',
         answer:
-          "Your Reference Stack lives in your private repository. Sovereign markdown. You own it forever, regardless of the tools you use.",
+          "Month-to-month. Cancel anytime. Your reference files are yours — markdown in your own repo. You keep everything you built. We don't hold your data hostage.",
+      },
+      {
+        question: '"What\'s the Sovereign Vault?"',
+        answer:
+          "Your own Digital Fortress. Your business knowledge lives on a self-hosted private VPS that you control. Encrypted, version-controlled, with a full audit trail and instant access revocation. You own the infrastructure. Your IP never trains anyone else's AI. Available on the VIP tier.",
+      },
+      {
+        question: '"How is this different from hiring an AI consultant?"',
+        answer:
+          "Consultants give you a report. We give you a system. Consultants leave after the engagement. The engine keeps compounding. Consultants cost $5-20K. Build starts at $99/mo.",
       },
     ],
   },
   cta: {
-    headline: "Wisdom is your Moat.\nDon't let it drain.",
+    headline: "Stop Prompting.\nStart Codifying.",
     subhead:
-      "Structure your expertise today. Compound your ROI forever.\nStop settle for generic AI.",
-    ctaText: "Calculate Your Knowledge Risk",
-    ctaUrl: "#calculator",
-    microcopy: "soul.md · offer.md · audience.md · voice.md — ready in 5 min.",
-    files: ["soul.md", "offer.md", "audience.md", "voice.md"],
-  },
-  urgency: {
-    eyebrow: "THE WINDOW",
-    headline: "The Cliff is Coming.",
-    closingLine: "First movers build reservoirs. Everyone else pays for the drought.",
-    cards: [
-      {
-        label: "Today",
-        title: "Risk Quantification",
-        description:
-          "You identify the $[ROC] risk in your experts' heads. You start the extraction sprint.",
-        status: "green",
-      },
-      {
-        label: "6 Months",
-        title: "Architectural Moat",
-        description:
-          "50+ reference files deep. Your AI knows your business cold. Your competitors are still re-writing prompts.",
-        status: "green",
-      },
-      {
-        label: "12 Months",
-        title: "Legacy Immortality",
-        description:
-          "Your context IS the business. Experts retire, but the engine continues. The moat is permanent.",
-        status: "green",
-      },
-    ],
-    terminal: {
-      command: "codify market --status",
-      lines: [
-        {
-          type: "info",
-          text: "Senior Expert Retirement rate ......... 10k/day",
-        },
-        {
-          type: "warning",
-          text: "Knowledge management leakage ............ $31.5B/yr",
-        },
-        {
-          type: "growth",
-          text: "Strategic Codification leaders ........... Pulling ahead",
-        },
-        {
-          type: "result",
-          text: "VERDICT: The window is open. Codify before you exit.",
-        },
-      ],
-    },
+      "The problem isn't the AI. The problem is the context.\nStructure your expertise. Let the system compound.",
+    ctaText: "Start Free Trial",
+    ctaUrl: "https://app.codify.build",
   },
   footer: {
-    tagline: "upstream wisdom > downstream noise",
-    copyright: `© ${new Date().getFullYear()} Codify`,
+    tagline: "Context > Prompts.",
+    copyright: `\u00a9 ${new Date().getFullYear()} Codify`,
     links: [
       { label: "Privacy", url: "/privacy" },
       { label: "Terms", url: "/terms" },
