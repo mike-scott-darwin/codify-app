@@ -35,7 +35,7 @@ const steps = [
     details: [
       "Pre-built context templates: soul.md, offer.md, audience.md, voice.md",
       "Full skill library included",
-      "Works with Claude, GPT, Gemini — any AI",
+      "Powered by Claude — no lock-in, your files work with any AI",
     ],
   },
   {

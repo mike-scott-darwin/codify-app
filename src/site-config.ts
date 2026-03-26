@@ -60,7 +60,7 @@ export const siteConfig = {
         label: "02",
         title: "Codify",
         description:
-          "Your knowledge becomes reference files — soul.md, offer.md, audience.md, voice.md — stored in a private repository you own. Platform-agnostic. Works with Claude, GPT, Gemini, whatever comes next.",
+          "Your knowledge becomes reference files — soul.md, offer.md, audience.md, voice.md — stored in a private repository you own. Powered by Claude as the recommended engine. No lock-in — your files work with any AI.",
         outcome: "AI reads your context before every output",
       },
       {
@@ -228,7 +228,7 @@ export const siteConfig = {
       {
         question: '"I can just use ChatGPT Projects"',
         answer:
-          "Projects are a filing cabinet. This is an architecture. Projects don't compound, don't generate from structured context, and lock you to one platform.",
+          "Projects are a filing cabinet. This is an architecture. Projects don't compound and lock you to one platform. Codify runs on Claude as the recommended engine, but your files are plain markdown — take them anywhere.",
       },
       {
         question: '"Why not just write good prompts?"',
