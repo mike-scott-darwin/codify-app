@@ -16,7 +16,7 @@ export const siteConfig = {
     subhead:
       "Every AI output sounds generic because it has zero context about your business.\nFix that permanently.",
     ctaText: "Start Free Trial",
-    ctaUrl: "https://app.codify.build",
+    ctaUrl: "/get-started",
   },
   problem: {
     eyebrow: "THE PROBLEM",
@@ -175,7 +175,7 @@ export const siteConfig = {
           "WhatsApp support",
         ],
         cta: "Start Free Trial",
-        ctaUrl: "https://app.codify.build",
+        ctaUrl: "/get-started",
         highlight: false,
       },
       {
@@ -194,7 +194,7 @@ export const siteConfig = {
           "Compounding — outputs improve as your context deepens",
         ],
         cta: "Start Free Trial",
-        ctaUrl: "https://app.codify.build",
+        ctaUrl: "/get-started",
         highlight: true,
       },
       {
@@ -214,7 +214,7 @@ export const siteConfig = {
           "Compounding — the system runs and improves while you sleep",
         ],
         cta: "Start Free Trial",
-        ctaUrl: "https://app.codify.build",
+        ctaUrl: "/get-started",
         highlight: false,
       },
     ],
@@ -267,7 +267,7 @@ export const siteConfig = {
     subhead:
       "The problem isn't the AI. The problem is the context.\nStructure your expertise. Let the system compound.",
     ctaText: "Start Free Trial",
-    ctaUrl: "https://app.codify.build",
+    ctaUrl: "/get-started",
   },
   footer: {
     tagline: "Context > Prompts.",

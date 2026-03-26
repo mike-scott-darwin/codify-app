@@ -33,7 +33,7 @@ export function Nav() {
             </a>
           ))}
           <a
-            href="https://app.codify.build"
+            href="/get-started"
             className="text-sm font-semibold bg-blue text-black px-5 py-2 rounded-lg hover:brightness-110 transition-all"
           >
             Start Free Trial
@@ -63,7 +63,7 @@ export function Nav() {
             </a>
           ))}
           <a
-            href="https://app.codify.build"
+            href="/get-started"
             className="text-sm font-semibold bg-blue text-black px-5 py-2 rounded-lg text-center"
             onClick={() => setOpen(false)}
           >
