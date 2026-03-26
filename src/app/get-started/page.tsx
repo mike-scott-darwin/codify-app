@@ -30,9 +30,8 @@ const steps = [
       "Download the pre-configured Codify vault with all skills, context templates, and the compounding architecture ready to go.",
     action: {
       label: "Download Vault",
-      url: "#",
-      external: false,
-      comingSoon: true,
+      url: "https://github.com/codify-build/codify-trial-vault",
+      external: true,
     },
     details: [
       "Pre-built context templates: soul.md, offer.md, audience.md, voice.md",
