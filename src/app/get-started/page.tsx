@@ -5,30 +5,38 @@ import { useState, FormEvent } from "react";
 // Replace with your GHL webhook URL
 const WEBHOOK_URL = "https://YOUR_GHL_WEBHOOK_URL_HERE";
 
+const prereqs = [
+  {
+    name: "Claude Pro",
+    description: "Codify runs on Claude Code, which requires an Anthropic Claude Pro subscription.",
+    price: "$20/mo",
+    url: "https://claude.ai/settings/billing",
+    linkLabel: "Get Claude Pro",
+  },
+  {
+    name: "Claude Code",
+    description: "The AI engine that powers your vault. Install via terminal after signing up for Claude Pro.",
+    price: "Included with Pro",
+    url: "https://docs.anthropic.com/en/docs/claude-code/overview",
+    linkLabel: "Install Claude Code",
+  },
+  {
+    name: "Obsidian",
+    description: "Your private knowledge base. Runs locally — your data never leaves your device.",
+    price: "Free",
+    url: "https://obsidian.md/download",
+    linkLabel: "Download Obsidian",
+  },
+];
+
 const steps = [
   {
     number: "01",
-    title: "Download Obsidian",
+    title: "Download the Codify Vault",
     description:
-      "Obsidian is a free, private knowledge base that runs on your machine. Your data never leaves your device.",
+      "Clone or download the pre-configured vault with all skills, context templates, and the compounding architecture ready to go.",
     action: {
-      label: "Download Obsidian",
-      url: "https://obsidian.md/download",
-      external: true,
-    },
-    details: [
-      "Available on Mac, Windows, Linux, iOS, and Android",
-      "Free for personal use",
-      "No account required",
-    ],
-  },
-  {
-    number: "02",
-    title: "Get Your Codify Vault",
-    description:
-      "Download the pre-configured Codify vault with all skills, context templates, and the compounding architecture ready to go.",
-    action: {
-      label: "Download Vault",
+      label: "Get the Vault",
       url: "https://github.com/codify-build/codify-trial-vault",
       external: true,
     },
@@ -39,19 +47,35 @@ const steps = [
     ],
   },
   {
-    number: "03",
-    title: "Open & Run /start",
+    number: "02",
+    title: "Open in Obsidian",
     description:
-      "Open the vault in Obsidian, launch Claude in the chat pane, and type /start. The system walks you through your first extraction.",
+      "Open the vault folder in Obsidian. This is your command centre — all your context, decisions, research, and outputs live here.",
     action: {
-      label: "Watch Setup Guide",
-      url: "#",
-      external: false,
-      comingSoon: true,
+      label: "Download Obsidian",
+      url: "https://obsidian.md/download",
+      external: true,
     },
     details: [
+      "Available on Mac, Windows, Linux, iOS, and Android",
+      "Free for personal use",
+      "Your data stays on your machine",
+    ],
+  },
+  {
+    number: "03",
+    title: "Launch Claude Code & Run /start",
+    description:
+      "Open your terminal, navigate to the vault folder, and run 'claude'. Then type /start — the system walks you through your first extraction.",
+    action: {
+      label: "Claude Code Setup Guide",
+      url: "https://docs.anthropic.com/en/docs/claude-code/overview",
+      external: true,
+    },
+    details: [
+      "Requires Claude Pro ($20/mo) — sign up at claude.ai",
+      "Install: npm install -g @anthropic-ai/claude-code",
       "Guided first extraction in under 30 minutes",
-      "Your context starts compounding immediately",
       "3 free extractions on the Explore tier",
     ],
   },
@@ -260,8 +284,49 @@ export default function GetStarted() {
       {/* Steps — shown after unlock */}
       {unlocked && (
         <>
+          {/* Prerequisites */}
+          <section className="pb-12 md:pb-16">
+            <div className="max-w-[800px] mx-auto px-6 md:px-12">
+              <h2 className="font-bold text-white text-lg mb-6">
+                What You Need
+              </h2>
+              <div className="grid sm:grid-cols-3 gap-4">
+                {prereqs.map((req) => (
+                  <div
+                    key={req.name}
+                    className="bg-surface border border-border rounded-xl p-5"
+                  >
+                    <div className="flex items-baseline justify-between mb-2">
+                      <h3 className="font-semibold text-white text-sm">
+                        {req.name}
+                      </h3>
+                      <span className="text-xs text-blue font-semibold">
+                        {req.price}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted leading-relaxed mb-3">
+                      {req.description}
+                    </p>
+                    <a
+                      href={req.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs text-blue hover:underline"
+                    >
+                      {req.linkLabel} &rarr;
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Steps */}
           <section className="pb-16 md:pb-20">
             <div className="max-w-[800px] mx-auto px-6 md:px-12">
+              <h2 className="font-bold text-white text-lg mb-6">
+                Setup Steps
+              </h2>
               <div className="space-y-8">
                 {steps.map((step) => (
                   <div
