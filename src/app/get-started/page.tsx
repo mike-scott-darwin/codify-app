@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
+"use client";
 
-export const metadata: Metadata = {
-  title: "Get Started — Codify",
-  description:
-    "Set up your Codify vault in minutes. Download Obsidian, clone your vault, and start codifying your expertise.",
-};
+import { useState, FormEvent } from "react";
+
+// Replace with your GHL webhook URL
+const WEBHOOK_URL = "https://YOUR_GHL_WEBHOOK_URL_HERE";
 
 const steps = [
   {
@@ -86,6 +85,41 @@ const tiers = [
 ];
 
 export default function GetStarted() {
+  const [unlocked, setUnlocked] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSubmitting(true);
+    setError("");
+
+    const form = e.currentTarget;
+    const data = {
+      firstName: (form.elements.namedItem("firstName") as HTMLInputElement).value,
+      lastName: (form.elements.namedItem("lastName") as HTMLInputElement).value,
+      email: (form.elements.namedItem("email") as HTMLInputElement).value,
+      phone: (form.elements.namedItem("phone") as HTMLInputElement).value,
+      source: "codify.build/get-started",
+      tags: ["free-trial", "website"],
+    };
+
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+        mode: "no-cors",
+      });
+      setUnlocked(true);
+    } catch {
+      // If webhook fails, still unlock — don't block the user
+      setUnlocked(true);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
   return (
     <main>
       {/* Nav */}
@@ -115,140 +149,240 @@ export default function GetStarted() {
             className="font-bold text-white leading-[1.1] mb-4"
             style={{ fontSize: "var(--text-4xl)" }}
           >
-            Set Up Your Vault
-            <br />
-            in 5 Minutes.
+            {unlocked ? "You're In." : "Start Your Free Trial"}
           </h1>
           <p className="text-muted text-lg leading-relaxed">
-            Everything runs locally on your machine.
-            <br />
-            Your knowledge stays yours.
+            {unlocked
+              ? "Follow the steps below to set up your vault."
+              : "Enter your details to get instant access to the Codify vault."}
           </p>
         </div>
       </section>
 
-      {/* Steps */}
-      <section className="pb-16 md:pb-20">
-        <div className="max-w-[800px] mx-auto px-6 md:px-12">
-          <div className="space-y-8">
-            {steps.map((step, i) => (
-              <div
-                key={step.number}
-                className="bg-surface border border-border rounded-xl p-8"
-              >
-                <div className="flex items-start gap-6">
-                  <div className="text-4xl font-bold text-white/10 shrink-0">
-                    {step.number}
-                  </div>
-                  <div className="flex-1">
-                    <h2 className="font-bold text-white text-xl mb-2">
-                      {step.title}
-                    </h2>
-                    <p className="text-muted text-sm leading-relaxed mb-4">
-                      {step.description}
-                    </p>
-
-                    <ul className="space-y-2 mb-6">
-                      {step.details.map((detail) => (
-                        <li
-                          key={detail}
-                          className="flex items-start gap-2 text-sm"
-                        >
-                          <span className="text-green shrink-0 mt-0.5">
-                            &#x2713;
-                          </span>
-                          <span className="text-foreground">{detail}</span>
-                        </li>
-                      ))}
-                    </ul>
-
-                    {"comingSoon" in step.action && step.action.comingSoon ? (
-                      <span className="inline-flex items-center text-sm text-dim border border-border px-5 py-2.5 rounded-lg">
-                        {step.action.label} — Coming Soon
-                      </span>
-                    ) : (
-                      <a
-                        href={step.action.url}
-                        target={step.action.external ? "_blank" : undefined}
-                        rel={
-                          step.action.external
-                            ? "noopener noreferrer"
-                            : undefined
-                        }
-                        className="inline-flex items-center gap-2 text-sm font-semibold bg-blue text-black px-5 py-2.5 rounded-lg hover:brightness-110 transition-all"
-                      >
-                        {step.action.label}
-                        {step.action.external && (
-                          <svg
-                            width="14"
-                            height="14"
-                            viewBox="0 0 16 16"
-                            fill="none"
-                          >
-                            <path
-                              d="M6 3h7v7M13 3L3 13"
-                              stroke="currentColor"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                            />
-                          </svg>
-                        )}
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Tier quick reference */}
-      <section className="pb-16 md:pb-20 border-t border-border pt-16 md:pt-20">
-        <div className="max-w-[900px] mx-auto px-6 md:px-12">
-          <div className="text-center mb-12">
-            <h2
-              className="font-bold text-white mb-3"
-              style={{ fontSize: "var(--text-2xl)" }}
+      {/* Lead capture form — shown before unlock */}
+      {!unlocked && (
+        <section className="pb-16 md:pb-20">
+          <div className="max-w-[480px] mx-auto px-6 md:px-12">
+            <form
+              onSubmit={handleSubmit}
+              className="bg-surface border border-border rounded-xl p-8 space-y-5"
             >
-              What You Get at Each Tier
-            </h2>
-            <p className="text-muted text-sm">
-              Start free. Upgrade when the compounding kicks in.
-            </p>
-          </div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {tiers.map((tier) => (
-              <div
-                key={tier.name}
-                className="bg-surface border border-border rounded-xl p-5"
-              >
-                <div className="flex items-baseline justify-between mb-2">
-                  <h3 className="font-semibold text-white">{tier.name}</h3>
-                  <span className="text-sm text-blue font-semibold">
-                    {tier.price}
-                  </span>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label
+                    htmlFor="firstName"
+                    className="block text-xs text-muted mb-1.5"
+                  >
+                    First name
+                  </label>
+                  <input
+                    id="firstName"
+                    name="firstName"
+                    type="text"
+                    required
+                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-white placeholder:text-dim outline-none focus:border-blue transition-colors"
+                    placeholder="Mike"
+                  />
                 </div>
-                <p className="text-xs text-muted mb-4 leading-relaxed">
-                  {tier.description}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {tier.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="font-mono text-[11px] text-green bg-green/10 border border-green/20 px-2 py-0.5 rounded"
-                    >
-                      {skill}
-                    </span>
-                  ))}
+                <div>
+                  <label
+                    htmlFor="lastName"
+                    className="block text-xs text-muted mb-1.5"
+                  >
+                    Last name
+                  </label>
+                  <input
+                    id="lastName"
+                    name="lastName"
+                    type="text"
+                    required
+                    className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-white placeholder:text-dim outline-none focus:border-blue transition-colors"
+                    placeholder="Scott"
+                  />
                 </div>
               </div>
-            ))}
+
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block text-xs text-muted mb-1.5"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-white placeholder:text-dim outline-none focus:border-blue transition-colors"
+                  placeholder="mike@example.com"
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor="phone"
+                  className="block text-xs text-muted mb-1.5"
+                >
+                  Phone (for WhatsApp support)
+                </label>
+                <input
+                  id="phone"
+                  name="phone"
+                  type="tel"
+                  required
+                  className="w-full bg-background border border-border rounded-lg px-4 py-3 text-sm text-white placeholder:text-dim outline-none focus:border-blue transition-colors"
+                  placeholder="+44 7700 900000"
+                />
+              </div>
+
+              {error && (
+                <p className="text-red text-xs">{error}</p>
+              )}
+
+              <button
+                type="submit"
+                disabled={submitting}
+                className="w-full bg-blue text-black font-semibold text-sm py-3.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-50"
+              >
+                {submitting ? "Setting up..." : "Get Free Access"}
+              </button>
+
+              <p className="text-[11px] text-dim text-center">
+                Your data stays yours. We only use this to set up your account
+                and provide WhatsApp support.
+              </p>
+            </form>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
+
+      {/* Steps — shown after unlock */}
+      {unlocked && (
+        <>
+          <section className="pb-16 md:pb-20">
+            <div className="max-w-[800px] mx-auto px-6 md:px-12">
+              <div className="space-y-8">
+                {steps.map((step) => (
+                  <div
+                    key={step.number}
+                    className="bg-surface border border-border rounded-xl p-8"
+                  >
+                    <div className="flex items-start gap-6">
+                      <div className="text-4xl font-bold text-white/10 shrink-0">
+                        {step.number}
+                      </div>
+                      <div className="flex-1">
+                        <h2 className="font-bold text-white text-xl mb-2">
+                          {step.title}
+                        </h2>
+                        <p className="text-muted text-sm leading-relaxed mb-4">
+                          {step.description}
+                        </p>
+
+                        <ul className="space-y-2 mb-6">
+                          {step.details.map((detail) => (
+                            <li
+                              key={detail}
+                              className="flex items-start gap-2 text-sm"
+                            >
+                              <span className="text-green shrink-0 mt-0.5">
+                                &#x2713;
+                              </span>
+                              <span className="text-foreground">{detail}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        {"comingSoon" in step.action && step.action.comingSoon ? (
+                          <span className="inline-flex items-center text-sm text-dim border border-border px-5 py-2.5 rounded-lg">
+                            {step.action.label} — Coming Soon
+                          </span>
+                        ) : (
+                          <a
+                            href={step.action.url}
+                            target={step.action.external ? "_blank" : undefined}
+                            rel={
+                              step.action.external
+                                ? "noopener noreferrer"
+                                : undefined
+                            }
+                            className="inline-flex items-center gap-2 text-sm font-semibold bg-blue text-black px-5 py-2.5 rounded-lg hover:brightness-110 transition-all"
+                          >
+                            {step.action.label}
+                            {step.action.external && (
+                              <svg
+                                width="14"
+                                height="14"
+                                viewBox="0 0 16 16"
+                                fill="none"
+                              >
+                                <path
+                                  d="M6 3h7v7M13 3L3 13"
+                                  stroke="currentColor"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            )}
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Tier quick reference */}
+          <section className="pb-16 md:pb-20 border-t border-border pt-16 md:pt-20">
+            <div className="max-w-[900px] mx-auto px-6 md:px-12">
+              <div className="text-center mb-12">
+                <h2
+                  className="font-bold text-white mb-3"
+                  style={{ fontSize: "var(--text-2xl)" }}
+                >
+                  What You Get at Each Tier
+                </h2>
+                <p className="text-muted text-sm">
+                  Start free. Upgrade when the compounding kicks in.
+                </p>
+              </div>
+
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {tiers.map((tier) => (
+                  <div
+                    key={tier.name}
+                    className="bg-surface border border-border rounded-xl p-5"
+                  >
+                    <div className="flex items-baseline justify-between mb-2">
+                      <h3 className="font-semibold text-white">{tier.name}</h3>
+                      <span className="text-sm text-blue font-semibold">
+                        {tier.price}
+                      </span>
+                    </div>
+                    <p className="text-xs text-muted mb-4 leading-relaxed">
+                      {tier.description}
+                    </p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {tier.skills.map((skill) => (
+                        <span
+                          key={skill}
+                          className="font-mono text-[11px] text-green bg-green/10 border border-green/20 px-2 py-0.5 rounded"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </>
+      )}
 
       {/* Help */}
       <section className="pb-16 md:pb-20">
