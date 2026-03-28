@@ -144,9 +144,11 @@ export default function Setup() {
               Download the Vault
             </h2>
             <p className="text-muted text-sm mb-6">
-              Unzip it, then open the folder in Obsidian. The sample files
-              inside show you what a completed vault looks like — they&apos;ll
-              be replaced with yours when you run /start.
+              Unzip it, then open the folder in Obsidian. The vault includes
+              30+ skills — build websites, scrape competitor ads, find and
+              qualify leads, manage your CRM, generate content, and more.
+              Sample files show you what a completed vault looks like —
+              they&apos;ll be replaced with yours when you run /start.
             </p>
             <a
               href="/codify-vault.zip"

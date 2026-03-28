@@ -67,15 +67,15 @@ export const siteConfig = {
         label: "03",
         title: "Generate",
         description:
-          "Ads, content, proposals, audits, strategy — all generated from your reference files. 90% accuracy on first drafts because the AI finally knows your business.",
+          "Ads, emails, proposals, websites, landing pages — all generated from your reference files. One command builds a full website. Another scrapes competitor ads. 90% accuracy on first drafts because the AI finally knows your business.",
         outcome: "High-fidelity outputs that sound like you",
       },
       {
         label: "04",
         title: "Compound",
         description:
-          "Update a context file and every downstream output regenerates automatically — ads, emails, funnels, landing pages. The system stays in sync and gets smarter every week without you getting busier.",
-        outcome: "Change one file, everything downstream updates",
+          "Scrape competitor ads and websites. Find and qualify leads. Push them to your CRM. Analyse what's working, feed it back into your context files, and every downstream output gets better automatically. The system optimises itself.",
+        outcome: "Every cycle, your outputs get sharper",
       },
     ],
   },
@@ -97,10 +97,10 @@ export const siteConfig = {
       "16+ hours/week on content and strategy",
     ],
     after: [
-      "One vault — context, skills, and deployment in one place",
+      "One vault — context, content, CRM, and website in one place",
       "AI reads your full context before writing anything",
-      "Outputs that sound like you from the first draft",
-      "9 hours/week — the system does the rest",
+      "Scrape competitors, find leads, push to CRM — all from the vault",
+      "9 hours/week — the system optimises itself",
     ],
   },
   testimonials: {
@@ -206,7 +206,8 @@ export const siteConfig = {
         features: [
           "Context extraction: /extract /import /enrich",
           "Content creation: /content /research /brief",
-          "Vault health: /audit /start",
+          "Competitive intel: /spy — scrape competitor ads, sites, and social",
+          "Vault health: /audit /start /optimise",
           "Parallel AI agents + MCP routing",
           "Auto-sync — update context, outputs regenerate downstream",
           "WhatsApp support",
@@ -226,9 +227,10 @@ export const siteConfig = {
           "Everything in Build",
           "Output skills: /ad /email /landing /proposal /pitch /funnel",
           "Client skills: /case-study /follow-up /objection",
-          "Compliance lenses + brand templates",
+          "Website builder: /site — full website from your context files",
+          "Lead generation: /leads — find, qualify, and push to CRM",
+          "CRM integration: /ghl — contacts, emails, pipeline, workflows",
           "Onboarding + ongoing support via WhatsApp",
-          "Auto-sync — update context, all outputs regenerate and redeploy",
         ],
         cta: "Start Free Trial",
         ctaUrl: "/get-started",
@@ -246,9 +248,9 @@ export const siteConfig = {
           "Everything in Pro",
           "Done-for-you stack build",
           "Distribution: /publish /campaign /repurpose",
+          "Full automation: /optimise runs weekly, context compounds itself",
           "Sovereign Vault — private VPS, self-hosted, full IP ownership",
           "Direct access via WhatsApp + calls",
-          "Auto-sync + auto-deploy — update context, everything goes live",
         ],
         cta: "Start Free Trial",
         ctaUrl: "/get-started",
@@ -296,6 +298,11 @@ export const siteConfig = {
         question: '"Can it actually build and deploy funnels?"',
         answer:
           "Yes. The /funnel skill generates SEO pages, launch funnels, blog batches, and retargeting assets — all from your context files — and deploys them directly to GoHighLevel. One command can produce 20+ pages that convert cold traffic because every page is built on your real business context, not templates.",
+      },
+      {
+        question: '"Can it scrape competitors and find leads?"',
+        answer:
+          "Yes. /spy scrapes competitor ads from Meta Ad Library, pulls their website copy and pricing, and analyses their social strategy — then flags gaps in your own context files. /leads finds and qualifies prospects against your ideal client profile, scores them, and pushes the best ones into your CRM. Everything feeds back into your vault so your outputs keep improving.",
       },
       {
         question: '"How is this different from hiring an AI consultant?"',
