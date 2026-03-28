@@ -14,7 +14,7 @@ export const siteConfig = {
     eyebrow: "FOR BUSINESS OWNERS ALREADY USING AI",
     headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
-      "Every AI output sounds generic because it has zero context about your business.\nFix that permanently.",
+      "8 tools. 5 AI models. Zero context about your business.\nOne vault fixes that permanently.",
     ctaText: "Start Free Trial",
     ctaUrl: "/get-started",
   },
@@ -31,17 +31,17 @@ export const siteConfig = {
       },
       {
         title: "The Copy-Paste Loop",
-        stat: "42%",
-        statLabel: "of knowledge is undocumented",
+        stat: "0",
+        statLabel: "context carries between sessions",
         description:
-          "Your expertise lives in your head. Every AI session starts from zero. The outputs sound like everyone else's because the input is missing what makes you different.",
+          "Every AI session starts from scratch. You re-explain your business, your audience, your offer — then get the same generic output you got last time. Nothing compounds. Nothing carries forward.",
       },
       {
         title: "The Tool Trap",
-        stat: "$31.5B",
-        statLabel: "lost to knowledge inefficiency",
+        stat: "8+",
+        statLabel: "tools just to ship one website",
         description:
-          "Better tools don't fix the problem. Prompt packs, custom GPTs, AI consultants — none of them work without your business context structured first.",
+          "Lovable, Cursor, Framer, n8n, five different AI models, three image generators — and you're still stitching it all together manually. More tools won't fix the problem. Your business context structured in one place will.",
       },
     ],
   },
@@ -74,8 +74,8 @@ export const siteConfig = {
         label: "04",
         title: "Compound",
         description:
-          "Every research session, decision, and file update makes the next output better. The system gets smarter every week without you getting busier.",
-        outcome: "The system compounds — permanently",
+          "Update a context file and every downstream output regenerates automatically — ads, emails, funnels, landing pages. The system stays in sync and gets smarter every week without you getting busier.",
+        outcome: "Change one file, everything downstream updates",
       },
     ],
   },
@@ -91,15 +91,15 @@ export const siteConfig = {
       { value: "9", label: "Hours/week to run it all", suffix: "h" },
     ],
     before: [
+      "8+ tools stitched together to ship one project",
       "Re-explain your business every AI session",
       "Generic outputs that sound like everyone else",
-      "Knowledge locked in one person's head",
       "16+ hours/week on content and strategy",
     ],
     after: [
+      "One vault — context, skills, and deployment in one place",
       "AI reads your full context before writing anything",
       "Outputs that sound like you from the first draft",
-      "Permanent, versioned business knowledge",
       "9 hours/week — the system does the rest",
     ],
   },
@@ -153,6 +153,43 @@ export const siteConfig = {
       },
     ],
   },
+  about: {
+    eyebrow: "WHY I BUILT THIS",
+    headline: "Built by a Founder Who Got Tired of Starting Over",
+    name: "Mike Scott",
+    role: "Founder, Codify",
+    intro: "I've spent the last decade building businesses — coaching, consulting, digital products, agency work. I've been in the trenches with clients, built funnels at 2am, written copy that converts, and rebuilt systems more times than I can count.",
+    sections: [
+      {
+        heading: "The Problem I Kept Running Into",
+        paragraphs: [
+          "Every time I started something new — a new offer, a new client, a new pivot — I had to re-explain everything. My positioning. My audience. My voice. My differentiators. To every tool, every VA, every AI assistant. Over and over and over.",
+          "I'd spend hours giving context to ChatGPT, only to start from scratch the next day. I'd brief a copywriter, then re-brief them a week later because they forgot half of what I told them. The knowledge was in my head, and it stayed there.",
+        ],
+      },
+      {
+        heading: "Going Deep on AI",
+        paragraphs: [
+          "When AI coding agents exploded, I went all in. GHL page builders, Framer, Lovable, Cursor, Claude Code — I tried everything. I was using 8 different tools and 5 different AI models just to ship a single client website.",
+          "The tools were incredible. But the problem was always the same: they had zero context about my business. I was copy-pasting the same background into every conversation, every project, every prompt. The AI was powerful but it was generic, because I was feeding it generic inputs.",
+        ],
+      },
+      {
+        heading: "The Moment It Clicked",
+        paragraphs: [
+          "I realised the gap wasn't the AI — it was the context layer. What if everything AI needed to know about my business lived in one structured place? What if it compounded over time instead of evaporating after every session?",
+          "So I built it. A vault architecture that extracts your expertise, structures it into files AI can use, and generates everything downstream — content, proposals, ads, emails, landing pages — all sounding like you, because it actually knows you.",
+        ],
+      },
+      {
+        heading: "Why I'm Sharing It",
+        paragraphs: [
+          "I use Codify every single day to run my own business. It's not a side project or an experiment — it's the operating system behind everything I ship. And I got tired of watching smart founders waste hours re-prompting AI with the same context they gave it yesterday.",
+          "Codify is for founders and business owners who are already using AI but know it should be better. You shouldn't need to be a prompt engineer. You shouldn't need 8 tools. You just need your AI to actually know your business.",
+        ],
+      },
+    ],
+  },
   product: {
     eyebrow: "PRICING",
     headline: "Start Free. Scale When Ready.",
@@ -171,7 +208,7 @@ export const siteConfig = {
           "Content creation: /content /research /brief",
           "Vault health: /audit /start",
           "Parallel AI agents + MCP routing",
-          "Compounding — every file makes future outputs better",
+          "Auto-sync — update context, outputs regenerate downstream",
           "WhatsApp support",
         ],
         cta: "Start Free Trial",
@@ -187,11 +224,11 @@ export const siteConfig = {
           "Full output skill library — ads, emails, proposals, landing pages, case studies. Client ready from day one.",
         features: [
           "Everything in Build",
-          "Output skills: /ad /email /landing /proposal /pitch",
+          "Output skills: /ad /email /landing /proposal /pitch /funnel",
           "Client skills: /case-study /follow-up /objection",
           "Compliance lenses + brand templates",
           "Onboarding + ongoing support via WhatsApp",
-          "Compounding — outputs improve as your context deepens",
+          "Auto-sync — update context, all outputs regenerate and redeploy",
         ],
         cta: "Start Free Trial",
         ctaUrl: "/get-started",
@@ -211,7 +248,7 @@ export const siteConfig = {
           "Distribution: /publish /campaign /repurpose",
           "Sovereign Vault — private VPS, self-hosted, full IP ownership",
           "Direct access via WhatsApp + calls",
-          "Compounding — the system runs and improves while you sleep",
+          "Auto-sync + auto-deploy — update context, everything goes live",
         ],
         cta: "Start Free Trial",
         ctaUrl: "/get-started",
@@ -254,6 +291,11 @@ export const siteConfig = {
         question: '"What\'s the Sovereign Vault?"',
         answer:
           "Your own Digital Fortress. Your business knowledge lives on a self-hosted private VPS that you control. Encrypted, version-controlled, with a full audit trail and instant access revocation. You own the infrastructure. Your IP never trains anyone else's AI. Available on the VIP tier.",
+      },
+      {
+        question: '"Can it actually build and deploy funnels?"',
+        answer:
+          "Yes. The /funnel skill generates SEO pages, launch funnels, blog batches, and retargeting assets — all from your context files — and deploys them directly to GoHighLevel. One command can produce 20+ pages that convert cold traffic because every page is built on your real business context, not templates.",
       },
       {
         question: '"How is this different from hiring an AI consultant?"',

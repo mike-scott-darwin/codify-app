@@ -11,7 +11,7 @@ export function Product() {
     <section
       id="engagement"
       ref={ref}
-      className="py-16 md:py-20 border-t border-border"
+      className="py-10 md:py-20 border-t border-border"
     >
       <div className="max-w-[1100px] mx-auto px-6 md:px-12">
         <div className="text-center mb-12">

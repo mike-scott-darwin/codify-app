@@ -10,7 +10,7 @@ export function Objections() {
   const { objections } = siteConfig;
 
   return (
-    <section id="faq" ref={ref} className="py-16 md:py-20 border-t border-border">
+    <section id="faq" ref={ref} className="py-10 md:py-20 border-t border-border">
       <div className="max-w-[800px] mx-auto px-6 md:px-12">
         <div className="text-center mb-16">
           <p className="text-xs tracking-[0.2em] uppercase text-blue mb-4">
