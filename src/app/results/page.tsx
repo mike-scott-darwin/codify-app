@@ -234,7 +234,7 @@ export default function ResultsPage() {
             See It For Yourself
           </h2>
           <p className="text-muted text-sm mb-8">
-            Try Codify free. 3 extractions. No credit card.
+            5 extractions + 3 content outputs free. No credit card.
           </p>
           <a
             href="/get-started"

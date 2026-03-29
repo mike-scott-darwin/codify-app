@@ -85,8 +85,8 @@ export default function TermsPage() {
             <div className="space-y-4">
               <p className="text-muted text-base md:text-sm leading-relaxed">
                 <span className="text-white font-semibold">Free trial.</span>{" "}
-                The free trial includes 3 context extractions. No credit card
-                required.
+                The free trial includes 5 context extractions and 3 content
+                outputs. No credit card required.
               </p>
               <p className="text-muted text-base md:text-sm leading-relaxed">
                 <span className="text-white font-semibold">Paid tiers.</span>{" "}

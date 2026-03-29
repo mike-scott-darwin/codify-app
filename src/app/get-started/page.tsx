@@ -75,7 +75,7 @@ export default function GetStarted() {
             Start Your Free Trial
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
-            Enter your details to get instant access to the Codify vault.
+            5 extractions + 3 content outputs. No credit card required.
           </p>
         </div>
       </section>
@@ -169,6 +169,34 @@ export default function GetStarted() {
                 and provide WhatsApp support.
               </p>
             </form>
+          </div>
+
+          {/* Trial includes */}
+          <div className="mt-6 space-y-3">
+            <p className="text-xs text-dim uppercase tracking-wider text-center">
+              Your free trial includes
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="bg-surface border border-border rounded-lg p-3 text-center">
+                <p className="text-xl font-bold text-white">5</p>
+                <p className="text-xs text-muted">Context extractions</p>
+              </div>
+              <div className="bg-surface border border-border rounded-lg p-3 text-center">
+                <p className="text-xl font-bold text-white">3</p>
+                <p className="text-xs text-muted">Content outputs</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-3 gap-3">
+              <div className="bg-surface border border-border rounded-lg p-3 text-center">
+                <p className="text-xs text-muted">No credit card</p>
+              </div>
+              <div className="bg-surface border border-border rounded-lg p-3 text-center">
+                <p className="text-xs text-muted">Your files, your repo</p>
+              </div>
+              <div className="bg-surface border border-border rounded-lg p-3 text-center">
+                <p className="text-xs text-muted">WhatsApp support</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

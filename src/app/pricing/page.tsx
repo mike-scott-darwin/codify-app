@@ -170,8 +170,8 @@ export default function Pricing() {
             Start Free. Scale When Ready.
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed mb-8">
-            Begin with a free trial. Your files are always yours — plain text you
-            own. Cancel anytime.
+            5 extractions + 3 content outputs free. No credit card. Your files
+            are always yours.
           </p>
 
           {/* Toggle */}
@@ -307,10 +307,10 @@ export default function Pricing() {
                   No lock-in. Your data is yours.
                 </p>
                 <p className="text-xs text-muted leading-relaxed">
-                  Start with a free trial. Cancel anytime — month-to-month, no
-                  contracts. Your reference files are plain markdown in your own
-                  repository. You keep everything you built. We don&apos;t hold
-                  your data hostage.
+                  Start with 5 extractions + 3 content outputs free. No credit card.
+                  Cancel anytime — month-to-month, no contracts. Your reference
+                  files are plain markdown in your own repository. You keep
+                  everything you built.
                 </p>
               </div>
             </div>

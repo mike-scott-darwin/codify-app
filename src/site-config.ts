@@ -15,6 +15,7 @@ export const siteConfig = {
     headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
       "8 tools. 5 AI models. Zero context about your business.\nOne vault fixes that permanently.",
+    trialNote: "5 extractions + 3 outputs free. No credit card.",
     ctaText: "Start Free Trial",
     ctaUrl: "/get-started",
   },
@@ -261,7 +262,7 @@ export const siteConfig = {
       },
     ],
     guarantee:
-      "Start with a free trial. Your files are always yours — plain text in your own repository. Cancel anytime. Your system keeps working.",
+      "5 extractions + 3 content outputs free. No credit card. Your files are always yours — plain text in your own repository. Cancel anytime. Your system keeps working.",
   },
   objections: {
     eyebrow: "FAQ",
@@ -285,7 +286,7 @@ export const siteConfig = {
       {
         question: '"Why pay monthly when AI tools are free?"',
         answer:
-          "Free AI gives you generic outputs. Codify gives you outputs that know your business. The difference is the reference architecture and the skills that read it. Build starts at $99/mo.",
+          "Free AI gives you generic outputs. Codify gives you outputs that know your business. The difference is the reference architecture and the skills that read it. Start with 5 free extractions and 3 content outputs — no credit card. Build starts at $99/mo when you're ready.",
       },
       {
         question: '"What if I want to cancel?"',
