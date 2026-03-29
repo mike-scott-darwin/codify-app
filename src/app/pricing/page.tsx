@@ -37,8 +37,8 @@ const tiers = [
           "Update a context file and every downstream output regenerates automatically. Change your offer once — everything updates.",
       },
       {
-        label: "WhatsApp support",
-        detail: "Direct access for setup help and questions.",
+        label: "Setup support via WhatsApp",
+        detail: "Get help with installation, configuration, and your first extraction.",
       },
     ],
     cta: "Start with Build",
@@ -86,7 +86,7 @@ const tiers = [
       {
         label: "Onboarding + WhatsApp support",
         detail:
-          "Guided setup to get your vault producing in the first session. Ongoing support via WhatsApp.",
+          "Guided setup to get your vault producing in the first session. Same-day WhatsApp support for questions and troubleshooting.",
       },
     ],
     cta: "Start with Pro",
