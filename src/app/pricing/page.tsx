@@ -37,8 +37,8 @@ const tiers = [
           "Update a context file and every downstream output regenerates automatically. Change your offer once — everything updates.",
       },
       {
-        label: "Setup support via WhatsApp",
-        detail: "Get help with installation, configuration, and your first extraction.",
+        label: "Setup support via WhatsApp (24-48h response)",
+        detail: "Get help with installation, configuration, and your first extraction. Responses within 24-48 hours on weekdays.",
       },
     ],
     cta: "Start with Build",
@@ -84,9 +84,9 @@ const tiers = [
           "/ghl connects your vault to GoHighLevel — create contacts, send emails, manage your pipeline, trigger workflows, book meetings. All from the vault.",
       },
       {
-        label: "Onboarding + WhatsApp support",
+        label: "Onboarding + same-day WhatsApp support",
         detail:
-          "Guided setup to get your vault producing in the first session. Same-day WhatsApp support for questions and troubleshooting.",
+          "Guided setup to get your vault producing in the first session. Same-day WhatsApp responses for questions and troubleshooting.",
       },
     ],
     cta: "Start with Pro",
@@ -127,9 +127,9 @@ const tiers = [
           "Your business knowledge lives on a private VPS that you control. Encrypted, version-controlled, full audit trail, instant access revocation. Your IP never trains anyone else's AI.",
       },
       {
-        label: "Direct access",
+        label: "Priority WhatsApp (4h response) + scheduled calls",
         detail:
-          "WhatsApp + scheduled calls. Priority support and strategic input.",
+          "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to tune your vault and plan campaigns.",
       },
     ],
     cta: "Start with VIP",
