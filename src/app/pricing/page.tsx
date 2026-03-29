@@ -42,6 +42,7 @@ const tiers = [
       },
     ],
     cta: "Start with Build",
+    ctaUrl: "https://link.fastpaydirect.com/payment-link/69c89e4cfb727d9c905d31e5",
     highlight: false,
   },
   {
@@ -89,6 +90,7 @@ const tiers = [
       },
     ],
     cta: "Start with Pro",
+    ctaUrl: "https://link.fastpaydirect.com/payment-link/69c89e84fb727d9c905d31e6",
     highlight: true,
   },
   {
@@ -131,6 +133,7 @@ const tiers = [
       },
     ],
     cta: "Start with VIP",
+    ctaUrl: "https://link.fastpaydirect.com/payment-link/69c89dddfb727d9c905d31e2",
     highlight: false,
   },
 ];
@@ -279,7 +282,9 @@ export default function Pricing() {
 
                   {/* CTA */}
                   <a
-                    href="/get-started"
+                    href={tier.ctaUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className={`block text-center font-semibold text-sm py-3.5 rounded-lg transition-all ${
                       tier.highlight
                         ? "bg-blue text-black hover:brightness-110"

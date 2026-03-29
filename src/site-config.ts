@@ -214,6 +214,7 @@ export const siteConfig = {
         ],
         cta: "Start Free Trial",
         ctaUrl: "/get-started",
+        payUrl: "https://link.fastpaydirect.com/payment-link/69c89e4cfb727d9c905d31e5",
         highlight: false,
       },
       {
@@ -234,6 +235,7 @@ export const siteConfig = {
         ],
         cta: "Start Free Trial",
         ctaUrl: "/get-started",
+        payUrl: "https://link.fastpaydirect.com/payment-link/69c89e84fb727d9c905d31e6",
         highlight: true,
       },
       {
@@ -254,6 +256,7 @@ export const siteConfig = {
         ],
         cta: "Start Free Trial",
         ctaUrl: "/get-started",
+        payUrl: "https://link.fastpaydirect.com/payment-link/69c89dddfb727d9c905d31e2",
         highlight: false,
       },
     ],
