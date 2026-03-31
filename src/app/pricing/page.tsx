@@ -149,8 +149,8 @@ export default function Pricing() {
             Start Free. Scale When Ready.
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed mb-8">
-            5 extractions + 3 content outputs free. No credit card. Your files
-            are always yours.
+            See what AI does when it actually knows your business.
+            Free trial, no credit card. Your files are always yours.
           </p>
 
           {/* Toggle */}
@@ -286,7 +286,7 @@ export default function Pricing() {
                   No lock-in. Your data is yours.
                 </p>
                 <p className="text-xs text-muted leading-relaxed">
-                  Start with 5 extractions + 3 content outputs free. No credit card.
+                  Try it free — no credit card, no commitment.
                   Cancel anytime — month-to-month, no contracts. Your reference
                   files are plain markdown in your own repository. You keep
                   everything you built.

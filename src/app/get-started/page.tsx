@@ -72,10 +72,11 @@ export default function GetStarted() {
             FREE TRIAL
           </p>
           <h1 className="font-bold text-white leading-[1.1] mb-4 text-[clamp(1.75rem,5vw,2.5rem)]">
-            Start Your Free Trial
+            See What AI Can Do When It{"\n"}Actually Knows Your Business
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
-            5 extractions + 3 content outputs. No credit card required.
+            We&apos;ll capture your expertise, structure it, and show you the
+            difference it makes. No credit card. No commitment.
           </p>
         </div>
       </section>
@@ -171,19 +172,32 @@ export default function GetStarted() {
             </form>
           </div>
 
-          {/* Trial includes */}
+          {/* What you get */}
           <div className="mt-6 space-y-3">
             <p className="text-xs text-dim uppercase tracking-wider text-center">
-              Your free trial includes
+              What you&apos;ll walk away with
             </p>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-surface border border-border rounded-lg p-3 text-center">
-                <p className="text-xl font-bold text-white">5</p>
-                <p className="text-xs text-muted">Context extractions</p>
+            <div className="grid grid-cols-1 gap-3">
+              <div className="bg-surface border border-border rounded-lg p-4 flex items-start gap-3">
+                <span className="text-green shrink-0 mt-0.5">&#x2713;</span>
+                <div>
+                  <p className="text-sm font-medium text-white">Your expertise captured in structured files</p>
+                  <p className="text-xs text-muted">We interview your business — your offer, audience, voice, and beliefs — and turn it into files AI can actually use.</p>
+                </div>
               </div>
-              <div className="bg-surface border border-border rounded-lg p-3 text-center">
-                <p className="text-xl font-bold text-white">3</p>
-                <p className="text-xs text-muted">Content outputs</p>
+              <div className="bg-surface border border-border rounded-lg p-4 flex items-start gap-3">
+                <span className="text-green shrink-0 mt-0.5">&#x2713;</span>
+                <div>
+                  <p className="text-sm font-medium text-white">AI outputs that sound like you, not a robot</p>
+                  <p className="text-xs text-muted">See the difference when AI reads your context first. Ads, content, or proposals that match your voice on the first draft.</p>
+                </div>
+              </div>
+              <div className="bg-surface border border-border rounded-lg p-4 flex items-start gap-3">
+                <span className="text-green shrink-0 mt-0.5">&#x2713;</span>
+                <div>
+                  <p className="text-sm font-medium text-white">Files you own — no lock-in, no platform dependency</p>
+                  <p className="text-xs text-muted">Plain text files in your own private repository. Works with Claude, GPT, Gemini, or whatever comes next.</p>
+                </div>
               </div>
             </div>
             <div className="grid grid-cols-3 gap-3">
@@ -191,7 +205,7 @@ export default function GetStarted() {
                 <p className="text-xs text-muted">No credit card</p>
               </div>
               <div className="bg-surface border border-border rounded-lg p-3 text-center">
-                <p className="text-xs text-muted">Your files, your repo</p>
+                <p className="text-xs text-muted">You own everything</p>
               </div>
               <div className="bg-surface border border-border rounded-lg p-3 text-center">
                 <p className="text-xs text-muted">WhatsApp support</p>
