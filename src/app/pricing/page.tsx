@@ -9,53 +9,53 @@ const tiers = [
     monthly: 199,
     annual: 1497,
     description:
-      "The output engine. Extract your expertise, generate ad-ready outputs from your reference stack. All skills unlocked.",
-    who: "For business owners who want AI that actually knows their business — extracting expertise, generating outputs, finding leads, and managing their pipeline from one place.",
+      "Full access. We codify your expertise and you generate ads, proposals, emails, and websites that sound like you — not a machine.",
+    who: "For business owners who want AI that actually knows their business — generating ads that convert, proposals that close, and finding leads that match their ideal client.",
     features: [
       {
-        label: "Context extraction",
+        label: "Capture your expertise",
         detail:
-          "Capture the knowledge in your head through guided interviews. /extract, /import, and /enrich build your context files from scratch or from existing documents.",
+          "We interview your business through guided conversations — your offer, audience, voice, and beliefs — and turn it into documents AI can actually use.",
       },
       {
-        label: "Content creation",
+        label: "Content that sounds like you",
         detail:
-          "Generate blog posts, social content, and newsletters that match your voice. /content, /research, and /brief — all informed by your context.",
+          "Generate blog posts, social content, and newsletters that match your voice. Every piece is informed by your real business knowledge, not templates.",
       },
       {
-        label: "Competitive intelligence",
+        label: "Track your competitors",
         detail:
-          "Scrape competitor ads, websites, and social profiles. /spy saves findings to your vault and flags gaps in your positioning.",
+          "Automatically monitor competitor ads, websites, and social profiles. See what they're doing and where the gaps are in your market.",
       },
       {
-        label: "Output skills",
+        label: "Ads, emails, proposals, funnels — first drafts in minutes",
         detail:
-          "Full library: /ad, /email, /landing, /proposal, /pitch, /funnel. Generate client-ready deliverables in your voice, every time.",
+          "Generate client-ready deliverables in your voice. Ads, emails, landing pages, proposals, pitch decks, and full funnels — all from your business knowledge.",
       },
       {
-        label: "Client skills",
+        label: "Case studies, follow-ups, objection handling",
         detail:
-          "/case-study turns wins into proof. /follow-up drafts post-meeting messages. /objection handles sales pushback using your actual expertise.",
+          "Turn client wins into proof. Draft post-meeting follow-ups. Handle sales objections using your actual expertise and track record.",
       },
       {
-        label: "Website builder",
+        label: "Full website from your business knowledge",
         detail:
-          "/site builds a complete, deployable website from your context files. The codify.build site was built with this exact skill.",
+          "Generate a complete, deployable website built from your expertise. The codify.build site was built this exact way.",
       },
       {
-        label: "Lead generation",
+        label: "Find and qualify leads",
         detail:
-          "/leads finds and qualifies prospects against your ideal client profile, scores them 1-10, and drafts personalised outreach in your voice.",
+          "Prospects matched against your ideal client profile, scored 1-10, with personalised outreach drafted in your voice. Pushed straight to your CRM.",
       },
       {
-        label: "CRM integration",
+        label: "CRM connected",
         detail:
-          "/ghl connects your vault to GoHighLevel — create contacts, send emails, manage your pipeline, trigger workflows, book meetings. All from the vault.",
+          "Linked to GoHighLevel — create contacts, send emails, manage your pipeline, trigger workflows, and book meetings. All connected to your business knowledge.",
       },
       {
         label: "Onboarding + same-day WhatsApp support",
         detail:
-          "Guided setup to get your vault producing in the first session. Same-day WhatsApp responses for questions and troubleshooting.",
+          "Guided setup to get you producing results in the first session. Same-day WhatsApp responses for questions and troubleshooting.",
       },
     ],
     cta: "Start with Pro",
@@ -68,47 +68,47 @@ const tiers = [
     monthly: 497,
     annual: 2997,
     description:
-      "Hands-off operation. Built, maintained, and run for you on infrastructure you own.",
-    who: "For established businesses that want the full system built and run for them — vault configured, AI assistant on WhatsApp, overnight automation, and everything on private infrastructure they control.",
+      "Hands-off operation. We build it, run it, and maintain it for you — on infrastructure you own.",
+    who: "For established businesses that want the full system built and run for them — AI assistant on WhatsApp, overnight research, daily briefings, and everything on private infrastructure they control.",
     features: [
       {
         label: "Everything in Pro",
-        detail: "All skills, integrations, and support.",
+        detail: "All capabilities, integrations, and support included.",
       },
       {
         label: "Done-for-you build",
         detail:
-          "We extract your context, build your vault, configure your skills, and tune everything to your business. You're operational from day one.",
+          "We capture your expertise, build your system, and tune everything to your business. You're producing results from day one without touching the setup.",
       },
       {
-        label: "Distribution skills",
+        label: "Publish and distribute everywhere",
         detail:
-          "/publish, /campaign, /repurpose — push content to every channel. One command can generate and distribute a full campaign across email, social, ads, and your website.",
+          "Push content to every channel at once. One request can generate and distribute a full campaign across email, social, ads, and your website.",
       },
       {
-        label: "Pocket Architect (WhatsApp)",
+        label: "AI assistant on WhatsApp",
         detail:
-          "A context-aware AI assistant on your phone. It reads your vault before responding. Send a message or voice note, get answers grounded in your business context. Request research, review drafts, or ask strategic questions — all from WhatsApp. No terminal needed.",
+          "An AI assistant on your phone that knows your business before it responds. Send a message or voice note, get answers grounded in your expertise. Request research, review drafts, or ask strategic questions — all from WhatsApp.",
       },
       {
-        label: "Overnight Research Engine",
+        label: "Research runs while you sleep",
         detail:
-          "Queue research topics via WhatsApp or terminal. Autonomous agents run overnight, results auto-commit to your vault by morning. Your context compounds while you sleep.",
+          "Queue research topics via WhatsApp. Results are ready by morning. Your business intelligence compounds while you sleep.",
       },
       {
         label: "Daily Briefing",
         detail:
-          "Morning summary delivered to WhatsApp at 7am. What changed in your vault, what's stale, what needs attention — before your first coffee.",
+          "Morning summary delivered to WhatsApp at 7am. What's new, what needs attention, and what opportunities surfaced — before your first coffee.",
       },
       {
-        label: "Sovereign Vault",
+        label: "Private infrastructure you own",
         detail:
-          "Your business knowledge lives on a private VPS that you control. Encrypted, version-controlled, full audit trail, instant access revocation. Your IP never trains anyone else's AI.",
+          "Your business knowledge lives on a private server that you control. Encrypted, full audit trail, instant access revocation. Your IP never trains anyone else's AI.",
       },
       {
         label: "Priority WhatsApp (4h response) + scheduled calls",
         detail:
-          "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to tune your vault and plan campaigns.",
+          "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to review performance and plan campaigns.",
       },
     ],
     cta: "Start with VIP",

@@ -55,28 +55,28 @@ export const siteConfig = {
         title: "Extract",
         description:
           "Capture the knowledge that lives in your head — your decisions, frameworks, beliefs, and the logic behind how you run your business. Not what's on your website. What's behind it.",
-        outcome: "Your expertise captured in structured files",
+        outcome: "Your expertise captured — not in your head anymore",
       },
       {
         label: "02",
         title: "Codify",
         description:
-          "Your knowledge becomes reference files — soul.md, offer.md, audience.md, voice.md — stored in a private repository you own. Powered by Claude as the recommended engine. No lock-in — your files work with any AI.",
-        outcome: "AI reads your context before every output",
+          "Your knowledge becomes structured business documents — your soul, offer, audience, and voice — stored securely in files you own. Works with any AI. No lock-in to any platform.",
+        outcome: "AI knows your business before it writes a word",
       },
       {
         label: "03",
         title: "Generate",
         description:
-          "Ads, emails, proposals, websites, landing pages — all generated from your reference files. One command builds a full website. Another scrapes competitor ads. 90% accuracy on first drafts because the AI finally knows your business.",
-        outcome: "High-fidelity outputs that sound like you",
+          "Ads, emails, proposals, websites, landing pages — all built from your business knowledge. 90% accurate first drafts because the AI finally knows your business. Less editing. Faster turnaround.",
+        outcome: "First drafts that sound like you, not a machine",
       },
       {
         label: "04",
         title: "Compound",
         description:
-          "Scrape competitor ads and websites. Find and qualify leads. Push them to your CRM. Analyse what's working, feed it back into your context files, and every downstream output gets better automatically. The system optimises itself.",
-        outcome: "Every cycle, your outputs get sharper",
+          "Track competitor ads and websites. Find and qualify leads. Push them to your CRM. Analyse what's working, feed it back, and every future deliverable gets better automatically. The system improves itself.",
+        outcome: "Every week, your results get sharper",
       },
     ],
   },
@@ -84,10 +84,10 @@ export const siteConfig = {
     eyebrow: "EAT YOUR OWN COOKING",
     headline: "We Run This System Every Day.",
     description:
-      "Every piece of content on this site was generated from the same system we sell. 48 reference files. 322+ commits. This isn't theory.",
+      "Every piece of content on this site was generated from the same system we sell. 48 business knowledge documents. 322+ refinements. This isn't theory.",
     stats: [
-      { value: "48", label: "Reference files", suffix: "" },
-      { value: "322", label: "Git commits", suffix: "+" },
+      { value: "48", label: "Business documents", suffix: "" },
+      { value: "322", label: "Refinements", suffix: "+" },
       { value: "90", label: "First-draft accuracy", suffix: "%" },
       { value: "9", label: "Hours/week to run it all", suffix: "h" },
     ],
@@ -98,17 +98,17 @@ export const siteConfig = {
       "16+ hours/week on content and strategy",
     ],
     after: [
-      "One vault — context, content, CRM, and website in one place",
-      "AI reads your full context before writing anything",
-      "Scrape competitors, find leads, push to CRM — all from the vault",
-      "9 hours/week — the system optimises itself",
+      "One system — your knowledge, content, CRM, and website in one place",
+      "AI knows your business before it writes anything",
+      "Track competitors, find leads, push to CRM — automatically",
+      "9 hours/week — the system improves itself",
     ],
   },
   testimonials: {
     eyebrow: "REAL RESULTS",
     headline: "From Generic to Codified.",
     description:
-      "Same engine. Same reference architecture. Their words, not ours.",
+      "Same system. Same approach. Their words, not ours.",
     items: [
       {
         name: "Joshua Breaux",
@@ -195,7 +195,7 @@ export const siteConfig = {
     eyebrow: "PRICING",
     headline: "Start Free. Scale When Ready.",
     description:
-      "Try 5 extractions + 3 outputs free. Then pick your tier.",
+      "Try it free. Then pick your speed.",
     tiers: [
       {
         name: "Pro",
@@ -203,16 +203,16 @@ export const siteConfig = {
         period: "/mo",
         annual: "$1,497/yr",
         description:
-          "The output engine. Extract your expertise, generate ad-ready outputs from your reference stack. All skills unlocked.",
+          "Full access. We codify your expertise and you generate ads, proposals, emails, and websites that sound like you — not a machine.",
         features: [
-          "Context extraction: /extract /import /enrich",
-          "Content creation: /content /research /brief",
-          "Competitive intel: /spy — scrape competitor ads, sites, and social",
-          "Output skills: /ad /email /landing /proposal /pitch /funnel",
-          "Client skills: /case-study /follow-up /objection",
-          "Website builder: /site — full website from your context files",
-          "Lead generation: /leads — find, qualify, and push to CRM",
-          "CRM integration: /ghl — contacts, emails, pipeline, workflows",
+          "Capture your expertise — we extract what's in your head into documents AI can use",
+          "Content that sounds like you — blog posts, social, newsletters in your voice",
+          "Track your competitors — monitor their ads, websites, and positioning automatically",
+          "Ads, emails, proposals, landing pages, funnels — first drafts in minutes",
+          "Case studies, follow-ups, objection handling — from your real experience",
+          "Full website built from your business knowledge",
+          "Find and qualify leads — scored against your ideal client, pushed to your CRM",
+          "CRM integration — contacts, emails, pipeline, and workflows connected",
           "Onboarding + same-day WhatsApp support",
         ],
         cta: "Start Free Trial",
@@ -227,16 +227,16 @@ export const siteConfig = {
         annual: "$2,997/yr",
         badge: "Sovereign Vault",
         description:
-          "Hands-off operation. Built, maintained, and run for you on infrastructure you own.",
+          "We build it, run it, and maintain it for you — on infrastructure you own. You get results without touching the system.",
         features: [
           "Everything in Pro",
-          "Done-for-you build — we extract, structure, and deploy",
-          "Distribution: /publish /campaign /repurpose",
-          "Pocket Architect — AI assistant on WhatsApp that reads your vault before responding",
-          "Overnight Research Engine — queue topics, agents run overnight, results in your vault by morning",
-          "Daily Briefing — morning summary of what changed, what's stale, what needs attention",
-          "Sovereign Vault — private VPS, self-hosted, full IP ownership",
-          "Priority WhatsApp (4h response) + scheduled calls",
+          "Done-for-you — we codify your expertise, build your system, and deploy it",
+          "Publish and distribute — push content to email, social, ads, and your website in one go",
+          "AI assistant on WhatsApp — ask questions, request drafts, get answers grounded in your business",
+          "Research runs while you sleep — queue topics, results land by morning",
+          "Daily briefing — what changed, what needs attention, before your first coffee",
+          "Your own private server — encrypted, fully owned, your IP never trains anyone else's AI",
+          "Priority WhatsApp (4h response) + scheduled strategy calls",
         ],
         cta: "Start Free Trial",
         ctaUrl: "/get-started",
@@ -245,7 +245,7 @@ export const siteConfig = {
       },
     ],
     guarantee:
-      "Try it free — no credit card, no commitment. Your files are always yours — plain text in your own repository. Cancel anytime. Your system keeps working.",
+      "Try it free — no credit card, no commitment. Everything we build is yours — stored securely, readable by any AI. Cancel anytime. Your system keeps working.",
   },
   objections: {
     eyebrow: "FAQ",
@@ -254,12 +254,12 @@ export const siteConfig = {
       {
         question: '"I can just use ChatGPT Projects"',
         answer:
-          "Projects are a filing cabinet. This is an architecture. Projects don't compound and lock you to one platform. Codify runs on Claude as the recommended engine, but your files are plain markdown — take them anywhere.",
+          "Projects are a filing cabinet. This is an operating system for your business knowledge. Projects don't compound and lock you to one platform. Your Codify files work with any AI — Claude, GPT, Gemini, whatever comes next.",
       },
       {
         question: '"Why not just write good prompts?"',
         answer:
-          "Prompts are disposable. You write them once, they work once. Reference files inform every output, forever. Context > Prompts.",
+          "Prompts are disposable. You write them once, they work once. Your codified business knowledge informs every ad, email, and proposal — forever. That's the difference.",
       },
       {
         question: '"I\'m not technical"',
@@ -269,27 +269,27 @@ export const siteConfig = {
       {
         question: '"Why pay monthly when AI tools are free?"',
         answer:
-          "Free AI gives you generic outputs. Codify gives you outputs that know your business. The difference is the reference architecture and the skills that read it. Try it free — see the difference when AI reads your context first. Pro starts at $199/mo when you're ready.",
+          "Free AI gives you generic results because it knows nothing about your business. Codify gives you ads, proposals, and content that sound like you — because it knows your offer, your audience, and your voice. Try it free. Pro starts at $199/mo when you're ready.",
       },
       {
         question: '"What if I want to cancel?"',
         answer:
-          "Month-to-month. Cancel anytime. Your reference files are yours — markdown in your own repo. You keep everything you built. We don't hold your data hostage.",
+          "Month-to-month. Cancel anytime. Everything we build is yours — stored securely in files you own. You keep it all. We don't hold your data hostage.",
       },
       {
         question: '"What\'s the Sovereign Vault?"',
         answer:
-          "Your own Digital Fortress. Your business knowledge lives on a self-hosted private VPS that you control. Encrypted, version-controlled, with a full audit trail and instant access revocation. You own the infrastructure. Your IP never trains anyone else's AI. Available on the VIP tier.",
+          "Your own Digital Fortress. Your business knowledge lives on a private server that you control. Encrypted, with full change history and instant access revocation. You own the infrastructure. Your IP never trains anyone else's AI. Available on the VIP tier.",
       },
       {
         question: '"Can it actually build and deploy funnels?"',
         answer:
-          "Yes. The /funnel skill generates SEO pages, launch funnels, blog batches, and retargeting assets — all from your context files — and deploys them directly to GoHighLevel. One command can produce 20+ pages that convert cold traffic because every page is built on your real business context, not templates.",
+          "Yes. Codify generates SEO pages, launch funnels, blog batches, and retargeting assets — all from your business knowledge — and deploys them directly to GoHighLevel. One run can produce 20+ pages that convert cold traffic because every page is built on your real expertise, not templates.",
       },
       {
         question: '"Can it scrape competitors and find leads?"',
         answer:
-          "Yes. /spy scrapes competitor ads from Meta Ad Library, pulls their website copy and pricing, and analyses their social strategy — then flags gaps in your own context files. /leads finds and qualifies prospects against your ideal client profile, scores them, and pushes the best ones into your CRM. Everything feeds back into your vault so your outputs keep improving.",
+          "Yes. Codify tracks competitor ads from Meta Ad Library, pulls their website copy and pricing, and analyses their social strategy — then flags gaps in your positioning. It also finds and qualifies prospects against your ideal client profile, scores them, and pushes the best ones into your CRM. Everything feeds back so your results keep improving.",
       },
       {
         question: '"How is this different from hiring an AI consultant?"',
