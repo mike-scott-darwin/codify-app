@@ -4,12 +4,13 @@ import { useState } from "react";
 
 const tiers = [
   {
-    name: "Build",
-    monthly: 99,
-    annual: 699,
+    name: "Pro",
+    badge: "Most Popular",
+    monthly: 199,
+    annual: 1497,
     description:
-      "The thinking engine. Extract, research, and codify — every session makes the next one smarter.",
-    who: "For founders getting started with AI who want to capture their expertise and start generating content that actually sounds like them.",
+      "The output engine. Extract your expertise, generate ad-ready outputs from your reference stack. All skills unlocked.",
+    who: "For business owners who want AI that actually knows their business — extracting expertise, generating outputs, finding leads, and managing their pipeline from one place.",
     features: [
       {
         label: "Context extraction",
@@ -25,38 +26,6 @@ const tiers = [
         label: "Competitive intelligence",
         detail:
           "Scrape competitor ads, websites, and social profiles. /spy saves findings to your vault and flags gaps in your positioning.",
-      },
-      {
-        label: "Vault health & optimisation",
-        detail:
-          "/audit checks your vault health. /optimise analyses what's working and recommends context file updates. Your vault gets smarter every week.",
-      },
-      {
-        label: "Auto-sync",
-        detail:
-          "Update a context file and every downstream output regenerates automatically. Change your offer once — everything updates.",
-      },
-      {
-        label: "Setup support via WhatsApp (24-48h response)",
-        detail: "Get help with installation, configuration, and your first extraction. Responses within 24-48 hours on weekdays.",
-      },
-    ],
-    cta: "Start with Build",
-    ctaUrl: "https://link.fastpaydirect.com/payment-link/69c89e4cfb727d9c905d31e5",
-    highlight: false,
-  },
-  {
-    name: "Pro",
-    badge: "Most Popular",
-    monthly: 199,
-    annual: 1497,
-    description:
-      "Full output skill library — ads, emails, proposals, websites, lead gen, and CRM. Client ready from day one.",
-    who: "For business owners ready to turn their vault into a revenue engine — generating ads, building websites, finding leads, and managing their pipeline from one place.",
-    features: [
-      {
-        label: "Everything in Build",
-        detail: "All extraction, content, competitive intel, and vault tools.",
       },
       {
         label: "Output skills",
@@ -99,17 +68,17 @@ const tiers = [
     monthly: 497,
     annual: 2997,
     description:
-      "The Digital Fortress. Done-for-you build, autonomous operations, and your IP secured on infrastructure you own.",
-    who: "For established businesses that want the full system built for them — vault configured, skills tuned, context extracted, and everything running on private infrastructure they control.",
+      "Hands-off operation. Built, maintained, and run for you on infrastructure you own.",
+    who: "For established businesses that want the full system built and run for them — vault configured, AI assistant on WhatsApp, overnight automation, and everything on private infrastructure they control.",
     features: [
       {
         label: "Everything in Pro",
         detail: "All skills, integrations, and support.",
       },
       {
-        label: "Done-for-you stack build",
+        label: "Done-for-you build",
         detail:
-          "We build your vault, extract your context, configure your skills, and tune everything to your business. You're operational from day one.",
+          "We extract your context, build your vault, configure your skills, and tune everything to your business. You're operational from day one.",
       },
       {
         label: "Distribution skills",
@@ -214,7 +183,7 @@ export default function Pricing() {
       {/* Tiers */}
       <section className="pb-16 md:pb-24">
         <div className="max-w-[1100px] mx-auto px-6 md:px-12">
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 gap-6 max-w-[800px] mx-auto">
             {tiers.map((tier) => {
               const price = annual ? tier.annual : tier.monthly;
               const period = annual ? "/yr" : "/mo";

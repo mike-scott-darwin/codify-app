@@ -195,38 +195,19 @@ export const siteConfig = {
     eyebrow: "PRICING",
     headline: "Start Free. Scale When Ready.",
     description:
-      "Begin with the free starter kit. Upgrade when you're ready to codify your full business.",
+      "Try 5 extractions + 3 outputs free. Then pick your tier.",
     tiers: [
-      {
-        name: "Build",
-        price: "$99",
-        period: "/mo",
-        annual: "$699/yr",
-        description:
-          "The thinking engine. Extract, research, and codify — every session makes the next one smarter.",
-        features: [
-          "Context extraction: /extract /import /enrich",
-          "Content creation: /content /research /brief",
-          "Competitive intel: /spy — scrape competitor ads, sites, and social",
-          "Vault health: /audit /start /optimise",
-          "Parallel AI agents + MCP routing",
-          "Auto-sync — update context, outputs regenerate downstream",
-          "Setup support via WhatsApp (24-48h response)",
-        ],
-        cta: "Start Free Trial",
-        ctaUrl: "/get-started",
-        payUrl: "https://link.fastpaydirect.com/payment-link/69c89e4cfb727d9c905d31e5",
-        highlight: false,
-      },
       {
         name: "Pro",
         price: "$199",
         period: "/mo",
         annual: "$1,497/yr",
         description:
-          "Full output skill library — ads, emails, proposals, landing pages, case studies. Client ready from day one.",
+          "The output engine. Extract your expertise, generate ad-ready outputs from your reference stack. All skills unlocked.",
         features: [
-          "Everything in Build",
+          "Context extraction: /extract /import /enrich",
+          "Content creation: /content /research /brief",
+          "Competitive intel: /spy — scrape competitor ads, sites, and social",
           "Output skills: /ad /email /landing /proposal /pitch /funnel",
           "Client skills: /case-study /follow-up /objection",
           "Website builder: /site — full website from your context files",
@@ -246,10 +227,10 @@ export const siteConfig = {
         annual: "$2,997/yr",
         badge: "Sovereign Vault",
         description:
-          "The Digital Fortress. Done-for-you build, autonomous operations, and your IP secured on infrastructure you own.",
+          "Hands-off operation. Built, maintained, and run for you on infrastructure you own.",
         features: [
           "Everything in Pro",
-          "Done-for-you stack build",
+          "Done-for-you build — we extract, structure, and deploy",
           "Distribution: /publish /campaign /repurpose",
           "Pocket Architect — AI assistant on WhatsApp that reads your vault before responding",
           "Overnight Research Engine — queue topics, agents run overnight, results in your vault by morning",
@@ -283,12 +264,12 @@ export const siteConfig = {
       {
         question: '"I\'m not technical"',
         answer:
-          "Neither are most of our users. Build tier walks you through it. Pro tier includes onboarding and ongoing support — you're client ready from day one.",
+          "Neither are most of our users. Pro tier includes onboarding and same-day WhatsApp support — you're client ready from day one.",
       },
       {
         question: '"Why pay monthly when AI tools are free?"',
         answer:
-          "Free AI gives you generic outputs. Codify gives you outputs that know your business. The difference is the reference architecture and the skills that read it. Start with 5 free extractions and 3 content outputs — no credit card. Build starts at $99/mo when you're ready.",
+          "Free AI gives you generic outputs. Codify gives you outputs that know your business. The difference is the reference architecture and the skills that read it. Start with 5 free extractions and 3 content outputs — no credit card. Pro starts at $199/mo when you're ready.",
       },
       {
         question: '"What if I want to cancel?"',
@@ -313,7 +294,7 @@ export const siteConfig = {
       {
         question: '"How is this different from hiring an AI consultant?"',
         answer:
-          "Consultants give you a report. We give you a system. Consultants leave after the engagement. The engine keeps compounding. Consultants cost $5-20K. Build starts at $99/mo.",
+          "Consultants give you a report. We give you a system. Consultants leave after the engagement. The engine keeps compounding. Consultants cost $5-20K. Pro starts at $199/mo.",
       },
     ],
   },
