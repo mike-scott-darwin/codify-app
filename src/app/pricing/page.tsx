@@ -117,9 +117,19 @@ const tiers = [
           "/publish, /campaign, /repurpose — push content to every channel. One command can generate and distribute a full campaign across email, social, ads, and your website.",
       },
       {
-        label: "Autonomous optimisation",
+        label: "Pocket Architect (WhatsApp)",
         detail:
-          "/optimise runs weekly on autopilot. Your vault analyses what's working, updates context files, and regenerates outputs. The system improves itself without you doing anything.",
+          "A context-aware AI assistant on your phone. It reads your vault before responding. Send a message or voice note, get answers grounded in your business context. Request research, review drafts, or ask strategic questions — all from WhatsApp. No terminal needed.",
+      },
+      {
+        label: "Overnight Research Engine",
+        detail:
+          "Queue research topics via WhatsApp or terminal. Autonomous agents run overnight, results auto-commit to your vault by morning. Your context compounds while you sleep.",
+      },
+      {
+        label: "Daily Briefing",
+        detail:
+          "Morning summary delivered to WhatsApp at 7am. What changed in your vault, what's stale, what needs attention — before your first coffee.",
       },
       {
         label: "Sovereign Vault",
