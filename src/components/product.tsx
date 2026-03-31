@@ -29,7 +29,7 @@ export function Product() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 gap-6 max-w-[800px] mx-auto">
           {product.tiers.map((tier, i) => (
             <div
               key={tier.name}
