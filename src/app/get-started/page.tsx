@@ -76,7 +76,7 @@ export default function GetStarted() {
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
             We&apos;ll codify your expertise so AI writes ads that convert,
-            proposals that close, and surfaces opportunities you&apos;d miss.
+            proposals that close, and finds revenue you&apos;re leaving on the table.
             No credit card. No commitment.
           </p>
         </div>
