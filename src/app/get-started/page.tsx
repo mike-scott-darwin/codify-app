@@ -72,11 +72,12 @@ export default function GetStarted() {
             FREE TRIAL
           </p>
           <h1 className="font-bold text-white leading-[1.1] mb-4 text-[clamp(1.75rem,5vw,2.5rem)]">
-            See What AI Can Do When It{"\n"}Actually Knows Your Business
+            Stop Re-Explaining Your{"\n"}Business to AI Every Day
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
-            We&apos;ll capture what makes your business unique and turn it into
-            AI outputs that sound like you — not a machine. No credit card. No commitment.
+            We&apos;ll codify your expertise so AI writes ads that convert,
+            proposals that close, and surfaces opportunities you&apos;d miss.
+            No credit card. No commitment.
           </p>
         </div>
       </section>
@@ -175,28 +176,28 @@ export default function GetStarted() {
           {/* What you get */}
           <div className="mt-6 space-y-3">
             <p className="text-xs text-dim uppercase tracking-wider text-center">
-              What you&apos;ll walk away with
+              What changes for your business
             </p>
             <div className="grid grid-cols-1 gap-3">
               <div className="bg-surface border border-border rounded-lg p-4 flex items-start gap-3">
                 <span className="text-green shrink-0 mt-0.5">&#x2713;</span>
                 <div>
-                  <p className="text-sm font-medium text-white">Your expertise captured in structured files</p>
-                  <p className="text-xs text-muted">We interview your business — your offer, audience, voice, and beliefs — and turn it into files AI can actually use.</p>
+                  <p className="text-sm font-medium text-white">Ads, proposals, and emails that close — first draft</p>
+                  <p className="text-xs text-muted">AI that knows your offer, your audience, and your voice writes copy that sounds like you — not generic filler you have to rewrite.</p>
                 </div>
               </div>
               <div className="bg-surface border border-border rounded-lg p-4 flex items-start gap-3">
                 <span className="text-green shrink-0 mt-0.5">&#x2713;</span>
                 <div>
-                  <p className="text-sm font-medium text-white">AI outputs that sound like you, not a robot</p>
-                  <p className="text-xs text-muted">See the difference when AI reads your context first. Ads, content, or proposals that match your voice on the first draft.</p>
+                  <p className="text-sm font-medium text-white">Hours back every week — stop re-explaining your business</p>
+                  <p className="text-xs text-muted">Your expertise is codified once. Every AI tool reads it automatically. No more copy-pasting context into every conversation.</p>
                 </div>
               </div>
               <div className="bg-surface border border-border rounded-lg p-4 flex items-start gap-3">
                 <span className="text-green shrink-0 mt-0.5">&#x2713;</span>
                 <div>
-                  <p className="text-sm font-medium text-white">Files you own — no lock-in, no platform dependency</p>
-                  <p className="text-xs text-muted">Plain text files in your own private repository. Works with Claude, GPT, Gemini, or whatever comes next.</p>
+                  <p className="text-sm font-medium text-white">Opportunities you&apos;d never spot manually</p>
+                  <p className="text-xs text-muted">AI cross-references your expertise against market gaps, competitor blind spots, and prospect data — surfacing revenue you&apos;re leaving on the table.</p>
                 </div>
               </div>
             </div>
