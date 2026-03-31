@@ -75,8 +75,8 @@ export default function GetStarted() {
             See What AI Can Do When It{"\n"}Actually Knows Your Business
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
-            We&apos;ll capture your expertise, structure it, and show you the
-            difference it makes. No credit card. No commitment.
+            We&apos;ll capture what makes your business unique and turn it into
+            AI outputs that sound like you — not a machine. No credit card. No commitment.
           </p>
         </div>
       </section>
