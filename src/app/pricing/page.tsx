@@ -5,6 +5,7 @@ import { useState } from "react";
 const tiers = [
   {
     name: "Pro",
+    key: "pro",
     badge: "Most Popular",
     monthly: 199,
     annual: 1497,
@@ -59,16 +60,16 @@ const tiers = [
       },
     ],
     cta: "Start with Pro",
-    ctaUrl: "https://link.fastpaydirect.com/payment-link/69c89e84fb727d9c905d31e6",
     highlight: true,
   },
   {
     name: "VIP",
-    badge: "Sovereign Vault",
+    key: "vip",
+    badge: "Done For You",
     monthly: 497,
     annual: 2997,
     description:
-      "Hands-off operation. We build it, run it, and maintain it for you — on infrastructure you own.",
+      "We build it, run it, and maintain it for you — on infrastructure you own. You get results without touching the system.",
     who: "For established businesses that want the full system built and run for them — AI assistant on WhatsApp, overnight research, daily briefings, and everything on private infrastructure they control.",
     features: [
       {
@@ -98,7 +99,7 @@ const tiers = [
       {
         label: "Daily Briefing",
         detail:
-          "Morning summary delivered to WhatsApp at 7am. What's new, what needs attention, and what opportunities surfaced — before your first coffee.",
+          "Morning summary delivered to WhatsApp at 7am. What's new, what needs attention, and what opportunities came up — before your first coffee.",
       },
       {
         label: "Private infrastructure you own",
@@ -112,13 +113,33 @@ const tiers = [
       },
     ],
     cta: "Start with VIP",
-    ctaUrl: "https://link.fastpaydirect.com/payment-link/69c89dddfb727d9c905d31e2",
     highlight: false,
   },
 ];
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
+
+  async function handleCheckout(tierKey: string) {
+    setLoading(tierKey);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tier: tierKey,
+          billing: annual ? "annual" : "monthly",
+        }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } catch {
+      setLoading(null);
+    }
+  }
 
   return (
     <main>
@@ -260,18 +281,17 @@ export default function Pricing() {
                   </div>
 
                   {/* CTA */}
-                  <a
-                    href={tier.ctaUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`block text-center font-semibold text-sm py-3.5 rounded-lg transition-all ${
+                  <button
+                    onClick={() => handleCheckout(tier.key)}
+                    disabled={loading === tier.key}
+                    className={`block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all cursor-pointer disabled:opacity-60 ${
                       tier.highlight
                         ? "bg-blue text-black hover:brightness-110"
                         : "bg-white/10 text-white hover:bg-white/15"
                     }`}
                   >
-                    {tier.cta}
-                  </a>
+                    {loading === tier.key ? "Redirecting..." : tier.cta}
+                  </button>
                 </div>
               );
             })}
@@ -287,9 +307,9 @@ export default function Pricing() {
                 </p>
                 <p className="text-xs text-muted leading-relaxed">
                   Try it free — no credit card, no commitment.
-                  Cancel anytime — month-to-month, no contracts. Your reference
-                  files are plain markdown in your own repository. You keep
-                  everything you built.
+                  Cancel anytime — month-to-month, no contracts.
+                  Everything we build is yours — stored securely, readable by any AI.
+                  You keep everything.
                 </p>
               </div>
             </div>
