@@ -1,16 +1,21 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 
 function SetupContent() {
   const searchParams = useSearchParams();
   const name = searchParams.get("name") || "there";
   const email = searchParams.get("email") || "";
+  const [copied, setCopied] = useState(false);
 
-  const installerUrl = email
-    ? `/api/installer?email=${encodeURIComponent(email)}`
-    : "#";
+  const installCmd = `curl -fsSL "https://codify.build/api/installer?email=${encodeURIComponent(email)}" | bash`;
+
+  function handleCopy() {
+    navigator.clipboard.writeText(installCmd);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  }
 
   return (
     <main>
@@ -41,27 +46,35 @@ function SetupContent() {
             Hi {name}, here&apos;s your vault.
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
-            Download the file below and double-click it.
+            Open Terminal on your Mac and paste the command below.
             <br />
             Everything installs automatically.
           </p>
         </div>
       </section>
 
-      {/* Download */}
+      {/* Install command */}
       <section className="pb-10 md:pb-14">
-        <div className="max-w-[480px] mx-auto px-6 md:px-12">
-          <div className="bg-surface border border-green/30 rounded-xl p-8 text-center">
-            <div className="text-4xl mb-4">&#x2193;</div>
-            <a
-              href={installerUrl}
-              download="install-codify.command"
-              className="inline-flex items-center justify-center gap-2 w-full bg-blue text-black font-semibold text-base py-4 rounded-lg hover:brightness-110 transition-all"
-            >
-              Download Installer
-            </a>
-            <p className="text-xs text-muted mt-4">
-              macOS only &middot; If blocked, right-click &rarr; Open
+        <div className="max-w-[520px] mx-auto px-6 md:px-12">
+          <div className="bg-surface border border-green/30 rounded-xl p-6 md:p-8">
+            <p className="text-xs text-muted mb-3 text-center">
+              Open Terminal (Cmd + Space, type &quot;Terminal&quot;, press Enter)
+              then paste:
+            </p>
+            <div className="relative">
+              <div className="bg-[#111] rounded-lg border border-border p-4 font-mono text-xs leading-relaxed text-white overflow-x-auto">
+                {installCmd}
+              </div>
+              <button
+                onClick={handleCopy}
+                className="absolute top-2 right-2 bg-blue/20 hover:bg-blue/40 text-blue text-xs px-3 py-1.5 rounded-md transition-colors"
+              >
+                {copied ? "Copied!" : "Copy"}
+              </button>
+            </div>
+            <p className="text-xs text-muted mt-4 text-center">
+              Takes about 2 minutes. You may need to enter your Mac password
+              once.
             </p>
           </div>
         </div>
@@ -83,7 +96,7 @@ function SetupContent() {
                   Installs Obsidian + AI engine
                 </p>
                 <p className="text-xs text-muted">
-                  Two free apps. Takes about 90 seconds.
+                  Two free apps. Automatic. About 90 seconds.
                 </p>
               </div>
             </div>
@@ -93,7 +106,7 @@ function SetupContent() {
               </div>
               <div>
                 <p className="text-sm font-medium text-white">
-                  Opens your vault
+                  Opens your vault in Obsidian
                 </p>
                 <p className="text-xs text-muted">
                   Your private knowledge base with 27 skills ready to go.
@@ -106,11 +119,11 @@ function SetupContent() {
               </div>
               <div>
                 <p className="text-sm font-medium text-white">
-                  You open Terminal and type: claude
+                  Type &quot;claude&quot; then &quot;/start&quot;
                 </p>
                 <p className="text-xs text-muted">
-                  Then type /start — the AI asks about your business and builds
-                  your vault. About 30 minutes.
+                  The AI asks about your business and builds your vault. About
+                  30 minutes.
                 </p>
               </div>
             </div>
@@ -132,12 +145,6 @@ function SetupContent() {
             </div>
             <div className="px-4 py-4 font-mono text-xs leading-relaxed">
               <p className="text-dim">
-                <span className="text-green">$</span>{" "}
-                <span className="text-white">
-                  cd ~/Documents/codify-trial-vault
-                </span>
-              </p>
-              <p className="text-dim mt-1">
                 <span className="text-green">$</span>{" "}
                 <span className="text-white">claude</span>
               </p>
