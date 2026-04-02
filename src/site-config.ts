@@ -25,10 +25,10 @@ export const siteConfig = {
     items: [
       {
         title: "The Context Gap",
-        stat: "95%",
-        statLabel: "of AI pilots fail",
+        stat: "80%",
+        statLabel: "of AI projects underdeliver",
         description:
-          "Not because the AI is bad — because it has zero context about your business. You keep re-explaining the same things every session.",
+          "60–80% underdeliver on ROI (VentureBeat). 30%+ get abandoned entirely (Gartner). Not because the AI is bad — because it has zero context about your business.",
       },
       {
         title: "The Copy-Paste Loop",
@@ -252,9 +252,9 @@ export const siteConfig = {
     headline: "You're thinking...",
     items: [
       {
-        question: '"I can just use ChatGPT Projects"',
+        question: '"I can just use ChatGPT Projects / CustomGPT / Notion AI"',
         answer:
-          "Projects are a filing cabinet. This is an operating system for your business knowledge. Projects don't compound and lock you to one platform. Your Codify files work with any AI — Claude, GPT, Gemini, whatever comes next.",
+          "Those tools organise what you already have. They don't extract what's in your head. Codify starts upstream — capturing your expertise, structuring it, then generating from it. And your files work with any AI — Claude, GPT, Gemini, whatever comes next. No platform lock-in.",
       },
       {
         question: '"Why not just write good prompts?"',
@@ -294,7 +294,7 @@ export const siteConfig = {
       {
         question: '"How is this different from hiring an AI consultant?"',
         answer:
-          "Consultants give you a report. We give you a system. Consultants leave after the engagement. The engine keeps compounding. Consultants cost $5-20K. Pro starts at $199/mo.",
+          "Consultants give you a report that sits in a drawer. We give you a system that compounds. Consultants leave after the engagement — your Codify system keeps getting smarter. Consultants cost $5–20K. Pro starts at $199/mo.",
       },
     ],
   },
