@@ -58,8 +58,11 @@ function SetupContent() {
         <div className="max-w-[520px] mx-auto px-6 md:px-12">
           <div className="bg-surface border border-green/30 rounded-xl p-6 md:p-8">
             <p className="text-xs text-muted mb-3 text-center">
-              Open Terminal (Cmd + Space, type &quot;Terminal&quot;, press Enter)
-              then paste:
+              Step 1: Open Terminal on your Mac (Cmd + Space, type
+              &quot;Terminal&quot;, hit Enter)
+              <br />
+              Step 2: Click &quot;Copy&quot; below, then paste into Terminal and
+              hit Enter
             </p>
             <div className="relative">
               <div className="bg-[#111] rounded-lg border border-border p-4 font-mono text-xs leading-relaxed text-white overflow-x-auto">
