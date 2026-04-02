@@ -127,7 +127,12 @@ echo "free-trial" > "$VAULT_PATH/00-Context/.tier" 2>/dev/null
 # --- Open Obsidian ---
 echo ""
 echo "  Opening your vault..."
-open "obsidian://open?path=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$VAULT_PATH'))")"
+
+# Try the Obsidian URI first, fall back to opening Obsidian manually
+if [[ -d "/Applications/Obsidian.app" ]]; then
+    open -a "Obsidian" "$VAULT_PATH" 2>/dev/null || \
+    open "obsidian://open?path=$(python3 -c "import urllib.parse; print(urllib.parse.quote('$VAULT_PATH'))")" 2>/dev/null
+fi
 
 sleep 3
 
