@@ -1,5 +1,13 @@
 const prereqs = [
   {
+    name: "Obsidian",
+    description:
+      "Your private knowledge base. Runs locally — your data never leaves your device.",
+    price: "Free",
+    url: "https://obsidian.md/download",
+    linkLabel: "Download Obsidian",
+  },
+  {
     name: "Claude Desktop",
     description:
       "Download the Claude app. Claude Code is built in — no terminal or coding experience needed.",
@@ -8,20 +16,12 @@ const prereqs = [
     linkLabel: "Download Claude",
   },
   {
-    name: "Claude Pro",
+    name: "Free AI Model",
     description:
-      "Subscribe to Claude Pro to unlock Claude Code inside the desktop app.",
-    price: "$20/mo",
-    url: "https://claude.ai/settings/billing",
-    linkLabel: "Get Claude Pro",
-  },
-  {
-    name: "Obsidian",
-    description:
-      "Your private knowledge base. Runs locally — your data never leaves your device.",
+      "Sign up for OpenRouter to connect a free AI model. No credit card needed — takes 30 seconds.",
     price: "Free",
-    url: "https://obsidian.md/download",
-    linkLabel: "Download Obsidian",
+    url: "https://openrouter.ai",
+    linkLabel: "Get Free API Key",
   },
 ];
 
@@ -91,8 +91,9 @@ const steps = [
     description:
       "Keep Obsidian open — that's where your files live. Now open Claude Desktop alongside it. This is a separate app where you'll talk to the AI.",
     details: [
-      "Open Claude Desktop and sign in with your Claude Pro account",
+      "Open Claude Desktop (separate app from Obsidian)",
       "Click the \"Code\" tab at the top of the window (not Chat or Cowork)",
+      "When asked to sign in, use your free OpenRouter API key (see What You Need above)",
       "You'll see a terminal. Type: cd path/to/codify-trial-vault (use the folder where you unzipped the vault)",
       "Press Enter, then type: /start",
       "The AI will ask you questions about your business and fill in your vault — guided, step by step, about 30 minutes",
