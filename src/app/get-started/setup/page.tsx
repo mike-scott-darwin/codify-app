@@ -122,11 +122,11 @@ function SetupContent() {
               </div>
               <div>
                 <p className="text-sm font-medium text-white">
-                  Type &quot;claude&quot; then &quot;/start&quot;
+                  In the same Terminal, type &quot;claude&quot; then &quot;/start&quot;
                 </p>
                 <p className="text-xs text-muted">
-                  The AI asks about your business and builds your vault. About
-                  30 minutes.
+                  Stay in Terminal (not the Claude Desktop app). The AI asks
+                  about your business and builds your vault. About 30 minutes.
                 </p>
               </div>
             </div>
