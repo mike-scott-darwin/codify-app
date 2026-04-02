@@ -40,9 +40,9 @@ export default function GetStarted() {
         return;
       }
 
-      router.push("/get-started/setup");
+      router.push(`/get-started/setup?name=${encodeURIComponent(data.firstName)}&email=${encodeURIComponent(data.email)}`);
     } catch {
-      router.push("/get-started/setup");
+      router.push(`/get-started/setup?name=${encodeURIComponent(data.firstName)}&email=${encodeURIComponent(data.email)}`);
     }
   }
 
