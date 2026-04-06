@@ -34,7 +34,9 @@ Find positioning gaps, unconventional messaging angles, underserved segments, an
     messages: [{ role: "user", content: prompt }],
   });
 
-  const text = response.content[0].text;
+  let text = response.content[0].text;
+  // Strip markdown code fences if present
+  text = text.replace(/^```(?:json)?\s*\n?/i, "").replace(/\n?```\s*$/i, "");
   const findings = JSON.parse(text);
 
   const durationMs = Date.now() - start;

@@ -35,7 +35,8 @@ Research their competitors, market trends, pricing, and advertising. Return stru
   });
 
   const result = await model.generateContent(prompt);
-  const text = result.response.text();
+  let text = result.response.text();
+  text = text.replace(/^```(?:json)?\s*\n?/i, "").replace(/\n?```\s*$/i, "");
   const findings = JSON.parse(text);
 
   const durationMs = Date.now() - start;

@@ -402,7 +402,7 @@ export default function GetStarted() {
                         required={inputMode === "write"}
                         rows={2}
                         className={inputClass + " resize-none"}
-                        placeholder="e.g. We run a fractional CFO practice for SaaS startups — we handle financial modeling, fundraise prep, and board reporting for companies between $2M and $20M ARR."
+                        placeholder="e.g. Fractional CFO for SaaS startups doing $2M–$20M ARR"
                       />
                     </div>
 
@@ -411,14 +411,14 @@ export default function GetStarted() {
                         htmlFor="audience"
                         className="block text-xs text-muted mb-1.5"
                       >
-                        Who is your ideal client and what do they struggle with?
+                        Who is your ideal client?
                       </label>
                       <textarea
                         id="audience"
                         name="audience"
                         rows={2}
                         className={inputClass + " resize-none"}
-                        placeholder="e.g. Series A founders who've outgrown their bookkeeper but can't justify a $250K full-time CFO. They're flying blind on cash runway and investor reporting."
+                        placeholder="e.g. Series A founders who've outgrown their bookkeeper"
                       />
                     </div>
 
@@ -427,14 +427,14 @@ export default function GetStarted() {
                         htmlFor="differentiator"
                         className="block text-xs text-muted mb-1.5"
                       >
-                        What makes you different from competitors?
+                        What makes you different?
                       </label>
                       <textarea
                         id="differentiator"
                         name="differentiator"
                         rows={2}
                         className={inputClass + " resize-none"}
-                        placeholder="e.g. We embed directly into their financial stack — Stripe, QBO, Carta — instead of working from spreadsheets. Founders get a live dashboard, not a monthly PDF."
+                        placeholder="e.g. We embed into their financial stack — live dashboards, not monthly PDFs"
                       />
                     </div>
 
@@ -443,14 +443,14 @@ export default function GetStarted() {
                         htmlFor="challenge"
                         className="block text-xs text-muted mb-1.5"
                       >
-                        What&apos;s your biggest growth challenge right now?
+                        What&apos;s your biggest growth challenge?
                       </label>
                       <textarea
                         id="challenge"
                         name="challenge"
                         rows={2}
                         className={inputClass + " resize-none"}
-                        placeholder="e.g. Getting past the 'we'll hire a full-time CFO eventually' objection. By the time they realize they need us, they've already made costly financial mistakes."
+                        placeholder="e.g. Prospects think they'll hire a full-time CFO 'eventually'"
                       />
                     </div>
                   </div>
@@ -653,63 +653,6 @@ export default function GetStarted() {
             </div>
           )}
 
-          {/* How it works */}
-          <div className="mt-6 space-y-3">
-            <p className="text-xs text-dim uppercase tracking-wider text-center">
-              How it works
-            </p>
-            <div className="grid grid-cols-1 gap-3">
-              <div className="bg-surface border border-border rounded-lg p-4 flex items-start gap-3">
-                <span className="text-blue shrink-0 mt-0.5 font-bold text-sm">
-                  1
-                </span>
-                <div>
-                  <p className="text-sm font-medium text-white">
-                    Tell us about your business
-                  </p>
-                  <p className="text-xs text-muted">
-                    Answer 4 quick questions, upload a document, or record a
-                    voice note. Whatever&apos;s easiest.
-                  </p>
-                </div>
-              </div>
-              <div className="bg-surface border border-border rounded-lg p-4 flex items-start gap-3">
-                <span className="text-blue shrink-0 mt-0.5 font-bold text-sm">
-                  2
-                </span>
-                <div>
-                  <p className="text-sm font-medium text-white">
-                    3 AI models scan your market simultaneously
-                  </p>
-                  <p className="text-xs text-muted">
-                    Google pulls real-time market data and competitor ads. Claude
-                    analyzes your positioning and finds strategic gaps. Codex
-                    matches competitive patterns across your industry.
-                  </p>
-                </div>
-              </div>
-              <div className="bg-surface border border-border rounded-lg p-4 flex items-start gap-3">
-                <span className="text-blue shrink-0 mt-0.5 font-bold text-sm">
-                  3
-                </span>
-                <div>
-                  <p className="text-sm font-medium text-white">
-                    3 opportunities in your inbox
-                  </p>
-                  <p className="text-xs text-muted">
-                    Specific, non-obvious plays delivered within 15 minutes. Not
-                    generic advice — evidence-based opportunities.
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="bg-surface border border-border rounded-lg p-4 text-center mt-4">
-              <p className="text-xs text-muted italic">
-                &ldquo;These 3 came from a paragraph. Imagine what happens with
-                your full expertise codified.&rdquo;
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 

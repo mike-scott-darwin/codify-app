@@ -38,7 +38,8 @@ Find market structure, competitive patterns, blind spots, disruption opportuniti
     ],
   });
 
-  const text = response.choices[0].message.content;
+  let text = response.choices[0].message.content;
+  text = text.replace(/^```(?:json)?\s*\n?/i, "").replace(/\n?```\s*$/i, "");
   const findings = JSON.parse(text);
 
   const durationMs = Date.now() - start;

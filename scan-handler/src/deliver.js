@@ -1,20 +1,25 @@
 import { log } from "./logger.js";
 
-const GHL_API_URL = "https://rest.gohighlevel.com/v1";
+const GHL_V1_API_URL = "https://rest.gohighlevel.com/v1";
 const GHL_API_KEY = process.env.GHL_API_KEY;
+const BOOKING_URL = "https://api.leadconnectorhq.com/widget/booking/323Lat7odQIudKsnAi8C";
 
 export async function deliverResults(job, assessorOutput) {
   const start = Date.now();
   log(job.id, "deliver_start");
 
   const { contact } = job;
-  const { emailHtml, summary, topOpportunities } = assessorOutput;
+  let { emailHtml, summary, topOpportunities } = assessorOutput;
+
+  // Replace booking link placeholder
+  emailHtml = emailHtml.replace(/BOOKING_LINK_PLACEHOLDER/g, BOOKING_URL);
 
   // Send via GHL email
   if (GHL_API_KEY && contact.ghlContactId) {
     try {
+      // Use GHL v1 send-email endpoint
       const res = await fetch(
-        `${GHL_API_URL}/conversations/messages`,
+        `${GHL_V1_API_URL}/contacts/${contact.ghlContactId}/campaigns/emails`,
         {
           method: "POST",
           headers: {
@@ -22,10 +27,9 @@ export async function deliverResults(job, assessorOutput) {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            type: "Email",
-            contactId: contact.ghlContactId,
-            subject: `${contact.firstName}, here are your 3 opportunities`,
-            html: emailHtml,
+            emailFrom: "Mike at Codify <hello@codify.build>",
+            subject: `${contact.firstName}, your Opportunity Scan is ready`,
+            body: emailHtml,
           }),
         }
       );
@@ -45,11 +49,13 @@ export async function deliverResults(job, assessorOutput) {
   }
 
   // Fallback: save to disk
-  const { writeFileSync } = await import("node:fs");
-  const fallbackPath = new URL(
-    `../../logs/deliverable-${job.id}.html`,
-    import.meta.url
-  ).pathname;
+  const { writeFileSync, mkdirSync } = await import("node:fs");
+  const { join, dirname } = await import("node:path");
+  const { fileURLToPath } = await import("node:url");
+  const __dirname = dirname(fileURLToPath(import.meta.url));
+  const logsDir = join(__dirname, "..", "logs");
+  mkdirSync(logsDir, { recursive: true });
+  const fallbackPath = join(logsDir, `deliverable-${job.id}.html`);
   writeFileSync(fallbackPath, emailHtml);
   log(job.id, "deliver_fallback", {
     path: fallbackPath,
