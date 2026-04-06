@@ -14,9 +14,9 @@ export const siteConfig = {
     eyebrow: "FOR BUSINESS OWNERS ALREADY USING AI",
     headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
-      "30 years of expertise stuck in your head. Every AI session starts from scratch.\nWe codify what you know so every output is grounded in your business — not generic templates.",
-    ctaText: "Get Your 3 Opportunities",
-    ctaUrl: "#opportunity-scan",
+      "You re-explain your business to AI every single session.\nWe fix that — permanently.",
+    ctaText: "See How It Works",
+    ctaUrl: "#how-it-works",
   },
   problem: {
     eyebrow: "THE PROBLEM",
