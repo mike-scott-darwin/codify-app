@@ -3,7 +3,8 @@ import { put } from "@vercel/blob";
 
 const GHL_API_URL = "https://rest.gohighlevel.com/v1/contacts/";
 const GHL_API_KEY = process.env.GHL_API_KEY!;
-const SCAN_WEBHOOK_URL = process.env.SCAN_WEBHOOK_URL!; // Mac Mini endpoint
+const SCAN_WEBHOOK_URL = process.env.SCAN_WEBHOOK_URL || "";
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || "";
 
 export async function POST(request: Request) {
   try {
@@ -116,7 +117,10 @@ export async function POST(request: Request) {
       try {
         await fetch(SCAN_WEBHOOK_URL, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(WEBHOOK_SECRET && { "X-Webhook-Secret": WEBHOOK_SECRET }),
+          },
           body: JSON.stringify(job),
         });
       } catch (err) {
