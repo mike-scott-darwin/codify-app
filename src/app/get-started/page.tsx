@@ -275,9 +275,9 @@ export default function GetStarted() {
             3 Opportunities Your{"\n"}Competitors Haven&apos;t Seen
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
-            Tell us about your business — type it, upload a doc, or record a
-            quick voice note. We&apos;ll scan your market and deliver 3 specific
-            opportunities within 15 minutes.
+            Tell us about your business. Three AI models scan your market
+            simultaneously — real-time data, strategic analysis, and competitive
+            patterns. 3 specific opportunities in 15 minutes.
           </p>
         </div>
       </section>
@@ -292,8 +292,10 @@ export default function GetStarted() {
                 We&apos;re scanning your market now.
               </h2>
               <p className="text-muted text-sm leading-relaxed">
-                Your 3 opportunities will land in your inbox within 15 minutes.
-                Not generic advice — specific plays tailored to your business.
+                Three AI models are scanning your market right now — Google for
+                real-time data, Claude for strategic analysis, Codex for
+                competitive patterns. Your 3 opportunities will land in your
+                inbox within 15 minutes.
               </p>
             </div>
           ) : (
@@ -641,7 +643,7 @@ export default function GetStarted() {
                   disabled={submitting}
                   className="w-full bg-blue text-black font-semibold text-sm py-3.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-50"
                 >
-                  {submitting ? "Scanning your market..." : "Get My 3 Opportunities"}
+                  {submitting ? "3 AI models scanning your market..." : "Get My 3 Opportunities"}
                 </button>
 
                 <p className="text-[11px] text-dim text-center">
@@ -677,11 +679,12 @@ export default function GetStarted() {
                 </span>
                 <div>
                   <p className="text-sm font-medium text-white">
-                    We scan your market
+                    3 AI models scan your market simultaneously
                   </p>
                   <p className="text-xs text-muted">
-                    Our system researches your competitors, analyzes your
-                    positioning, and finds gaps nobody else is exploiting.
+                    Google pulls real-time market data and competitor ads. Claude
+                    analyzes your positioning and finds strategic gaps. Codex
+                    matches competitive patterns across your industry.
                   </p>
                 </div>
               </div>
