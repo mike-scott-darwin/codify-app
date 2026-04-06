@@ -59,7 +59,7 @@ const tiers = [
           "Guided setup to get you producing results in the first session. Same-day WhatsApp responses for questions and troubleshooting.",
       },
     ],
-    cta: "Get Your 3 Opportunities",
+    cta: "Find My Missing Revenue",
     highlight: true,
   },
   {
@@ -112,7 +112,7 @@ const tiers = [
           "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to review performance and plan campaigns.",
       },
     ],
-    cta: "Get Your 3 Opportunities",
+    cta: "Find My Missing Revenue",
     highlight: false,
   },
 ];

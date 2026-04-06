@@ -272,12 +272,12 @@ export default function GetStarted() {
             FREE OPPORTUNITY SCAN
           </p>
           <h1 className="font-bold text-white leading-[1.1] mb-4 text-[clamp(1.75rem,5vw,2.5rem)]">
-            3 Opportunities Your{"\n"}Competitors Haven&apos;t Seen
+            What Revenue Are You{"\n"}Leaving on the Table?
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
-            Tell us about your business. Three AI models scan your market
-            simultaneously — real-time data, strategic analysis, and competitive
-            patterns. 3 specific opportunities in 15 minutes.
+            Tell us about your business. Google, Claude, and Codex scan your
+            market simultaneously — and show you exactly where the money is.
+            Free. 15 minutes.
           </p>
         </div>
       </section>
@@ -643,7 +643,7 @@ export default function GetStarted() {
                   disabled={submitting}
                   className="w-full bg-blue text-black font-semibold text-sm py-3.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-50"
                 >
-                  {submitting ? "3 AI models scanning your market..." : "Get My 3 Opportunities"}
+                  {submitting ? "3 AI models scanning your market..." : "Find My Missing Revenue"}
                 </button>
 
                 <p className="text-[11px] text-dim text-center">
