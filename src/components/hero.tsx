@@ -14,7 +14,7 @@ export function Hero() {
   const { hero } = siteConfig;
 
   return (
-    <section className="pt-16 pb-6 md:pt-40 md:pb-28 relative overflow-hidden">
+    <section className="pt-16 pb-4 md:pt-40 md:pb-16 relative overflow-hidden">
       <div className="max-w-[900px] mx-auto px-6 md:px-12 text-center relative z-10">
         <p
           className={`text-xs tracking-[0.2em] uppercase text-blue mb-2 md:mb-6 transition-all duration-700 ${

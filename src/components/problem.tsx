@@ -8,7 +8,7 @@ export function Problem() {
   const { problem } = siteConfig;
 
   return (
-    <section ref={ref} className="py-8 md:py-20 border-t border-border">
+    <section ref={ref} className="py-6 md:py-14 border-t border-border">
       <div className="max-w-[1100px] mx-auto px-6 md:px-12">
         <div className="text-center mb-6 md:mb-16">
           <p className="text-xs tracking-[0.2em] uppercase text-blue mb-2 md:mb-4">
