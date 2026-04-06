@@ -1,48 +1,47 @@
 export const siteConfig = {
   brand: {
     name: "codify",
-    tagline: "Context > Prompts.",
+    tagline: "They build the agent. We build what it knows.",
     domain: "codify.build",
     email: "hello@codify.build",
   },
   metadata: {
-    title: "Codify — Stop Prompting. Start Codifying.",
+    title: "Codify — Your 30 Years of Expertise, Compounding Forever.",
     description:
-      "Your business knowledge is your moat — but only if AI can use it. Codify extracts, structures, and operationalizes your expertise so AI actually works for your business.",
+      "Context Architecture for senior executives. We extract your institutional knowledge and structure it so every AI agent you deploy knows your business.",
   },
   hero: {
-    eyebrow: "FOR BUSINESS OWNERS ALREADY USING AI",
-    headline: "Your AI Doesn't\nKnow Your Business.",
+    eyebrow: "CONTEXT ARCHITECTURE FOR SENIOR EXECUTIVES",
+    headline: "Your agent is only as smart\nas its context.",
     subhead:
-      "8 tools. 5 AI models. Zero context about your business.\nOne vault fixes that permanently.",
-    trialNote: "See what AI does when it actually knows your business. Free, no credit card.",
-    ctaText: "Start Free Trial",
-    ctaUrl: "/get-started",
+      "Everyone is deploying AI agents. Nobody is structuring what the agents need to know.\nWe extract 30+ years of expertise and make every agent, every output, every decision grounded in your business.",
+    ctaText: "Get Your 3 Opportunities",
+    ctaUrl: "#opportunity-scan",
   },
   problem: {
     eyebrow: "THE PROBLEM",
-    headline: "Generic In. Generic Out.",
+    headline: "Your agents are flying blind.",
     items: [
       {
-        title: "The Context Gap",
+        title: "The Empty Agent Epidemic",
         stat: "80%",
-        statLabel: "of AI projects underdeliver",
+        statLabel: "of AI projects underdeliver on ROI",
         description:
-          "60–80% underdeliver on ROI (VentureBeat). 30%+ get abandoned entirely (Gartner). Not because the AI is bad — because it has zero context about your business.",
+          "You deployed Copilot, Lindy, or a custom AI agent. It booked the wrong meeting, sent a generic follow-up, quoted the wrong service. The agent isn't dumb — it just doesn't know your business.",
       },
       {
-        title: "The Copy-Paste Loop",
-        stat: "0",
-        statLabel: "context carries between sessions",
+        title: "The Knowledge Walkout",
+        stat: "42%",
+        statLabel: "of institutional knowledge is undocumented",
         description:
-          "Every AI session starts from scratch. You re-explain your business, your audience, your offer — then get the same generic output you got last time. Nothing compounds. Nothing carries forward.",
+          "30 years of expertise lives in your head. Frameworks you built, decisions you made, patterns you see that nobody else can. None of it is structured for any AI agent to use.",
       },
       {
-        title: "The Tool Trap",
-        stat: "8+",
-        statLabel: "tools just to ship one website",
+        title: "The Consultant Graveyard",
+        stat: "$20K",
+        statLabel: "reports that sit in drawers",
         description:
-          "Lovable, Cursor, Framer, n8n, five different AI models, three image generators — and you're still stitching it all together manually. More tools won't fix the problem. Your business context structured in one place will.",
+          "You paid $10K–$20K for an AI consultant's report. It sat in a drawer. No system. No compounding. Just a deliverable that died the day it was delivered.",
       },
     ],
   },
@@ -54,103 +53,103 @@ export const siteConfig = {
         label: "01",
         title: "Extract",
         description:
-          "Capture the knowledge that lives in your head — your decisions, frameworks, beliefs, and the logic behind how you run your business. Not what's on your website. What's behind it.",
+          "We sit with you and pull out what makes your business yours. Beliefs, frameworks, decisions, the judgment calls you make without thinking. A conversation, not a questionnaire.",
         outcome: "Your expertise captured — not in your head anymore",
       },
       {
         label: "02",
         title: "Codify",
         description:
-          "Your knowledge becomes structured business documents — your soul, offer, audience, and voice — stored securely in files you own. Works with any AI. No lock-in to any platform.",
-        outcome: "AI knows your business before it writes a word",
+          "Your expertise becomes structured business documents — your identity, offer, audience, and voice. Plain files you own. Works with any AI agent. No lock-in to any platform.",
+        outcome: "Every agent knows your business before it writes a word",
       },
       {
         label: "03",
         title: "Generate",
         description:
-          "Ads, emails, proposals, websites, landing pages — all built from your business knowledge. 90% accurate first drafts because the AI finally knows your business. Less editing. Faster turnaround.",
+          "AI reads your entire context before writing anything. Ads, emails, proposals, content — every output sounds like you wrote it on your best day. 90% accurate first drafts.",
         outcome: "First drafts that sound like you, not a machine",
       },
       {
         label: "04",
         title: "Compound",
         description:
-          "Track competitor ads and websites. Find and qualify leads. Push them to your CRM. Analyse what's working, feed it back, and every future deliverable gets better automatically. The system improves itself.",
-        outcome: "Every week, your results get sharper",
+          "Every decision logged, every research file added, every extraction session feeds back into better outputs. The system gets smarter every week — automatically.",
+        outcome: "A system that improves itself while you sleep",
       },
     ],
   },
   proof: {
-    eyebrow: "EAT YOUR OWN COOKING",
-    headline: "We Run This System Every Day.",
+    eyebrow: "THE PROOF",
+    headline: "We eat our own cooking.",
     description:
-      "Every piece of content on this site was generated from the same system we sell. 48 business knowledge documents. 322+ refinements. This isn't theory.",
+      "We built a business on this system before we built the platform. Every metric below is real. This page was generated from our own business documents.",
     stats: [
       { value: "48", label: "Business documents", suffix: "" },
       { value: "322", label: "Refinements", suffix: "+" },
-      { value: "90", label: "First-draft accuracy", suffix: "%" },
-      { value: "9", label: "Hours/week to run it all", suffix: "h" },
+      { value: "9", label: "Hours per week", suffix: "h" },
+      { value: "7", label: "Months daily use", suffix: "mo" },
     ],
     before: [
-      "8+ tools stitched together to ship one project",
-      "Re-explain your business every AI session",
+      "Re-explain the business every AI session",
       "Generic outputs that sound like everyone else",
-      "16+ hours/week on content and strategy",
+      "Hours of editing to make AI copy sound human",
+      "$10K consultant report sitting in a drawer",
     ],
     after: [
-      "One system — your knowledge, content, CRM, and website in one place",
-      "AI knows your business before it writes anything",
-      "Track competitors, find leads, push to CRM — automatically",
-      "9 hours/week — the system improves itself",
+      "Every agent reads your full context before generating anything",
+      "Every output sounds like you from the first draft",
+      "Minutes to generate an entire ad batch",
+      "A system that gets smarter every week",
     ],
   },
   testimonials: {
     eyebrow: "REAL RESULTS",
-    headline: "From Generic to Codified.",
+    headline: "Real people. Real results.",
     description:
-      "Same system. Same approach. Their words, not ours.",
+      "Members using the same architecture that powers Codify. Their words, not ours.",
     items: [
       {
-        name: "Joshua Breaux",
-        context: "4 days in",
+        name: "Alex Reisch",
+        context: "VIP — Skool community builder",
         quote:
-          "Validated 105 keywords in Ahrefs. Mapped 5 pillar articles, 15+ cluster articles, and the full internal linking architecture. The part I\u2019m most pumped about is the compounding. Every decision codified feeds the next session. No more starting over with a different AI stranger.",
+          "21+ lessons across 3 courses, 22 email triggers, all built in hours not weeks. Every piece of content sounds like me. I've never experienced anything like this in 15+ years of building online.",
+        result: "Complete community in days, not months",
+      },
+      {
+        name: "Joshua Breaux",
+        context: "4 days in — content strategy",
+        quote:
+          "Validated 105 keywords. Mapped 5 pillar articles, 15+ cluster articles, and the full internal linking architecture. The part I\u2019m most pumped about is the compounding. Every decision feeds the next session. No more starting over with a different AI stranger.",
         result: "Full content strategy in 5 hours",
       },
       {
-        name: "Josh Ballard",
-        context: "Busy dad, 9-5 job",
+        name: "Joe DeFilippo",
+        context: "Helped brother-in-law start a business",
         quote:
-          "Giving Claude Code an organizational structure to work within, and being able to build out my business frameworks have been truly incredible. As a busy dad working a 9-5, this is great.",
-        result: "Business frameworks built in 2 days",
+          "I researched his local competition, identified his advantages, and built his full business profile — offer, audience, voice, brand. Sent him a summary email. His response: 'Joe, I am blown away.' Not bad for about an hour of work.",
+        result: "Full business profile built in 1 hour",
       },
       {
-        name: "Grant Sparks",
-        context: "Sales team automation",
+        name: "Joel Neupane",
+        context: "Full funnel automation",
         quote:
-          "My sales team burns too much time looking for the right business networking events. Claude whipped it up, built the repo, did the initial searches. It\u2019s functional and working, and takes that effort off of the team.",
-        result: "Built a working AI agent from scratch",
+          "Built a complete Stripe + CRM automation that replaced Zapier entirely. Full funnel — payment processing, email triggers, contact management. Saving $500\u20131,500 a month on tools I no longer need.",
+        result: "Saved $500\u20131,500/mo replacing paid tools",
       },
       {
-        name: "Alex Reisch",
-        context: "Skool community builder",
+        name: "Jordan Watkins",
+        context: "Content creator — video production",
         quote:
-          "Built a master-level Skool community in record time. Every lesson and email trigger sounded like me, not a machine.",
-        result: "Complete IP codification in days",
+          "Created an animation using my stored business assets. This would normally take three to four hours — I completed it in about 20 minutes.",
+        result: "3\u20134 hour work done in 20 minutes",
       },
       {
         name: "Joe DeFilippo",
-        context: "Team lead",
+        context: "SaaS developer — 26 days in",
         quote:
-          "Moved from tactical fixes to architectural growth. 63 PRs in 26 days. The structured files kept my team aligned and honest.",
-        result: "60% faster team throughput",
-      },
-      {
-        name: "Community Member",
-        context: "Ad campaigns",
-        quote:
-          "Once you articulate your offer, audience, voice, and proof into structured reference, everything downstream gets better. Ads. Content. Sales pages. I ran the ad skill and it made hundreds of variations. We put them in the account and it\u2019s converting.",
-        result: "Hundreds of ad variations, converting",
+          "63 pull requests merged in 26 days. The previous 63 took me 43 days. And quality didn't slip — we went from 75 automated tests to 395. The system doesn't just speed you up, it keeps you honest.",
+        result: "Moving 60% faster with 5x more tests",
       },
     ],
   },
@@ -159,65 +158,74 @@ export const siteConfig = {
     headline: "Built by a Founder Who Got Tired of Starting Over",
     name: "Mike Scott",
     role: "Founder, Codify",
-    intro: "I've spent the last decade building businesses — coaching, consulting, digital products, agency work. I've been in the trenches with clients, built funnels at 2am, written copy that converts, and rebuilt systems more times than I can count.",
+    intro: "I've spent the last decade building businesses \u2014 coaching, consulting, digital products, agency work. I've been in the trenches with clients, built funnels at 2am, written copy that converts, and rebuilt systems more times than I can count.",
     sections: [
       {
         heading: "The Problem I Kept Running Into",
         paragraphs: [
-          "Every time I started something new — a new offer, a new client, a new pivot — I had to re-explain everything. My positioning. My audience. My voice. My differentiators. To every tool, every VA, every AI assistant. Over and over and over.",
+          "Every time I started something new \u2014 a new offer, a new client, a new pivot \u2014 I had to re-explain everything. My positioning. My audience. My voice. My differentiators. To every tool, every VA, every AI assistant. Over and over and over.",
           "I'd spend hours giving context to ChatGPT, only to start from scratch the next day. I'd brief a copywriter, then re-brief them a week later because they forgot half of what I told them. The knowledge was in my head, and it stayed there.",
         ],
       },
       {
         heading: "Going Deep on AI",
         paragraphs: [
-          "When AI coding agents exploded, I went all in. GHL page builders, Framer, Lovable, Cursor, Claude Code — I tried everything. I was using 8 different tools and 5 different AI models just to ship a single client website.",
-          "The tools were incredible. But the problem was always the same: they had zero context about my business. I was copy-pasting the same background into every conversation, every project, every prompt. The AI was powerful but it was generic, because I was feeding it generic inputs.",
+          "When AI agents exploded, I went all in. I tried everything \u2014 Copilot, Lindy, custom GPTs, Claude, Gemini. The tools were incredible. But the problem was always the same: they had zero context about my business.",
+          "I was copy-pasting the same background into every conversation, every project, every agent. The AI was powerful but generic, because I was feeding it generic inputs.",
         ],
       },
       {
         heading: "The Moment It Clicked",
         paragraphs: [
-          "I realised the gap wasn't the AI — it was the context layer. What if everything AI needed to know about my business lived in one structured place? What if it compounded over time instead of evaporating after every session?",
-          "So I built it. A vault architecture that extracts your expertise, structures it into files AI can use, and generates everything downstream — content, proposals, ads, emails, landing pages — all sounding like you, because it actually knows you.",
+          "I realised the gap wasn't the AI \u2014 it was the context layer. What if everything AI needed to know about my business lived in one structured place? What if it compounded over time instead of evaporating after every session?",
+          "So I built it. An architecture that extracts your expertise, structures it into files any AI can use, and generates everything downstream \u2014 content, proposals, ads, emails, landing pages \u2014 all sounding like you, because it actually knows you.",
         ],
       },
       {
         heading: "Why I'm Sharing It",
         paragraphs: [
-          "I use Codify every single day to run my own business. It's not a side project or an experiment — it's the operating system behind everything I ship. And I got tired of watching smart founders waste hours re-prompting AI with the same context they gave it yesterday.",
-          "Codify is for founders and business owners who are already using AI but know it should be better. You shouldn't need to be a prompt engineer. You shouldn't need 8 tools. You just need your AI to actually know your business.",
+          "I use Codify every single day to run my own business. It's not a side project or an experiment \u2014 it's the operating system behind everything I ship.",
+          "Codify is for senior executives and business owners who are deploying AI agents but know they should be smarter. You shouldn't need to re-explain your business every session. You just need your agents to know your business.",
         ],
       },
     ],
   },
   product: {
-    eyebrow: "PRICING",
-    headline: "Start Free. Scale When Ready.",
+    eyebrow: "THE TIERS",
+    headline: "Same system. More depth.",
     description:
-      "Try it free. Then pick your speed.",
+      "Start with the Opportunity Scan \u2014 free, no commitment. Upgrade when the system proves itself.",
+    trial: {
+      name: "Opportunity Scan",
+      description:
+        "Send us a summary of your business. We'll show you where the next 3 opportunities are \u2014 free.",
+      howItWorks:
+        "You send a paragraph about your business. We scan your market, cross-reference your positioning, and deliver 3 specific opportunities you haven't seen. Delivered in 24\u201348 hours.",
+      cta: "Get Your 3 Opportunities",
+      ctaUrl: "#opportunity-scan",
+    },
     tiers: [
       {
         name: "Pro",
         price: "$199",
         period: "/mo",
         annual: "$1,497/yr",
+        badge: "Most Popular",
         description:
-          "Full access. We codify your expertise and you generate ads, proposals, emails, and websites that sound like you — not a machine.",
+          "The output engine. You run it. We codify your expertise and you generate ads, proposals, emails, and websites that sound like you \u2014 not a machine.",
         features: [
-          "Capture your expertise — we extract what's in your head into documents AI can use",
-          "Content that sounds like you — blog posts, social, newsletters in your voice",
-          "Track your competitors — monitor their ads, websites, and positioning automatically",
-          "Ads, emails, proposals, landing pages, funnels — first drafts in minutes",
-          "Case studies, follow-ups, objection handling — from your real experience",
+          "Capture your expertise \u2014 we extract what's in your head into documents any AI agent can use",
+          "Content that sounds like you \u2014 blog posts, social, newsletters in your voice",
+          "Track your competitors \u2014 monitor their ads, websites, and positioning automatically",
+          "Ads, emails, proposals, landing pages, funnels \u2014 first drafts in minutes",
+          "Case studies, follow-ups, objection handling \u2014 from your real experience",
           "Full website built from your business knowledge",
-          "Find and qualify leads — scored against your ideal client, pushed to your CRM",
-          "CRM integration — contacts, emails, pipeline, and workflows connected",
+          "Find and qualify leads \u2014 scored against your ideal client, pushed to your CRM",
+          "CRM integration \u2014 contacts, emails, pipeline, and workflows connected",
           "Onboarding + same-day WhatsApp support",
         ],
-        cta: "Start Free Trial",
-        ctaUrl: "/get-started",
-        payUrl: "https://link.fastpaydirect.com/payment-link/69c89e84fb727d9c905d31e6",
+        cta: "Get Your 3 Opportunities",
+        ctaUrl: "#opportunity-scan",
         highlight: true,
       },
       {
@@ -225,88 +233,72 @@ export const siteConfig = {
         price: "$497",
         period: "/mo",
         annual: "$2,997/yr",
-        badge: "Sovereign Vault",
+        badge: "Done For You",
         description:
-          "We build it, run it, and maintain it for you — on infrastructure you own. You get results without touching the system.",
+          "Hands-off operation. We build it, run it, and maintain it for you \u2014 on infrastructure you own. You get results without touching the system.",
         features: [
           "Everything in Pro",
-          "Done-for-you — we codify your expertise, build your system, and deploy it",
-          "Publish and distribute — push content to email, social, ads, and your website in one go",
-          "AI assistant on WhatsApp — ask questions, request drafts, get answers grounded in your business",
-          "Research runs while you sleep — queue topics, results land by morning",
-          "Daily briefing — what changed, what needs attention, before your first coffee",
-          "Your own private server — encrypted, fully owned, your IP never trains anyone else's AI",
+          "Done-for-you \u2014 we codify your expertise, build your system, and run it",
+          "Publish and distribute \u2014 push content to email, social, ads, and your website in one go",
+          "AI assistant on WhatsApp \u2014 ask questions, request drafts, get answers grounded in your business",
+          "Research runs while you sleep \u2014 queue topics, results land by morning",
+          "Daily briefing \u2014 what changed, what needs attention, before your first coffee",
+          "Your own private server \u2014 encrypted, fully owned, your IP never trains anyone else's AI",
           "Priority WhatsApp (4h response) + scheduled strategy calls",
         ],
-        cta: "Start Free Trial",
-        ctaUrl: "/get-started",
-        payUrl: "https://link.fastpaydirect.com/payment-link/69c89dddfb727d9c905d31e2",
+        cta: "Get Your 3 Opportunities",
+        ctaUrl: "#opportunity-scan",
         highlight: false,
       },
     ],
     guarantee:
-      "Try it free — no credit card, no commitment. Everything we build is yours — stored securely, readable by any AI. Cancel anytime. Your system keeps working.",
+      "No commitment. Everything we build is yours \u2014 stored securely, readable by any AI. Cancel anytime. Your system keeps working.",
   },
   objections: {
-    eyebrow: "FAQ",
+    eyebrow: "OBJECTIONS",
     headline: "You're thinking...",
     items: [
       {
-        question: '"I can just use ChatGPT Projects / CustomGPT / Notion AI"',
+        question: '"I already have an AI agent / Copilot / Lindy"',
         answer:
-          "Those tools organise what you already have. They don't extract what's in your head. Codify starts upstream — capturing your expertise, structuring it, then generating from it. And your files work with any AI — Claude, GPT, Gemini, whatever comes next. No platform lock-in.",
+          "Great \u2014 now give it your business context. Without codified knowledge, your agent is a genius with amnesia. It can do things, but it doesn't know your business. We fix that.",
       },
       {
-        question: '"Why not just write good prompts?"',
+        question: '"Why can\'t AI just document my business for me?"',
         answer:
-          "Prompts are disposable. You write them once, they work once. Your codified business knowledge informs every ad, email, and proposal — forever. That's the difference.",
+          "Research shows AI-generated business documentation actually makes agents perform worse \u2014 they create organised noise, not real context. Real codification requires human judgment. That's what we do.",
+      },
+      {
+        question: '"Why not hire an AI consultant?"',
+        answer:
+          "Consultants give you a report that sits in a drawer. We give you a system that compounds. Their report is outdated in 3 months. Your context compounds forever. Consultants cost $5\u201320K. Pro starts at $199/mo.",
       },
       {
         question: '"I\'m not technical"',
         answer:
-          "Neither are most of our users. Pro tier includes onboarding and same-day WhatsApp support — you're client ready from day one.",
+          "You don't need to be. You talk, we codify. Start with the Opportunity Scan \u2014 send us a paragraph about your business and we'll show you 3 opportunities. No app to download. No terminal. No code.",
       },
       {
-        question: '"Why pay monthly when AI tools are free?"',
+        question: '"What if I want to stop?"',
         answer:
-          "Free AI gives you generic results because it knows nothing about your business. Codify gives you ads, proposals, and content that sound like you — because it knows your offer, your audience, and your voice. Try it free. Pro starts at $199/mo when you're ready.",
+          "Month-to-month. Cancel anytime. Your files are yours \u2014 plain files you own. You keep everything. We don't hold your data hostage.",
       },
       {
-        question: '"What if I want to cancel?"',
+        question: '"How is this different from knowledge management?"',
         answer:
-          "Month-to-month. Cancel anytime. Everything we build is yours — stored securely in files you own. You keep it all. We don't hold your data hostage.",
-      },
-      {
-        question: '"What\'s the Sovereign Vault?"',
-        answer:
-          "Your own Digital Fortress. Your business knowledge lives on a private server that you control. Encrypted, with full change history and instant access revocation. You own the infrastructure. Your IP never trains anyone else's AI. Available on the VIP tier.",
-      },
-      {
-        question: '"Can it actually build and deploy funnels?"',
-        answer:
-          "Yes. Codify generates SEO pages, launch funnels, blog batches, and retargeting assets — all from your business knowledge — and deploys them directly to GoHighLevel. One run can produce 20+ pages that convert cold traffic because every page is built on your real expertise, not templates.",
-      },
-      {
-        question: '"Can it scrape competitors and find leads?"',
-        answer:
-          "Yes. Codify tracks competitor ads from Meta Ad Library, pulls their website copy and pricing, and analyses their social strategy — then flags gaps in your positioning. It also finds and qualifies prospects against your ideal client profile, scores them, and pushes the best ones into your CRM. Everything feeds back so your results keep improving.",
-      },
-      {
-        question: '"How is this different from hiring an AI consultant?"',
-        answer:
-          "Consultants give you a report that sits in a drawer. We give you a system that compounds. Consultants leave after the engagement — your Codify system keeps getting smarter. Consultants cost $5–20K. Pro starts at $199/mo.",
+          "Knowledge management stores information. We operationalize it. Your codified knowledge powers AI agents that generate ads, proposals, content, and market intelligence \u2014 grounded in your expertise, not generic templates.",
       },
     ],
   },
   cta: {
-    headline: "Stop Prompting.\nStart Codifying.",
+    headline: "Your expertise is the asset.\nWe make every agent use it.",
     subhead:
-      "The problem isn't the AI. The problem is the context.\nStructure your expertise. Let the system compound.",
-    ctaText: "Start Free Trial",
-    ctaUrl: "/get-started",
+      "Send us a paragraph about your business. We'll show you 3 opportunities your competitors haven't seen \u2014 free, in 24\u201348 hours.",
+    ctaText: "Get Your 3 Opportunities",
+    ctaUrl: "#opportunity-scan",
   },
   footer: {
-    tagline: "Context > Prompts.",
+    tagline: "they build the agent. we build what it knows.",
     copyright: `\u00a9 ${new Date().getFullYear()} Codify`,
     links: [
       { label: "Privacy", url: "/privacy" },

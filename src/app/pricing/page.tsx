@@ -59,7 +59,7 @@ const tiers = [
           "Guided setup to get you producing results in the first session. Same-day WhatsApp responses for questions and troubleshooting.",
       },
     ],
-    cta: "Start with Pro",
+    cta: "Get Your 3 Opportunities",
     highlight: true,
   },
   {
@@ -112,34 +112,13 @@ const tiers = [
           "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to review performance and plan campaigns.",
       },
     ],
-    cta: "Start with VIP",
+    cta: "Get Your 3 Opportunities",
     highlight: false,
   },
 ];
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
-  const [loading, setLoading] = useState<string | null>(null);
-
-  async function handleCheckout(tierKey: string) {
-    setLoading(tierKey);
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          tier: tierKey,
-          billing: annual ? "annual" : "monthly",
-        }),
-      });
-      const data = await res.json();
-      if (data.url) {
-        window.location.href = data.url;
-      }
-    } catch {
-      setLoading(null);
-    }
-  }
 
   return (
     <main>
@@ -164,14 +143,14 @@ export default function Pricing() {
       <section className="pt-20 pb-8 md:pt-36 md:pb-12">
         <div className="max-w-[700px] mx-auto px-6 md:px-12 text-center">
           <p className="text-xs tracking-[0.2em] uppercase text-blue mb-3">
-            PRICING
+            THE TIERS
           </p>
           <h1 className="font-bold text-white leading-[1.1] mb-4 text-[clamp(1.75rem,5vw,2.5rem)]">
-            Start Free. Scale When Ready.
+            Same system. More depth.
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed mb-8">
-            See what AI does when it actually knows your business.
-            Free trial, no credit card. Your files are always yours.
+            Start with the Opportunity Scan — free, no commitment.
+            Upgrade when the system proves itself.
           </p>
 
           {/* Toggle */}
@@ -281,17 +260,16 @@ export default function Pricing() {
                   </div>
 
                   {/* CTA */}
-                  <button
-                    onClick={() => handleCheckout(tier.key)}
-                    disabled={loading === tier.key}
-                    className={`block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all cursor-pointer disabled:opacity-60 ${
+                  <a
+                    href="/#opportunity-scan"
+                    className={`block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all ${
                       tier.highlight
                         ? "bg-blue text-black hover:brightness-110"
                         : "bg-white/10 text-white hover:bg-white/15"
                     }`}
                   >
-                    {loading === tier.key ? "Redirecting..." : tier.cta}
-                  </button>
+                    {tier.cta}
+                  </a>
                 </div>
               );
             })}
@@ -346,8 +324,7 @@ export default function Pricing() {
       <footer className="py-8 border-t border-border">
         <div className="max-w-[1000px] mx-auto px-6 md:px-12 text-center">
           <span className="text-xs text-dim">
-            &copy; {new Date().getFullYear()} Codify &middot; Context &gt;
-            Prompts.
+            &copy; {new Date().getFullYear()} Codify &middot; they build the agent. we build what it knows.
           </span>
         </div>
       </footer>
