@@ -37,7 +37,7 @@ export function Nav() {
             href="/get-started"
             className="text-sm font-semibold bg-blue text-black px-5 py-2 rounded-lg hover:brightness-110 transition-all"
           >
-            Start Free Trial
+            Find My Missing Revenue
           </a>
         </div>
 
@@ -68,7 +68,7 @@ export function Nav() {
             className="text-sm font-semibold bg-blue text-black px-5 py-2 rounded-lg text-center"
             onClick={() => setOpen(false)}
           >
-            Start Free Trial
+            Find My Missing Revenue
           </a>
         </div>
       )}

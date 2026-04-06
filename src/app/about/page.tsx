@@ -24,7 +24,7 @@ export default function AboutPage() {
               href="/get-started"
               className="text-sm font-semibold bg-blue text-black px-4 py-2 rounded-lg hover:brightness-110 transition-all"
             >
-              Start Free Trial
+              Find My Missing Revenue
             </a>
           </div>
         </div>
@@ -105,7 +105,7 @@ export default function AboutPage() {
             href="/get-started"
             className="inline-flex items-center justify-center gap-2 text-sm font-semibold bg-blue text-black px-8 py-4 rounded-lg hover:brightness-110 transition-all w-full sm:w-auto"
           >
-            Start Free Trial
+            Find My Missing Revenue
           </a>
         </div>
       </section>

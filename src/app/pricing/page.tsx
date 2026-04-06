@@ -261,7 +261,7 @@ export default function Pricing() {
 
                   {/* CTA */}
                   <a
-                    href="/#opportunity-scan"
+                    href="/get-started"
                     className={`block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all ${
                       tier.highlight
                         ? "bg-blue text-black hover:brightness-110"

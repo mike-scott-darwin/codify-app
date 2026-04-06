@@ -15,8 +15,8 @@ export const siteConfig = {
     headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
       "You re-explain your business to AI every single session.\nWe fix that — permanently.",
-    ctaText: "See How It Works",
-    ctaUrl: "#how-it-works",
+    ctaText: "Find My Missing Revenue",
+    ctaUrl: "/get-started",
   },
   problem: {
     eyebrow: "THE PROBLEM",
@@ -202,7 +202,7 @@ export const siteConfig = {
       howItWorks:
         "You send a paragraph about your business. Three AI models scan your market in parallel — competitors, positioning gaps, and revenue opportunities. Results in 15 minutes.",
       cta: "Find My Missing Revenue",
-      ctaUrl: "#opportunity-scan",
+      ctaUrl: "/get-started",
     },
     tiers: [
       {
@@ -225,7 +225,7 @@ export const siteConfig = {
           "Onboarding + same-day WhatsApp support",
         ],
         cta: "Find My Missing Revenue",
-        ctaUrl: "#opportunity-scan",
+        ctaUrl: "/get-started",
         highlight: true,
       },
       {
@@ -247,7 +247,7 @@ export const siteConfig = {
           "Priority WhatsApp (4h response) + scheduled strategy calls",
         ],
         cta: "Find My Missing Revenue",
-        ctaUrl: "#opportunity-scan",
+        ctaUrl: "/get-started",
         highlight: false,
       },
     ],
@@ -295,7 +295,7 @@ export const siteConfig = {
     subhead:
       "Tell us about your business. Google, Claude, and Codex scan your market simultaneously. You'll see exactly where the money is — free, in 15 minutes.",
     ctaText: "Find My Missing Revenue",
-    ctaUrl: "#opportunity-scan",
+    ctaUrl: "/get-started",
   },
   footer: {
     tagline: "Your expertise, structured. Your AI, transformed.",
