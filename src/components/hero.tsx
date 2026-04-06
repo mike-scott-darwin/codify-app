@@ -14,10 +14,10 @@ export function Hero() {
   const { hero } = siteConfig;
 
   return (
-    <section className="pt-20 pb-10 md:pt-40 md:pb-28 relative overflow-hidden">
+    <section className="pt-16 pb-6 md:pt-40 md:pb-28 relative overflow-hidden">
       <div className="max-w-[900px] mx-auto px-6 md:px-12 text-center relative z-10">
         <p
-          className={`text-xs tracking-[0.2em] uppercase text-blue mb-3 md:mb-6 transition-all duration-700 ${
+          className={`text-xs tracking-[0.2em] uppercase text-blue mb-2 md:mb-6 transition-all duration-700 ${
             revealed ? "opacity-100" : "opacity-0 translate-y-4"
           }`}
         >
@@ -25,7 +25,7 @@ export function Hero() {
         </p>
 
         <h1
-          className={`font-bold text-white leading-[1.08] tracking-tight mb-4 md:mb-6 whitespace-pre-line transition-all duration-700 ${
+          className={`font-bold text-white leading-[1.08] tracking-tight mb-3 md:mb-6 whitespace-pre-line transition-all duration-700 ${
             revealed ? "opacity-100" : "opacity-0 translate-y-6"
           }`}
           style={{
@@ -37,7 +37,7 @@ export function Hero() {
         </h1>
 
         <p
-          className={`text-base md:text-xl text-muted max-w-[640px] mx-auto mb-6 md:mb-10 leading-relaxed whitespace-pre-line transition-all duration-700 ${
+          className={`text-sm md:text-xl text-muted max-w-[640px] mx-auto mb-4 md:mb-10 leading-relaxed whitespace-pre-line transition-all duration-700 ${
             revealed ? "opacity-100" : "opacity-0 translate-y-6"
           }`}
           style={{ transitionDelay: "300ms" }}
@@ -53,7 +53,7 @@ export function Hero() {
         >
           <a
             href={hero.ctaUrl}
-            className="inline-flex items-center gap-2 bg-blue text-black font-semibold text-base px-8 py-4 rounded-lg hover:brightness-110 transition-all"
+            className="inline-flex items-center gap-2 bg-blue text-black font-semibold text-sm md:text-base px-6 py-3 md:px-8 md:py-4 rounded-lg hover:brightness-110 transition-all"
           >
             {hero.ctaText}
             <svg
