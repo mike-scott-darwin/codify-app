@@ -291,9 +291,9 @@ export const siteConfig = {
     ],
   },
   cta: {
-    headline: "Your expertise is the asset.\nWe make AI actually use it.",
+    headline: "Your expertise is the asset. We make AI use it.",
     subhead:
-      "Tell us about your business. Google, Claude, and Codex scan your market simultaneously. You'll see exactly where the money is — free, in 15 minutes.",
+      "Free opportunity scan — results in 15 minutes.",
     ctaText: "Find My Missing Revenue",
     ctaUrl: "/get-started",
   },
