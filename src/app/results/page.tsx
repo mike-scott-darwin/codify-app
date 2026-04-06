@@ -234,7 +234,7 @@ export default function ResultsPage() {
             See It For Yourself
           </h2>
           <p className="text-muted text-sm mb-8">
-            5 extractions + 3 content outputs free. No credit card.
+            Free opportunity scan — results in 15 minutes.
           </p>
           <a
             href="/get-started"

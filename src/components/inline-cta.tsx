@@ -24,7 +24,7 @@ export function InlineCTA() {
           </svg>
         </a>
         <p className="text-xs text-dim mt-3">
-          Free to start. No credit card required.
+          Free opportunity scan — results in 15 minutes.
         </p>
       </div>
     </section>
