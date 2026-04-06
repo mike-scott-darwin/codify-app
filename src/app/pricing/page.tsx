@@ -324,7 +324,7 @@ export default function Pricing() {
       <footer className="py-8 border-t border-border">
         <div className="max-w-[1000px] mx-auto px-6 md:px-12 text-center">
           <span className="text-xs text-dim">
-            &copy; {new Date().getFullYear()} Codify &middot; they build the agent. we build what it knows.
+            &copy; {new Date().getFullYear()} Codify &middot; Your expertise, structured. Your AI, transformed.
           </span>
         </div>
       </footer>
