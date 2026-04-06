@@ -14,7 +14,7 @@ export const siteConfig = {
     eyebrow: "FOR BUSINESS OWNERS ALREADY USING AI",
     headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
-      "30 years of expertise — AI has no access to any of it.\nWe extract it. Structure it. So AI makes you money.",
+      "Years of experience — AI has no access to any of it.\nWe extract it. Structure it. So AI makes you money.",
     ctaText: "Find My Missing Revenue",
     ctaUrl: "/get-started",
   },
