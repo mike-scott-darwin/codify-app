@@ -11,10 +11,10 @@ export const siteConfig = {
       "Context Architecture for senior executives. We extract your institutional knowledge and structure it so every AI agent you deploy knows your business.",
   },
   hero: {
-    eyebrow: "CONTEXT ARCHITECTURE FOR SENIOR EXECUTIVES",
-    headline: "Your agent is only as smart\nas its context.",
+    eyebrow: "FOR BUSINESS OWNERS ALREADY USING AI",
+    headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
-      "Everyone is deploying AI agents. Nobody is structuring what the agents need to know.\nWe extract 30+ years of expertise and make every agent, every output, every decision grounded in your business.",
+      "30 years of expertise stuck in your head. Every AI session starts from scratch.\nWe codify what you know so every output is grounded in your business — not generic templates.",
     ctaText: "Get Your 3 Opportunities",
     ctaUrl: "#opportunity-scan",
   },
