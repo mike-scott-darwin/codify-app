@@ -14,7 +14,7 @@ export const siteConfig = {
     eyebrow: "FOR BUSINESS OWNERS ALREADY USING AI",
     headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
-      "You re-explain your business to AI every single session.\nWe fix that — permanently.",
+      "Generic AI gives you generic results — and that costs you money.\nTell us about your business and we'll show you exactly where.",
     ctaText: "Find My Missing Revenue",
     ctaUrl: "/get-started",
   },
