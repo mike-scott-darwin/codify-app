@@ -15,8 +15,8 @@ export const siteConfig = {
     headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
       "You re-explain your business to AI every single session.\nWe fix that — permanently.",
-    ctaText: "See How It Works",
-    ctaUrl: "#how-it-works",
+    ctaText: "Try It Free",
+    ctaUrl: "/get-started",
   },
   problem: {
     eyebrow: "THE PROBLEM",
@@ -201,8 +201,8 @@ export const siteConfig = {
         "Send us a summary of your business. We'll show you where the next 3 opportunities are — free.",
       howItWorks:
         "You send a paragraph about your business. We scan your market, cross-reference your positioning, and deliver 3 specific opportunities you haven't seen. Delivered in 24–48 hours.",
-      cta: "Get Your 3 Opportunities",
-      ctaUrl: "#opportunity-scan",
+      cta: "Try It Free",
+      ctaUrl: "/get-started",
     },
     tiers: [
       {
@@ -224,8 +224,8 @@ export const siteConfig = {
           "Connected to your systems — CRM, email, pipeline, and workflows",
           "Onboarding + same-day WhatsApp support",
         ],
-        cta: "Get Your 3 Opportunities",
-        ctaUrl: "#opportunity-scan",
+        cta: "Try It Free",
+        ctaUrl: "/get-started",
         highlight: true,
       },
       {
@@ -246,8 +246,8 @@ export const siteConfig = {
           "Your own private server — encrypted, fully owned, your IP never trains anyone else's AI",
           "Priority WhatsApp (4h response) + scheduled strategy calls",
         ],
-        cta: "Get Your 3 Opportunities",
-        ctaUrl: "#opportunity-scan",
+        cta: "Try It Free",
+        ctaUrl: "/get-started",
         highlight: false,
       },
     ],
@@ -294,8 +294,8 @@ export const siteConfig = {
     headline: "Your expertise is the asset.\nWe make AI actually use it.",
     subhead:
       "Send us a paragraph about your business. We'll show you 3 opportunities your competitors haven't seen — free, in 24–48 hours.",
-    ctaText: "Get Your 3 Opportunities",
-    ctaUrl: "#opportunity-scan",
+    ctaText: "Try It Free",
+    ctaUrl: "/get-started",
   },
   footer: {
     tagline: "Your expertise, structured. Your AI, transformed.",
