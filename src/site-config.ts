@@ -15,8 +15,8 @@ export const siteConfig = {
     headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
       "You re-explain your business to AI every single session.\nWe fix that — permanently.",
-    ctaText: "Try It Free",
-    ctaUrl: "/get-started",
+    ctaText: "See How It Works",
+    ctaUrl: "#how-it-works",
   },
   problem: {
     eyebrow: "THE PROBLEM",
@@ -198,11 +198,11 @@ export const siteConfig = {
     trial: {
       name: "Opportunity Scan",
       description:
-        "Send us a summary of your business. We'll show you where the next 3 opportunities are — free.",
+        "Tell us about your business. Google, Claude, and Codex scan your market simultaneously — and show you exactly where the money is.",
       howItWorks:
-        "You send a paragraph about your business. We scan your market, cross-reference your positioning, and deliver 3 specific opportunities you haven't seen. Delivered in 24–48 hours.",
-      cta: "Try It Free",
-      ctaUrl: "/get-started",
+        "You send a paragraph about your business. Three AI models scan your market in parallel — competitors, positioning gaps, and revenue opportunities. Results in 15 minutes.",
+      cta: "Find My Missing Revenue",
+      ctaUrl: "#opportunity-scan",
     },
     tiers: [
       {
@@ -224,8 +224,8 @@ export const siteConfig = {
           "Connected to your systems — CRM, email, pipeline, and workflows",
           "Onboarding + same-day WhatsApp support",
         ],
-        cta: "Try It Free",
-        ctaUrl: "/get-started",
+        cta: "Find My Missing Revenue",
+        ctaUrl: "#opportunity-scan",
         highlight: true,
       },
       {
@@ -246,8 +246,8 @@ export const siteConfig = {
           "Your own private server — encrypted, fully owned, your IP never trains anyone else's AI",
           "Priority WhatsApp (4h response) + scheduled strategy calls",
         ],
-        cta: "Try It Free",
-        ctaUrl: "/get-started",
+        cta: "Find My Missing Revenue",
+        ctaUrl: "#opportunity-scan",
         highlight: false,
       },
     ],
@@ -293,9 +293,9 @@ export const siteConfig = {
   cta: {
     headline: "Your expertise is the asset.\nWe make AI actually use it.",
     subhead:
-      "Send us a paragraph about your business. We'll show you 3 opportunities your competitors haven't seen — free, in 24–48 hours.",
-    ctaText: "Try It Free",
-    ctaUrl: "/get-started",
+      "Tell us about your business. Google, Claude, and Codex scan your market simultaneously. You'll see exactly where the money is — free, in 15 minutes.",
+    ctaText: "Find My Missing Revenue",
+    ctaUrl: "#opportunity-scan",
   },
   footer: {
     tagline: "Your expertise, structured. Your AI, transformed.",
