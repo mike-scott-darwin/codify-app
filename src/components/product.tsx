@@ -1,11 +1,31 @@
 "use client";
 
+import { useState } from "react";
 import { siteConfig } from "../site-config";
 import { useInView } from "./use-in-view";
 
 export function Product() {
   const { ref, inView } = useInView(0.1);
   const { product } = siteConfig;
+  const [loading, setLoading] = useState<string | null>(null);
+
+  async function handleCheckout(tierName: string) {
+    const key = tierName.toLowerCase();
+    setLoading(key);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ tier: key, billing: "monthly" }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } finally {
+      setLoading(null);
+    }
+  }
 
   return (
     <section
@@ -88,16 +108,17 @@ export function Product() {
                   ))}
                 </ul>
 
-                <a
-                  href={tier.ctaUrl}
-                  className={`block text-center font-semibold text-sm py-3.5 px-6 rounded-lg transition-all ${
+                <button
+                  onClick={() => handleCheckout(tier.name)}
+                  disabled={loading === tier.name.toLowerCase()}
+                  className={`block w-full text-center font-semibold text-sm py-3.5 px-6 rounded-lg transition-all cursor-pointer disabled:opacity-60 ${
                     tier.highlight
                       ? "bg-blue text-black hover:brightness-110"
                       : "bg-white/10 text-white hover:bg-white/15"
                   }`}
                 >
-                  {tier.cta}
-                </a>
+                  {loading === tier.name.toLowerCase() ? "Redirecting..." : tier.cta}
+                </button>
               </div>
             </div>
           ))}

@@ -119,6 +119,27 @@ const tiers = [
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
+  const [loading, setLoading] = useState<string | null>(null);
+
+  async function handleCheckout(tierKey: string) {
+    setLoading(tierKey);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          tier: tierKey,
+          billing: annual ? "annual" : "monthly",
+        }),
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      }
+    } finally {
+      setLoading(null);
+    }
+  }
 
   return (
     <main>
@@ -260,16 +281,17 @@ export default function Pricing() {
                   </div>
 
                   {/* CTA */}
-                  <a
-                    href="/get-started"
-                    className={`block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all ${
+                  <button
+                    onClick={() => handleCheckout(tier.key)}
+                    disabled={loading === tier.key}
+                    className={`block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all cursor-pointer disabled:opacity-60 ${
                       tier.highlight
                         ? "bg-blue text-black hover:brightness-110"
                         : "bg-white/10 text-white hover:bg-white/15"
                     }`}
                   >
-                    {tier.cta}
-                  </a>
+                    {loading === tier.key ? "Redirecting..." : tier.cta}
+                  </button>
                 </div>
               );
             })}
