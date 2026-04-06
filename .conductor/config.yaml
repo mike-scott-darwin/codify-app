@@ -1,0 +1,35 @@
+project_name: codify-site
+version: 1.0.0
+
+# Git workflow
+branching:
+  strategy: issue-per-branch
+  branch_prefix: "codify-site"
+  main_branch: main
+  max_commits_per_branch: 10
+  auto_pr: true
+
+# GitHub integration
+github_integration:
+  enabled: true
+  use_issues: true
+  issue_to_task: true
+  pr_reviews: true
+  repo: mike-scott-darwin/codify-site
+
+# Worktree management
+worktrees:
+  enabled: true
+  base_path: ../workspaces/codify-site
+  naming: city
+
+# Task management
+task_management: github-issues
+
+# Infrastructure
+infrastructure:
+  deploy: vercel
+  deploy_branch: main
+  m1_host: 100.88.4.114
+  m1_user: michaelscott
+  scan_handler_path: ~/scan-handler
