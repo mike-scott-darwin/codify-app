@@ -111,7 +111,7 @@ export const siteConfig = {
     items: [
       {
         name: "Alex Reisch",
-        context: "VIP — Skool community builder",
+        context: "Codify — Skool community builder",
         quote:
           "21+ lessons across 3 courses, 22 email triggers, all built in hours not weeks. Every piece of content sounds like me. I've never experienced anything like this in 15+ years of building online.",
         result: "Complete community in days, not months",
@@ -192,62 +192,63 @@ export const siteConfig = {
   },
   product: {
     eyebrow: "PRICING",
-    headline: "Same system. More depth.",
+    headline: "Three levels. One compounding vault.",
     description:
-      "Start with the Opportunity Scan — free, no commitment. Upgrade when the system proves itself.",
+      "Start with the Opportunity Assessment — free, no commitment. Upgrade when the system proves itself.",
     trial: {
-      name: "Opportunity Scan",
+      name: "Opportunity Assessment",
       description:
         "Tell us about your business. Google, Claude, and Codex scan your market simultaneously — and show you exactly where the money is.",
       howItWorks:
-        "You send a paragraph about your business. Three AI models scan your market in parallel — competitors, positioning gaps, and revenue opportunities. Results in 15 minutes.",
+        "You send a paragraph about your business. Three AI models scan your market in parallel — competitors, positioning gaps, and revenue opportunities. We deliver 3 specific opportunities in 24-48 hours.",
       cta: "Find My Missing Revenue",
       ctaUrl: "/get-started",
     },
     tiers: [
       {
-        name: "Pro",
-        price: "$199",
+        name: "Codify",
+        price: "$497",
         period: "/mo",
-        annual: "$1,497/yr",
-        badge: "Most Popular",
+        annual: "$2,997/yr",
+        badge: "Managed",
         description:
-          "The output engine. We codify your expertise and you generate ads, proposals, emails, and websites that sound like you — not a machine.",
+          "We extract your expertise, build your sovereign vault, and run the agent for you. Done-for-you. You get outputs — we handle the rest.",
         features: [
-          "Capture your expertise — we extract what's in your head into structured files AI can use",
-          "Content that sounds like you — blog posts, social, newsletters in your voice",
+          "Done-for-you — we extract your expertise, build your vault, and run it for you",
+          "Content that sounds like you — ads, emails, proposals, landing pages, funnels in your voice",
           "Track your competitors — monitor their ads, websites, and positioning automatically",
-          "Ads, emails, proposals, landing pages, funnels — first drafts in minutes",
-          "Case studies, follow-ups, objection handling — from your real experience",
-          "Full website built from your business knowledge",
-          "Find and qualify leads — scored against your ideal client, pushed to your CRM",
+          "AI assistant on WhatsApp — ask questions, request drafts, get answers grounded in your business",
+          "Overnight automation — queue research topics, results land in your vault by morning",
+          "Daily briefing — what changed, what needs attention, before your first coffee",
+          "Monthly Brain Sync — we keep your context fresh and accurate",
           "Connected to your systems — CRM, email, pipeline, and workflows",
-          "Onboarding + same-day WhatsApp support",
+          "Priority WhatsApp support (4h response) + scheduled strategy calls",
         ],
         cta: "Find My Missing Revenue",
         ctaUrl: "/get-started",
         highlight: true,
       },
       {
-        name: "VIP",
-        price: "$497",
+        name: "Orchestrate",
+        price: "$2,997",
         period: "/mo",
-        annual: "$2,997/yr",
-        badge: "Done For You",
+        annual: "",
+        badge: "Autonomous Agents",
         description:
-          "Hands-off operation. We build it, run it, and maintain it for you — on infrastructure you own. You get results without touching the system.",
+          "We build your orchestrator and deploy a specialised agent team — Strategy, Brand, GTM, Sales, and more — running from your sovereign vault with guardrails you control.",
         features: [
-          "Everything in Pro",
-          "Done-for-you — we codify your expertise, build your system, and run it",
-          "Publish and distribute — push content to email, social, ads, and your website in one go",
-          "AI assistant on WhatsApp — ask questions, request drafts, get answers grounded in your business",
-          "Overnight automation — queue research topics, results land by morning",
-          "Daily briefing — what changed, what needs attention, before your first coffee",
-          "Your own private server — encrypted, fully owned, your IP never trains anyone else's AI",
-          "Priority WhatsApp (4h response) + scheduled strategy calls",
+          "Everything in Codify",
+          "Autonomous agent team — 8+ specialised workers operating in parallel",
+          "Orchestrator routes tasks, enforces brand and operational guardrails",
+          "Sovereign infrastructure — private server, your domain, your jurisdiction",
+          "Self-hosted git — Forgejo, not GitHub. Zero-knowledge architecture",
+          "Human-in-the-Loop — all outputs require your sign-off before publishing",
+          "Encrypted off-site backups — automated, auditable",
+          "White-glove handover — 2-hour walkthrough of your sovereign stack",
+          "$5,000 one-time setup. By application only.",
         ],
-        cta: "Find My Missing Revenue",
-        ctaUrl: "/get-started",
+        cta: "Talk to Michael",
+        ctaUrl: "mailto:hello@codify.build?subject=Orchestrate%20Tier",
         highlight: false,
       },
     ],
@@ -271,12 +272,12 @@ export const siteConfig = {
       {
         question: '"Why not hire a consultant?"',
         answer:
-          "Consultants give you a report that sits in a drawer. We give you a system that compounds. Their report is outdated in 3 months. Your context compounds forever. Consultants cost $5–20K. Pro starts at $199/mo.",
+          "Consultants give you a report that sits in a drawer. We give you a system that compounds. Their report is outdated in 3 months. Your context compounds forever. Consultants cost $5–20K. Codify starts at $497/mo — and it compounds.",
       },
       {
         question: '"I\'m not technical"',
         answer:
-          "You don't need to be. You talk, we codify. Start with the Opportunity Scan — send us a paragraph about your business and we'll show you 3 opportunities. No app to download. No code.",
+          "You don't need to be. You talk, we codify. Start with the Opportunity Assessment — send us a paragraph about your business and we'll show you 3 opportunities. No app to download. No code.",
       },
       {
         question: '"What if I want to stop?"',
@@ -293,7 +294,7 @@ export const siteConfig = {
   cta: {
     headline: "Your expertise is the asset. We make AI use it.",
     subhead:
-      "Free opportunity scan — results in 15 minutes.",
+      "Free Opportunity Assessment — 3 opportunities in 48 hours.",
     ctaText: "Find My Missing Revenue",
     ctaUrl: "/get-started",
   },

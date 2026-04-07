@@ -6,10 +6,11 @@ function getStripe() {
 }
 
 const PRICE_MAP: Record<string, { priceId: string; mode: "subscription" | "payment" }> = {
-  "pro-monthly": { priceId: "price_1THJLoJeFf5ThhqeOAb30zLx", mode: "subscription" },
-  "pro-annual": { priceId: "price_1THJEiJeFf5ThhqemgH1GCI4", mode: "payment" },
-  "vip-monthly": { priceId: "price_1THJKuJeFf5ThhqelxJugRTy", mode: "subscription" },
-  "vip-annual": { priceId: "price_1THJHDJeFf5Thhqew25eVn5F", mode: "payment" },
+  // TODO: Create new Stripe products and update these price IDs
+  // Old: pro-monthly ($199), pro-annual ($1,497), vip-monthly ($497), vip-annual ($2,997)
+  // New: codify-monthly ($497), codify-annual ($2,997)
+  "codify-monthly": { priceId: "price_TODO_codify_monthly", mode: "subscription" },
+  "codify-annual": { priceId: "price_TODO_codify_annual", mode: "payment" },
 };
 
 export async function POST(request: Request) {

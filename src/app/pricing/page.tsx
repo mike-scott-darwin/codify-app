@@ -4,87 +4,29 @@ import { useState } from "react";
 
 const tiers = [
   {
-    name: "Pro",
-    key: "pro",
-    badge: "Most Popular",
-    monthly: 199,
-    annual: 1497,
+    name: "Codify",
+    key: "codify",
+    badge: "Managed",
+    monthly: 497,
+    annual: 2997,
     description:
-      "Full access. We codify your expertise and you generate ads, proposals, emails, and websites that sound like you — not a machine.",
-    who: "For business owners who want AI that actually knows their business — generating ads that convert, proposals that close, and finding leads that match their ideal client.",
+      "We extract your expertise, build your sovereign vault, and run the agent for you. Done-for-you. You get outputs — we handle the rest.",
+    who: "For established business owners who want AI that actually knows their business — with everything built, run, and maintained for them. WhatsApp assistant, overnight research, daily briefings, and priority support.",
     features: [
       {
-        label: "Capture your expertise",
+        label: "Done-for-you build and operations",
         detail:
-          "We interview your business through guided conversations — your offer, audience, voice, and beliefs — and turn it into documents AI can actually use.",
+          "We extract your expertise through guided conversations, build your vault, and run the agent. You get outputs from day one without touching the setup.",
       },
       {
         label: "Content that sounds like you",
         detail:
-          "Generate blog posts, social content, and newsletters that match your voice. Every piece is informed by your real business knowledge, not templates.",
+          "Generate ads, emails, proposals, landing pages, and funnels in your voice. Every piece is informed by your real business knowledge, not templates.",
       },
       {
         label: "Track your competitors",
         detail:
           "Automatically monitor competitor ads, websites, and social profiles. See what they're doing and where the gaps are in your market.",
-      },
-      {
-        label: "Ads, emails, proposals, funnels — first drafts in minutes",
-        detail:
-          "Generate client-ready deliverables in your voice. Ads, emails, landing pages, proposals, pitch decks, and full funnels — all from your business knowledge.",
-      },
-      {
-        label: "Case studies, follow-ups, objection handling",
-        detail:
-          "Turn client wins into proof. Draft post-meeting follow-ups. Handle sales objections using your actual expertise and track record.",
-      },
-      {
-        label: "Full website from your business knowledge",
-        detail:
-          "Generate a complete, deployable website built from your expertise. The codify.build site was built this exact way.",
-      },
-      {
-        label: "Find and qualify leads",
-        detail:
-          "Prospects matched against your ideal client profile, scored 1-10, with personalised outreach drafted in your voice. Pushed straight to your CRM.",
-      },
-      {
-        label: "CRM connected",
-        detail:
-          "Linked to GoHighLevel — create contacts, send emails, manage your pipeline, trigger workflows, and book meetings. All connected to your business knowledge.",
-      },
-      {
-        label: "Onboarding + same-day WhatsApp support",
-        detail:
-          "Guided setup to get you producing results in the first session. Same-day WhatsApp responses for questions and troubleshooting.",
-      },
-    ],
-    cta: "Find My Missing Revenue",
-    highlight: true,
-  },
-  {
-    name: "VIP",
-    key: "vip",
-    badge: "Done For You",
-    monthly: 497,
-    annual: 2997,
-    description:
-      "We build it, run it, and maintain it for you — on infrastructure you own. You get results without touching the system.",
-    who: "For established businesses that want the full system built and run for them — AI assistant on WhatsApp, overnight research, daily briefings, and everything on private infrastructure they control.",
-    features: [
-      {
-        label: "Everything in Pro",
-        detail: "All capabilities, integrations, and support included.",
-      },
-      {
-        label: "Done-for-you build",
-        detail:
-          "We capture your expertise, build your system, and tune everything to your business. You're producing results from day one without touching the setup.",
-      },
-      {
-        label: "Publish and distribute everywhere",
-        detail:
-          "Push content to every channel at once. One request can generate and distribute a full campaign across email, social, ads, and your website.",
       },
       {
         label: "AI assistant on WhatsApp",
@@ -102,17 +44,75 @@ const tiers = [
           "Morning summary delivered to WhatsApp at 7am. What's new, what needs attention, and what opportunities came up — before your first coffee.",
       },
       {
-        label: "Private infrastructure you own",
+        label: "Monthly Brain Sync",
         detail:
-          "Your business knowledge lives on a private server that you control. Encrypted, full audit trail, instant access revocation. Your IP never trains anyone else's AI.",
+          "We review your vault every month — updating stale context, adding new decisions, and ensuring your AI stays current with your business.",
       },
       {
-        label: "Priority WhatsApp (4h response) + scheduled calls",
+        label: "CRM connected",
+        detail:
+          "Linked to GoHighLevel — create contacts, send emails, manage your pipeline, trigger workflows, and book meetings. All connected to your business knowledge.",
+      },
+      {
+        label: "Priority WhatsApp support (4h response) + scheduled calls",
         detail:
           "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to review performance and plan campaigns.",
       },
     ],
     cta: "Find My Missing Revenue",
+    highlight: true,
+  },
+  {
+    name: "Orchestrate",
+    key: "orchestrate",
+    badge: "Autonomous Agents",
+    monthly: 2997,
+    annual: 0,
+    description:
+      "We build your orchestrator and deploy a specialised agent team — Strategy, Brand, GTM, Sales, and more — running from your sovereign vault with guardrails you control.",
+    who: "For executives who want an autonomous team of AI agents running their business operations — strategy, brand, marketing, sales — on sovereign infrastructure they own. By application only.",
+    features: [
+      {
+        label: "Everything in Codify",
+        detail: "All capabilities, integrations, and support included.",
+      },
+      {
+        label: "Autonomous agent team",
+        detail:
+          "8+ specialised AI workers — Strategy, Brand, GTM, Sales, Product, Engineering, Client Success, Research — each reading your vault, working in parallel.",
+      },
+      {
+        label: "Orchestrator with guardrails",
+        detail:
+          "An AI orchestrator routes tasks to the right specialist agent and enforces your brand, content, and operational guardrails. You set the direction, the team executes.",
+      },
+      {
+        label: "Sovereign infrastructure",
+        detail:
+          "Private server, your domain, your jurisdiction. Optional non-US data sovereignty (Switzerland/Finland). Your IP never trains anyone else's AI.",
+      },
+      {
+        label: "Self-hosted git",
+        detail:
+          "Forgejo, not GitHub. Full zero-knowledge architecture. Your business knowledge lives on infrastructure you control.",
+      },
+      {
+        label: "Human-in-the-Loop",
+        detail:
+          "All outputs require your sign-off before publishing. Full audit trail. Nothing goes live without your approval.",
+      },
+      {
+        label: "Encrypted off-site backups",
+        detail:
+          "Automated, auditable backups to encrypted off-site storage. Your vault survives anything.",
+      },
+      {
+        label: "White-glove handover",
+        detail:
+          "2-hour walkthrough of your sovereign stack. You understand everything that's running and how to control it.",
+      },
+    ],
+    cta: "Talk to Michael",
     highlight: false,
   },
 ];
@@ -122,6 +122,10 @@ export default function Pricing() {
   const [loading, setLoading] = useState<string | null>(null);
 
   async function handleCheckout(tierKey: string) {
+    if (tierKey === "orchestrate") {
+      window.location.href = "mailto:hello@codify.build?subject=Orchestrate%20Tier";
+      return;
+    }
     setLoading(tierKey);
     try {
       const res = await fetch("/api/checkout", {
@@ -164,17 +168,17 @@ export default function Pricing() {
       <section className="pt-20 pb-8 md:pt-36 md:pb-12">
         <div className="max-w-[700px] mx-auto px-6 md:px-12 text-center">
           <p className="text-xs tracking-[0.2em] uppercase text-blue mb-3">
-            THE TIERS
+            PRICING
           </p>
           <h1 className="font-bold text-white leading-[1.1] mb-4 text-[clamp(1.75rem,5vw,2.5rem)]">
-            Same system. More depth.
+            Three levels. One compounding vault.
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed mb-8">
-            Start with the Opportunity Scan — free, no commitment.
+            Start with the Opportunity Assessment — free, no commitment.
             Upgrade when the system proves itself.
           </p>
 
-          {/* Toggle */}
+          {/* Toggle - only for Codify tier */}
           <div className="inline-flex items-center gap-3 bg-surface border border-border rounded-full px-2 py-1.5">
             <button
               onClick={() => setAnnual(false)}
@@ -195,7 +199,7 @@ export default function Pricing() {
               }`}
             >
               Annual
-              <span className="ml-1.5 text-[11px] opacity-80">Save up to 50%</span>
+              <span className="ml-1.5 text-[11px] opacity-80">Save 50%</span>
             </button>
           </div>
         </div>
@@ -206,11 +210,21 @@ export default function Pricing() {
         <div className="max-w-[1100px] mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-2 gap-6 max-w-[800px] mx-auto">
             {tiers.map((tier) => {
-              const price = annual ? tier.annual : tier.monthly;
-              const period = annual ? "/yr" : "/mo";
-              const savings = annual
-                ? tier.monthly * 12 - tier.annual
-                : 0;
+              const isOrchestrate = tier.key === "orchestrate";
+              const price = isOrchestrate
+                ? tier.monthly
+                : annual
+                ? tier.annual
+                : tier.monthly;
+              const period = isOrchestrate
+                ? "/mo"
+                : annual
+                ? "/yr"
+                : "/mo";
+              const savings =
+                !isOrchestrate && annual
+                  ? tier.monthly * 12 - tier.annual
+                  : 0;
 
               return (
                 <div
@@ -239,7 +253,12 @@ export default function Pricing() {
                       </span>
                       <span className="text-sm text-muted">{period}</span>
                     </div>
-                    {annual && savings > 0 && (
+                    {isOrchestrate && (
+                      <p className="text-xs text-muted font-medium">
+                        + $5,000 one-time setup
+                      </p>
+                    )}
+                    {savings > 0 && (
                       <p className="text-xs text-green font-medium">
                         Save ${savings.toLocaleString()} vs monthly
                       </p>
