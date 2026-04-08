@@ -2,133 +2,127 @@
 
 import { useState } from "react";
 
-const tiers = [
-  {
-    name: "Pro",
-    key: "pro",
-    badge: "Most Popular",
-    monthly: 199,
-    annual: 1497,
-    description:
-      "Full access. We codify your expertise and you generate ads, proposals, emails, and websites that sound like you — not a machine.",
-    who: "For business owners who want AI that actually knows their business — generating ads that convert, proposals that close, and finding leads that match their ideal client.",
-    features: [
-      {
-        label: "Capture your expertise",
-        detail:
-          "We interview your business through guided conversations — your offer, audience, voice, and beliefs — and turn it into documents AI can actually use.",
-      },
-      {
-        label: "Content that sounds like you",
-        detail:
-          "Generate blog posts, social content, and newsletters that match your voice. Every piece is informed by your real business knowledge, not templates.",
-      },
-      {
-        label: "Track your competitors",
-        detail:
-          "Automatically monitor competitor ads, websites, and social profiles. See what they're doing and where the gaps are in your market.",
-      },
-      {
-        label: "Ads, emails, proposals, funnels — first drafts in minutes",
-        detail:
-          "Generate client-ready deliverables in your voice. Ads, emails, landing pages, proposals, pitch decks, and full funnels — all from your business knowledge.",
-      },
-      {
-        label: "Case studies, follow-ups, objection handling",
-        detail:
-          "Turn client wins into proof. Draft post-meeting follow-ups. Handle sales objections using your actual expertise and track record.",
-      },
-      {
-        label: "Full website from your business knowledge",
-        detail:
-          "Generate a complete, deployable website built from your expertise. The codify.build site was built this exact way.",
-      },
-      {
-        label: "Find and qualify leads",
-        detail:
-          "Prospects matched against your ideal client profile, scored 1-10, with personalised outreach drafted in your voice. Pushed straight to your CRM.",
-      },
-      {
-        label: "CRM connected",
-        detail:
-          "Linked to GoHighLevel — create contacts, send emails, manage your pipeline, trigger workflows, and book meetings. All connected to your business knowledge.",
-      },
-      {
-        label: "Onboarding + same-day WhatsApp support",
-        detail:
-          "Guided setup to get you producing results in the first session. Same-day WhatsApp responses for questions and troubleshooting.",
-      },
-    ],
-    cta: "Find My Missing Revenue",
-    highlight: true,
-  },
-  {
-    name: "VIP",
-    key: "vip",
-    badge: "Done For You",
-    monthly: 497,
-    annual: 2997,
-    description:
-      "We build it, run it, and maintain it for you — on infrastructure you own. You get results without touching the system.",
-    who: "For established businesses that want the full system built and run for them — AI assistant on WhatsApp, overnight research, daily briefings, and everything on private infrastructure they control.",
-    features: [
-      {
-        label: "Everything in Pro",
-        detail: "All capabilities, integrations, and support included.",
-      },
-      {
-        label: "Done-for-you build",
-        detail:
-          "We capture your expertise, build your system, and tune everything to your business. You're producing results from day one without touching the setup.",
-      },
-      {
-        label: "Publish and distribute everywhere",
-        detail:
-          "Push content to every channel at once. One request can generate and distribute a full campaign across email, social, ads, and your website.",
-      },
-      {
-        label: "AI assistant on WhatsApp",
-        detail:
-          "An AI assistant on your phone that knows your business before it responds. Send a message or voice note, get answers grounded in your expertise. Request research, review drafts, or ask strategic questions — all from WhatsApp.",
-      },
-      {
-        label: "Research runs while you sleep",
-        detail:
-          "Queue research topics via WhatsApp. Results are ready by morning. Your business intelligence compounds while you sleep.",
-      },
-      {
-        label: "Daily Briefing",
-        detail:
-          "Morning summary delivered to WhatsApp at 7am. What's new, what needs attention, and what opportunities came up — before your first coffee.",
-      },
-      {
-        label: "Private infrastructure you own",
-        detail:
-          "Your business knowledge lives on a private server that you control. Encrypted, full audit trail, instant access revocation. Your IP never trains anyone else's AI.",
-      },
-      {
-        label: "Priority WhatsApp (4h response) + scheduled calls",
-        detail:
-          "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to review performance and plan campaigns.",
-      },
-    ],
-    cta: "Find My Missing Revenue",
-    highlight: false,
-  },
-];
+const codify = {
+  name: "Codify",
+  key: "codify",
+  badge: "Managed Service",
+  monthly: 497,
+  annual: 2997,
+  description:
+    "Managed context engine. We extract your expertise, build your vault, run the agent, and deliver results. You don't touch the system unless you want to.",
+  who: "For business owners who want their expertise extracted, structured, and operationalized — with a managed agent generating ads, proposals, emails, and research grounded in their business.",
+  features: [
+    {
+      label: "Done-for-you build",
+      detail:
+        "We extract your expertise through guided conversations, structure it into your vault, and deploy everything. You're producing results from day one.",
+    },
+    {
+      label: "Content, ads, proposals, emails — first drafts in minutes",
+      detail:
+        "Generate client-ready deliverables in your voice. Ads, emails, landing pages, proposals, pitch decks, and full funnels — all from your business knowledge.",
+    },
+    {
+      label: "AI assistant on WhatsApp",
+      detail:
+        "An AI assistant on your phone that knows your business before it responds. Voice notes, quick questions, strategic research — all from WhatsApp.",
+    },
+    {
+      label: "Overnight automation",
+      detail:
+        "Queue research topics via WhatsApp. Results are ready by morning. Your business intelligence compounds while you sleep.",
+    },
+    {
+      label: "Track your competitors",
+      detail:
+        "Automatically monitor competitor ads, websites, and social profiles. See what they're doing and where the gaps are in your market.",
+    },
+    {
+      label: "Find and qualify leads",
+      detail:
+        "Prospects matched against your ideal client profile, scored 1-10, with personalised outreach drafted in your voice. Pushed straight to your CRM.",
+    },
+    {
+      label: "Connected to your systems",
+      detail:
+        "Linked to your CRM — create contacts, send emails, manage your pipeline, trigger workflows, and book meetings. All grounded in your business knowledge.",
+    },
+    {
+      label: "Monthly Brain Sync",
+      detail:
+        "Keeps your context fresh and ensures nothing drifts. New wins, new offers, new positioning — all captured and compounding.",
+    },
+    {
+      label: "Priority WhatsApp (4h response) + scheduled calls",
+      detail:
+        "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to review performance and plan campaigns.",
+    },
+  ],
+  highlight: true,
+};
+
+const orchestrate = {
+  name: "Orchestrate",
+  badge: "By Application",
+  description:
+    "Autonomous agent team on sovereign infrastructure. We build your orchestrator and deploy specialized agents that run your business operations — with guardrails you control.",
+  who: "For established businesses that want an autonomous agent team — Strategy, Brand, GTM, Sales, Research — running on private infrastructure they own and control.",
+  features: [
+    {
+      label: "Everything in Codify",
+      detail: "All capabilities, integrations, and support included.",
+    },
+    {
+      label: "Orchestrator",
+      detail:
+        "Routes tasks to the right specialist agent. Enforces brand, content, and operational guardrails automatically.",
+    },
+    {
+      label: "Specialized agent team",
+      detail:
+        "Strategy, Brand, GTM, Sales, Product, Engineering, Client Success, Research. Each reads your vault. Works in parallel.",
+    },
+    {
+      label: "Your own private server",
+      detail:
+        "Private infrastructure on your domain, your jurisdiction. Optional non-US data sovereignty. Fully encrypted.",
+    },
+    {
+      label: "Human-in-the-loop approval",
+      detail:
+        "All outputs require your sign-off before publishing. You set direction, the team executes.",
+    },
+    {
+      label: "Daily briefing",
+      detail:
+        "Morning summary delivered to WhatsApp. What's new, what needs attention, and what opportunities came up — before your first coffee.",
+    },
+    {
+      label: "Encrypted off-site backups",
+      detail:
+        "Automated, auditable, off-site. Your business knowledge is protected and recoverable.",
+    },
+    {
+      label: "White-glove handover",
+      detail:
+        "2-hour walkthrough of your sovereign stack. We don't just build it — we make sure you understand every piece.",
+    },
+  ],
+  highlight: false,
+};
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
-  const [loading, setLoading] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  async function handleCheckout(tierKey: string) {
-    setLoading(tierKey);
+  async function handleCheckout() {
+    setLoading(true);
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          tier: tierKey,
+          tier: "codify",
           billing: annual ? "annual" : "monthly",
         }),
       });
@@ -137,9 +131,13 @@ export default function Pricing() {
         window.location.href = data.url;
       }
     } finally {
-      setLoading(null);
+      setLoading(false);
     }
   }
+
+  const price = annual ? codify.annual : codify.monthly;
+  const period = annual ? "/yr" : "/mo";
+  const savings = annual ? codify.monthly * 12 - codify.annual : 0;
 
   return (
     <main>
@@ -164,7 +162,7 @@ export default function Pricing() {
       <section className="pt-20 pb-8 md:pt-36 md:pb-12">
         <div className="max-w-[700px] mx-auto px-6 md:px-12 text-center">
           <p className="text-xs tracking-[0.2em] uppercase text-blue mb-3">
-            THE TIERS
+            PRICING
           </p>
           <h1 className="font-bold text-white leading-[1.1] mb-4 text-[clamp(1.75rem,5vw,2.5rem)]">
             Same system. More depth.
@@ -195,7 +193,7 @@ export default function Pricing() {
               }`}
             >
               Annual
-              <span className="ml-1.5 text-[11px] opacity-80">Save up to 50%</span>
+              <span className="ml-1.5 text-[11px] opacity-80">Save 50%</span>
             </button>
           </div>
         </div>
@@ -205,96 +203,128 @@ export default function Pricing() {
       <section className="pb-16 md:pb-24">
         <div className="max-w-[1100px] mx-auto px-6 md:px-12">
           <div className="grid md:grid-cols-2 gap-6 max-w-[800px] mx-auto">
-            {tiers.map((tier) => {
-              const price = annual ? tier.annual : tier.monthly;
-              const period = annual ? "/yr" : "/mo";
-              const savings = annual
-                ? tier.monthly * 12 - tier.annual
-                : 0;
-
-              return (
-                <div
-                  key={tier.name}
-                  className={`bg-surface border rounded-xl p-6 md:p-8 flex flex-col ${
-                    tier.highlight
-                      ? "border-blue/50 ring-1 ring-blue/20"
-                      : "border-border"
-                  }`}
-                >
-                  {/* Header */}
-                  <div className="mb-6">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h2 className="font-bold text-white text-xl">
-                        {tier.name}
-                      </h2>
-                      {tier.badge && (
-                        <span className="text-[10px] uppercase tracking-wider font-semibold text-blue bg-blue/10 px-2 py-0.5 rounded-full">
-                          {tier.badge}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-baseline gap-1 mb-3">
-                      <span className="text-3xl font-bold text-white">
-                        ${price.toLocaleString()}
-                      </span>
-                      <span className="text-sm text-muted">{period}</span>
-                    </div>
-                    {annual && savings > 0 && (
-                      <p className="text-xs text-green font-medium">
-                        Save ${savings.toLocaleString()} vs monthly
-                      </p>
-                    )}
-                    <p className="text-sm text-muted leading-relaxed mt-3">
-                      {tier.description}
-                    </p>
-                  </div>
-
-                  {/* Who it's for */}
-                  <div className="bg-background/50 border border-border rounded-lg p-4 mb-6">
-                    <p className="text-xs text-dim uppercase tracking-wider mb-1.5">
-                      Who it&apos;s for
-                    </p>
-                    <p className="text-sm text-foreground leading-relaxed">
-                      {tier.who}
-                    </p>
-                  </div>
-
-                  {/* Features */}
-                  <div className="space-y-4 mb-8 flex-1">
-                    {tier.features.map((feature) => (
-                      <div key={feature.label}>
-                        <div className="flex items-start gap-2">
-                          <span className="text-green shrink-0 mt-0.5 text-sm">
-                            &#x2713;
-                          </span>
-                          <div>
-                            <p className="text-sm font-medium text-white">
-                              {feature.label}
-                            </p>
-                            <p className="text-xs text-muted leading-relaxed mt-0.5">
-                              {feature.detail}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* CTA */}
-                  <button
-                    onClick={() => handleCheckout(tier.key)}
-                    disabled={loading === tier.key}
-                    className={`block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all cursor-pointer disabled:opacity-60 ${
-                      tier.highlight
-                        ? "bg-blue text-black hover:brightness-110"
-                        : "bg-white/10 text-white hover:bg-white/15"
-                    }`}
-                  >
-                    {loading === tier.key ? "Redirecting..." : tier.cta}
-                  </button>
+            {/* Codify */}
+            <div className="bg-surface border border-blue/50 ring-1 ring-blue/20 rounded-xl p-6 md:p-8 flex flex-col">
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <h2 className="font-bold text-white text-xl">
+                    {codify.name}
+                  </h2>
+                  <span className="text-[10px] uppercase tracking-wider font-semibold text-blue bg-blue/10 px-2 py-0.5 rounded-full">
+                    {codify.badge}
+                  </span>
                 </div>
-              );
-            })}
+                <div className="flex items-baseline gap-1 mb-3">
+                  <span className="text-3xl font-bold text-white">
+                    ${price.toLocaleString()}
+                  </span>
+                  <span className="text-sm text-muted">{period}</span>
+                </div>
+                {annual && savings > 0 && (
+                  <p className="text-xs text-green font-medium">
+                    Save ${savings.toLocaleString()} vs monthly
+                  </p>
+                )}
+                <p className="text-sm text-muted leading-relaxed mt-3">
+                  {codify.description}
+                </p>
+              </div>
+
+              <div className="bg-background/50 border border-border rounded-lg p-4 mb-6">
+                <p className="text-xs text-dim uppercase tracking-wider mb-1.5">
+                  Who it&apos;s for
+                </p>
+                <p className="text-sm text-foreground leading-relaxed">
+                  {codify.who}
+                </p>
+              </div>
+
+              <div className="space-y-4 mb-8 flex-1">
+                {codify.features.map((feature) => (
+                  <div key={feature.label}>
+                    <div className="flex items-start gap-2">
+                      <span className="text-green shrink-0 mt-0.5 text-sm">
+                        &#x2713;
+                      </span>
+                      <div>
+                        <p className="text-sm font-medium text-white">
+                          {feature.label}
+                        </p>
+                        <p className="text-xs text-muted leading-relaxed mt-0.5">
+                          {feature.detail}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={handleCheckout}
+                disabled={loading}
+                className="block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all cursor-pointer disabled:opacity-60 bg-blue text-black hover:brightness-110"
+              >
+                {loading ? "Redirecting..." : "Find My Missing Revenue"}
+              </button>
+            </div>
+
+            {/* Orchestrate */}
+            <div className="bg-surface border border-border rounded-xl p-6 md:p-8 flex flex-col">
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <h2 className="font-bold text-white text-xl">
+                    {orchestrate.name}
+                  </h2>
+                  <span className="text-[10px] uppercase tracking-wider font-semibold text-blue bg-blue/10 px-2 py-0.5 rounded-full">
+                    {orchestrate.badge}
+                  </span>
+                </div>
+                <div className="flex items-baseline gap-1 mb-3">
+                  <span className="text-3xl font-bold text-white">
+                    Custom
+                  </span>
+                </div>
+                <p className="text-sm text-muted leading-relaxed mt-3">
+                  {orchestrate.description}
+                </p>
+              </div>
+
+              <div className="bg-background/50 border border-border rounded-lg p-4 mb-6">
+                <p className="text-xs text-dim uppercase tracking-wider mb-1.5">
+                  Who it&apos;s for
+                </p>
+                <p className="text-sm text-foreground leading-relaxed">
+                  {orchestrate.who}
+                </p>
+              </div>
+
+              <div className="space-y-4 mb-8 flex-1">
+                {orchestrate.features.map((feature) => (
+                  <div key={feature.label}>
+                    <div className="flex items-start gap-2">
+                      <span className="text-green shrink-0 mt-0.5 text-sm">
+                        &#x2713;
+                      </span>
+                      <div>
+                        <p className="text-sm font-medium text-white">
+                          {feature.label}
+                        </p>
+                        <p className="text-xs text-muted leading-relaxed mt-0.5">
+                          {feature.detail}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <a
+                href="mailto:hello@codify.build?subject=Orchestrate%20Inquiry"
+                className="block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all bg-white/10 text-white hover:bg-white/15"
+              >
+                Talk to Michael
+              </a>
+            </div>
           </div>
 
           {/* Guarantee */}
@@ -306,8 +336,8 @@ export default function Pricing() {
                   No lock-in. Your data is yours.
                 </p>
                 <p className="text-xs text-muted leading-relaxed">
-                  Try it free — no credit card, no commitment.
-                  Cancel anytime — month-to-month, no contracts.
+                  Start with a free Opportunity Scan — no credit card, no commitment.
+                  Codify is month-to-month, cancel anytime.
                   Everything we build is yours — stored securely, readable by any AI.
                   You keep everything.
                 </p>

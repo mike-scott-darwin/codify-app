@@ -6,10 +6,8 @@ function getStripe() {
 }
 
 const PRICE_MAP: Record<string, { priceId: string; mode: "subscription" | "payment" }> = {
-  "pro-monthly": { priceId: "price_1THJLoJeFf5ThhqeOAb30zLx", mode: "subscription" },
-  "pro-annual": { priceId: "price_1THJEiJeFf5ThhqemgH1GCI4", mode: "payment" },
-  "vip-monthly": { priceId: "price_1THJKuJeFf5ThhqelxJugRTy", mode: "subscription" },
-  "vip-annual": { priceId: "price_1THJHDJeFf5Thhqew25eVn5F", mode: "payment" },
+  "codify-monthly": { priceId: "price_1THJKuJeFf5ThhqelxJugRTy", mode: "subscription" },
+  "codify-annual": { priceId: "price_1THJHDJeFf5Thhqew25eVn5F", mode: "payment" },
 };
 
 export async function POST(request: Request) {
