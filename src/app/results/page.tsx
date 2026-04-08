@@ -11,10 +11,16 @@ function AnimatedNumber({
   value: number;
   active: boolean;
 }) {
-  const [display, setDisplay] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
-    if (!active) return;
+    setMounted(true);
+    setDisplay(0);
+  }, []);
+
+  useEffect(() => {
+    if (!active || !mounted) return;
     const duration = 1800;
     const start = performance.now();
 
@@ -27,7 +33,7 @@ function AnimatedNumber({
     }
 
     requestAnimationFrame(tick);
-  }, [active, value]);
+  }, [active, value, mounted]);
 
   return <>{display}</>;
 }
@@ -231,16 +237,16 @@ export default function ResultsPage() {
             className="font-bold text-white mb-4"
             style={{ fontSize: "var(--text-2xl)" }}
           >
-            See It For Yourself
+            Ready to Codify Your Expertise?
           </h2>
           <p className="text-muted text-sm mb-8">
-            Free opportunity scan — results in 15 minutes.
+            Same system. Same results. Your business, compounding.
           </p>
           <a
-            href="/get-started"
+            href="/pricing"
             className="inline-flex items-center justify-center gap-2 text-sm font-semibold bg-blue text-black px-8 py-4 rounded-lg hover:brightness-110 transition-all w-full sm:w-auto"
           >
-            Find My Missing Revenue
+            Join Codify
           </a>
         </div>
       </section>
