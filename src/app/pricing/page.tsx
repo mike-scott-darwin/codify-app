@@ -9,53 +9,53 @@ const codify = {
   monthly: 497,
   annual: 2997,
   description:
-    "Managed context engine. We extract your expertise, build your vault, run the agent, and deliver results. You don't touch the system unless you want to.",
-  who: "For business owners who want their expertise extracted, structured, and operationalized — with a managed agent generating ads, proposals, emails, and research grounded in their business.",
+    "We extract your expertise, structure it into a sovereign vault, and build the compounding architecture that makes any AI tool work for your business.",
+  who: "For business owners who want their expertise extracted, structured, and built into a system that compounds — so every AI tool they use actually knows their business.",
   features: [
     {
       label: "Done-for-you build",
       detail:
-        "We extract your expertise through guided conversations, structure it into your vault, and deploy everything. You're producing results from day one.",
+        "We extract your expertise through guided conversations, structure it into your vault, and deploy the full architecture. You're producing results from day one.",
     },
     {
-      label: "Content, ads, proposals, emails — first drafts in minutes",
+      label: "Context extraction interviews",
       detail:
-        "Generate client-ready deliverables in your voice. Ads, emails, landing pages, proposals, pitch decks, and full funnels — all from your business knowledge.",
+        "We pull out what's in your head — your offer, audience, voice, beliefs, process, objection handling — through structured conversations designed to capture what matters.",
+    },
+    {
+      label: "Sovereign vault",
+      detail:
+        "Structured files you own, portable to any AI tool (Claude, GPT, Gemini). Your expertise lives in one place and powers everything downstream.",
+    },
+    {
+      label: "Compounding architecture",
+      detail:
+        "Every session builds on the last. New wins, new positioning, new insights — all captured and layered into your vault. Nothing starts from scratch.",
     },
     {
       label: "AI assistant on WhatsApp",
       detail:
-        "An AI assistant on your phone that knows your business before it responds. Voice notes, quick questions, strategic research — all from WhatsApp.",
+        "An AI assistant on your phone grounded in your vault. Voice notes, quick questions, strategic research — all from WhatsApp.",
     },
     {
-      label: "Overnight automation",
+      label: "90% accurate first drafts",
       detail:
-        "Queue research topics via WhatsApp. Results are ready by morning. Your business intelligence compounds while you sleep.",
-    },
-    {
-      label: "Track your competitors",
-      detail:
-        "Automatically monitor competitor ads, websites, and social profiles. See what they're doing and where the gaps are in your market.",
-    },
-    {
-      label: "Find and qualify leads",
-      detail:
-        "Prospects matched against your ideal client profile, scored 1-10, with personalised outreach drafted in your voice. Pushed straight to your CRM.",
-    },
-    {
-      label: "Connected to your systems",
-      detail:
-        "Linked to your CRM — create contacts, send emails, manage your pipeline, trigger workflows, and book meetings. All grounded in your business knowledge.",
+        "Because AI reads your full context before generating anything. Ads, proposals, emails, content — all sound like you on the first pass.",
     },
     {
       label: "Monthly Brain Sync",
       detail:
-        "Keeps your context fresh and ensures nothing drifts. New wins, new offers, new positioning — all captured and compounding.",
+        "Keeps your context fresh as your business evolves. New offers, new wins, new positioning — all captured and compounding.",
+    },
+    {
+      label: "No platform lock-in",
+      detail:
+        "Plain files in your own secure storage, readable by any AI. You keep everything. Your system works regardless of which tools you use.",
     },
     {
       label: "Priority WhatsApp (4h response) + scheduled calls",
       detail:
-        "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to review performance and plan campaigns.",
+        "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to review your architecture and plan next steps.",
     },
   ],
   highlight: true,
@@ -65,37 +65,37 @@ const orchestrate = {
   name: "Orchestrate",
   badge: "By Application",
   description:
-    "Autonomous agent team on sovereign infrastructure. We build your orchestrator and deploy specialized agents that run your business operations — with guardrails you control.",
-  who: "For established businesses that want an autonomous agent team — Strategy, Brand, GTM, Sales, Research — running on private infrastructure they own and control.",
+    "We build the full sovereign infrastructure — your vault, your orchestrator, your agent team — on hardware you own. You control everything.",
+  who: "For established businesses that want the full architecture built on their own sovereign infrastructure — private server, agent team, orchestrator — all under their control.",
   features: [
     {
       label: "Everything in Codify",
-      detail: "All capabilities, integrations, and support included.",
+      detail: "Full vault build, context extraction, compounding architecture, and ongoing support.",
     },
     {
-      label: "Orchestrator",
+      label: "Orchestrator architecture",
       detail:
-        "Routes tasks to the right specialist agent. Enforces brand, content, and operational guardrails automatically.",
+        "Routes tasks to specialist agents with guardrails you define. Enforces brand, content, and operational standards automatically.",
     },
     {
-      label: "Specialized agent team",
+      label: "Agent team deployment",
       detail:
-        "Strategy, Brand, GTM, Sales, Product, Engineering, Client Success, Research. Each reads your vault. Works in parallel.",
+        "Strategy, Brand, GTM, Sales, Product, Research agents — each reads your vault and works in parallel. We build and deploy them on your infrastructure.",
     },
     {
-      label: "Your own private server",
+      label: "Sovereign infrastructure",
       detail:
-        "Private infrastructure on your domain, your jurisdiction. Optional non-US data sovereignty. Fully encrypted.",
+        "Private server on your domain, your jurisdiction. Optional non-US data sovereignty (Switzerland/Finland). Fully encrypted.",
     },
     {
       label: "Human-in-the-loop approval",
       detail:
-        "All outputs require your sign-off before publishing. You set direction, the team executes.",
+        "Nothing publishes without your sign-off. You set direction, the architecture executes.",
     },
     {
-      label: "Daily briefing",
+      label: "Zero-knowledge architecture",
       detail:
-        "Morning summary delivered to WhatsApp. What's new, what needs attention, and what opportunities came up — before your first coffee.",
+        "Your data never leaves your infrastructure. No shared servers, no third-party access, no training on your content.",
     },
     {
       label: "Encrypted off-site backups",
