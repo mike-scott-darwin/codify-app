@@ -22,7 +22,13 @@ export const metadata: Metadata = {
     title: siteConfig.metadata.title,
     description: siteConfig.metadata.description,
     siteName: siteConfig.brand.name,
+    url: `https://${siteConfig.brand.domain}`,
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: siteConfig.metadata.title,
+    description: siteConfig.metadata.description,
   },
 };
 
