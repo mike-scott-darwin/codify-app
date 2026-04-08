@@ -264,7 +264,7 @@ export default function Pricing() {
                 disabled={loading}
                 className="block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all cursor-pointer disabled:opacity-60 bg-blue text-black hover:brightness-110"
               >
-                {loading ? "Redirecting..." : "Find My Missing Revenue"}
+                {loading ? "Redirecting..." : "Join Codify"}
               </button>
             </div>
 
