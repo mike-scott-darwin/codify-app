@@ -222,7 +222,7 @@ export const siteConfig = {
           "Yours to keep — no strings attached",
         ],
         cta: "Fix It Free",
-        ctaUrl: "/get-started?tier=snapshot",
+        ctaUrl: "/get-started",
         highlight: false,
       },
       {
