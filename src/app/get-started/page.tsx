@@ -276,7 +276,7 @@ export default function GetStarted() {
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
             Tell us about your business. We build a skeleton context profile
-            and use it to find 3 opportunities you haven't seen.
+            and show you what structured context finds that prompts alone can't.
             Free. Delivered in 24–48 hours.
           </p>
         </div>
