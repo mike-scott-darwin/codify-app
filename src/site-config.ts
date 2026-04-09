@@ -198,9 +198,9 @@ export const siteConfig = {
     trial: {
       name: "Opportunity Scan",
       description:
-        "Tell us about your business. We build a skeleton context profile and use it to find 3 opportunities you haven't seen.",
+        "Tell us about your business. We structure it into a context profile and show you what structured context finds that prompts alone can't.",
       howItWorks:
-        "You send a paragraph about your business. We build a skeleton context profile — your identity, positioning, audience, differentiator — then use it to find 3 specific opportunities. You get the profile, the opportunities, and a gap analysis showing what your AI still doesn't know. Delivered in 24-48 hours.",
+        "You send a paragraph about your business. We structure it into a context profile — identity, positioning, audience, differentiator — then run it through our research engine. You get the profile, 3 opportunities it surfaced, and a gap analysis showing where better context sharpens the results. Delivered in 24-48 hours.",
       cta: "Try for Free",
       ctaUrl: "/get-started",
     },
