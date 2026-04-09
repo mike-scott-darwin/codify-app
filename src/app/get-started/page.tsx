@@ -643,7 +643,7 @@ export default function GetStarted() {
                   disabled={submitting}
                   className="w-full bg-blue text-black font-semibold text-sm py-3.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-50"
                 >
-                  {submitting ? "3 AI models scanning your market..." : "Find My Missing Revenue"}
+                  {submitting ? "3 AI models scanning your market..." : "Fix It Free"}
                 </button>
 
                 <p className="text-[11px] text-dim text-center">

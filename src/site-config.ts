@@ -221,7 +221,7 @@ export const siteConfig = {
           "Delivered in 48 hours",
           "Yours to keep — no strings attached",
         ],
-        cta: "Get Your Snapshot",
+        cta: "Fix It Free",
         ctaUrl: "/get-started?tier=snapshot",
         highlight: false,
       },
