@@ -272,12 +272,12 @@ export default function GetStarted() {
             FREE OPPORTUNITY SCAN
           </p>
           <h1 className="font-bold text-white leading-[1.1] mb-4 text-[clamp(1.75rem,5vw,2.5rem)]">
-            What Revenue Are You{"\n"}Leaving on the Table?
+            What Is Your AI Missing?
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
-            Tell us about your business. Google, Claude, and Codex scan your
-            market simultaneously — and show you exactly where the money is.
-            Free. 15 minutes.
+            Tell us about your business. We build a skeleton context profile
+            and use it to find 3 opportunities you haven't seen.
+            Free. Delivered in 24–48 hours.
           </p>
         </div>
       </section>
@@ -289,13 +289,14 @@ export default function GetStarted() {
             <div className="bg-surface border border-green/30 rounded-xl p-6 md:p-8 text-center">
               <p className="text-2xl mb-3">&#x2713;</p>
               <h2 className="font-bold text-white text-xl mb-2">
-                We&apos;re scanning your market now.
+                Your Opportunity Scan is underway.
               </h2>
               <p className="text-muted text-sm leading-relaxed">
-                Three AI models are scanning your market right now — Google for
-                real-time data, Claude for strategic analysis, Codex for
-                competitive patterns. Your 3 opportunities will land in your
-                inbox within 15 minutes.
+                We're building a skeleton context profile from your business
+                summary — your identity, positioning, audience, and
+                differentiator. Then we'll use it to find 3 specific
+                opportunities. Expect your scan in your inbox within 24–48
+                hours.
               </p>
             </div>
           ) : (
@@ -643,11 +644,11 @@ export default function GetStarted() {
                   disabled={submitting}
                   className="w-full bg-blue text-black font-semibold text-sm py-3.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-50"
                 >
-                  {submitting ? "3 AI models scanning your market..." : "Fix It Free"}
+                  {submitting ? "Submitting your scan..." : "Fix It Free"}
                 </button>
 
                 <p className="text-[11px] text-dim text-center">
-                  Free. No credit card. Results in under 15 minutes.
+                  Free. No credit card. Delivered in 24–48 hours.
                 </p>
               </form>
             </div>
