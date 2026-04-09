@@ -37,11 +37,11 @@ export const siteConfig = {
           "30 years of expertise lives in your head. The frameworks you built, the decisions you made, the patterns you see that nobody else can. None of it is structured for AI to use.",
       },
       {
-        title: "The Consultant Graveyard",
-        stat: "$20K",
-        statLabel: "reports that sit in drawers",
+        title: "The Re-Explanation Tax",
+        stat: "9.3h",
+        statLabel: "per week searching for context",
         description:
-          "You paid $10K–$20K for a consultant's report. It sat in a drawer. No system. No compounding. Just a deliverable that died the day it was delivered.",
+          "Knowledge workers spend 9.3 hours every week searching for and re-explaining information they already know. Every AI session, every new tool, every new hire — you start from scratch. That's not a productivity tool. That's a tax on your expertise.",
       },
     ],
   },
