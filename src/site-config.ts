@@ -198,9 +198,9 @@ export const siteConfig = {
     trial: {
       name: "Opportunity Scan",
       description:
-        "Tell us about your business. Google, Claude, and Codex scan your market simultaneously — and show you exactly where the money is.",
+        "Tell us about your business. We build a skeleton context profile and use it to find 3 opportunities you haven't seen.",
       howItWorks:
-        "You send a paragraph about your business. Three AI models scan your market in parallel — competitors, positioning gaps, and revenue opportunities. We deliver 3 specific opportunities in 24-48 hours.",
+        "You send a paragraph about your business. We build a skeleton context profile — your identity, positioning, audience, differentiator — then use it to find 3 specific opportunities. You get the profile, the opportunities, and a gap analysis showing what your AI still doesn't know. Delivered in 24-48 hours.",
       cta: "Scan My Business — Free",
       ctaUrl: "/get-started",
     },
