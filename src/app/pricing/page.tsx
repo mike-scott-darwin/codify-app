@@ -44,7 +44,7 @@ const tiers = [
           "The snapshot is yours regardless of whether you upgrade. Use it however you want. No subscription required.",
       },
     ],
-    cta: "Get Your Snapshot — $97",
+    cta: "Get Snapshot",
     highlight: false,
   },
   {
@@ -58,52 +58,37 @@ const tiers = [
     who: "For established business owners who want AI that actually knows their business — with everything built, run, and maintained for them. WhatsApp assistant, overnight research, daily briefings, and priority support.",
     features: [
       {
-        label: "Done-for-you build and operations",
+        label: "Done-for-you vault build and operations",
         detail:
-          "We extract your expertise through guided conversations, build your vault, and run the agent. You get outputs from day one without touching the setup.",
+          "We extract your expertise, build your vault, and run it. You get outputs from day one.",
       },
       {
         label: "Content that sounds like you",
         detail:
-          "Generate ads, emails, proposals, landing pages, and funnels in your voice. Every piece is informed by your real business knowledge, not templates.",
-      },
-      {
-        label: "Track your competitors",
-        detail:
-          "Automatically monitor competitor ads, websites, and social profiles. See what they're doing and where the gaps are in your market.",
+          "Ads, emails, proposals, landing pages — all in your voice, grounded in your real business knowledge.",
       },
       {
         label: "AI assistant on WhatsApp",
         detail:
-          "An AI assistant on your phone that knows your business before it responds. Send a message or voice note, get answers grounded in your expertise. Request research, review drafts, or ask strategic questions — all from WhatsApp.",
+          "Ask questions, request drafts, queue research — all from your phone. Answers grounded in your vault.",
       },
       {
-        label: "Research runs while you sleep",
+        label: "Overnight research + daily briefing",
         detail:
-          "Queue research topics via WhatsApp. Results are ready by morning. Your business intelligence compounds while you sleep.",
+          "Queue topics, results land by morning. Daily summary of what changed and what needs attention.",
       },
       {
-        label: "Daily Briefing",
+        label: "CRM, competitor tracking + monthly Brain Sync",
         detail:
-          "Morning summary delivered to WhatsApp at 7am. What's new, what needs attention, and what opportunities came up — before your first coffee.",
+          "Connected to GoHighLevel. Competitor monitoring. Monthly vault review keeps your AI current.",
       },
       {
-        label: "Monthly Brain Sync",
+        label: "Priority support + scheduled strategy calls",
         detail:
-          "We review your vault every month — updating stale context, adding new decisions, and ensuring your AI stays current with your business.",
-      },
-      {
-        label: "CRM connected",
-        detail:
-          "Linked to GoHighLevel — create contacts, send emails, manage your pipeline, trigger workflows, and book meetings. All connected to your business knowledge.",
-      },
-      {
-        label: "Priority WhatsApp support (4h response) + scheduled calls",
-        detail:
-          "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to review performance and plan campaigns.",
+          "4-hour WhatsApp response on weekdays. Scheduled calls to review performance and plan campaigns.",
       },
     ],
-    cta: "Scan My Business — Free",
+    cta: "Join Codify",
     highlight: true,
   },
   {
