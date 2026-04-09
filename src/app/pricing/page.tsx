@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const tiers = [
   {
-    name: "Context Snapshot",
+    name: "Snapshot",
     key: "snapshot",
     badge: "One-Time",
     monthly: 97,

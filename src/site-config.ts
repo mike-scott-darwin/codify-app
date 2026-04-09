@@ -206,7 +206,7 @@ export const siteConfig = {
     },
     tiers: [
       {
-        name: "Context Snapshot",
+        name: "Snapshot",
         price: "$97",
         period: "",
         annual: "",
