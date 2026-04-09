@@ -67,9 +67,9 @@ export default function PrivacyPage() {
                 <span className="text-white font-semibold">
                   Vault contents.
                 </span>{" "}
-                Your reference files (soul.md, audience.md, voice.md, etc.) are
-                stored in your own private repository. We do not access, read,
-                or train on your vault contents. Your intellectual property is
+                Your reference files (business profile, audience insights, voice
+                guide, etc.) are stored in your own private secure storage. We
+                do not access, read, or train on your vault contents. Your intellectual property is
                 yours.
               </p>
               <p className="text-muted text-base md:text-sm leading-relaxed">
@@ -181,7 +181,7 @@ export default function PrivacyPage() {
                 <span className="text-blue shrink-0">&bull;</span>
                 <span>
                   <span className="text-white font-semibold">GitHub</span>{" "}
-                  &mdash; repository hosting for vault files
+                  &mdash; secure cloud storage for vault files
                 </span>
               </li>
             </ul>
@@ -192,8 +192,8 @@ export default function PrivacyPage() {
             <p className="text-muted text-base md:text-sm leading-relaxed">
               We use industry-standard security measures to protect your data.
               VIP tier customers benefit from sovereign vault infrastructure
-              &mdash; self-hosted, encrypted, with full audit trails and instant
-              access revocation.
+              &mdash; your own private server, fully encrypted, with audit
+              trails and instant access revocation.
             </p>
           </div>
 
@@ -211,7 +211,7 @@ export default function PrivacyPage() {
                 hello@codify.build
               </a>
               . If you cancel your subscription, your vault files remain in your
-              own repository &mdash; we don&apos;t hold your data hostage.
+              own secure storage &mdash; we don&apos;t hold your data hostage.
             </p>
           </div>
 

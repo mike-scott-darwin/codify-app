@@ -90,9 +90,8 @@ export default function TermsPage() {
               </p>
               <p className="text-muted text-base md:text-sm leading-relaxed">
                 <span className="text-white font-semibold">Paid tiers.</span>{" "}
-                Build ($99/mo), Pro ($199/mo), and VIP ($497/mo) are billed
-                monthly or annually. Annual plans are discounted. Prices are in
-                USD.
+                Codify ($497/mo or $2,997/yr) is billed monthly or annually.
+                Orchestrate is custom-priced by application. Prices are in USD.
               </p>
               <p className="text-muted text-base md:text-sm leading-relaxed">
                 <span className="text-white font-semibold">Cancellation.</span>{" "}
@@ -118,7 +117,7 @@ export default function TermsPage() {
                 <span className="text-white font-semibold">You own your vault.</span>{" "}
                 All reference files, context documents, and generated outputs
                 created through the Service belong to you. Your vault lives in
-                your own repository. If you cancel, your files stay with you.
+                your own secure storage. If you cancel, your files stay with you.
               </p>
               <p className="text-muted text-base md:text-sm leading-relaxed">
                 <span className="text-white font-semibold">
@@ -131,7 +130,7 @@ export default function TermsPage() {
                 <span className="text-white font-semibold">
                   Sovereign Vault (VIP).
                 </span>{" "}
-                VIP tier customers get self-hosted infrastructure. You control
+                VIP tier customers get their own private infrastructure. You control
                 the server, the encryption, and the access. We help you set it
                 up but the infrastructure is yours.
               </p>
@@ -226,7 +225,7 @@ export default function TermsPage() {
               We may suspend or terminate your access to the Service if you
               violate these terms. You can terminate your account at any time by
               cancelling your subscription and emailing us. Upon termination,
-              your vault files remain in your own repository &mdash; we
+              your vault files remain in your own secure storage &mdash; we
               don&apos;t delete your work.
             </p>
           </div>

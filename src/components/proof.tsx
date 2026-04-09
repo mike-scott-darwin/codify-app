@@ -11,10 +11,16 @@ function AnimatedNumber({
   value: number;
   active: boolean;
 }) {
-  const [display, setDisplay] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const [display, setDisplay] = useState(value);
 
   useEffect(() => {
-    if (!active) return;
+    setMounted(true);
+    setDisplay(0);
+  }, []);
+
+  useEffect(() => {
+    if (!active || !mounted) return;
     const duration = 1800;
     const start = performance.now();
 
@@ -27,7 +33,7 @@ function AnimatedNumber({
     }
 
     requestAnimationFrame(tick);
-  }, [active, value]);
+  }, [active, value, mounted]);
 
   return <>{display}</>;
 }

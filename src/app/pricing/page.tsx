@@ -148,7 +148,7 @@ const tiers = [
 
 export default function Pricing() {
   const [annual, setAnnual] = useState(false);
-  const [loading, setLoading] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   async function handleCheckout(tierKey: string) {
     if (tierKey === "orchestrate") {
@@ -179,7 +179,7 @@ export default function Pricing() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          tier: tierKey,
+          tier: "codify",
           billing: annual ? "annual" : "monthly",
         }),
       });
@@ -188,9 +188,13 @@ export default function Pricing() {
         window.location.href = data.url;
       }
     } finally {
-      setLoading(null);
+      setLoading(false);
     }
   }
+
+  const price = annual ? codify.annual : codify.monthly;
+  const period = annual ? "/yr" : "/mo";
+  const savings = annual ? codify.monthly * 12 - codify.annual : 0;
 
   return (
     <main>
@@ -362,8 +366,117 @@ export default function Pricing() {
                     {loading === tier.key ? "Redirecting..." : tier.cta}
                   </button>
                 </div>
-              );
-            })}
+                <div className="flex items-baseline gap-1 mb-3">
+                  <span className="text-3xl font-bold text-white">
+                    ${price.toLocaleString()}
+                  </span>
+                  <span className="text-sm text-muted">{period}</span>
+                </div>
+                {annual && savings > 0 && (
+                  <p className="text-xs text-green font-medium">
+                    Save ${savings.toLocaleString()} vs monthly
+                  </p>
+                )}
+                <p className="text-sm text-muted leading-relaxed mt-3">
+                  {codify.description}
+                </p>
+              </div>
+
+              <div className="bg-background/50 border border-border rounded-lg p-4 mb-6">
+                <p className="text-xs text-dim uppercase tracking-wider mb-1.5">
+                  Who it&apos;s for
+                </p>
+                <p className="text-sm text-foreground leading-relaxed">
+                  {codify.who}
+                </p>
+              </div>
+
+              <div className="space-y-4 mb-8 flex-1">
+                {codify.features.map((feature) => (
+                  <div key={feature.label}>
+                    <div className="flex items-start gap-2">
+                      <span className="text-green shrink-0 mt-0.5 text-sm">
+                        &#x2713;
+                      </span>
+                      <div>
+                        <p className="text-sm font-medium text-white">
+                          {feature.label}
+                        </p>
+                        <p className="text-xs text-muted leading-relaxed mt-0.5">
+                          {feature.detail}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <button
+                onClick={handleCheckout}
+                disabled={loading}
+                className="block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all cursor-pointer disabled:opacity-60 bg-blue text-black hover:brightness-110"
+              >
+                {loading ? "Redirecting..." : "Join Codify"}
+              </button>
+            </div>
+
+            {/* Orchestrate */}
+            <div className="bg-surface border border-border rounded-xl p-6 md:p-8 flex flex-col">
+              <div className="mb-6">
+                <div className="flex items-center gap-2 mb-2">
+                  <h2 className="font-bold text-white text-xl">
+                    {orchestrate.name}
+                  </h2>
+                  <span className="text-[10px] uppercase tracking-wider font-semibold text-blue bg-blue/10 px-2 py-0.5 rounded-full">
+                    {orchestrate.badge}
+                  </span>
+                </div>
+                <div className="flex items-baseline gap-1 mb-3">
+                  <span className="text-3xl font-bold text-white">
+                    Custom
+                  </span>
+                </div>
+                <p className="text-sm text-muted leading-relaxed mt-3">
+                  {orchestrate.description}
+                </p>
+              </div>
+
+              <div className="bg-background/50 border border-border rounded-lg p-4 mb-6">
+                <p className="text-xs text-dim uppercase tracking-wider mb-1.5">
+                  Who it&apos;s for
+                </p>
+                <p className="text-sm text-foreground leading-relaxed">
+                  {orchestrate.who}
+                </p>
+              </div>
+
+              <div className="space-y-4 mb-8 flex-1">
+                {orchestrate.features.map((feature) => (
+                  <div key={feature.label}>
+                    <div className="flex items-start gap-2">
+                      <span className="text-green shrink-0 mt-0.5 text-sm">
+                        &#x2713;
+                      </span>
+                      <div>
+                        <p className="text-sm font-medium text-white">
+                          {feature.label}
+                        </p>
+                        <p className="text-xs text-muted leading-relaxed mt-0.5">
+                          {feature.detail}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <a
+                href="mailto:hello@codify.build?subject=Orchestrate%20Inquiry"
+                className="block w-full text-center font-semibold text-sm py-3.5 rounded-lg transition-all bg-white/10 text-white hover:bg-white/15"
+              >
+                Talk to Michael
+              </a>
+            </div>
           </div>
 
           {/* Guarantee */}
@@ -375,8 +488,8 @@ export default function Pricing() {
                   No lock-in. Your data is yours.
                 </p>
                 <p className="text-xs text-muted leading-relaxed">
-                  Try it free — no credit card, no commitment.
-                  Cancel anytime — month-to-month, no contracts.
+                  Start with a free Opportunity Scan — no credit card, no commitment.
+                  Codify is month-to-month, cancel anytime.
                   Everything we build is yours — stored securely, readable by any AI.
                   You keep everything.
                 </p>

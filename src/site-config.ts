@@ -86,7 +86,7 @@ export const siteConfig = {
       "We built a business on this system before we offered it to anyone else. Every metric below is real. This page was generated from our own business documents.",
     stats: [
       { value: "48", label: "Business documents", suffix: "" },
-      { value: "322", label: "Refinements", suffix: "+" },
+      { value: "322", label: "Improvements made", suffix: "+" },
       { value: "9", label: "Hours per week", suffix: "h" },
       { value: "7", label: "Months daily use", suffix: "mo" },
     ],
@@ -146,10 +146,10 @@ export const siteConfig = {
       },
       {
         name: "Joe DeFilippo",
-        context: "SaaS developer — 26 days in",
+        context: "Software business owner — 26 days in",
         quote:
-          "63 pull requests merged in 26 days. The previous 63 took me 43 days. And quality didn't slip — we went from 75 automated tests to 395. The system doesn't just speed you up, it keeps you honest.",
-        result: "Moving 60% faster with 5x more tests",
+          "63 updates shipped in 26 days. The previous 63 took me 43 days. And quality didn't slip — we went from 75 quality checks to 395. The system doesn't just speed you up, it keeps you honest.",
+        result: "Moving 60% faster with 5x more quality checks",
       },
     ],
   },
