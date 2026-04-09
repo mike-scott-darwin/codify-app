@@ -272,12 +272,12 @@ export default function GetStarted() {
             FREE OPPORTUNITY SCAN
           </p>
           <h1 className="font-bold text-white leading-[1.1] mb-4 text-[clamp(1.75rem,5vw,2.5rem)]">
-            What Is Your AI Missing?
+            See What Your AI Gets Wrong.
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
-            Tell us about your business. We build a skeleton context profile
-            and show you what structured context finds that prompts alone can't.
-            Free. Delivered in 24–48 hours.
+            Tell us about your business in one paragraph. You'll get back a
+            context profile, 3 actionable opportunities, and a clear picture
+            of what your AI is getting wrong about your business. Free. 48 hours.
           </p>
         </div>
       </section>
