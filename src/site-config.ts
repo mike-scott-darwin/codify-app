@@ -280,7 +280,7 @@ export const siteConfig = {
     headline: "You're thinking...",
     items: [
       {
-        question: '"What's the difference between the snapshot and full Codify?"',
+        question: "\"What's the difference between the snapshot and full Codify?\"",
         answer:
           "The Snapshot captures 3 files — your identity, voice, and audience. It's a photograph. Codify builds 40+ files and updates them every week — it's a living system. The Snapshot is a great way to see what structured context does before committing to the full engine.",
       },
