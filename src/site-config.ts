@@ -15,7 +15,7 @@ export const siteConfig = {
     headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
       "The expertise that wins you clients lives in your head.\nAI has never seen it.",
-    ctaText: "What Am I Missing? — Free",
+    ctaText: "What's Missing? — Free",
     ctaUrl: "/get-started",
   },
   problem: {
@@ -201,7 +201,7 @@ export const siteConfig = {
         "Tell us about your business. We build a skeleton context profile and use it to find 3 opportunities you haven't seen.",
       howItWorks:
         "You send a paragraph about your business. We build a skeleton context profile — your identity, positioning, audience, differentiator — then use it to find 3 specific opportunities. You get the profile, the opportunities, and a gap analysis showing what your AI still doesn't know. Delivered in 24-48 hours.",
-      cta: "What Am I Missing? — Free",
+      cta: "What's Missing? — Free",
       ctaUrl: "/get-started",
     },
     tiers: [
@@ -244,7 +244,7 @@ export const siteConfig = {
           "Connected to your systems — CRM, email, pipeline, and workflows",
           "Priority WhatsApp support (4h response) + scheduled strategy calls",
         ],
-        cta: "What Am I Missing? — Free",
+        cta: "What's Missing? — Free",
         ctaUrl: "/get-started",
         highlight: true,
       },
@@ -320,7 +320,7 @@ export const siteConfig = {
     headline: "Your expertise is the asset. We make AI use it.",
     subhead:
       "Free Opportunity Scan — 3 opportunities in 48 hours.",
-    ctaText: "What Am I Missing? — Free",
+    ctaText: "What's Missing? — Free",
     ctaUrl: "/get-started",
   },
   footer: {
