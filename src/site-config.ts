@@ -14,7 +14,7 @@ export const siteConfig = {
     eyebrow: "FOR BUSINESS OWNERS ALREADY USING AI",
     headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
-      "Every AI tool you use starts with zero knowledge of your business.\nWe fix that.",
+      "Every AI tool you use starts with zero knowledge of your business. We fix that.",
     ctaText: "Try for Free",
     ctaUrl: "/get-started",
   },
