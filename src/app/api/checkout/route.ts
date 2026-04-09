@@ -6,9 +6,8 @@ function getStripe() {
 }
 
 const PRICE_MAP: Record<string, { priceId: string; mode: "subscription" | "payment" }> = {
-  // TODO: Create new Stripe products and update these price IDs
-  // Old: pro-monthly ($199), pro-annual ($1,497), vip-monthly ($497), vip-annual ($2,997)
-  // New: codify-monthly ($497), codify-annual ($2,997)
+  // TODO: Create Stripe products and update these price IDs
+  "snapshot-monthly": { priceId: "price_TODO_snapshot", mode: "payment" },
   "codify-monthly": { priceId: "price_TODO_codify_monthly", mode: "subscription" },
   "codify-annual": { priceId: "price_TODO_codify_annual", mode: "payment" },
 };

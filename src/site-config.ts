@@ -192,7 +192,7 @@ export const siteConfig = {
   },
   product: {
     eyebrow: "PRICING",
-    headline: "Three levels. One compounding vault.",
+    headline: "Four levels. One compounding vault.",
     description:
       "Start with the Opportunity Assessment — free, no commitment. Upgrade when the system proves itself.",
     trial: {
@@ -205,6 +205,26 @@ export const siteConfig = {
       ctaUrl: "/get-started",
     },
     tiers: [
+      {
+        name: "Context Snapshot",
+        price: "$97",
+        period: "",
+        annual: "",
+        badge: "One-Time",
+        description:
+          "Your identity, voice, and audience — extracted and structured in one session. Yours to keep. Use it with any AI tool.",
+        features: [
+          "20-minute voice note or call",
+          "Soul + Voice + Audience files",
+          "Polished snapshot document",
+          "Works with ChatGPT, Claude, any AI",
+          "Delivered in 48 hours",
+          "Yours to keep — no strings attached",
+        ],
+        cta: "Get Your Snapshot",
+        ctaUrl: "/get-started?tier=snapshot",
+        highlight: false,
+      },
       {
         name: "Codify",
         price: "$497",
@@ -259,6 +279,11 @@ export const siteConfig = {
     eyebrow: "FAQ",
     headline: "You're thinking...",
     items: [
+      {
+        question: '"What's the difference between the snapshot and full Codify?"',
+        answer:
+          "The Snapshot captures 3 files — your identity, voice, and audience. It's a photograph. Codify builds 40+ files and updates them every week — it's a living system. The Snapshot is a great way to see what structured context does before committing to the full engine.",
+      },
       {
         question: '"I already use ChatGPT / Claude / Copilot"',
         answer:

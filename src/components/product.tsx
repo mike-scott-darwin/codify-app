@@ -11,6 +11,12 @@ export function Product() {
 
   async function handleCheckout(tierName: string) {
     const key = tierName.toLowerCase();
+    // Orchestrate goes to email
+    if (key === "orchestrate") {
+      window.location.href = "mailto:hello@codify.build?subject=Orchestrate%20Tier";
+      return;
+    }
+    // Snapshot and Codify go to checkout
     setLoading(key);
     try {
       const res = await fetch("/api/checkout", {
@@ -49,7 +55,7 @@ export function Product() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 max-w-[800px] mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 max-w-[1100px] mx-auto">
           {product.tiers.map((tier, i) => (
             <div
               key={tier.name}
@@ -86,9 +92,11 @@ export function Product() {
                   </span>
                   <span className="text-sm text-dim">{tier.period}</span>
                 </div>
-                <div className="text-xs text-dim mb-4">
-                  or {tier.annual} — save 40%+
-                </div>
+                {tier.annual && (
+                  <div className="text-xs text-dim mb-4">
+                    or {tier.annual} — save 40%+
+                  </div>
+                )}
 
                 <p className="text-sm text-muted leading-relaxed mb-6">
                   {tier.description}

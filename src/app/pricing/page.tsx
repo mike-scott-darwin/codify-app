@@ -4,6 +4,50 @@ import { useState } from "react";
 
 const tiers = [
   {
+    name: "Context Snapshot",
+    key: "snapshot",
+    badge: "One-Time",
+    monthly: 97,
+    annual: 0,
+    description:
+      "Your identity, voice, and audience — extracted and structured in one session. Yours to keep.",
+    who: "For business owners who want to see what structured context does for their AI outputs — before committing to the full engine. One session, one payment, yours forever.",
+    features: [
+      {
+        label: "20-minute extraction session",
+        detail:
+          "Send a voice note via WhatsApp, jump on a quick call, or write a summary. Whatever's easiest. We ask specific questions designed to pull out what matters.",
+      },
+      {
+        label: "Soul + Voice + Audience files",
+        detail:
+          "Three structured documents capturing your core identity, communication style, and buyer profile. The same format used by our full Codify clients.",
+      },
+      {
+        label: "Polished snapshot document",
+        detail:
+          "A standalone deliverable synthesizing all three files. Hand it to any team member or paste it into any AI tool for immediate results.",
+      },
+      {
+        label: "Works with any AI tool",
+        detail:
+          "Paste your Voice file into ChatGPT, Claude, or any AI before writing anything. Your outputs immediately stop sounding generic.",
+      },
+      {
+        label: "Delivered in 48 hours",
+        detail:
+          "From your input to your inbox. No waiting weeks. No onboarding calls. Just your expertise, structured.",
+      },
+      {
+        label: "Yours to keep — no strings attached",
+        detail:
+          "The snapshot is yours regardless of whether you upgrade. Use it however you want. No subscription required.",
+      },
+    ],
+    cta: "Get Your Snapshot — $97",
+    highlight: false,
+  },
+  {
     name: "Codify",
     key: "codify",
     badge: "Managed",
@@ -126,6 +170,24 @@ export default function Pricing() {
       window.location.href = "mailto:hello@codify.build?subject=Orchestrate%20Tier";
       return;
     }
+    if (tierKey === "snapshot") {
+      // Snapshot is always one-time payment
+      setLoading(tierKey);
+      try {
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ tier: tierKey, billing: "monthly" }),
+        });
+        const data = await res.json();
+        if (data.url) {
+          window.location.href = data.url;
+        }
+      } finally {
+        setLoading(null);
+      }
+      return;
+    }
     setLoading(tierKey);
     try {
       const res = await fetch("/api/checkout", {
@@ -171,7 +233,7 @@ export default function Pricing() {
             PRICING
           </p>
           <h1 className="font-bold text-white leading-[1.1] mb-4 text-[clamp(1.75rem,5vw,2.5rem)]">
-            Three levels. One compounding vault.
+            Four levels. One compounding vault.
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed mb-8">
             Start with the Opportunity Assessment — free, no commitment.
@@ -208,21 +270,24 @@ export default function Pricing() {
       {/* Tiers */}
       <section className="pb-16 md:pb-24">
         <div className="max-w-[1100px] mx-auto px-6 md:px-12">
-          <div className="grid md:grid-cols-2 gap-6 max-w-[800px] mx-auto">
+          <div className="grid md:grid-cols-3 gap-6 max-w-[1100px] mx-auto">
             {tiers.map((tier) => {
               const isOrchestrate = tier.key === "orchestrate";
-              const price = isOrchestrate
+              const isSnapshot = tier.key === "snapshot";
+              const price = isOrchestrate || isSnapshot
                 ? tier.monthly
                 : annual
                 ? tier.annual
                 : tier.monthly;
               const period = isOrchestrate
                 ? "/mo"
+                : isSnapshot
+                ? ""
                 : annual
                 ? "/yr"
                 : "/mo";
               const savings =
-                !isOrchestrate && annual
+                !isOrchestrate && !isSnapshot && annual
                   ? tier.monthly * 12 - tier.annual
                   : 0;
 
