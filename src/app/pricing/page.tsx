@@ -103,7 +103,7 @@ const tiers = [
           "Priority WhatsApp support with 4-hour response time on weekdays. Scheduled strategy calls to review performance and plan campaigns.",
       },
     ],
-    cta: "Find My Missing Revenue",
+    cta: "Scan My Business — Free",
     highlight: true,
   },
   {
@@ -236,7 +236,7 @@ export default function Pricing() {
             Four levels. One compounding vault.
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed mb-8">
-            Start with the Opportunity Assessment — free, no commitment.
+            Start with the Opportunity Scan — free, no commitment.
             Upgrade when the system proves itself.
           </p>
 
