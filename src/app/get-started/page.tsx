@@ -7,14 +7,6 @@ const MAX_RECORDING_SECONDS = 180;
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 const ACCEPTED_FILE_TYPES = ".pdf,.doc,.docx,.txt";
 
-// Guided prompts for voice mode
-const VOICE_PROMPTS = [
-  "What does your business do — in plain English?",
-  "Who is your ideal client and what keeps them up at night?",
-  "What makes you different from the obvious alternatives?",
-  "What's the one thing slowing your growth right now?",
-];
-
 export default function GetStarted() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
@@ -33,11 +25,6 @@ export default function GetStarted() {
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // Input mode
-  const [inputMode, setInputMode] = useState<"write" | "upload" | "voice">(
-    "write"
-  );
 
   useEffect(() => {
     return () => {
@@ -157,7 +144,6 @@ export default function GetStarted() {
     const form = e.currentTarget;
     const formData = new FormData();
 
-    // Contact fields
     formData.append(
       "firstName",
       (form.elements.namedItem("firstName") as HTMLInputElement).value
@@ -175,7 +161,6 @@ export default function GetStarted() {
       (form.elements.namedItem("phone") as HTMLInputElement).value
     );
 
-    // Business answers (from write mode fields)
     const businessEl = form.elements.namedItem("business") as HTMLInputElement;
     const audienceEl = form.elements.namedItem("audience") as HTMLInputElement;
     const differentiatorEl = form.elements.namedItem(
@@ -190,14 +175,10 @@ export default function GetStarted() {
     formData.append("differentiator", differentiatorEl?.value || "");
     formData.append("challenge", challengeEl?.value || "");
 
-    formData.append("inputMode", inputMode);
-
-    // File upload
     if (uploadedFile) {
       formData.append("file", uploadedFile);
     }
 
-    // Voice note
     if (audioBlob) {
       formData.append("voiceNote", audioBlob, "voice-note.webm");
       formData.append("voiceDuration", String(recordingTime));
@@ -226,25 +207,6 @@ export default function GetStarted() {
 
   const inputClass =
     "w-full bg-background border border-border rounded-lg px-4 py-3 text-base md:text-sm text-white placeholder:text-dim outline-none focus:border-blue transition-colors";
-
-  const modeTab = (
-    mode: "write" | "upload" | "voice",
-    label: string,
-    icon: string
-  ) => (
-    <button
-      type="button"
-      onClick={() => setInputMode(mode)}
-      className={`flex items-center gap-2 px-4 py-2.5 text-xs font-medium rounded-lg transition-colors ${
-        inputMode === mode
-          ? "bg-blue/20 text-blue border border-blue/40"
-          : "text-muted hover:text-white border border-border hover:border-border/80"
-      }`}
-    >
-      <span>{icon}</span>
-      {label}
-    </button>
-  );
 
   return (
     <main>
@@ -275,7 +237,7 @@ export default function GetStarted() {
             See What Your AI Gets Wrong.
           </h1>
           <p className="text-muted text-base md:text-lg leading-relaxed">
-            Tell us about your business in one paragraph. You'll get back a
+            Tell us about your business in one paragraph. You&apos;ll get back a
             context profile, 3 actionable opportunities, and a clear picture
             of what your AI is getting wrong about your business. Free. 48 hours.
           </p>
@@ -292,9 +254,9 @@ export default function GetStarted() {
                 Your Opportunity Scan is underway.
               </h2>
               <p className="text-muted text-sm leading-relaxed">
-                We're building a skeleton context profile from your business
+                We&apos;re building a context profile from your business
                 summary — your identity, positioning, audience, and
-                differentiator. Then we'll use it to find 3 specific
+                differentiator. Then we&apos;ll use it to find 3 specific
                 opportunities. Expect your scan in your inbox within 24–48
                 hours.
               </p>
@@ -343,7 +305,7 @@ export default function GetStarted() {
                     htmlFor="email"
                     className="block text-xs text-muted mb-1.5"
                   >
-                    Email (where we send your opportunities)
+                    Email (where we send your results)
                   </label>
                   <input
                     id="email"
@@ -371,116 +333,105 @@ export default function GetStarted() {
                   />
                 </div>
 
-                {/* Divider + mode selector */}
+                {/* Tell us about your business */}
                 <div className="border-t border-border pt-5">
                   <p className="text-sm font-medium text-white mb-1">
                     Tell us about your business
                   </p>
-                  <p className="text-xs text-muted mb-3">
-                    Pick whichever way is easiest for you. The more detail you
-                    share, the better your opportunities will be.
+                  <p className="text-xs text-muted mb-4">
+                    Type, upload, record — use any combination. The more context
+                    you share, the sharper your results.
                   </p>
-                  <div className="flex gap-2 mb-4">
-                    {modeTab("write", "Type it", "\u270D")}
-                    {modeTab("upload", "Upload", "\u{1F4CE}")}
-                    {modeTab("voice", "Voice note", "\u{1F3A4}")}
+                </div>
+
+                {/* Text fields */}
+                <div className="space-y-4">
+                  <div>
+                    <label
+                      htmlFor="business"
+                      className="block text-xs text-muted mb-1.5"
+                    >
+                      What does your business do?
+                    </label>
+                    <textarea
+                      id="business"
+                      name="business"
+                      required
+                      rows={2}
+                      className={inputClass + " resize-none"}
+                      placeholder="e.g. Fractional CFO for SaaS startups doing $2M–$20M ARR"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="audience"
+                      className="block text-xs text-muted mb-1.5"
+                    >
+                      Who is your ideal client?
+                    </label>
+                    <textarea
+                      id="audience"
+                      name="audience"
+                      rows={2}
+                      className={inputClass + " resize-none"}
+                      placeholder="e.g. Series A founders who've outgrown their bookkeeper"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="differentiator"
+                      className="block text-xs text-muted mb-1.5"
+                    >
+                      What makes you different?
+                    </label>
+                    <textarea
+                      id="differentiator"
+                      name="differentiator"
+                      rows={2}
+                      className={inputClass + " resize-none"}
+                      placeholder="e.g. We embed into their financial stack — live dashboards, not monthly PDFs"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="challenge"
+                      className="block text-xs text-muted mb-1.5"
+                    >
+                      What&apos;s your biggest growth challenge?
+                    </label>
+                    <textarea
+                      id="challenge"
+                      name="challenge"
+                      rows={2}
+                      className={inputClass + " resize-none"}
+                      placeholder="e.g. Prospects think they'll hire a full-time CFO 'eventually'"
+                    />
                   </div>
                 </div>
 
-                {/* Mode: Write — guided questions with examples */}
-                {inputMode === "write" && (
-                  <div className="space-y-4">
-                    <div>
-                      <label
-                        htmlFor="business"
-                        className="block text-xs text-muted mb-1.5"
-                      >
-                        What does your business do?
-                      </label>
-                      <textarea
-                        id="business"
-                        name="business"
-                        required={inputMode === "write"}
-                        rows={2}
-                        className={inputClass + " resize-none"}
-                        placeholder="e.g. Fractional CFO for SaaS startups doing $2M–$20M ARR"
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="audience"
-                        className="block text-xs text-muted mb-1.5"
-                      >
-                        Who is your ideal client?
-                      </label>
-                      <textarea
-                        id="audience"
-                        name="audience"
-                        rows={2}
-                        className={inputClass + " resize-none"}
-                        placeholder="e.g. Series A founders who've outgrown their bookkeeper"
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="differentiator"
-                        className="block text-xs text-muted mb-1.5"
-                      >
-                        What makes you different?
-                      </label>
-                      <textarea
-                        id="differentiator"
-                        name="differentiator"
-                        rows={2}
-                        className={inputClass + " resize-none"}
-                        placeholder="e.g. We embed into their financial stack — live dashboards, not monthly PDFs"
-                      />
-                    </div>
-
-                    <div>
-                      <label
-                        htmlFor="challenge"
-                        className="block text-xs text-muted mb-1.5"
-                      >
-                        What&apos;s your biggest growth challenge?
-                      </label>
-                      <textarea
-                        id="challenge"
-                        name="challenge"
-                        rows={2}
-                        className={inputClass + " resize-none"}
-                        placeholder="e.g. Prospects think they'll hire a full-time CFO 'eventually'"
-                      />
-                    </div>
-                  </div>
-                )}
-
-                {/* Mode: Upload */}
-                {inputMode === "upload" && (
-                  <div>
-                    <p className="text-xs text-muted mb-3">
-                      Upload a pitch deck, proposal, one-pager, or website copy.
-                      We&apos;ll extract your positioning and run a deeper scan.
+                {/* Upload + Voice — optional extras */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {/* Upload */}
+                  <div className="bg-background border border-border rounded-lg p-4">
+                    <p className="text-xs font-medium text-white mb-2">
+                      Attach a file
+                      <span className="text-dim font-normal ml-1">(optional)</span>
                     </p>
                     {uploadedFile ? (
-                      <div className="bg-background border border-border rounded-lg p-4 flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <span className="text-blue text-lg">&#128196;</span>
-                          <div>
-                            <p className="text-sm text-white">
-                              {uploadedFile.name}
-                            </p>
-                            <p className="text-xs text-dim">
-                              {(uploadedFile.size / 1024).toFixed(0)} KB
-                            </p>
-                          </div>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 min-w-0">
+                          <span className="text-blue text-sm">&#128196;</span>
+                          <p className="text-xs text-white truncate">
+                            {uploadedFile.name}
+                          </p>
                         </div>
                         <button
                           type="button"
                           onClick={clearFile}
-                          className="text-xs text-muted hover:text-white transition-colors"
+                          className="text-xs text-muted hover:text-white transition-colors shrink-0 ml-2"
                         >
                           Remove
                         </button>
@@ -496,17 +447,14 @@ export default function GetStarted() {
                         onDrop={handleDrop}
                       >
                         <div
-                          className={`bg-background border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
+                          className={`border border-dashed rounded-lg p-3 text-center transition-colors ${
                             dragOver
                               ? "border-blue/60 bg-blue/5"
                               : "border-border hover:border-blue/40"
                           }`}
                         >
-                          <p className="text-sm text-muted mb-1">
-                            Drop a file here or click to upload
-                          </p>
-                          <p className="text-xs text-dim">
-                            PDF, DOC, DOCX, or TXT — max 10MB
+                          <p className="text-xs text-muted">
+                            Drop or click — PDF, DOC, TXT
                           </p>
                         </div>
                         <input
@@ -518,90 +466,45 @@ export default function GetStarted() {
                         />
                       </label>
                     )}
-                    {/* Still ask the core question */}
-                    <div className="mt-4">
-                      <label
-                        htmlFor="business"
-                        className="block text-xs text-muted mb-1.5"
-                      >
-                        In one sentence — what does your business do?
-                      </label>
-                      <input
-                        id="business"
-                        name="business"
-                        type="text"
-                        required
-                        className={inputClass}
-                        placeholder="e.g. Fractional CFO for SaaS companies doing $2M-$20M ARR"
-                      />
-                    </div>
                   </div>
-                )}
 
-                {/* Mode: Voice */}
-                {inputMode === "voice" && (
-                  <div>
-                    <div className="bg-background border border-border rounded-lg p-4 mb-4">
-                      <p className="text-xs text-muted mb-2.5">
-                        Hit record and walk through these four questions. 2-3
-                        minutes is perfect.
-                      </p>
-                      <ol className="space-y-1.5">
-                        {VOICE_PROMPTS.map((prompt, i) => (
-                          <li
-                            key={i}
-                            className="text-xs text-white/80 flex gap-2"
-                          >
-                            <span className="text-blue font-bold shrink-0">
-                              {i + 1}.
-                            </span>
-                            {prompt}
-                          </li>
-                        ))}
-                      </ol>
-                    </div>
-
+                  {/* Voice */}
+                  <div className="bg-background border border-border rounded-lg p-4">
+                    <p className="text-xs font-medium text-white mb-2">
+                      Record a voice note
+                      <span className="text-dim font-normal ml-1">(optional)</span>
+                    </p>
                     {!audioBlob ? (
-                      <div className="bg-background border border-border rounded-lg p-6 text-center">
+                      <div className="text-center">
                         {recording ? (
-                          <>
-                            <div className="flex items-center justify-center gap-3 mb-3">
-                              <span className="inline-block w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-                              <span className="text-white text-lg font-mono">
-                                {formatTime(recordingTime)}
-                              </span>
-                              <span className="text-xs text-dim">
-                                / {formatTime(MAX_RECORDING_SECONDS)}
-                              </span>
-                            </div>
+                          <div className="flex items-center justify-center gap-2">
+                            <span className="inline-block w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+                            <span className="text-white text-sm font-mono">
+                              {formatTime(recordingTime)}
+                            </span>
                             <button
                               type="button"
                               onClick={stopRecording}
-                              className="bg-red-500/20 text-red-400 border border-red-500/40 px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-red-500/30 transition-colors"
+                              className="text-xs text-red-400 hover:text-red-300 ml-2"
                             >
-                              Stop Recording
+                              Stop
                             </button>
-                          </>
+                          </div>
                         ) : (
-                          <>
-                            <p className="text-muted text-sm mb-3">
-                              Tap to start recording
-                            </p>
-                            <button
-                              type="button"
-                              onClick={startRecording}
-                              className="bg-blue/20 text-blue border border-blue/40 px-6 py-2.5 rounded-lg text-sm font-medium hover:bg-blue/30 transition-colors"
-                            >
-                              Record Voice Note
-                            </button>
-                          </>
+                          <button
+                            type="button"
+                            onClick={startRecording}
+                            className="text-xs text-blue hover:text-blue/80 transition-colors"
+                          >
+                            Tap to record (up to 3 min)
+                          </button>
                         )}
                       </div>
                     ) : (
-                      <div className="bg-background border border-border rounded-lg p-4 space-y-3">
+                      <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-sm text-white">
-                            Voice note — {formatTime(recordingTime)}
+                          <span className="text-xs text-white">
+                            {formatTime(recordingTime)} recorded
                           </span>
                           <button
                             type="button"
@@ -612,30 +515,12 @@ export default function GetStarted() {
                           </button>
                         </div>
                         {audioUrl && (
-                          <audio controls src={audioUrl} className="w-full h-8" />
+                          <audio controls src={audioUrl} className="w-full h-7" />
                         )}
                       </div>
                     )}
-
-                    {/* Core question for search */}
-                    <div className="mt-4">
-                      <label
-                        htmlFor="business"
-                        className="block text-xs text-muted mb-1.5"
-                      >
-                        In one sentence — what does your business do?
-                      </label>
-                      <input
-                        id="business"
-                        name="business"
-                        type="text"
-                        required
-                        className={inputClass}
-                        placeholder="e.g. Fractional CFO for SaaS companies doing $2M-$20M ARR"
-                      />
-                    </div>
                   </div>
-                )}
+                </div>
 
                 {error && <p className="text-red-400 text-xs">{error}</p>}
 
@@ -653,7 +538,6 @@ export default function GetStarted() {
               </form>
             </div>
           )}
-
         </div>
       </section>
 
