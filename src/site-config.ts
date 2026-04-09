@@ -201,7 +201,7 @@ export const siteConfig = {
         "Tell us about your business. We build a skeleton context profile and use it to find 3 opportunities you haven't seen.",
       howItWorks:
         "You send a paragraph about your business. We build a skeleton context profile — your identity, positioning, audience, differentiator — then use it to find 3 specific opportunities. You get the profile, the opportunities, and a gap analysis showing what your AI still doesn't know. Delivered in 24-48 hours.",
-      cta: "Fix It Free",
+      cta: "Try for Free",
       ctaUrl: "/get-started",
     },
     tiers: [
@@ -221,7 +221,7 @@ export const siteConfig = {
           "Delivered in 48 hours",
           "Yours to keep — no strings attached",
         ],
-        cta: "Fix It Free",
+        cta: "Try for Free",
         ctaUrl: "/get-started",
         highlight: false,
       },
@@ -244,7 +244,7 @@ export const siteConfig = {
           "Connected to your systems — CRM, email, pipeline, and workflows",
           "Priority WhatsApp support (4h response) + scheduled strategy calls",
         ],
-        cta: "Fix It Free",
+        cta: "Try for Free",
         ctaUrl: "/get-started",
         highlight: true,
       },
