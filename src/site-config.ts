@@ -14,8 +14,8 @@ export const siteConfig = {
     eyebrow: "FOR BUSINESS OWNERS ALREADY USING AI",
     headline: "Your AI Doesn't\nKnow Your Business.",
     subhead:
-      "The expertise that wins you clients lives in your head.\nAI has never seen it.",
-    ctaText: "Fix It Free",
+      "Every AI tool you use starts with zero knowledge of your business.\nWe fix that.",
+    ctaText: "Try for Free",
     ctaUrl: "/get-started",
   },
   problem: {
@@ -320,7 +320,7 @@ export const siteConfig = {
     headline: "Your expertise is the asset. We make AI use it.",
     subhead:
       "Free Opportunity Scan — 3 opportunities in 48 hours.",
-    ctaText: "Fix It Free",
+    ctaText: "Try for Free",
     ctaUrl: "/get-started",
   },
   footer: {

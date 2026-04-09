@@ -529,7 +529,7 @@ export default function GetStarted() {
                   disabled={submitting}
                   className="w-full bg-blue text-black font-semibold text-sm py-3.5 rounded-lg hover:brightness-110 transition-all disabled:opacity-50"
                 >
-                  {submitting ? "Submitting your scan..." : "Fix It Free"}
+                  {submitting ? "Submitting your scan..." : "Try for Free"}
                 </button>
 
                 <p className="text-[11px] text-dim text-center">

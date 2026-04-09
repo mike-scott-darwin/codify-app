@@ -6,7 +6,7 @@ export function InlineCTA() {
           href="/get-started"
           className="inline-flex items-center justify-center gap-2 bg-blue text-black font-semibold text-sm px-8 py-3.5 rounded-lg hover:brightness-110 transition-all w-full sm:w-auto"
         >
-          Fix It Free
+          Try for Free
           <svg
             width="14"
             height="14"
