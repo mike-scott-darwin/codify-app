@@ -6,14 +6,9 @@ function getStripe() {
 }
 
 const PRICE_TO_TIER: Record<string, string> = {
-  // TODO: Update with new Stripe price IDs after creating Codify $497 product
-  // Old price IDs kept for backwards compatibility during transition
-  "price_1THJLoJeFf5ThhqeOAb30zLx": "codify",    // was pro-monthly
-  "price_1THJEiJeFf5ThhqemgH1GCI4": "codify",    // was pro-annual
-  "price_1THJKuJeFf5ThhqelxJugRTy": "codify",    // was vip-monthly
-  "price_1THJHDJeFf5Thhqew25eVn5F": "codify",    // was vip-annual
-  "price_TODO_codify_monthly": "codify",
-  "price_TODO_codify_annual": "codify",
+  "price_1TKUiBJeFf5Thhqe7KE99fL6": "snapshot",
+  "price_1TKUj0JeFf5ThhqeMzFcUJHv": "codify",
+  "price_1TKUk8JeFf5ThhqemoScaJAP": "codify",
 };
 
 const GHL_API_URL = "https://services.leadconnectorhq.com/contacts/";

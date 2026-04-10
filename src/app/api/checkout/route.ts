@@ -6,10 +6,9 @@ function getStripe() {
 }
 
 const PRICE_MAP: Record<string, { priceId: string; mode: "subscription" | "payment" }> = {
-  // TODO: Create Stripe products and update these price IDs
-  "snapshot-monthly": { priceId: "price_TODO_snapshot", mode: "payment" },
-  "codify-monthly": { priceId: "price_TODO_codify_monthly", mode: "subscription" },
-  "codify-annual": { priceId: "price_TODO_codify_annual", mode: "payment" },
+  "snapshot-monthly": { priceId: "price_1TKUiBJeFf5Thhqe7KE99fL6", mode: "payment" },
+  "codify-monthly": { priceId: "price_1TKUj0JeFf5ThhqeMzFcUJHv", mode: "subscription" },
+  "codify-annual": { priceId: "price_1TKUk8JeFf5ThhqemoScaJAP", mode: "payment" },
 };
 
 export async function POST(request: Request) {
