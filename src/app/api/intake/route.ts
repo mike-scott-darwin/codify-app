@@ -1,15 +1,24 @@
 import { NextResponse } from "next/server";
+import { put } from "@vercel/blob";
 
 const SCAN_WEBHOOK_URL = process.env.SCAN_WEBHOOK_URL || "";
 const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || "";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const { token, answers } = body;
+    const formData = await request.formData();
 
+    const token = formData.get("token") as string;
     if (!token) {
       return NextResponse.json({ error: "Invalid link" }, { status: 400 });
+    }
+
+    // Parse text answers
+    let answers: Record<string, string> = {};
+    try {
+      answers = JSON.parse((formData.get("answers") as string) || "{}");
+    } catch {
+      // ignore parse errors
     }
 
     // Build combined answer text
@@ -20,9 +29,26 @@ export async function POST(request: Request) {
     if (answers?.style) parts.push(`My style: ${answers.style}`);
     if (answers?.origin) parts.push(`Why I started: ${answers.origin}`);
 
-    if (parts.length === 0) {
+    // Handle voice note upload
+    let voiceNote: { url: string; duration: number } | null = null;
+    const voice = formData.get("voiceNote") as File | null;
+    if (voice && voice.size > 0) {
+      const blob = await put(
+        `intake/${Date.now()}-voice.webm`,
+        voice,
+        { access: "public" }
+      );
+      voiceNote = {
+        url: blob.url,
+        duration: parseInt(
+          (formData.get("voiceDuration") as string) || "0"
+        ),
+      };
+    }
+
+    if (parts.length === 0 && !voiceNote) {
       return NextResponse.json(
-        { error: "Please answer at least one question" },
+        { error: "Please answer at least one question or record a voice note" },
         { status: 400 }
       );
     }
@@ -31,9 +57,7 @@ export async function POST(request: Request) {
 
     // Forward to Mac Mini webhook receiver
     if (SCAN_WEBHOOK_URL) {
-      // Reuse the same host but hit port 9000 for the webhook receiver
-      const baseUrl = SCAN_WEBHOOK_URL.replace(/\/+$/, "");
-      const url = new URL(baseUrl);
+      const url = new URL(SCAN_WEBHOOK_URL.replace(/\/+$/, ""));
       url.port = "9000";
       url.pathname = "/intake";
 
@@ -48,6 +72,7 @@ export async function POST(request: Request) {
             token,
             answers: combinedAnswers,
             raw: answers,
+            voiceNote,
             submitted: new Date().toISOString(),
           }),
         });
