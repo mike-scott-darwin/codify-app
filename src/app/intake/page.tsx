@@ -114,7 +114,8 @@ function IntakeForm() {
           </h1>
           <p className="text-[#666] text-lg leading-relaxed">
             I&apos;m already researching your business. Answer any of these to
-            make the output significantly better. Skip what doesn&apos;t
+            make the output significantly better. Use your phone&apos;s
+            dictation — just tap the mic and talk. Skip what doesn&apos;t
             resonate — even one answer helps.
           </p>
         </div>
