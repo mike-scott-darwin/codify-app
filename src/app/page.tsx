@@ -2,6 +2,7 @@ import { Nav } from "../components/nav";
 import { Hero } from "../components/hero";
 import { Problem } from "../components/problem";
 import { Mechanism } from "../components/mechanism";
+import { WhyNow } from "../components/why-now";
 import { InlineCTA } from "../components/inline-cta";
 import { Proof } from "../components/proof";
 import { Testimonials } from "../components/testimonials";
@@ -16,6 +17,7 @@ export default function Home() {
       <Nav />
       <Hero />
       <Problem />
+      <WhyNow />
       <Mechanism />
       <InlineCTA />
       <Proof />

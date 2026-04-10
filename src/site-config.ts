@@ -45,6 +45,24 @@ export const siteConfig = {
       },
     ],
   },
+  whyNow: {
+    eyebrow: "THE SHIFT",
+    headline: "The Gap Is Already Opening.",
+    statements: [
+      {
+        text: "AI gets better every week. Your competitors who codify their expertise now compound every advantage. You start over every session.",
+        highlight: "The gap between structured and unstructured businesses doubles every quarter.",
+      },
+      {
+        text: "Companies are replacing 10-person teams with one person and a trained agent swarm. Not in five years. Now.",
+        highlight: "One person with codified context produces what entire departments used to.",
+      },
+      {
+        text: "The question isn\'t whether to structure your expertise for AI. It\'s how many weeks of compounding you\'ve already missed.",
+        highlight: "Every week without context is a week your AI learns nothing.",
+      },
+    ],
+  },
   mechanism: {
     eyebrow: "HOW IT WORKS",
     headline: "Extract. Codify. Generate. Compound.",
