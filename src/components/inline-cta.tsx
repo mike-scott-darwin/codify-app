@@ -24,7 +24,7 @@ export function InlineCTA() {
           </svg>
         </a>
         <p className="text-xs text-dim mt-3">
-          Free opportunity scan — results in 15 minutes.
+          Free opportunity scan — 3 opportunities in 48 hours.
         </p>
       </div>
     </section>

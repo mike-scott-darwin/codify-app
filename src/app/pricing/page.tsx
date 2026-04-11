@@ -152,7 +152,7 @@ export default function Pricing() {
 
   async function handleCheckout(tierKey: string) {
     if (tierKey === "orchestrate") {
-      window.location.href = "mailto:hello@codify.build?subject=Orchestrate%20Tier";
+      window.location.href = "https://api.leadconnectorhq.com/widget/booking/codify";
       return;
     }
     if (tierKey === "snapshot") {
@@ -304,9 +304,14 @@ export default function Pricing() {
                       <span className="text-sm text-muted">{period}</span>
                     </div>
                     {isOrchestrate && (
-                      <p className="text-xs text-muted font-medium">
-                        + $5,000 one-time setup
-                      </p>
+                      <>
+                        <p className="text-xs text-muted font-medium">
+                          + $5,000 one-time setup
+                        </p>
+                        <a href="https://api.leadconnectorhq.com/widget/booking/codify" target="_blank" rel="noopener noreferrer" className="text-xs text-blue font-medium mt-1 hover:underline block">
+                          By application only →
+                        </a>
+                      </>
                     )}
                     {savings > 0 && (
                       <p className="text-xs text-green font-medium">

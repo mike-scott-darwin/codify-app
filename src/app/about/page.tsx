@@ -99,7 +99,7 @@ export default function AboutPage() {
             Ready to Stop Starting Over?
           </h2>
           <p className="text-muted text-sm mb-8">
-            Free opportunity scan — results in 15 minutes.
+            Free opportunity scan — 3 opportunities in 48 hours.
           </p>
           <a
             href="/get-started"
