@@ -9,10 +9,14 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@vercel/blob": "^2.3.3",
+    "@supabase/ssr": "^0.10.2",
+    "@supabase/supabase-js": "^2.103.0",
+    "gray-matter": "^4.0.3",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
     "stripe": "^21.0.1"
   },
   "devDependencies": {
