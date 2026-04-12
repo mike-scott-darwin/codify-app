@@ -1,34 +1,30 @@
-import Link from "next/link";
+"use client";
+
+import { useState } from "react";
+import { ChatDrawerProvider } from "@/components/vault/chat-drawer-provider";
+import VaultSidebar from "@/components/vault/sidebar";
+import VaultTopBar from "@/components/vault/top-bar";
+import ChatDrawer from "@/components/vault/chat-drawer";
 
 export default function VaultLayout({ children }: { children: React.ReactNode }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <nav className="border-b border-border bg-surface">
-        <div className="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <Link href="/vault" className="font-sans font-bold text-foreground">
-              Codify Vault
-            </Link>
-            <div className="flex gap-4 text-sm">
-              <Link href="/vault" className="text-muted hover:text-foreground transition-colors">
-                Dashboard
-              </Link>
-              <Link href="/vault/files" className="text-muted hover:text-foreground transition-colors">
-                Files
-              </Link>
-              <Link href="/vault/chat" className="text-muted hover:text-foreground transition-colors">
-                Pocket Architect
-              </Link>
-            </div>
-          </div>
-          <form action="/vault/auth/signout" method="POST">
-            <button type="submit" className="text-sm text-dim hover:text-muted transition-colors">
-              Sign out
-            </button>
-          </form>
+    <ChatDrawerProvider>
+      <div className="flex h-screen bg-background text-foreground">
+        <VaultSidebar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
+        <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+          <VaultTopBar
+            clientName=""
+            onMenuToggle={() => setSidebarOpen(!sidebarOpen)}
+          />
+          <main className="flex-1 overflow-y-auto">{children}</main>
         </div>
-      </nav>
-      {children}
-    </div>
+        <ChatDrawer />
+      </div>
+    </ChatDrawerProvider>
   );
 }
