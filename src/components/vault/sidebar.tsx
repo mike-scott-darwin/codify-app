@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 
 interface FileNode {
   name: string;
@@ -10,7 +10,6 @@ interface FileNode {
   type: "file" | "dir";
 }
 
-// Top-level vault folders to show in tree
 const VAULT_FOLDERS = [
   { name: "reference", path: "reference", label: "Context", icon: "◆", color: "text-blue" },
   { name: "decisions", path: "decisions", label: "Decisions", icon: "⚡", color: "text-green" },
@@ -92,12 +91,7 @@ function FolderNode({
           )}
           {children.map((child) =>
             child.type === "dir" ? (
-              <FolderNode
-                key={child.path}
-                node={child}
-                depth={depth + 1}
-                onClose={onClose}
-              />
+              <FolderNode key={child.path} node={child} depth={depth + 1} onClose={onClose} />
             ) : (
               <Link
                 key={child.path}
@@ -125,95 +119,88 @@ function FolderNode({
   );
 }
 
-export default function VaultSidebar({
-  isOpen,
-  onClose,
-  width = 256,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  width?: number;
-}) {
+function SidebarContent({ onClose }: { onClose: () => void }) {
   const pathname = usePathname();
 
   return (
     <>
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 z-30 md:hidden"
+      <div className="p-4 border-b border-border">
+        <Link href="/vault" className="font-sans font-bold text-foreground text-lg" onClick={onClose}>
+          Codify Vault
+        </Link>
+      </div>
+
+      <div className="border-b border-border py-2">
+        <Link
+          href="/vault"
           onClick={onClose}
-        />
-      )}
+          className={`flex items-center gap-3 px-4 py-1.5 text-sm transition-colors ${
+            pathname === "/vault" ? "text-blue bg-blue/5" : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+          }`}
+        >
+          <span className="text-xs">◫</span>
+          Dashboard
+        </Link>
+        <Link
+          href="/vault/activity"
+          onClick={onClose}
+          className={`flex items-center gap-3 px-4 py-1.5 text-sm transition-colors ${
+            pathname === "/vault/activity" ? "text-blue bg-blue/5" : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+          }`}
+        >
+          <span className="text-xs">◔</span>
+          Activity
+        </Link>
+      </div>
 
+      <div className="flex-1 overflow-y-auto py-2">
+        <p className="px-4 py-1 text-xs font-medium text-dim uppercase tracking-wider">Files</p>
+        {VAULT_FOLDERS.map((folder) => (
+          <FolderNode key={folder.path} node={folder} depth={0} onClose={onClose} />
+        ))}
+      </div>
+
+      <div className="p-4 border-t border-border">
+        <form action="/vault/auth/signout" method="POST">
+          <button type="submit" className="text-xs text-dim hover:text-muted transition-colors">
+            Sign out
+          </button>
+        </form>
+      </div>
+    </>
+  );
+}
+
+// Desktop: embedded in flex layout, no positioning tricks
+// Mobile: fixed overlay with backdrop
+export default function VaultSidebar({
+  isOpen,
+  onClose,
+  embedded,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  width?: number;
+  embedded?: boolean;
+}) {
+  if (embedded) {
+    return (
+      <div className="flex flex-col h-full w-full overflow-hidden">
+        <SidebarContent onClose={onClose} />
+      </div>
+    );
+  }
+
+  // Mobile overlay
+  return (
+    <>
+      {isOpen && <div className="fixed inset-0 bg-black/50 z-30" onClick={onClose} />}
       <aside
-        className={`fixed md:relative z-40 h-full w-64 md:w-full bg-surface md:border-r-0 border-r border-border flex flex-col transition-transform duration-200 ${
-          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        className={`fixed z-40 top-0 left-0 h-full w-64 bg-surface border-r border-border flex flex-col transition-transform duration-200 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
-        
       >
-        <div className="p-4 border-b border-border">
-          <Link
-            href="/vault"
-            className="font-sans font-bold text-foreground text-lg"
-            onClick={onClose}
-          >
-            Codify Vault
-          </Link>
-        </div>
-
-        {/* Quick nav */}
-        <div className="border-b border-border py-2">
-          <Link
-            href="/vault"
-            onClick={onClose}
-            className={`flex items-center gap-3 px-4 py-1.5 text-sm transition-colors ${
-              pathname === "/vault"
-                ? "text-blue bg-blue/5"
-                : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
-            }`}
-          >
-            <span className="text-xs">◫</span>
-            Dashboard
-          </Link>
-          <Link
-            href="/vault/activity"
-            onClick={onClose}
-            className={`flex items-center gap-3 px-4 py-1.5 text-sm transition-colors ${
-              pathname === "/vault/activity"
-                ? "text-blue bg-blue/5"
-                : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
-            }`}
-          >
-            <span className="text-xs">◔</span>
-            Activity
-          </Link>
-        </div>
-
-        {/* File tree */}
-        <div className="flex-1 overflow-y-auto py-2">
-          <p className="px-4 py-1 text-xs font-medium text-dim uppercase tracking-wider">
-            Files
-          </p>
-          {VAULT_FOLDERS.map((folder) => (
-            <FolderNode
-              key={folder.path}
-              node={folder}
-              depth={0}
-              onClose={onClose}
-            />
-          ))}
-        </div>
-
-        <div className="p-4 border-t border-border">
-          <form action="/vault/auth/signout" method="POST">
-            <button
-              type="submit"
-              className="text-xs text-dim hover:text-muted transition-colors"
-            >
-              Sign out
-            </button>
-          </form>
-        </div>
+        <SidebarContent onClose={onClose} />
       </aside>
     </>
   );
