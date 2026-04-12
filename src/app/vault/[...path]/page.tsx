@@ -3,6 +3,7 @@ import { getFileContent } from "@/lib/vault";
 import Link from "next/link";
 import MarkdownRenderer from "./markdown-renderer";
 import DocumentActions from "./document-actions";
+import Backlinks from "./backlinks";
 
 export default async function VaultDocumentViewer({
   params,
@@ -87,7 +88,7 @@ export default async function VaultDocumentViewer({
         ))}
       </div>
 
-      {/* Frontmatter + Actions row */}
+      {/* Frontmatter badges */}
       <div className="flex flex-wrap items-center gap-2 mb-4">
         {frontmatterEntries.map(([key, value]) => (
           <span
@@ -108,6 +109,9 @@ export default async function VaultDocumentViewer({
       <div className="bg-surface border border-border rounded-lg p-6">
         <MarkdownRenderer content={doc.content} />
       </div>
+
+      {/* Backlinks */}
+      <Backlinks filePath={filePath} />
     </div>
   );
 }

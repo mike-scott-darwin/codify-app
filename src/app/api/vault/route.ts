@@ -5,6 +5,7 @@ import {
   getRecentCommits,
   getVaultMetrics,
   getContextDepth,
+  getBacklinks,
 } from "@/lib/vault";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -65,6 +66,14 @@ export async function GET(request: NextRequest) {
       case "activity": {
         const count = parseInt(searchParams.get("count") ?? "20", 10);
         return NextResponse.json(await getRecentCommits(token, repo, count));
+      }
+
+      case "backlinks": {
+        const path = searchParams.get("path");
+        if (!path) {
+          return NextResponse.json({ error: "path required" }, { status: 400 });
+        }
+        return NextResponse.json(await getBacklinks(token, repo, path));
       }
 
       case "depth":

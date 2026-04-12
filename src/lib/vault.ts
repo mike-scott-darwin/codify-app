@@ -175,3 +175,154 @@ export async function getContextDepth(
 
   return results;
 }
+
+// --- Backlinks ---
+
+export interface BacklinkResult {
+  path: string;
+  name: string;
+  context: string; // the line containing the link
+  type: "link" | "mention";
+}
+
+async function getAllMarkdownFiles(
+  token: string,
+  repo: string,
+  dir: string = ""
+): Promise<VaultFile[]> {
+  try {
+    const items = await listDirectory(token, repo, dir);
+    const results: VaultFile[] = [];
+
+    for (const item of items) {
+      if (item.type === "file" && item.name.endsWith(".md")) {
+        results.push(item);
+      } else if (item.type === "dir" && !item.name.startsWith(".")) {
+        const nested = await getAllMarkdownFiles(token, repo, item.path);
+        results.push(...nested);
+      }
+    }
+
+    return results;
+  } catch {
+    return [];
+  }
+}
+
+export async function getBacklinks(
+  token: string,
+  repo: string,
+  targetPath: string
+): Promise<BacklinkResult[]> {
+  const targetName = targetPath.split("/").pop()?.replace(".md", "") ?? "";
+  const targetPathNoExt = targetPath.replace(".md", "");
+
+  // Get all markdown files
+  const allFiles = await getAllMarkdownFiles(token, repo);
+
+  // Filter out the target file itself
+  const otherFiles = allFiles.filter((f) => f.path !== targetPath);
+
+  // Scan each file for references (parallel, batched to avoid rate limits)
+  const BATCH = 10;
+  const backlinks: BacklinkResult[] = [];
+
+  for (let i = 0; i < otherFiles.length; i += BATCH) {
+    const batch = otherFiles.slice(i, i + BATCH);
+    const results = await Promise.all(
+      batch.map(async (file) => {
+        try {
+          const raw = await githubFetchRaw(token, repo, file.path);
+          const lines = raw.split("\n");
+          const matches: BacklinkResult[] = [];
+
+          for (const line of lines) {
+            // Skip frontmatter
+            if (line.trim() === "---") continue;
+
+            // Check for markdown links: [text](path)
+            const mdLinkRegex = /\[([^\]]*)\]\(([^)]+)\)/g;
+            let match;
+            while ((match = mdLinkRegex.exec(line)) !== null) {
+              const linkTarget = match[2];
+              if (
+                linkTarget.includes(targetPath) ||
+                linkTarget.includes(targetPathNoExt) ||
+                linkTarget.endsWith(targetName + ".md") ||
+                linkTarget.endsWith(targetName)
+              ) {
+                matches.push({
+                  path: file.path,
+                  name: file.name.replace(".md", ""),
+                  context: line.trim().slice(0, 200),
+                  type: "link",
+                });
+                break; // one match per file for links
+              }
+            }
+
+            // Check for wikilinks: [[filename]]
+            const wikiRegex = /\[\[([^\]]+)\]\]/g;
+            while ((match = wikiRegex.exec(line)) !== null) {
+              const wikiTarget = match[1].split("|")[0].trim(); // handle [[path|alias]]
+              if (
+                wikiTarget === targetName ||
+                wikiTarget === targetPath ||
+                wikiTarget === targetPathNoExt ||
+                wikiTarget.endsWith(targetName)
+              ) {
+                matches.push({
+                  path: file.path,
+                  name: file.name.replace(".md", ""),
+                  context: line.trim().slice(0, 200),
+                  type: "link",
+                });
+                break;
+              }
+            }
+          }
+
+          // If no formal links found, check for unlinked mentions
+          if (matches.length === 0 && targetName.length > 3) {
+            const lowerContent = raw.toLowerCase();
+            const lowerName = targetName.toLowerCase().replace(/-/g, " ");
+            // Also try the raw filename with dashes
+            const lowerNameDash = targetName.toLowerCase();
+
+            if (lowerContent.includes(lowerName) || lowerContent.includes(lowerNameDash)) {
+              // Find the first line with the mention
+              for (const line of lines) {
+                const lowerLine = line.toLowerCase();
+                if (lowerLine.includes(lowerName) || lowerLine.includes(lowerNameDash)) {
+                  if (line.trim() && !line.startsWith("---")) {
+                    matches.push({
+                      path: file.path,
+                      name: file.name.replace(".md", ""),
+                      context: line.trim().slice(0, 200),
+                      type: "mention",
+                    });
+                    break;
+                  }
+                }
+              }
+            }
+          }
+
+          return matches;
+        } catch {
+          return [];
+        }
+      })
+    );
+
+    backlinks.push(...results.flat());
+  }
+
+  // Sort: links first, then mentions
+  backlinks.sort((a, b) => {
+    if (a.type !== b.type) return a.type === "link" ? -1 : 1;
+    return a.name.localeCompare(b.name);
+  });
+
+  return backlinks;
+}
