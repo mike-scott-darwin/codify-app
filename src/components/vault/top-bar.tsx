@@ -31,10 +31,8 @@ export default function VaultTopBar({
           onClick={toggle}
           className="lg:hidden flex items-center gap-2 px-3 py-1.5 text-sm bg-blue/10 text-blue border border-blue/20 rounded-lg hover:bg-blue/20 transition-colors"
         >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5">
-            <path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v7a1 1 0 01-1 1H5l-3 3V3z" />
-          </svg>
-          <span className="hidden sm:inline">Pocket Architect</span>
+          <span className="text-xs">◈</span>
+          <span className="hidden sm:inline">Claude Sonnet</span>
         </button>
       </div>
     </div>

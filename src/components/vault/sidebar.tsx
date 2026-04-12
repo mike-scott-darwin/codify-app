@@ -17,7 +17,7 @@ const VAULT_FOLDERS = [
   { name: "research", path: "research", label: "Research", icon: "◎", color: "text-amber" },
   { name: "outputs", path: "outputs", label: "Outputs", icon: "□", color: "text-purple" },
   { name: "content", path: "content", label: "Content", icon: "✎", color: "text-cyan" },
-  { name: "whatsapp", path: "whatsapp", label: "WhatsApp", icon: "◯", color: "text-muted" },
+  { name: "whatsapp", path: "whatsapp", label: "Pocket Architect", icon: "◈", color: "text-blue" },
   { name: "snapshots", path: "snapshots", label: "Snapshots", icon: "◇", color: "text-muted" },
 ];
 
@@ -128,9 +128,11 @@ function FolderNode({
 export default function VaultSidebar({
   isOpen,
   onClose,
+  width = 256,
 }: {
   isOpen: boolean;
   onClose: () => void;
+  width?: number;
 }) {
   const pathname = usePathname();
 
@@ -144,9 +146,10 @@ export default function VaultSidebar({
       )}
 
       <aside
-        className={`fixed md:relative z-40 h-full w-64 bg-surface border-r border-border flex flex-col transition-transform duration-200 ${
+        className={`fixed md:relative z-40 h-full bg-surface border-r border-border flex flex-col transition-transform duration-200 ${
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
+        style={{ width: `${width}px` }}
       >
         <div className="p-4 border-b border-border">
           <Link
@@ -183,18 +186,6 @@ export default function VaultSidebar({
           >
             <span className="text-xs">◔</span>
             Activity
-          </Link>
-          <Link
-            href="/vault/chat"
-            onClick={onClose}
-            className={`flex items-center gap-3 px-4 py-1.5 text-sm transition-colors ${
-              pathname === "/vault/chat"
-                ? "text-blue bg-blue/5"
-                : "text-blue/70 hover:text-blue hover:bg-blue/5"
-            }`}
-          >
-            <span className="text-xs">◈</span>
-            Pocket Architect
           </Link>
         </div>
 

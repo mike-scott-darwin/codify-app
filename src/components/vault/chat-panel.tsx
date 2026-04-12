@@ -3,7 +3,7 @@
 import { useChatDrawer } from "./chat-drawer-provider";
 import ChatCore from "./chat-core";
 
-export default function ChatPanel() {
+export default function ChatPanel({ width = 384 }: { width?: number }) {
   const { isOpen, toggle, pendingPrompt, clearPendingPrompt } = useChatDrawer();
 
   return (
@@ -20,20 +20,24 @@ export default function ChatPanel() {
       <aside
         className={`
           fixed right-0 top-0 h-full z-50 w-full sm:w-96
-          lg:relative lg:z-auto lg:w-96 lg:shrink-0
+          lg:relative lg:z-auto lg:shrink-0
           bg-surface border-l border-border
           flex flex-col
           transition-transform duration-200
           ${isOpen ? "translate-x-0" : "translate-x-full lg:translate-x-0"}
         `}
+        style={{ width: width }}
       >
         {/* Header */}
         <div className="h-12 border-b border-border flex items-center justify-between px-4 shrink-0">
           <div className="flex items-center gap-2">
             <span className="text-blue text-sm">◈</span>
             <h3 className="text-sm font-sans font-bold text-foreground">
-              Pocket Architect
+              Claude Sonnet
             </h3>
+            <span className="text-xs text-dim px-1.5 py-0.5 bg-background rounded">
+              4.6
+            </span>
           </div>
           <button
             onClick={toggle}

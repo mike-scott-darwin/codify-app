@@ -136,8 +136,8 @@ export default function ChatCore({
                 Pocket Architect
               </h2>
               <p className="text-muted text-sm mt-2 max-w-xs mx-auto">
-                Ask anything about your business, request research, or draft
-                content.
+                Ask anything about your vault — research, draft content, capture
+                decisions.
               </p>
               <div className="flex flex-wrap justify-center gap-2 mt-4">
                 {quickActions.map((action) => (
@@ -217,7 +217,7 @@ export default function ChatCore({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Ask your Pocket Architect..."
+            placeholder="Ask Claude..."
             rows={1}
             className="flex-1 bg-background border border-border rounded-lg px-3 py-2 text-foreground placeholder:text-dim focus:outline-none focus:border-blue resize-none text-sm"
             style={{ minHeight: "40px", maxHeight: "120px" }}
