@@ -159,6 +159,18 @@ export default async function VaultDashboard() {
             </div>
           </div>
 
+          {/* Getting Started */}
+          <Link
+            href="/vault/ONBOARDING.md"
+            className="flex items-center gap-3 bg-surface border border-blue/30 rounded-lg p-3 hover:border-blue/50 transition-colors mb-4"
+          >
+            <span className="text-blue text-sm">◈</span>
+            <div>
+              <span className="text-sm text-foreground">Getting Started</span>
+              <p className="text-xs text-dim">Build your four Context files and watch the vault compound</p>
+            </div>
+          </Link>
+
           {/* Vault Sections */}
           <div className="space-y-2">
             {[
