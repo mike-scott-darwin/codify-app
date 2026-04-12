@@ -2,6 +2,7 @@ import { createSupabaseServer } from "@/lib/supabase-server";
 import { getFileContent } from "@/lib/vault";
 import Link from "next/link";
 import MarkdownRenderer from "./markdown-renderer";
+import DocumentActions from "./document-actions";
 
 export default async function VaultDocumentViewer({
   params,
@@ -47,10 +48,8 @@ export default async function VaultDocumentViewer({
     );
   }
 
-  // Build breadcrumb from path
   const parts = filePath.split("/");
   const fileName = parts[parts.length - 1];
-  const dirPath = parts.slice(0, -1).join("/");
 
   const frontmatterEntries = Object.entries(doc.frontmatter).filter(
     ([, v]) => v !== null && v !== undefined && v !== ""
@@ -69,7 +68,7 @@ export default async function VaultDocumentViewer({
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-1 text-sm mb-4">
+      <div className="flex items-center gap-1 text-sm mb-3">
         <Link href="/vault/files" className="text-blue hover:underline">Root</Link>
         {parts.map((part, i) => (
           <span key={i} className="flex items-center gap-1">
@@ -88,19 +87,22 @@ export default async function VaultDocumentViewer({
         ))}
       </div>
 
-      {/* Frontmatter strip */}
-      {frontmatterEntries.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-4">
-          {frontmatterEntries.map(([key, value]) => (
-            <span
-              key={key}
-              className={`text-xs px-2 py-1 rounded ${badgeColor(key, value)}`}
-            >
-              {key}: {String(value)}
-            </span>
-          ))}
-        </div>
-      )}
+      {/* Frontmatter + Actions row */}
+      <div className="flex flex-wrap items-center gap-2 mb-4">
+        {frontmatterEntries.map(([key, value]) => (
+          <span
+            key={key}
+            className={`text-xs px-2 py-1 rounded ${badgeColor(key, value)}`}
+          >
+            {key}: {String(value)}
+          </span>
+        ))}
+      </div>
+
+      {/* Context-aware actions */}
+      <div className="mb-4">
+        <DocumentActions filePath={filePath} fileName={fileName} />
+      </div>
 
       {/* Markdown content */}
       <div className="bg-surface border border-border rounded-lg p-6">

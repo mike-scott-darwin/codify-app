@@ -2,83 +2,128 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 
-const navSections = [
-  {
-    label: "Overview",
-    items: [
-      { name: "Dashboard", href: "/vault", icon: "grid" },
-      { name: "Activity", href: "/vault/activity", icon: "clock" },
-    ],
-  },
-  {
-    label: "Vault",
-    items: [
-      { name: "Context", href: "/vault/files?path=reference/core", icon: "file" },
-      { name: "Decisions", href: "/vault/decisions", icon: "zap" },
-      { name: "Research", href: "/vault/research", icon: "search" },
-      { name: "Outputs", href: "/vault/files?path=outputs", icon: "box" },
-      { name: "Content", href: "/vault/files?path=content", icon: "edit" },
-    ],
-  },
-  {
-    label: "Tools",
-    items: [
-      { name: "Pocket Architect", href: "/vault/chat", icon: "message" },
-    ],
-  },
+interface FileNode {
+  name: string;
+  path: string;
+  type: "file" | "dir";
+}
+
+// Top-level vault folders to show in tree
+const VAULT_FOLDERS = [
+  { name: "reference", path: "reference", label: "Context", icon: "◆", color: "text-blue" },
+  { name: "decisions", path: "decisions", label: "Decisions", icon: "⚡", color: "text-green" },
+  { name: "research", path: "research", label: "Research", icon: "◎", color: "text-amber" },
+  { name: "outputs", path: "outputs", label: "Outputs", icon: "□", color: "text-purple" },
+  { name: "content", path: "content", label: "Content", icon: "✎", color: "text-cyan" },
+  { name: "whatsapp", path: "whatsapp", label: "WhatsApp", icon: "◯", color: "text-muted" },
+  { name: "snapshots", path: "snapshots", label: "Snapshots", icon: "◇", color: "text-muted" },
 ];
 
-const icons: Record<string, React.ReactNode> = {
-  grid: (
-    <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5">
-      <rect x="1.5" y="1.5" width="5" height="5" rx="1" />
-      <rect x="9.5" y="1.5" width="5" height="5" rx="1" />
-      <rect x="1.5" y="9.5" width="5" height="5" rx="1" />
-      <rect x="9.5" y="9.5" width="5" height="5" rx="1" />
-    </svg>
-  ),
-  clock: (
-    <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5">
-      <circle cx="8" cy="8" r="6" />
-      <path d="M8 4.5V8l2.5 1.5" />
-    </svg>
-  ),
-  file: (
-    <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5">
-      <path d="M9.5 1.5H4a1 1 0 00-1 1v11a1 1 0 001 1h8a1 1 0 001-1V5L9.5 1.5z" />
-      <path d="M9.5 1.5V5H13" />
-    </svg>
-  ),
-  zap: (
-    <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5">
-      <path d="M8.5 1.5L3 9h4.5l-1 5.5L13 7H8.5l1-5.5z" />
-    </svg>
-  ),
-  search: (
-    <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5">
-      <circle cx="7" cy="7" r="4.5" />
-      <path d="M10.5 10.5L14 14" />
-    </svg>
-  ),
-  box: (
-    <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5">
-      <path d="M2 5l6-3 6 3v6l-6 3-6-3V5z" />
-      <path d="M2 5l6 3 6-3M8 8v6.5" />
-    </svg>
-  ),
-  edit: (
-    <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5">
-      <path d="M11 1.5l3.5 3.5L5 14.5H1.5V11L11 1.5z" />
-    </svg>
-  ),
-  message: (
-    <svg className="w-4 h-4" fill="none" viewBox="0 0 16 16" stroke="currentColor" strokeWidth="1.5">
-      <path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v7a1 1 0 01-1 1H5l-3 3V3z" />
-    </svg>
-  ),
-};
+function FolderNode({
+  node,
+  depth = 0,
+  onClose,
+}: {
+  node: { name: string; path: string; label?: string; icon?: string; color?: string };
+  depth?: number;
+  onClose: () => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const [children, setChildren] = useState<FileNode[]>([]);
+  const [loading, setLoading] = useState(false);
+  const pathname = usePathname();
+
+  const loadChildren = useCallback(async () => {
+    if (children.length > 0) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/vault?action=list&path=${encodeURIComponent(node.path)}`);
+      if (res.ok) {
+        const data = await res.json();
+        const sorted = (data as FileNode[]).sort((a: FileNode, b: FileNode) => {
+          if (a.type !== b.type) return a.type === "dir" ? -1 : 1;
+          return a.name.localeCompare(b.name);
+        });
+        setChildren(sorted);
+      }
+    } catch {
+      // silently fail
+    }
+    setLoading(false);
+  }, [node.path, children.length]);
+
+  function handleToggle() {
+    if (!expanded) loadChildren();
+    setExpanded(!expanded);
+  }
+
+  const displayName = node.label || node.name;
+  const pl = depth * 12 + 12;
+
+  return (
+    <div>
+      <button
+        onClick={handleToggle}
+        className={`w-full flex items-center gap-2 py-1.5 text-sm hover:bg-[#1a1a1a] transition-colors text-left ${
+          expanded ? "text-foreground" : "text-muted"
+        }`}
+        style={{ paddingLeft: `${pl}px`, paddingRight: "12px" }}
+      >
+        <span className="text-dim text-xs w-3 shrink-0">
+          {expanded ? "▼" : "▶"}
+        </span>
+        {node.icon && (
+          <span className={`text-xs ${node.color || "text-muted"}`}>{node.icon}</span>
+        )}
+        {!node.icon && (
+          <span className="text-amber text-xs">📁</span>
+        )}
+        <span className="truncate">{displayName}</span>
+      </button>
+
+      {expanded && (
+        <div>
+          {loading && (
+            <p className="text-xs text-dim py-1" style={{ paddingLeft: `${pl + 24}px` }}>
+              Loading...
+            </p>
+          )}
+          {children.map((child) =>
+            child.type === "dir" ? (
+              <FolderNode
+                key={child.path}
+                node={child}
+                depth={depth + 1}
+                onClose={onClose}
+              />
+            ) : (
+              <Link
+                key={child.path}
+                href={`/vault/${child.path}`}
+                onClick={onClose}
+                className={`flex items-center gap-2 py-1 text-sm transition-colors ${
+                  pathname === `/vault/${child.path}`
+                    ? "text-blue bg-blue/5"
+                    : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+                }`}
+                style={{ paddingLeft: `${(depth + 1) * 12 + 12 + 12}px`, paddingRight: "12px" }}
+              >
+                <span className={`text-xs ${child.name.endsWith(".md") ? "text-blue" : "text-dim"}`}>
+                  {child.name.endsWith(".md") ? "◆" : "·"}
+                </span>
+                <span className="truncate text-xs">
+                  {child.name.replace(".md", "")}
+                </span>
+              </Link>
+            )
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function VaultSidebar({
   isOpen,
@@ -89,14 +134,8 @@ export default function VaultSidebar({
 }) {
   const pathname = usePathname();
 
-  function isActive(href: string) {
-    if (href === "/vault") return pathname === "/vault";
-    return pathname.startsWith(href.split("?")[0]);
-  }
-
   return (
     <>
-      {/* Mobile backdrop */}
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-30 md:hidden"
@@ -119,30 +158,60 @@ export default function VaultSidebar({
           </Link>
         </div>
 
-        <nav className="flex-1 overflow-y-auto py-2">
-          {navSections.map((section) => (
-            <div key={section.label} className="mb-2">
-              <p className="px-4 py-1 text-xs font-medium text-dim uppercase tracking-wider">
-                {section.label}
-              </p>
-              {section.items.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={onClose}
-                  className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
-                    isActive(item.href)
-                      ? "text-blue bg-blue/5 border-r-2 border-blue"
-                      : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
-                  }`}
-                >
-                  {icons[item.icon]}
-                  <span>{item.name}</span>
-                </Link>
-              ))}
-            </div>
+        {/* Quick nav */}
+        <div className="border-b border-border py-2">
+          <Link
+            href="/vault"
+            onClick={onClose}
+            className={`flex items-center gap-3 px-4 py-1.5 text-sm transition-colors ${
+              pathname === "/vault"
+                ? "text-blue bg-blue/5"
+                : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+            }`}
+          >
+            <span className="text-xs">◫</span>
+            Dashboard
+          </Link>
+          <Link
+            href="/vault/activity"
+            onClick={onClose}
+            className={`flex items-center gap-3 px-4 py-1.5 text-sm transition-colors ${
+              pathname === "/vault/activity"
+                ? "text-blue bg-blue/5"
+                : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+            }`}
+          >
+            <span className="text-xs">◔</span>
+            Activity
+          </Link>
+          <Link
+            href="/vault/chat"
+            onClick={onClose}
+            className={`flex items-center gap-3 px-4 py-1.5 text-sm transition-colors ${
+              pathname === "/vault/chat"
+                ? "text-blue bg-blue/5"
+                : "text-blue/70 hover:text-blue hover:bg-blue/5"
+            }`}
+          >
+            <span className="text-xs">◈</span>
+            Pocket Architect
+          </Link>
+        </div>
+
+        {/* File tree */}
+        <div className="flex-1 overflow-y-auto py-2">
+          <p className="px-4 py-1 text-xs font-medium text-dim uppercase tracking-wider">
+            Files
+          </p>
+          {VAULT_FOLDERS.map((folder) => (
+            <FolderNode
+              key={folder.path}
+              node={folder}
+              depth={0}
+              onClose={onClose}
+            />
           ))}
-        </nav>
+        </div>
 
         <div className="p-4 border-t border-border">
           <form action="/vault/auth/signout" method="POST">
