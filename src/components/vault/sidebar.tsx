@@ -23,10 +23,10 @@ const VAULT_FOLDERS = [
 
 const ONBOARDING_FILES = [
   { name: "Getting Started", path: "ONBOARDING.md", icon: "◈" },
-  { name: "Soul — Your Identity", path: "00-Context/soul.md", icon: "◆" },
-  { name: "Audience — Who Buys", path: "00-Context/audience.md", icon: "◆" },
-  { name: "Offer — Your Value", path: "00-Context/offer.md", icon: "◆" },
-  { name: "Voice — How You Sound", path: "00-Context/voice.md", icon: "◆" },
+  { name: "Soul — Your Identity", path: "reference/core/soul.md", icon: "◆" },
+  { name: "Audience — Who Buys", path: "reference/core/audience.md", icon: "◆" },
+  { name: "Offer — Your Value", path: "reference/core/offer.md", icon: "◆" },
+  { name: "Voice — How You Sound", path: "reference/core/voice.md", icon: "◆" },
 ];
 
 function FolderNode({
