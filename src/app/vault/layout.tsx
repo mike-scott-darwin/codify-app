@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ChatDrawerProvider } from "@/components/vault/chat-drawer-provider";
 import VaultSidebar from "@/components/vault/sidebar";
 import VaultTopBar from "@/components/vault/top-bar";
-import ChatDrawer from "@/components/vault/chat-drawer";
+import ChatPanel from "@/components/vault/chat-panel";
 
 export default function VaultLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -12,10 +12,13 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
   return (
     <ChatDrawerProvider>
       <div className="flex h-screen bg-background text-foreground">
+        {/* Left — File tree */}
         <VaultSidebar
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
         />
+
+        {/* Center — Content */}
         <div className="flex-1 flex flex-col overflow-hidden min-w-0">
           <VaultTopBar
             clientName=""
@@ -23,7 +26,9 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
           />
           <main className="flex-1 overflow-y-auto">{children}</main>
         </div>
-        <ChatDrawer />
+
+        {/* Right — Pocket Architect (always visible on desktop) */}
+        <ChatPanel />
       </div>
     </ChatDrawerProvider>
   );
