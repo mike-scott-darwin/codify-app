@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useCallback } from "react";
+import SettingsModal from "./settings-modal";
 
 interface FileNode {
   name: string;
@@ -121,6 +122,7 @@ function FolderNode({
 
 function SidebarContent({ onClose }: { onClose: () => void }) {
   const pathname = usePathname();
+  const [settingsOpen, setSettingsOpen] = useState(false);
 
   return (
     <>
@@ -160,19 +162,28 @@ function SidebarContent({ onClose }: { onClose: () => void }) {
         ))}
       </div>
 
-      <div className="p-4 border-t border-border">
+      <div className="p-3 border-t border-border flex items-center justify-between">
+        <button
+          onClick={() => setSettingsOpen(true)}
+          className="flex items-center gap-2 text-xs text-dim hover:text-muted transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+            <path d="M10 3.5a1 1 0 00-1 1v.3a1.7 1.7 0 01-1 1.5 1.7 1.7 0 01-1.8-.2l-.2-.2a1 1 0 10-1.4 1.4l.2.2a1.7 1.7 0 01.2 1.8 1.7 1.7 0 01-1.5 1H4.5a1 1 0 000 2h.3a1.7 1.7 0 011.5 1 1.7 1.7 0 01-.2 1.8l-.2.2a1 1 0 101.4 1.4l.2-.2a1.7 1.7 0 011.8-.2 1.7 1.7 0 011 1.5v.3a1 1 0 002 0v-.3a1.7 1.7 0 011-1.5 1.7 1.7 0 011.8.2l.2.2a1 1 0 101.4-1.4l-.2-.2a1.7 1.7 0 01-.2-1.8 1.7 1.7 0 011.5-1h.3a1 1 0 000-2h-.3a1.7 1.7 0 01-1.5-1 1.7 1.7 0 01.2-1.8l.2-.2a1 1 0 10-1.4-1.4l-.2.2a1.7 1.7 0 01-1.8.2 1.7 1.7 0 01-1-1.5v-.3a1 1 0 00-1 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
+          </svg>
+          Settings
+        </button>
         <form action="/vault/auth/signout" method="POST">
           <button type="submit" className="text-xs text-dim hover:text-muted transition-colors">
             Sign out
           </button>
         </form>
       </div>
+
+      <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </>
   );
 }
 
-// Desktop: embedded in flex layout, no positioning tricks
-// Mobile: fixed overlay with backdrop
 export default function VaultSidebar({
   isOpen,
   onClose,
@@ -191,7 +202,6 @@ export default function VaultSidebar({
     );
   }
 
-  // Mobile overlay
   return (
     <>
       {isOpen && <div className="fixed inset-0 bg-black/50 z-30" onClick={onClose} />}
