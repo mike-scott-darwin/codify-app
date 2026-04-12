@@ -146,10 +146,10 @@ export default function VaultSidebar({
       )}
 
       <aside
-        className={`fixed md:relative z-40 h-full bg-surface border-r border-border flex flex-col transition-transform duration-200 ${
+        className={`fixed md:relative z-40 h-full w-64 md:w-full bg-surface md:border-r-0 border-r border-border flex flex-col transition-transform duration-200 ${
           isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         }`}
-        style={{ width: `${width}px` }}
+        
       >
         <div className="p-4 border-b border-border">
           <Link

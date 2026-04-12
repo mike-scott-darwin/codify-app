@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback } from "react";
 import { ChatDrawerProvider } from "@/components/vault/chat-drawer-provider";
 import VaultSidebar from "@/components/vault/sidebar";
 import VaultTopBar from "@/components/vault/top-bar";
@@ -22,26 +22,35 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
   }, []);
 
   const handleChatResize = useCallback((delta: number) => {
-    // Dragging left = negative delta = wider chat panel
     setChatWidth((w) => Math.min(CHAT_MAX, Math.max(CHAT_MIN, w - delta)));
   }, []);
 
   return (
     <ChatDrawerProvider>
-      <div className="flex h-screen bg-background text-foreground">
-        {/* Left — File tree */}
-        <VaultSidebar
-          isOpen={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
-          width={sidebarWidth}
-        />
+      <div className="flex h-screen bg-background text-foreground overflow-hidden">
+        {/* Left — File tree (dynamic width) */}
+        <div className="hidden md:flex h-full shrink-0" style={{ width: `${sidebarWidth}px` }}>
+          <VaultSidebar
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+            width={sidebarWidth}
+          />
+        </div>
+
+        {/* Mobile sidebar */}
+        <div className="md:hidden">
+          <VaultSidebar
+            isOpen={sidebarOpen}
+            onClose={() => setSidebarOpen(false)}
+          />
+        </div>
 
         {/* Resize handle — sidebar | content */}
-        <div className="hidden md:block">
+        <div className="hidden md:flex h-full">
           <ResizeHandle onResize={handleSidebarResize} />
         </div>
 
-        {/* Center — Content */}
+        {/* Center — Content (fills remaining space) */}
         <div className="flex-1 flex flex-col overflow-hidden min-w-0">
           <VaultTopBar
             clientName=""
@@ -51,11 +60,11 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
         </div>
 
         {/* Resize handle — content | chat */}
-        <div className="hidden lg:block">
+        <div className="hidden lg:flex h-full">
           <ResizeHandle onResize={handleChatResize} />
         </div>
 
-        {/* Right — LLM chat (always visible on desktop) */}
+        {/* Right — LLM chat (dynamic width) */}
         <ChatPanel width={chatWidth} />
       </div>
     </ChatDrawerProvider>
