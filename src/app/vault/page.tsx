@@ -1,6 +1,7 @@
 import { createSupabaseServer } from "@/lib/supabase-server";
 import { getVaultMetrics, getContextDepth, getRecentCommits } from "@/lib/vault";
 import Link from "next/link";
+import DashboardActions from "./dashboard-actions";
 
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -137,39 +138,8 @@ export default async function VaultDashboard() {
 
         {/* Right column — 2/5 */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Quick Actions */}
-          <div className="bg-surface border border-blue/20 rounded-lg p-4">
-            <h2 className="text-sm font-sans font-bold text-blue mb-3">Claude Sonnet</h2>
-            <p className="text-xs text-muted mb-3">
-              Your AI strategist — grounded in your vault files.
-            </p>
-            <div className="grid grid-cols-2 gap-2">
-              <Link href="/vault/chat" className="text-center px-3 py-2 text-xs bg-blue/10 text-blue border border-blue/20 rounded-lg hover:bg-blue/20 transition-colors">
-                Brief me
-              </Link>
-              <Link href="/vault/chat" className="text-center px-3 py-2 text-xs bg-blue/10 text-blue border border-blue/20 rounded-lg hover:bg-blue/20 transition-colors">
-                Draft content
-              </Link>
-              <Link href="/vault/chat" className="text-center px-3 py-2 text-xs bg-blue/10 text-blue border border-blue/20 rounded-lg hover:bg-blue/20 transition-colors">
-                Research
-              </Link>
-              <Link href="/vault/chat" className="text-center px-3 py-2 text-xs bg-blue/10 text-blue border border-blue/20 rounded-lg hover:bg-blue/20 transition-colors">
-                What needs work?
-              </Link>
-            </div>
-          </div>
-
-          {/* Getting Started */}
-          <Link
-            href="/vault/ONBOARDING.md"
-            className="flex items-center gap-3 bg-surface border border-blue/30 rounded-lg p-3 hover:border-blue/50 transition-colors mb-4"
-          >
-            <span className="text-blue text-sm">◈</span>
-            <div>
-              <span className="text-sm text-foreground">Getting Started</span>
-              <p className="text-xs text-dim">Build your four Context files and watch the vault compound</p>
-            </div>
-          </Link>
+          {/* Quick Actions — triggers chat panel */}
+          <DashboardActions />
 
           {/* Vault Sections */}
           <div className="space-y-2">

@@ -21,6 +21,14 @@ const VAULT_FOLDERS = [
   { name: "snapshots", path: "snapshots", label: "Snapshots", icon: "◇", color: "text-muted" },
 ];
 
+const ONBOARDING_FILES = [
+  { name: "Getting Started", path: "ONBOARDING.md", icon: "◈" },
+  { name: "Soul — Your Identity", path: "00-Context/soul.md", icon: "◆" },
+  { name: "Audience — Who Buys", path: "00-Context/audience.md", icon: "◆" },
+  { name: "Offer — Your Value", path: "00-Context/offer.md", icon: "◆" },
+  { name: "Voice — How You Sound", path: "00-Context/voice.md", icon: "◆" },
+];
+
 function FolderNode({
   node,
   depth = 0,
@@ -123,6 +131,7 @@ function FolderNode({
 function SidebarContent({ onClose }: { onClose: () => void }) {
   const pathname = usePathname();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
 
   return (
     <>
@@ -153,6 +162,40 @@ function SidebarContent({ onClose }: { onClose: () => void }) {
           <span className="text-xs">◔</span>
           Activity
         </Link>
+      </div>
+
+      {/* Onboarding section */}
+      <div className="border-b border-border py-2">
+        <button
+          onClick={() => setOnboardingOpen(!onboardingOpen)}
+          className={`w-full flex items-center gap-3 px-4 py-1.5 text-sm transition-colors text-left ${
+            onboardingOpen ? "text-blue" : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+          }`}
+        >
+          <span className="text-xs">{onboardingOpen ? "▼" : "▶"}</span>
+          <span className="text-blue text-xs">◈</span>
+          Getting Started
+        </button>
+        {onboardingOpen && (
+          <div className="pl-4">
+            {ONBOARDING_FILES.map((file) => (
+              <Link
+                key={file.path}
+                href={`/vault/${file.path}`}
+                onClick={onClose}
+                className={`flex items-center gap-2 py-1 text-sm transition-colors ${
+                  pathname === `/vault/${file.path}`
+                    ? "text-blue bg-blue/5"
+                    : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+                }`}
+                style={{ paddingLeft: "24px", paddingRight: "12px" }}
+              >
+                <span className="text-blue text-xs">{file.icon}</span>
+                <span className="truncate text-xs">{file.name}</span>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className="flex-1 overflow-y-auto py-2">
