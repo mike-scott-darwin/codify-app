@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
+import { provisionVault } from "@/lib/provision-vault";
+import { createSupabaseAdmin } from "@/lib/supabase-admin";
 
 function getStripe() {
   return new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -10,6 +12,9 @@ const PRICE_TO_TIER: Record<string, string> = {
   "price_1TKUj0JeFf5ThhqeMzFcUJHv": "codify",
   "price_1TKUk8JeFf5ThhqemoScaJAP": "codify",
 };
+
+// Only these tiers get a vault provisioned
+const VAULT_TIERS = new Set(["codify"]);
 
 const GHL_API_URL = "https://services.leadconnectorhq.com/contacts/";
 const GHL_LOCATION_ID = "AKRQpXEUDgloSAbxzDmh";
@@ -46,7 +51,7 @@ async function upsertGhlContact(email: string, name: string, tag: string) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        tags: [tag, "codify-paid"],
+        tags: [tag, "codify-paid", "vault-provisioned"],
         source: "stripe-checkout",
       }),
     });
@@ -67,7 +72,7 @@ async function upsertGhlContact(email: string, name: string, tag: string) {
         firstName: firstName || "Customer",
         lastName,
         email,
-        tags: [tag, "codify-paid"],
+        tags: [tag, "codify-paid", "vault-provisioned"],
         source: "stripe-checkout",
       }),
     });
@@ -79,6 +84,53 @@ async function upsertGhlContact(email: string, name: string, tag: string) {
   }
 
   return contactId;
+}
+
+async function provisionClientVault(email: string, name: string, company: string) {
+  const githubToken = process.env.GITHUB_TOKEN;
+  if (!githubToken) {
+    console.error("GITHUB_TOKEN not set — cannot provision vault");
+    return null;
+  }
+
+  // 1. Create GitHub repo from template + personalize
+  const { repoFullName } = await provisionVault({
+    token: githubToken,
+    clientName: name || "New Client",
+    email,
+    company: company || name || "Client",
+  });
+
+  // 2. Insert client row into Supabase
+  const supabase = createSupabaseAdmin();
+  const { error } = await supabase.from("clients").upsert(
+    {
+      email,
+      client_name: name || "New Client",
+      github_repo: repoFullName,
+      tier: "codify",
+      provisioned_at: new Date().toISOString(),
+    },
+    { onConflict: "email" }
+  );
+
+  if (error) {
+    console.error("Supabase client insert failed:", error);
+  }
+
+  // 3. Pre-create Supabase auth user so magic link works on first click
+  const { error: authError } = await supabase.auth.admin.createUser({
+    email,
+    email_confirm: true,
+  });
+
+  // Ignore "already registered" — that's fine
+  if (authError && !authError.message.includes("already")) {
+    console.error("Supabase auth user creation failed:", authError);
+  }
+
+  console.log(`Vault provisioned: ${repoFullName} for ${email}`);
+  return repoFullName;
 }
 
 export async function POST(request: Request) {
@@ -123,12 +175,26 @@ export async function POST(request: Request) {
     }
 
     const name = session.customer_details?.name || "";
+    const company = (session.custom_fields?.find((f) => f.key === "company")?.text?.value) || name;
 
-    try {
-      const contactId = await upsertGhlContact(email, name, tag);
-      console.log(`Stripe webhook: ${email} tagged ${tag}, GHL contact: ${contactId}`);
-    } catch (err) {
-      console.error("GHL upsert failed:", err);
+    // Run GHL upsert + vault provisioning in parallel
+    const results = await Promise.allSettled([
+      upsertGhlContact(email, name, tag),
+      VAULT_TIERS.has(tag)
+        ? provisionClientVault(email, name, company)
+        : Promise.resolve(null),
+    ]);
+
+    const [ghlResult, vaultResult] = results;
+    const contactId = ghlResult.status === "fulfilled" ? ghlResult.value : null;
+    const repoName = vaultResult.status === "fulfilled" ? vaultResult.value : null;
+
+    console.log(
+      `Stripe webhook: ${email} | tier=${tag} | GHL=${contactId} | vault=${repoName || "skipped"}`
+    );
+
+    if (vaultResult.status === "rejected") {
+      console.error("Vault provisioning failed:", vaultResult.reason);
     }
   }
 

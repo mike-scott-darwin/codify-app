@@ -49,6 +49,7 @@ export default async function VaultDocumentViewer({
     );
   }
 
+  const isOnboarding = filePath === "ONBOARDING.md";
   const parts = filePath.split("/");
   const fileName = parts[parts.length - 1];
 
@@ -88,30 +89,34 @@ export default async function VaultDocumentViewer({
         ))}
       </div>
 
-      {/* Frontmatter badges */}
-      <div className="flex flex-wrap items-center gap-2 mb-4">
-        {frontmatterEntries.map(([key, value]) => (
-          <span
-            key={key}
-            className={`text-xs px-2 py-1 rounded ${badgeColor(key, value)}`}
-          >
-            {key}: {String(value)}
-          </span>
-        ))}
-      </div>
+      {/* Frontmatter badges — hidden for onboarding */}
+      {!isOnboarding && frontmatterEntries.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2 mb-4">
+          {frontmatterEntries.map(([key, value]) => (
+            <span
+              key={key}
+              className={`text-xs px-2 py-1 rounded ${badgeColor(key, value)}`}
+            >
+              {key}: {String(value)}
+            </span>
+          ))}
+        </div>
+      )}
 
-      {/* Context-aware actions */}
-      <div className="mb-4">
-        <DocumentActions filePath={filePath} fileName={fileName} />
-      </div>
+      {/* Context-aware actions — hidden for onboarding */}
+      {!isOnboarding && (
+        <div className="mb-4">
+          <DocumentActions filePath={filePath} fileName={fileName} />
+        </div>
+      )}
 
       {/* Markdown content */}
       <div className="bg-surface border border-border rounded-lg p-6">
         <MarkdownRenderer content={doc.content} />
       </div>
 
-      {/* Backlinks */}
-      <Backlinks filePath={filePath} />
+      {/* Backlinks — hidden for onboarding */}
+      {!isOnboarding && <Backlinks filePath={filePath} />}
     </div>
   );
 }

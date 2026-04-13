@@ -63,7 +63,7 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
         {/* Gutter: sidebar | content */}
         <div
           onMouseDown={(e) => startDrag("sidebar", e)}
-          className="hidden md:block w-1 shrink-0 cursor-col-resize bg-border/40 hover:bg-blue/40 active:bg-blue transition-colors"
+          className="hidden md:block w-1 shrink-0 cursor-col-resize bg-transparent hover:bg-blue/30 active:bg-blue/60 transition-colors"
         />
 
         {/* Center — content */}
@@ -75,7 +75,7 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
         {/* Gutter: content | chat */}
         <div
           onMouseDown={(e) => startDrag("chat", e)}
-          className="hidden lg:block w-1 shrink-0 cursor-col-resize bg-border/40 hover:bg-blue/40 active:bg-blue transition-colors"
+          className="hidden lg:block w-1 shrink-0 cursor-col-resize bg-transparent hover:bg-blue/30 active:bg-blue/60 transition-colors"
         />
 
         {/* Right — LLM chat */}
