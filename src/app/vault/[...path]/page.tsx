@@ -5,6 +5,14 @@ import MarkdownRenderer from "./markdown-renderer";
 import DocumentActions from "./document-actions";
 import Backlinks from "./backlinks";
 
+const CLEAN_FILES = new Set([
+  "ONBOARDING.md",
+  "reference/core/soul.md",
+  "reference/core/audience.md",
+  "reference/core/offer.md",
+  "reference/core/voice.md",
+]);
+
 export default async function VaultDocumentViewer({
   params,
 }: {
@@ -49,7 +57,7 @@ export default async function VaultDocumentViewer({
     );
   }
 
-  const isOnboarding = filePath === "ONBOARDING.md";
+  const isClean = CLEAN_FILES.has(filePath);
   const parts = filePath.split("/");
   const fileName = parts[parts.length - 1];
 
@@ -89,8 +97,8 @@ export default async function VaultDocumentViewer({
         ))}
       </div>
 
-      {/* Frontmatter badges — hidden for onboarding */}
-      {!isOnboarding && frontmatterEntries.length > 0 && (
+      {/* Frontmatter badges — hidden for clean files */}
+      {!isClean && frontmatterEntries.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 mb-4">
           {frontmatterEntries.map(([key, value]) => (
             <span
@@ -103,8 +111,8 @@ export default async function VaultDocumentViewer({
         </div>
       )}
 
-      {/* Context-aware actions — hidden for onboarding */}
-      {!isOnboarding && (
+      {/* Context-aware actions — hidden for clean files */}
+      {!isClean && (
         <div className="mb-4">
           <DocumentActions filePath={filePath} fileName={fileName} />
         </div>
@@ -115,8 +123,8 @@ export default async function VaultDocumentViewer({
         <MarkdownRenderer content={doc.content} />
       </div>
 
-      {/* Backlinks — hidden for onboarding */}
-      {!isOnboarding && <Backlinks filePath={filePath} />}
+      {/* Backlinks — hidden for clean files */}
+      {!isClean && <Backlinks filePath={filePath} />}
     </div>
   );
 }
