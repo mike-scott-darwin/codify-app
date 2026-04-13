@@ -29,6 +29,8 @@ const ONBOARDING_FILES = [
   { name: "Voice — How You Sound", path: "reference/core/voice.md", icon: "◆" },
 ];
 
+const HIDDEN_FOLDERS = new Set(["archive", ".context", ".claude", ".openclaw", ".obsidian"]);
+
 function FolderNode({
   node,
   depth = 0,
@@ -50,10 +52,12 @@ function FolderNode({
       const res = await fetch(`/api/vault?action=list&path=${encodeURIComponent(node.path)}`);
       if (res.ok) {
         const data = await res.json();
-        const sorted = (data as FileNode[]).sort((a: FileNode, b: FileNode) => {
-          if (a.type !== b.type) return a.type === "dir" ? -1 : 1;
-          return a.name.localeCompare(b.name);
-        });
+        const sorted = (data as FileNode[])
+          .filter((f: FileNode) => !(f.type === "dir" && HIDDEN_FOLDERS.has(f.name)))
+          .sort((a: FileNode, b: FileNode) => {
+            if (a.type !== b.type) return a.type === "dir" ? -1 : 1;
+            return a.name.localeCompare(b.name);
+          });
         setChildren(sorted);
       }
     } catch {
