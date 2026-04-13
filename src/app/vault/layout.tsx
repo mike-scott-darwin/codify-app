@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { ChatDrawerProvider } from "@/components/vault/chat-drawer-provider";
+import CommandPalette from "@/components/vault/command-palette";
 import VaultSidebar from "@/components/vault/sidebar";
 import VaultTopBar from "@/components/vault/top-bar";
 import ChatPanel from "@/components/vault/chat-panel";
@@ -51,6 +52,7 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
 
   return (
     <ChatDrawerProvider>
+      <CommandPalette />
       <div className="flex h-screen bg-background text-foreground overflow-hidden">
         {/* Left — file tree */}
         <div

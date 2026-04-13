@@ -176,6 +176,51 @@ export async function getContextDepth(
   return results;
 }
 
+// --- Compound Score ---
+
+export interface CompoundScore {
+  score: number;
+  crossReferences: number;
+  totalFiles: number;
+}
+
+export async function getCompoundScore(
+  token: string,
+  repo: string
+): Promise<CompoundScore> {
+  // Get all markdown files from key folders
+  const folders = ["reference/core", "decisions", "research", "outputs"];
+  const allFiles: VaultFile[] = [];
+
+  for (const folder of folders) {
+    try {
+      const files = await listDirectory(token, repo, folder);
+      allFiles.push(...files.filter(f => f.type === "file" && f.name.endsWith(".md")));
+    } catch {}
+  }
+
+  let crossReferences = 0;
+
+  // Sample up to 30 files to avoid rate limits
+  const sample = allFiles.slice(0, 30);
+
+  for (const file of sample) {
+    try {
+      const raw = await githubFetchRaw(token, repo, file.path);
+      // Count wikilinks [[...]]
+      const wikilinks = (raw.match(/\[\[[^\]]+\]\]/g) || []).length;
+      // Count markdown links [text](path) that point to vault files
+      const mdlinks = (raw.match(/\]\([^)]+\.md\)/g) || []).length;
+      crossReferences += wikilinks + mdlinks;
+    } catch {}
+  }
+
+  // Score: cross-references + bonus for file count
+  const score = crossReferences + Math.floor(allFiles.length * 2);
+
+  return { score, crossReferences, totalFiles: allFiles.length };
+}
+
 // --- Backlinks ---
 
 export interface BacklinkResult {

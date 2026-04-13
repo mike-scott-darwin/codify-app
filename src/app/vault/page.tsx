@@ -1,7 +1,11 @@
 import { createSupabaseServer } from "@/lib/supabase-server";
-import { getVaultMetrics, getContextDepth, getRecentCommits } from "@/lib/vault";
+import { getVaultMetrics, getContextDepth, getRecentCommits, getCompoundScore } from "@/lib/vault";
+import type { CompoundScore } from "@/lib/vault";
 import Link from "next/link";
 import DashboardActions from "./dashboard-actions";
+import WelcomeState from "./welcome-state";
+import BuildingState from "./building-state";
+import ContextMap from "@/components/vault/context-map";
 
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -40,15 +44,30 @@ export default async function VaultDashboard() {
   let metrics = null;
   let depth = null;
   let activity = null;
+  let compoundScore: CompoundScore | null = null;
 
   if (token && repo) {
-    [metrics, depth, activity] = await Promise.all([
+    [metrics, depth, activity, compoundScore] = await Promise.all([
       getVaultMetrics(token, repo).catch(() => null),
       getContextDepth(token, repo).catch(() => null),
       getRecentCommits(token, repo, 10).catch(() => null),
+      getCompoundScore(token, repo).catch(() => null),
     ]);
   }
 
+  // --- Adaptive homepage: detect vault maturity ---
+  const isFirstOpen = !depth || depth.every((d) => d.words < 100);
+  const isBuilding = depth && depth.some((d) => d.level === "needs-attention") && !isFirstOpen;
+
+  if (isFirstOpen) {
+    return <WelcomeState />;
+  }
+
+  if (isBuilding) {
+    return <BuildingState depth={depth!} activity={activity} />;
+  }
+
+  // --- State 3: Compounding (all context files active) ---
   const clientName = client?.client_name ?? "Your Vault";
 
   const stats = [
@@ -63,6 +82,20 @@ export default async function VaultDashboard() {
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <h1 className="text-xl font-sans font-bold mb-5">{clientName}</h1>
+
+      {/* Compound Score */}
+      {compoundScore && (
+        <div className="bg-surface border border-green/20 rounded-lg p-4 mb-6 flex items-center justify-between">
+          <div>
+            <p className="text-xs text-muted">Compound Score</p>
+            <p className="text-3xl font-bold text-green">{compoundScore.score}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-xs text-muted">{compoundScore.crossReferences} cross-references</p>
+            <p className="text-xs text-muted">{compoundScore.totalFiles} files</p>
+          </div>
+        </div>
+      )}
 
       {/* Stat cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
@@ -106,6 +139,15 @@ export default async function VaultDashboard() {
                   </div>
                 ))}
               </div>
+            </div>
+          )}
+
+
+          {/* Context Architecture */}
+          {depth && (
+            <div className="bg-surface border border-border rounded-lg p-4">
+              <h2 className="text-sm font-sans font-bold text-foreground mb-3">Context Architecture</h2>
+              <ContextMap depth={depth} />
             </div>
           )}
 

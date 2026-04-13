@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useMemo } from "react";
+import { useChatDrawer } from "@/components/vault/chat-drawer-provider";
 
 interface Message {
   role: "user" | "assistant";
@@ -31,6 +32,7 @@ export default function ChatCore({
   initialPrompt,
   onPromptConsumed,
 }: ChatCoreProps) {
+  const { currentFile, setCurrentFile } = useChatDrawer();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);
@@ -111,7 +113,7 @@ export default function ChatCore({
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMessages }),
+        body: JSON.stringify({ messages: newMessages, currentFile }),
       });
 
       if (!res.ok) {
@@ -206,6 +208,20 @@ export default function ChatCore({
 
   return (
     <div className={`flex flex-col ${className}`}>
+      {/* File context bar */}
+      {currentFile && (
+        <div className="px-4 py-2 border-b border-border bg-blue/5 flex items-center gap-2 text-xs">
+          <span className="text-blue">📄</span>
+          <span className="text-muted truncate">Viewing: {currentFile}</span>
+          <button
+            onClick={() => setCurrentFile(null)}
+            className="ml-auto text-dim hover:text-muted"
+          >
+            ×
+          </button>
+        </div>
+      )}
+
       <div className="flex-1 overflow-y-auto px-4 py-4">
         <div className="space-y-4">
           {messages.length === 0 && (

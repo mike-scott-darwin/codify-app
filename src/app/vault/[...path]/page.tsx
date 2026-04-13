@@ -1,9 +1,10 @@
 import { createSupabaseServer } from "@/lib/supabase-server";
-import { getFileContent } from "@/lib/vault";
+import { getFileContent, getContextDepth } from "@/lib/vault";
 import Link from "next/link";
 import MarkdownRenderer from "./markdown-renderer";
 import DocumentActions from "./document-actions";
 import Backlinks from "./backlinks";
+import FileContextSetter from "./file-context-setter";
 
 const CLEAN_FILES = new Set([
   "ONBOARDING.md",
@@ -61,6 +62,15 @@ export default async function VaultDocumentViewer({
   const parts = filePath.split("/");
   const fileName = parts[parts.length - 1];
 
+  let depthInfo: { words: number; level: string } | null = null;
+  if (filePath.startsWith("reference/core/")) {
+    try {
+      const allDepth = await getContextDepth(token, repo);
+      const match = allDepth.find((d: { file: string; words: number; level: string }) => d.file === filePath);
+      if (match) depthInfo = { words: match.words, level: match.level };
+    } catch {}
+  }
+
   const frontmatterEntries = Object.entries(doc.frontmatter).filter(
     ([, v]) => v !== null && v !== undefined && v !== ""
   );
@@ -77,6 +87,8 @@ export default async function VaultDocumentViewer({
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-6">
+      <FileContextSetter path={filePath} />
+
       {/* Breadcrumb */}
       <div className="flex items-center gap-1 text-sm mb-3">
         <Link href="/vault/files" className="text-blue hover:underline">Root</Link>
@@ -96,6 +108,24 @@ export default async function VaultDocumentViewer({
           </span>
         ))}
       </div>
+
+      {/* Depth badge for context files */}
+      {isClean && filePath.startsWith("reference/core/") && depthInfo && (
+        <div className="flex items-center gap-2 mb-4 text-xs">
+          <span className={`inline-block w-2 h-2 rounded-full ${
+            depthInfo.level === "deep" ? "bg-green" :
+            depthInfo.level === "growing" ? "bg-amber" : "bg-red/50"
+          }`} />
+          <span className={
+            depthInfo.level === "deep" ? "text-green" :
+            depthInfo.level === "growing" ? "text-amber" : "text-red"
+          }>
+            {depthInfo.level === "deep" ? "Deep" : depthInfo.level === "growing" ? "Growing" : "Needs work"}
+          </span>
+          <span className="text-dim">&mdash;</span>
+          <span className="text-muted">{depthInfo.words.toLocaleString()} words</span>
+        </div>
+      )}
 
       {/* Frontmatter badges — hidden for clean files */}
       {!isClean && frontmatterEntries.length > 0 && (

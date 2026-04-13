@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import SettingsModal from "./settings-modal";
 
 interface FileNode {
@@ -136,6 +136,18 @@ function SidebarContent({ onClose }: { onClose: () => void }) {
   const pathname = usePathname();
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [onboardingOpen, setOnboardingOpen] = useState(false);
+  const [contextDepth, setContextDepth] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    fetch("/api/vault?action=depth")
+      .then(r => r.ok ? r.json() : [])
+      .then((data: { file: string; level: string }[]) => {
+        const map: Record<string, string> = {};
+        for (const d of data) map[d.file] = d.level;
+        setContextDepth(map);
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <>
@@ -165,6 +177,16 @@ function SidebarContent({ onClose }: { onClose: () => void }) {
         >
           <span className="text-xs">◔</span>
           Activity
+        </Link>
+        <Link
+          href="/vault/pipeline"
+          onClick={onClose}
+          className={`flex items-center gap-3 px-4 py-1.5 text-sm transition-colors ${
+            pathname === "/vault/pipeline" ? "text-blue bg-blue/5" : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+          }`}
+        >
+          <span className="text-xs">▥</span>
+          Pipeline
         </Link>
       </div>
 
@@ -196,6 +218,12 @@ function SidebarContent({ onClose }: { onClose: () => void }) {
               >
                 <span className="text-blue text-xs">{file.icon}</span>
                 <span className="truncate text-xs">{file.name}</span>
+                {file.path.startsWith("reference/core/") && contextDepth[file.path] && (
+                  <span className={`inline-block w-1.5 h-1.5 rounded-full ml-auto shrink-0 ${
+                    contextDepth[file.path] === "deep" ? "bg-green" :
+                    contextDepth[file.path] === "growing" ? "bg-amber" : "bg-red/50"
+                  }`} />
+                )}
               </Link>
             ))}
           </div>
