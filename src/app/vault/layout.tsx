@@ -3,25 +3,26 @@
 import { useState, useRef, useEffect } from "react";
 import { ChatDrawerProvider } from "@/components/vault/chat-drawer-provider";
 import CommandPalette from "@/components/vault/command-palette";
-import VaultSidebar from "@/components/vault/sidebar";
+import VaultSidebar, { ActivityRibbon, TreePanel } from "@/components/vault/sidebar";
 import VaultTopBar from "@/components/vault/top-bar";
 import ChatPanel from "@/components/vault/chat-panel";
 
 export default function VaultLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarW, setSidebarW] = useState(256);
+  const [treePanelOpen, setTreePanelOpen] = useState(true);
+  const [treePanelW, setTreePanelW] = useState(220);
   const [chatW, setChatW] = useState(384);
-  const dragRef = useRef<{ target: "sidebar" | "chat"; startX: number; startW: number } | null>(null);
+  const dragRef = useRef<{ target: "tree" | "chat"; startX: number; startW: number } | null>(null);
 
   useEffect(() => {
     function onMove(e: MouseEvent) {
       if (!dragRef.current) return;
       const { target, startX, startW } = dragRef.current;
-      if (target === "sidebar") {
+      if (target === "tree") {
         const delta = e.clientX - startX;
-        setSidebarW(Math.min(400, Math.max(180, startW + delta)));
+        setTreePanelW(Math.min(360, Math.max(160, startW + delta)));
       } else {
-        const delta = startX - e.clientX; // inverted — drag left = wider
+        const delta = startX - e.clientX;
         setChatW(Math.min(600, Math.max(280, startW + delta)));
       }
     }
@@ -39,12 +40,12 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
     };
   }, []);
 
-  function startDrag(target: "sidebar" | "chat", e: React.MouseEvent) {
+  function startDrag(target: "tree" | "chat", e: React.MouseEvent) {
     e.preventDefault();
     dragRef.current = {
       target,
       startX: e.clientX,
-      startW: target === "sidebar" ? sidebarW : chatW,
+      startW: target === "tree" ? treePanelW : chatW,
     };
     document.body.style.cursor = "col-resize";
     document.body.style.userSelect = "none";
@@ -54,19 +55,31 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
     <ChatDrawerProvider>
       <CommandPalette />
       <div className="flex h-screen bg-background text-foreground overflow-hidden">
-        {/* Left — file tree */}
-        <div
-          className="hidden md:flex flex-col shrink-0 h-full bg-surface"
-          style={{ width: sidebarW }}
-        >
-          <VaultSidebar isOpen={true} onClose={() => {}} embedded />
+        {/* Activity Ribbon — always visible on desktop */}
+        <div className="hidden md:flex">
+          <ActivityRibbon
+            treePanelOpen={treePanelOpen}
+            onToggleTreePanel={() => setTreePanelOpen(!treePanelOpen)}
+          />
         </div>
 
-        {/* Gutter: sidebar | content */}
-        <div
-          onMouseDown={(e) => startDrag("sidebar", e)}
-          className="hidden md:block w-1 shrink-0 cursor-col-resize bg-transparent hover:bg-blue/30 active:bg-blue/60 transition-colors"
-        />
+        {/* Tree Panel — collapsible file browser */}
+        {treePanelOpen && (
+          <div
+            className="hidden md:flex flex-col shrink-0 h-full border-r border-border"
+            style={{ width: treePanelW }}
+          >
+            <TreePanel embedded />
+          </div>
+        )}
+
+        {/* Gutter: tree panel | content */}
+        {treePanelOpen && (
+          <div
+            onMouseDown={(e) => startDrag("tree", e)}
+            className="hidden md:block w-1 shrink-0 cursor-col-resize bg-transparent hover:bg-blue/30 active:bg-blue/60 transition-colors"
+          />
+        )}
 
         {/* Center — content */}
         <div className="flex-1 flex flex-col overflow-hidden min-w-0">
