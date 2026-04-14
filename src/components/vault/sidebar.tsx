@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
+import { useChatDrawer } from "./chat-drawer-provider";
 import SettingsModal from "./settings-modal";
 
 interface FileNode {
@@ -31,11 +32,7 @@ const ONBOARDING_FILES = [
 
 const HIDDEN_FOLDERS = new Set(["archive", ".context", ".claude", ".openclaw", ".obsidian"]);
 
-const NAV_ITEMS = [
-  { id: "dashboard", href: "/vault", icon: "◫", label: "Dashboard" },
-  { id: "activity", href: "/vault/activity", icon: "◔", label: "Activity" },
-  { id: "pipeline", href: "/vault/pipeline", icon: "▥", label: "Pipeline" },
-];
+/* ─── Folder tree node ─── */
 
 function FolderNode({
   node,
@@ -78,25 +75,25 @@ function FolderNode({
   }
 
   const displayName = node.label || node.name;
-  const pl = depth * 12 + 12;
+  const pl = depth * 14 + 16;
 
   return (
     <div>
       <button
         onClick={handleToggle}
-        className={`w-full flex items-center gap-2 py-1.5 text-sm hover:bg-[#1a1a1a] transition-colors text-left ${
+        className={`w-full flex items-center gap-2.5 py-2 text-[13px] hover:bg-[#1a1a1a] transition-colors text-left ${
           expanded ? "text-foreground" : "text-muted"
         }`}
-        style={{ paddingLeft: `${pl}px`, paddingRight: "12px" }}
+        style={{ paddingLeft: `${pl}px`, paddingRight: "16px" }}
       >
-        <span className="text-dim text-xs w-3 shrink-0">
+        <span className="text-dim text-[10px] w-3 shrink-0">
           {expanded ? "▼" : "▶"}
         </span>
         {node.icon && (
-          <span className={`text-xs ${node.color || "text-muted"}`}>{node.icon}</span>
+          <span className={`text-sm ${node.color || "text-muted"}`}>{node.icon}</span>
         )}
         {!node.icon && (
-          <span className="text-amber text-xs">📁</span>
+          <span className="text-amber text-sm">📁</span>
         )}
         <span className="truncate">{displayName}</span>
       </button>
@@ -104,7 +101,7 @@ function FolderNode({
       {expanded && (
         <div>
           {loading && (
-            <p className="text-xs text-dim py-1" style={{ paddingLeft: `${pl + 24}px` }}>
+            <p className="text-xs text-dim py-1.5" style={{ paddingLeft: `${pl + 28}px` }}>
               Loading...
             </p>
           )}
@@ -116,17 +113,17 @@ function FolderNode({
                 key={child.path}
                 href={`/vault/${child.path}`}
                 onClick={onClose}
-                className={`flex items-center gap-2 py-1 text-sm transition-colors ${
+                className={`flex items-center gap-2.5 py-1.5 text-[13px] transition-colors ${
                   pathname === `/vault/${child.path}`
                     ? "text-blue bg-blue/5"
                     : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
                 }`}
-                style={{ paddingLeft: `${(depth + 1) * 12 + 12 + 12}px`, paddingRight: "12px" }}
+                style={{ paddingLeft: `${(depth + 1) * 14 + 16 + 14}px`, paddingRight: "16px" }}
               >
-                <span className={`text-xs ${child.name.endsWith(".md") ? "text-blue" : "text-dim"}`}>
+                <span className={`text-sm ${child.name.endsWith(".md") ? "text-blue" : "text-dim"}`}>
                   {child.name.endsWith(".md") ? "◆" : "·"}
                 </span>
-                <span className="truncate text-xs">
+                <span className="truncate">
                   {child.name.replace(".md", "")}
                 </span>
               </Link>
@@ -138,7 +135,7 @@ function FolderNode({
   );
 }
 
-/* ─── Activity Ribbon (narrow icon strip) ─── */
+/* ─── Activity Ribbon ─── */
 
 export function ActivityRibbon({
   treePanelOpen,
@@ -148,82 +145,65 @@ export function ActivityRibbon({
   onToggleTreePanel: () => void;
 }) {
   const pathname = usePathname();
+  const { toggle: toggleChat } = useChatDrawer();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
+  const isHome = pathname === "/vault";
+
   return (
-    <div className="flex flex-col h-full w-[52px] bg-[#0d0d0d] border-r border-border shrink-0">
+    <div className="flex flex-col h-full w-[48px] bg-[#0a0a0a] border-r border-border shrink-0">
+      {/* Home */}
       <Link
         href="/vault"
-        className="flex items-center justify-center h-12 border-b border-border text-foreground hover:text-blue transition-colors"
-        title="Codify Vault"
+        title="Home"
+        className={`flex items-center justify-center h-[48px] transition-colors ${
+          isHome && !treePanelOpen
+            ? "text-blue"
+            : "text-dim hover:text-foreground"
+        }`}
       >
-        <span className="text-lg font-bold">C</span>
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+          <path d="M3 10.5L10 4l7 6.5M5 9v7a1 1 0 001 1h3v-4h2v4h3a1 1 0 001-1V9" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
       </Link>
 
-      <div className="flex flex-col items-center py-3 gap-1">
-        {NAV_ITEMS.map((item) => {
-          const active = pathname === item.href;
-          return (
-            <Link
-              key={item.id}
-              href={item.href}
-              title={item.label}
-              className={`relative flex items-center justify-center w-9 h-9 rounded-lg text-base transition-colors ${
-                active
-                  ? "text-blue bg-blue/10"
-                  : "text-dim hover:text-foreground hover:bg-[#1a1a1a]"
-              }`}
-            >
-              {active && (
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-blue rounded-r-full" />
-              )}
-              <span>{item.icon}</span>
-            </Link>
-          );
-        })}
+      {/* Files */}
+      <button
+        onClick={onToggleTreePanel}
+        title="Files"
+        className={`flex items-center justify-center h-[48px] transition-colors ${
+          treePanelOpen
+            ? "text-blue"
+            : "text-dim hover:text-foreground"
+        }`}
+      >
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+          <path d="M3 5h5l2 2h7a1 1 0 011 1v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1z" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
 
-        <div className="w-6 h-px bg-border my-1" />
+      {/* Claude chat */}
+      <button
+        onClick={toggleChat}
+        title="Claude"
+        className="flex items-center justify-center h-[48px] text-dim hover:text-foreground transition-colors lg:hidden"
+      >
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+          <path d="M4 5h12a1 1 0 011 1v7a1 1 0 01-1 1h-4l-3 3v-3H4a1 1 0 01-1-1V6a1 1 0 011-1z" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
 
-        <button
-          onClick={onToggleTreePanel}
-          title={treePanelOpen ? "Collapse files" : "Expand files"}
-          className={`relative flex items-center justify-center w-9 h-9 rounded-lg text-base transition-colors ${
-            treePanelOpen
-              ? "text-blue bg-blue/10"
-              : "text-dim hover:text-foreground hover:bg-[#1a1a1a]"
-          }`}
-        >
-          {treePanelOpen && (
-            <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-5 bg-blue rounded-r-full" />
-          )}
-          <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
-            <path d="M3 4h5l2 2h7a1 1 0 011 1v8a1 1 0 01-1 1H3a1 1 0 01-1-1V5a1 1 0 011-1z" />
-          </svg>
-        </button>
-      </div>
-
-      <div className="mt-auto flex flex-col items-center py-3 gap-1">
+      {/* Bottom — settings only */}
+      <div className="mt-auto flex flex-col items-center pb-3">
         <button
           onClick={() => setSettingsOpen(true)}
           title="Settings"
-          className="flex items-center justify-center w-9 h-9 rounded-lg text-dim hover:text-foreground hover:bg-[#1a1a1a] transition-colors"
+          className="flex items-center justify-center w-[48px] h-[48px] text-dim hover:text-foreground transition-colors"
         >
-          <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
             <path d="M10 3.5a1 1 0 00-1 1v.3a1.7 1.7 0 01-1 1.5 1.7 1.7 0 01-1.8-.2l-.2-.2a1 1 0 10-1.4 1.4l.2.2a1.7 1.7 0 01.2 1.8 1.7 1.7 0 01-1.5 1H4.5a1 1 0 000 2h.3a1.7 1.7 0 011.5 1 1.7 1.7 0 01-.2 1.8l-.2.2a1 1 0 101.4 1.4l.2-.2a1.7 1.7 0 011.8-.2 1.7 1.7 0 011 1.5v.3a1 1 0 002 0v-.3a1.7 1.7 0 011-1.5 1.7 1.7 0 011.8.2l.2.2a1 1 0 101.4-1.4l-.2-.2a1.7 1.7 0 01-.2-1.8 1.7 1.7 0 011.5-1h.3a1 1 0 000-2h-.3a1.7 1.7 0 01-1.5-1 1.7 1.7 0 01.2-1.8l.2-.2a1 1 0 10-1.4-1.4l-.2.2a1.7 1.7 0 01-1.8.2 1.7 1.7 0 01-1-1.5v-.3a1 1 0 00-1 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
           </svg>
         </button>
-
-        <form action="/vault/auth/signout" method="POST">
-          <button
-            type="submit"
-            title="Sign out"
-            className="flex items-center justify-center w-9 h-9 rounded-lg text-dim hover:text-foreground hover:bg-[#1a1a1a] transition-colors"
-          >
-            <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
-              <path d="M13 3h4a1 1 0 011 1v12a1 1 0 01-1 1h-4M9 16l-4-4m0 0l4-4m-4 4h11" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-        </form>
       </div>
 
       {settingsOpen && (
@@ -233,7 +213,7 @@ export function ActivityRibbon({
   );
 }
 
-/* ─── Tree Panel (file browser) ─── */
+/* ─── Tree Panel ─── */
 
 export function TreePanel() {
   const pathname = usePathname();
@@ -253,36 +233,33 @@ export function TreePanel() {
 
   return (
     <div className="flex flex-col h-full w-full overflow-hidden bg-surface">
-      <div className="px-3 py-3 border-b border-border">
-        <span className="text-xs font-medium text-dim uppercase tracking-wider">Files</span>
-      </div>
-
+      {/* Onboarding */}
       <div className="border-b border-border py-2">
         <button
           onClick={() => setOnboardingOpen(!onboardingOpen)}
-          className={`w-full flex items-center gap-3 px-4 py-1.5 text-sm transition-colors text-left ${
+          className={`w-full flex items-center gap-3 px-4 py-2 text-[13px] transition-colors text-left ${
             onboardingOpen ? "text-blue" : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
           }`}
         >
-          <span className="text-xs">{onboardingOpen ? "▼" : "▶"}</span>
-          <span className="text-blue text-xs">◈</span>
+          <span className="text-[10px]">{onboardingOpen ? "▼" : "▶"}</span>
+          <span className="text-blue text-sm">◈</span>
           Getting Started
         </button>
         {onboardingOpen && (
-          <div className="pl-4">
+          <div>
             {ONBOARDING_FILES.map((file) => (
               <Link
                 key={file.path}
                 href={`/vault/${file.path}`}
-                className={`flex items-center gap-2 py-1 text-sm transition-colors ${
+                className={`flex items-center gap-2.5 py-1.5 text-[13px] transition-colors ${
                   pathname === `/vault/${file.path}`
                     ? "text-blue bg-blue/5"
                     : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
                 }`}
-                style={{ paddingLeft: "24px", paddingRight: "12px" }}
+                style={{ paddingLeft: "40px", paddingRight: "16px" }}
               >
-                <span className="text-blue text-xs">{file.icon}</span>
-                <span className="truncate text-xs">{file.name}</span>
+                <span className="text-blue text-sm">{file.icon}</span>
+                <span className="truncate">{file.name}</span>
                 {file.path.startsWith("reference/core/") && contextDepth[file.path] && (
                   <span className={`inline-block w-1.5 h-1.5 rounded-full ml-auto shrink-0 ${
                     contextDepth[file.path] === "deep" ? "bg-green" :
@@ -295,16 +272,26 @@ export function TreePanel() {
         )}
       </div>
 
+      {/* File tree */}
       <div className="flex-1 overflow-y-auto py-2">
         {VAULT_FOLDERS.map((folder) => (
           <FolderNode key={folder.path} node={folder} depth={0} onClose={() => {}} />
         ))}
       </div>
+
+      {/* Sign out — tucked at bottom of tree panel */}
+      <div className="p-3 border-t border-border">
+        <form action="/vault/auth/signout" method="POST">
+          <button type="submit" className="text-xs text-dim hover:text-muted transition-colors">
+            Sign out
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
 
-/* ─── Mobile Sidebar (combined for overlay) ─── */
+/* ─── Mobile Sidebar ─── */
 
 export default function VaultSidebar({
   isOpen,
@@ -347,48 +334,47 @@ export default function VaultSidebar({
         </div>
 
         <div className="border-b border-border py-2">
-          {NAV_ITEMS.map((item) => (
-            <Link
-              key={item.id}
-              href={item.href}
-              onClick={onClose}
-              className={`flex items-center gap-3 px-4 py-1.5 text-sm transition-colors ${
-                pathname === item.href ? "text-blue bg-blue/5" : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
-              }`}
-            >
-              <span className="text-xs">{item.icon}</span>
-              {item.label}
-            </Link>
-          ))}
+          <Link
+            href="/vault"
+            onClick={onClose}
+            className={`flex items-center gap-3 px-4 py-2 text-sm transition-colors ${
+              pathname === "/vault" ? "text-blue bg-blue/5" : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+            }`}
+          >
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+              <path d="M3 10.5L10 4l7 6.5M5 9v7a1 1 0 001 1h3v-4h2v4h3a1 1 0 001-1V9" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Home
+          </Link>
         </div>
 
         <div className="border-b border-border py-2">
           <button
             onClick={() => setOnboardingOpen(!onboardingOpen)}
-            className={`w-full flex items-center gap-3 px-4 py-1.5 text-sm transition-colors text-left ${
+            className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors text-left ${
               onboardingOpen ? "text-blue" : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
             }`}
           >
             <span className="text-xs">{onboardingOpen ? "▼" : "▶"}</span>
-            <span className="text-blue text-xs">◈</span>
+            <span className="text-blue text-sm">◈</span>
             Getting Started
           </button>
           {onboardingOpen && (
-            <div className="pl-4">
+            <div>
               {ONBOARDING_FILES.map((file) => (
                 <Link
                   key={file.path}
                   href={`/vault/${file.path}`}
                   onClick={onClose}
-                  className={`flex items-center gap-2 py-1 text-sm transition-colors ${
+                  className={`flex items-center gap-2.5 py-1.5 text-sm transition-colors ${
                     pathname === `/vault/${file.path}`
                       ? "text-blue bg-blue/5"
                       : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
                   }`}
-                  style={{ paddingLeft: "24px", paddingRight: "12px" }}
+                  style={{ paddingLeft: "40px", paddingRight: "16px" }}
                 >
-                  <span className="text-blue text-xs">{file.icon}</span>
-                  <span className="truncate text-xs">{file.name}</span>
+                  <span className="text-blue text-sm">{file.icon}</span>
+                  <span className="truncate">{file.name}</span>
                   {file.path.startsWith("reference/core/") && contextDepth[file.path] && (
                     <span className={`inline-block w-1.5 h-1.5 rounded-full ml-auto shrink-0 ${
                       contextDepth[file.path] === "deep" ? "bg-green" :
@@ -402,7 +388,6 @@ export default function VaultSidebar({
         </div>
 
         <div className="flex-1 overflow-y-auto py-2">
-          <p className="px-4 py-1 text-xs font-medium text-dim uppercase tracking-wider">Files</p>
           {VAULT_FOLDERS.map((folder) => (
             <FolderNode key={folder.path} node={folder} depth={0} onClose={onClose} />
           ))}
