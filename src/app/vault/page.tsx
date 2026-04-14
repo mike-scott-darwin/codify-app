@@ -2,10 +2,8 @@ import { createSupabaseServer } from "@/lib/supabase-server";
 import { getVaultMetrics, getContextDepth, getRecentCommits, getCompoundScore } from "@/lib/vault";
 import type { CompoundScore } from "@/lib/vault";
 import Link from "next/link";
-import DashboardActions from "./dashboard-actions";
 import WelcomeState from "./welcome-state";
 import BuildingState from "./building-state";
-import ContextMap from "@/components/vault/context-map";
 import SyncButton from "./sync-button";
 
 function timeAgo(dateStr: string): string {
@@ -71,14 +69,26 @@ export default async function VaultDashboard() {
   // --- State 3: Compounding (all context files active) ---
   const clientName = client?.client_name ?? "Your Vault";
 
-  const stats = [
-    { label: "Context", value: metrics?.contextFiles ?? "—", color: "text-blue" },
-    { label: "Decisions", value: metrics?.decisions ?? "—", color: "text-green" },
-    { label: "Research", value: metrics?.research ?? "—", color: "text-amber" },
-    { label: "Outputs", value: metrics?.outputs ?? "—", color: "text-purple" },
-    { label: "Content", value: (metrics?.drafts ?? 0) + (metrics?.published ?? 0) || "—", color: "text-cyan" },
-    { label: "Last Update", value: metrics?.lastCommit ? timeAgo(metrics.lastCommit) : "—", color: "text-muted" },
+  // Vault sections — clickable cards with counts
+  const sections = [
+    { name: "Context", href: "/vault/files?path=reference/core", count: metrics?.contextFiles, color: "text-blue", borderColor: "border-blue/20 hover:border-blue/40" },
+    { name: "Decisions", href: "/vault/decisions", count: metrics?.decisions, color: "text-green", borderColor: "border-green/20 hover:border-green/40" },
+    { name: "Research", href: "/vault/research", count: metrics?.research, color: "text-amber", borderColor: "border-amber/20 hover:border-amber/40" },
+    { name: "Outputs", href: "/vault/files?path=outputs", count: metrics?.outputs, color: "text-purple", borderColor: "border-purple/20 hover:border-purple/40" },
+    { name: "Content", href: "/vault/files?path=content", count: (metrics?.drafts ?? 0) + (metrics?.published ?? 0), color: "text-cyan", borderColor: "border-cyan/20 hover:border-cyan/40" },
   ];
+
+  // Attention items — flag things that need work
+  const attentionItems: { label: string; detail: string; color: string }[] = [];
+  if (depth) {
+    for (const d of depth) {
+      if (d.level === "needs-attention") {
+        attentionItems.push({ label: d.label, detail: `${d.words} words — needs more depth`, color: "text-red" });
+      } else if (d.level === "growing") {
+        attentionItems.push({ label: d.label, detail: `${d.words.toLocaleString()} words — still growing`, color: "text-amber" });
+      }
+    }
+  }
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
@@ -87,27 +97,39 @@ export default async function VaultDashboard() {
         <SyncButton />
       </div>
 
-      {/* Compound Score */}
-      {compoundScore && (
-        <div className="bg-surface border border-green/20 rounded-lg p-4 mb-6 flex items-center justify-between">
-          <div>
-            <p className="text-xs text-muted">Compound Score</p>
-            <p className="text-3xl font-bold text-green">{compoundScore.score}</p>
+      {/* Compound Score + Last Update */}
+      <div className="flex items-center gap-4 mb-6">
+        {compoundScore && (
+          <div className="bg-surface border border-green/20 rounded-lg p-4 flex-1 flex items-center justify-between">
+            <div>
+              <p className="text-xs text-muted">Compound Score</p>
+              <p className="text-3xl font-bold text-green">{compoundScore.score}</p>
+            </div>
+            <div className="text-right">
+              <p className="text-xs text-muted">{compoundScore.crossReferences} cross-references</p>
+              <p className="text-xs text-muted">{compoundScore.totalFiles} files</p>
+            </div>
           </div>
-          <div className="text-right">
-            <p className="text-xs text-muted">{compoundScore.crossReferences} cross-references</p>
-            <p className="text-xs text-muted">{compoundScore.totalFiles} files</p>
+        )}
+        {metrics?.lastCommit && (
+          <div className="bg-surface border border-border rounded-lg p-4 text-center">
+            <p className="text-xs text-muted">Last Update</p>
+            <p className="text-lg font-bold text-foreground mt-0.5">{timeAgo(metrics.lastCommit)}</p>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-6">
-        {stats.map((stat) => (
-          <div key={stat.label} className="bg-surface border border-border rounded-lg p-3">
-            <p className="text-xs text-muted">{stat.label}</p>
-            <p className={`text-xl font-bold ${stat.color} mt-0.5`}>{stat.value}</p>
-          </div>
+      {/* Vault Sections — single row of clickable cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
+        {sections.map((section) => (
+          <Link
+            key={section.name}
+            href={section.href}
+            className={`bg-surface border rounded-lg p-3 transition-colors ${section.borderColor}`}
+          >
+            <p className="text-xs text-muted">{section.name}</p>
+            <p className={`text-xl font-bold ${section.color} mt-0.5`}>{section.count ?? "—"}</p>
+          </Link>
         ))}
       </div>
 
@@ -146,15 +168,6 @@ export default async function VaultDashboard() {
             </div>
           )}
 
-
-          {/* Context Architecture */}
-          {depth && (
-            <div className="bg-surface border border-border rounded-lg p-4">
-              <h2 className="text-sm font-sans font-bold text-foreground mb-3">Context Architecture</h2>
-              <ContextMap depth={depth} />
-            </div>
-          )}
-
           {/* Recent Activity */}
           {activity && activity.length > 0 && (
             <div className="bg-surface border border-border rounded-lg p-4">
@@ -182,28 +195,38 @@ export default async function VaultDashboard() {
           )}
         </div>
 
-        {/* Right column — 2/5 */}
+        {/* Right column — 2/5: Attention items */}
         <div className="lg:col-span-2 space-y-6">
-          {/* Quick Actions — triggers chat panel */}
-          <DashboardActions />
+          {/* Needs Attention */}
+          {attentionItems.length > 0 && (
+            <div className="bg-surface border border-red/20 rounded-lg p-4">
+              <h2 className="text-sm font-sans font-bold text-foreground mb-3">Needs Attention</h2>
+              <div className="space-y-2">
+                {attentionItems.map((item) => (
+                  <div key={item.label} className="flex items-center justify-between py-1.5">
+                    <span className="text-sm text-foreground">{item.label}</span>
+                    <span className={`text-xs ${item.color}`}>{item.detail}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-          {/* Vault Sections */}
-          <div className="space-y-2">
-            {[
-              { name: "Decisions", href: "/vault/decisions", count: metrics?.decisions, color: "border-green/20 hover:border-green/40" },
-              { name: "Research", href: "/vault/research", count: metrics?.research, color: "border-amber/20 hover:border-amber/40" },
-              { name: "Outputs", href: "/vault/files?path=outputs", count: metrics?.outputs, color: "border-purple/20 hover:border-purple/40" },
-              { name: "Content", href: "/vault/files?path=content", count: (metrics?.drafts ?? 0) + (metrics?.published ?? 0), color: "border-cyan/20 hover:border-cyan/40" },
-            ].map((section) => (
-              <Link
-                key={section.name}
-                href={section.href}
-                className={`flex items-center justify-between bg-surface border rounded-lg p-3 transition-colors ${section.color}`}
-              >
-                <span className="text-sm text-foreground">{section.name}</span>
-                <span className="text-sm text-muted">{section.count ?? "—"}</span>
-              </Link>
-            ))}
+          {/* Quick links to vault areas */}
+          <div className="bg-surface border border-border rounded-lg p-4">
+            <h2 className="text-sm font-sans font-bold text-foreground mb-3">Browse Vault</h2>
+            <div className="space-y-1.5">
+              {sections.map((section) => (
+                <Link
+                  key={section.name}
+                  href={section.href}
+                  className="flex items-center justify-between py-2 px-2 rounded-md hover:bg-background transition-colors"
+                >
+                  <span className="text-sm text-foreground">{section.name}</span>
+                  <span className="text-xs text-muted">{section.count ?? "—"} files</span>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </div>
