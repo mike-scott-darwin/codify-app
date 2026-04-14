@@ -25,7 +25,9 @@ export default function AgentPage() {
       {/* Agent header */}
       <div className="px-6 py-4 border-b border-border bg-surface flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-          <span className={`text-xl ${agent.color}`}>{agent.icon}</span>
+          <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${agent.gradient} flex items-center justify-center shadow-sm`}>
+            <span className="text-base">{agent.emoji}</span>
+          </div>
           <div>
             <h1 className="text-base font-sans font-bold text-foreground">{agent.name}</h1>
             <p className="text-xs text-muted">{agent.shortDescription}</p>
