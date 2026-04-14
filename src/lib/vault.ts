@@ -178,16 +178,51 @@ export async function getContextDepth(
 
 // --- Compound Score ---
 
-export interface CompoundScore {
+export interface ContextScoreTier {
+  label: string;
+  description: string;
+  color: string;
+  min: number;
+  max: number;
+}
+
+const CONTEXT_TIERS: ContextScoreTier[] = [
+  { label: "Invisible", description: "AI knows almost nothing about your business", color: "text-red", min: 0, max: 49 },
+  { label: "Emerging", description: "AI has a basic outline — enough to start, not enough to be useful", color: "text-amber", min: 50, max: 149 },
+  { label: "Structured", description: "AI understands your business well enough to draft and advise", color: "text-blue", min: 150, max: 299 },
+  { label: "Connected", description: "AI sees how your decisions, research, and strategy link together", color: "text-green", min: 300, max: 499 },
+  { label: "Compounding", description: "AI operates like an insider — every new file makes the whole vault smarter", color: "text-green", min: 500, max: Infinity },
+];
+
+export interface ContextScore {
   score: number;
   crossReferences: number;
   totalFiles: number;
+  tier: ContextScoreTier;
+  nextTier: ContextScoreTier | null;
+  progressToNext: number; // 0-100
 }
 
-export async function getCompoundScore(
+function getTier(score: number): { tier: ContextScoreTier; nextTier: ContextScoreTier | null; progressToNext: number } {
+  let currentIdx = 0;
+  for (let i = CONTEXT_TIERS.length - 1; i >= 0; i--) {
+    if (score >= CONTEXT_TIERS[i].min) {
+      currentIdx = i;
+      break;
+    }
+  }
+  const tier = CONTEXT_TIERS[currentIdx];
+  const nextTier = currentIdx < CONTEXT_TIERS.length - 1 ? CONTEXT_TIERS[currentIdx + 1] : null;
+  const progressToNext = nextTier
+    ? Math.min(Math.round(((score - tier.min) / (nextTier.min - tier.min)) * 100), 100)
+    : 100;
+  return { tier, nextTier, progressToNext };
+}
+
+export async function getContextScore(
   token: string,
   repo: string
-): Promise<CompoundScore> {
+): Promise<ContextScore> {
   // Get all markdown files from key folders
   const folders = ["reference/core", "decisions", "research", "outputs"];
   const allFiles: VaultFile[] = [];
@@ -217,8 +252,9 @@ export async function getCompoundScore(
 
   // Score: cross-references + bonus for file count
   const score = crossReferences + Math.floor(allFiles.length * 2);
+  const { tier, nextTier, progressToNext } = getTier(score);
 
-  return { score, crossReferences, totalFiles: allFiles.length };
+  return { score, crossReferences, totalFiles: allFiles.length, tier, nextTier, progressToNext };
 }
 
 // --- Backlinks ---

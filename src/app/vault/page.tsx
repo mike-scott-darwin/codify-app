@@ -1,6 +1,6 @@
 import { createSupabaseServer } from "@/lib/supabase-server";
-import { getVaultMetrics, getContextDepth, getRecentCommits, getCompoundScore } from "@/lib/vault";
-import type { CompoundScore } from "@/lib/vault";
+import { getVaultMetrics, getContextDepth, getRecentCommits, getContextScore } from "@/lib/vault";
+import type { ContextScore } from "@/lib/vault";
 import Link from "next/link";
 import WelcomeState from "./welcome-state";
 import BuildingState from "./building-state";
@@ -43,14 +43,14 @@ export default async function VaultDashboard() {
   let metrics = null;
   let depth = null;
   let activity = null;
-  let compoundScore: CompoundScore | null = null;
+  let contextScore: ContextScore | null = null;
 
   if (token && repo) {
-    [metrics, depth, activity, compoundScore] = await Promise.all([
+    [metrics, depth, activity, contextScore] = await Promise.all([
       getVaultMetrics(token, repo).catch(() => null),
       getContextDepth(token, repo).catch(() => null),
       getRecentCommits(token, repo, 10).catch(() => null),
-      getCompoundScore(token, repo).catch(() => null),
+      getContextScore(token, repo).catch(() => null),
     ]);
   }
 
@@ -90,6 +90,17 @@ export default async function VaultDashboard() {
     }
   }
 
+  // Tier markers for the benchmark scale
+  const tierMarkers = [
+    { label: "Invisible", position: 0 },
+    { label: "Emerging", position: 10 },
+    { label: "Structured", position: 30 },
+    { label: "Connected", position: 60 },
+    { label: "Compounding", position: 100 },
+  ];
+  // Map score to a 0-100 visual scale (500 = 100%)
+  const scorePosition = contextScore ? Math.min((contextScore.score / 500) * 100, 100) : 0;
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
       <div className="flex items-center justify-between mb-5">
@@ -97,27 +108,62 @@ export default async function VaultDashboard() {
         <SyncButton />
       </div>
 
-      {/* Compound Score + Last Update */}
-      <div className="flex items-center gap-4 mb-6">
-        {compoundScore && (
-          <div className="bg-surface border border-green/20 rounded-lg p-4 flex-1 flex items-center justify-between">
+      {/* Context Score with benchmark */}
+      {contextScore && (
+        <div className="bg-surface border border-border rounded-lg p-5 mb-6">
+          <div className="flex items-start justify-between mb-4">
             <div>
-              <p className="text-xs text-muted">Compound Score</p>
-              <p className="text-3xl font-bold text-green">{compoundScore.score}</p>
+              <p className="text-xs text-muted mb-1">Context Score</p>
+              <div className="flex items-baseline gap-3">
+                <p className={`text-4xl font-bold ${contextScore.tier.color}`}>{contextScore.score}</p>
+                <span className={`text-sm font-medium ${contextScore.tier.color}`}>{contextScore.tier.label}</span>
+              </div>
+              <p className="text-xs text-muted mt-1">{contextScore.tier.description}</p>
             </div>
             <div className="text-right">
-              <p className="text-xs text-muted">{compoundScore.crossReferences} cross-references</p>
-              <p className="text-xs text-muted">{compoundScore.totalFiles} files</p>
+              <p className="text-xs text-muted">{contextScore.crossReferences} cross-references</p>
+              <p className="text-xs text-muted">{contextScore.totalFiles} files</p>
+              {metrics?.lastCommit && (
+                <p className="text-xs text-dim mt-1">Updated {timeAgo(metrics.lastCommit)}</p>
+              )}
             </div>
           </div>
-        )}
-        {metrics?.lastCommit && (
-          <div className="bg-surface border border-border rounded-lg p-4 text-center">
-            <p className="text-xs text-muted">Last Update</p>
-            <p className="text-lg font-bold text-foreground mt-0.5">{timeAgo(metrics.lastCommit)}</p>
+
+          {/* Benchmark bar */}
+          <div className="relative mt-2">
+            <div className="h-2 bg-background rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all ${
+                  contextScore.score >= 500 ? "bg-green" :
+                  contextScore.score >= 300 ? "bg-green" :
+                  contextScore.score >= 150 ? "bg-blue" :
+                  contextScore.score >= 50 ? "bg-amber" : "bg-red"
+                }`}
+                style={{ width: `${scorePosition}%` }}
+              />
+            </div>
+            {/* Tier labels below the bar */}
+            <div className="relative h-5 mt-1.5">
+              {tierMarkers.map((marker) => (
+                <span
+                  key={marker.label}
+                  className="absolute text-[10px] text-dim -translate-x-1/2"
+                  style={{ left: `${marker.position}%` }}
+                >
+                  {marker.label}
+                </span>
+              ))}
+            </div>
           </div>
-        )}
-      </div>
+
+          {/* Next tier prompt */}
+          {contextScore.nextTier && (
+            <p className="text-xs text-muted mt-2">
+              <span className={contextScore.nextTier.color}>{contextScore.nextTier.min - contextScore.score} points</span> to reach {contextScore.nextTier.label} — {contextScore.nextTier.description.toLowerCase()}
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Vault Sections — single row of clickable cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
