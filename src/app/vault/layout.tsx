@@ -69,7 +69,7 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
             className="hidden md:flex flex-col shrink-0 h-full border-r border-border"
             style={{ width: treePanelW }}
           >
-            <TreePanel embedded />
+            <TreePanel />
           </div>
         )}
 
