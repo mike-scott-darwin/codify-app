@@ -7,9 +7,15 @@ import VaultSidebar, { ActivityRibbon, TreePanel } from "@/components/vault/side
 import VaultTopBar from "@/components/vault/top-bar";
 import ChatPanel from "@/components/vault/chat-panel";
 
+import type { RibbonPanel } from "@/components/vault/types";
+
 export default function VaultLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [treePanelOpen, setTreePanelOpen] = useState(true);
+  const [activePanel, setActivePanel] = useState<RibbonPanel>("files");
+
+  function togglePanel(panel: "files" | "ai") {
+    setActivePanel((prev) => (prev === panel ? null : panel));
+  }
 
   return (
     <ChatDrawerProvider>
@@ -18,15 +24,20 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
         {/* Ribbon */}
         <div className="hidden md:flex">
           <ActivityRibbon
-            treePanelOpen={treePanelOpen}
-            onToggleTreePanel={() => setTreePanelOpen(!treePanelOpen)}
+            activePanel={activePanel}
+            onTogglePanel={togglePanel}
           />
         </div>
 
-        {/* Tree panel */}
-        {treePanelOpen && (
+        {/* Second panel — files or AI, driven by ribbon */}
+        {activePanel === "files" && (
           <div className="hidden md:flex flex-col shrink-0 h-full w-[220px] border-r border-border">
             <TreePanel />
+          </div>
+        )}
+        {activePanel === "ai" && (
+          <div className="hidden md:flex flex-col shrink-0 h-full w-[340px] border-r border-border">
+            <ChatPanel embedded />
           </div>
         )}
 
@@ -35,9 +46,6 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
           <VaultTopBar clientName="" onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
           <main className="flex-1 overflow-y-auto">{children}</main>
         </div>
-
-        {/* Chat — always overlay, opens from ribbon */}
-        <ChatPanel />
 
         {/* Mobile sidebar overlay */}
         <div className="md:hidden">

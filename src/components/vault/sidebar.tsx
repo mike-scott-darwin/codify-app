@@ -3,8 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
-import { useChatDrawer } from "./chat-drawer-provider";
 import SettingsModal from "./settings-modal";
+import type { RibbonPanel } from "./types";
 
 interface FileNode {
   name: string;
@@ -138,14 +138,13 @@ function FolderNode({
 /* ─── Activity Ribbon ─── */
 
 export function ActivityRibbon({
-  treePanelOpen,
-  onToggleTreePanel,
+  activePanel,
+  onTogglePanel,
 }: {
-  treePanelOpen: boolean;
-  onToggleTreePanel: () => void;
+  activePanel: RibbonPanel;
+  onTogglePanel: (panel: "files" | "ai") => void;
 }) {
   const pathname = usePathname();
-  const { toggle: toggleChat } = useChatDrawer();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const isHome = pathname === "/vault";
@@ -157,7 +156,7 @@ export function ActivityRibbon({
         href="/vault"
         title="Home"
         className={`flex items-center justify-center h-[48px] transition-colors ${
-          isHome && !treePanelOpen
+          isHome && !activePanel
             ? "text-blue"
             : "text-dim hover:text-foreground"
         }`}
@@ -169,10 +168,10 @@ export function ActivityRibbon({
 
       {/* Files */}
       <button
-        onClick={onToggleTreePanel}
+        onClick={() => onTogglePanel("files")}
         title="Files"
         className={`flex items-center justify-center h-[48px] transition-colors ${
-          treePanelOpen
+          activePanel === "files"
             ? "text-blue"
             : "text-dim hover:text-foreground"
         }`}
@@ -182,18 +181,23 @@ export function ActivityRibbon({
         </svg>
       </button>
 
-      {/* Claude chat */}
+      {/* AI */}
       <button
-        onClick={toggleChat}
-        title="Claude"
-        className="flex items-center justify-center h-[48px] text-dim hover:text-foreground transition-colors"
+        onClick={() => onTogglePanel("ai")}
+        title="AI"
+        className={`flex items-center justify-center h-[48px] transition-colors ${
+          activePanel === "ai"
+            ? "text-blue"
+            : "text-dim hover:text-foreground"
+        }`}
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
-          <path d="M4 5h12a1 1 0 011 1v7a1 1 0 01-1 1h-4l-3 3v-3H4a1 1 0 01-1-1V6a1 1 0 011-1z" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M10 2l1.5 4.5L16 8l-4.5 1.5L10 14l-1.5-4.5L4 8l4.5-1.5L10 2z" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M15 12l.75 2.25L18 15l-2.25.75L15 18l-.75-2.25L12 15l2.25-.75L15 12z" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
 
-      {/* Bottom — settings only */}
+      {/* Settings */}
       <div className="mt-auto flex flex-col items-center pb-3">
         <button
           onClick={() => setSettingsOpen(true)}

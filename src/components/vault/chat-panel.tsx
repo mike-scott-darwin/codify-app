@@ -4,7 +4,6 @@ import { useChatDrawer } from "./chat-drawer-provider";
 import ChatCore from "./chat-core";
 
 export default function ChatPanel({
-  width = 384,
   embedded,
 }: {
   width?: number;
@@ -15,9 +14,10 @@ export default function ChatPanel({
   const header = (
     <div className="h-12 border-b border-border flex items-center justify-between px-4 shrink-0">
       <div className="flex items-center gap-2">
-        <span className="text-blue text-sm">◈</span>
-        <h3 className="text-sm font-sans font-bold text-foreground">Claude Sonnet</h3>
-        <span className="text-xs text-dim px-1.5 py-0.5 bg-background rounded">4.6</span>
+        <svg className="w-4 h-4 text-blue" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+          <path d="M10 2l1.5 4.5L16 8l-4.5 1.5L10 14l-1.5-4.5L4 8l4.5-1.5L10 2z" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <h3 className="text-sm font-sans font-bold text-foreground">AI</h3>
       </div>
       {!embedded && (
         <button onClick={toggle} className="text-muted hover:text-foreground">
@@ -29,10 +29,10 @@ export default function ChatPanel({
     </div>
   );
 
-  // Desktop: embedded in flex layout
+  // Embedded: inline in the panel area (like the file tree)
   if (embedded) {
     return (
-      <div className="flex flex-col h-full w-full bg-surface border-l border-border overflow-hidden">
+      <div className="flex flex-col h-full w-full bg-surface overflow-hidden">
         {header}
         <ChatCore className="flex-1 min-h-0" initialPrompt={pendingPrompt} onPromptConsumed={clearPendingPrompt} />
       </div>
