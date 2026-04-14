@@ -6,6 +6,7 @@ import DashboardActions from "./dashboard-actions";
 import WelcomeState from "./welcome-state";
 import BuildingState from "./building-state";
 import ContextMap from "@/components/vault/context-map";
+import SyncButton from "./sync-button";
 
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
@@ -81,7 +82,10 @@ export default async function VaultDashboard() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-6">
-      <h1 className="text-xl font-sans font-bold mb-5">{clientName}</h1>
+      <div className="flex items-center justify-between mb-5">
+        <h1 className="text-xl font-sans font-bold">{clientName}</h1>
+        <SyncButton />
+      </div>
 
       {/* Compound Score */}
       {compoundScore && (
