@@ -1,17 +1,26 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { ChatDrawerProvider } from "@/components/vault/chat-drawer-provider";
 import CommandPalette from "@/components/vault/command-palette";
 import VaultSidebar, { ActivityRibbon, TreePanel } from "@/components/vault/sidebar";
 import VaultTopBar from "@/components/vault/top-bar";
+import AiSidePanel from "@/components/vault/ai-side-panel";
 import ChatPanel from "@/components/vault/chat-panel";
-
 import type { RibbonPanel } from "@/components/vault/types";
 
 export default function VaultLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activePanel, setActivePanel] = useState<RibbonPanel>("files");
+  const pathname = usePathname();
+
+  // Auto-switch to AI panel when navigating to agents routes
+  useEffect(() => {
+    if (pathname.startsWith("/vault/agents")) {
+      setActivePanel("ai");
+    }
+  }, [pathname]);
 
   function togglePanel(panel: "files" | "ai") {
     setActivePanel((prev) => (prev === panel ? null : panel));
@@ -29,15 +38,15 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
           />
         </div>
 
-        {/* Second panel — files or AI, driven by ribbon */}
+        {/* Side panel — files or AI */}
         {activePanel === "files" && (
           <div className="hidden md:flex flex-col shrink-0 h-full w-[220px] border-r border-border">
             <TreePanel />
           </div>
         )}
         {activePanel === "ai" && (
-          <div className="hidden md:flex flex-col shrink-0 h-full w-[340px] border-r border-border">
-            <ChatPanel embedded />
+          <div className="hidden md:flex flex-col shrink-0 h-full w-[260px] border-r border-border">
+            <AiSidePanel />
           </div>
         )}
 
@@ -47,7 +56,8 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
           <main className="flex-1 overflow-y-auto">{children}</main>
         </div>
 
-        {/* Mobile sidebar overlay */}
+        {/* Mobile: chat overlay + sidebar overlay */}
+        <ChatPanel />
         <div className="md:hidden">
           <VaultSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         </div>

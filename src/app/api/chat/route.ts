@@ -5,6 +5,7 @@ import {
   listDirectory,
   getRecentCommits,
 } from "@/lib/vault";
+import { getAgent } from "@/lib/agents";
 import { NextResponse } from "next/server";
 
 // --- Vault tools that Claude can call ---
@@ -241,7 +242,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Missing Anthropic API key" }, { status: 500 });
   }
 
-  const { messages } = await request.json();
+  const { messages, agentId } = await request.json();
+  const agent = agentId ? getAgent(agentId) : null;
 
   // Load core vault context for system prompt
   let vaultContext = "";
@@ -300,7 +302,8 @@ ${vaultContext || "No core files loaded yet. Use the read_vault_file tool to loa
 ## Important
 - Never make up information about the client — always read from the vault
 - If you don't know something, search the vault or ask the client
-- Every response should be grounded in vault context`;
+- Every response should be grounded in vault context
+${agent ? `\n## Agent Role: ${agent.name}\n${agent.systemPrompt}` : ""}`;
 
   const anthropic = new Anthropic({ apiKey: anthropicKey });
 
