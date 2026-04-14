@@ -21,12 +21,15 @@ export async function POST() {
     .eq("email", user.email ?? "")
     .single();
 
-  if (!client?.github_token || !client?.github_repo) {
-    return NextResponse.json({ error: "Missing GitHub config" }, { status: 500 });
+  const token = client?.github_token || process.env.GITHUB_TOKEN;
+  const repo = client?.github_repo;
+
+  if (!token || !repo) {
+    return NextResponse.json({ error: "Missing GitHub configuration" }, { status: 500 });
   }
 
   try {
-    const result = await syncRepoToCache(client.github_token, client.github_repo);
+    const result = await syncRepoToCache(token, repo);
     return NextResponse.json({ ok: true, ...result });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Sync failed";
