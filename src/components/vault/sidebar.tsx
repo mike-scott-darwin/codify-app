@@ -186,7 +186,7 @@ export function ActivityRibbon({
       <button
         onClick={toggleChat}
         title="Claude"
-        className="flex items-center justify-center h-[48px] text-dim hover:text-foreground transition-colors lg:hidden"
+        className="flex items-center justify-center h-[48px] text-dim hover:text-foreground transition-colors"
       >
         <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
           <path d="M4 5h12a1 1 0 011 1v7a1 1 0 01-1 1h-4l-3 3v-3H4a1 1 0 01-1-1V6a1 1 0 011-1z" strokeLinecap="round" strokeLinejoin="round" />

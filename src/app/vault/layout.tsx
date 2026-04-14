@@ -15,7 +15,7 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
     <ChatDrawerProvider>
       <CommandPalette />
       <div className="flex h-screen bg-background text-foreground overflow-hidden">
-        {/* Ribbon — always visible on desktop */}
+        {/* Ribbon */}
         <div className="hidden md:flex">
           <ActivityRibbon
             treePanelOpen={treePanelOpen}
@@ -23,30 +23,25 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
           />
         </div>
 
-        {/* Tree panel — toggles instantly */}
+        {/* Tree panel */}
         {treePanelOpen && (
           <div className="hidden md:flex flex-col shrink-0 h-full w-[220px] border-r border-border">
             <TreePanel />
           </div>
         )}
 
-        {/* Content */}
+        {/* Content — full remaining width */}
         <div className="flex-1 flex flex-col overflow-hidden min-w-0">
           <VaultTopBar clientName="" onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
           <main className="flex-1 overflow-y-auto">{children}</main>
         </div>
 
-        {/* Chat panel — desktop */}
-        <div className="hidden lg:flex flex-col shrink-0 h-full w-[384px]">
-          <ChatPanel width={384} embedded />
-        </div>
+        {/* Chat — always overlay, opens from ribbon */}
+        <ChatPanel />
 
-        {/* Mobile overlays */}
+        {/* Mobile sidebar overlay */}
         <div className="md:hidden">
           <VaultSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-        </div>
-        <div className="lg:hidden">
-          <ChatPanel width={384} />
         </div>
       </div>
     </ChatDrawerProvider>
