@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import SettingsModal from "./settings-modal";
 import type { RibbonPanel } from "./types";
@@ -145,9 +145,17 @@ export function ActivityRibbon({
   onTogglePanel: (panel: "files" | "ai") => void;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [settingsOpen, setSettingsOpen] = useState(false);
 
   const isHome = pathname === "/vault";
+
+  function handleAiToggle() {
+    if (activePanel !== "ai") {
+      router.push("/vault/agents");
+    }
+    onTogglePanel("ai");
+  }
 
   return (
     <div className="flex flex-col h-full w-[48px] bg-[#0a0a0a] border-r border-border shrink-0">
@@ -183,7 +191,7 @@ export function ActivityRibbon({
 
       {/* AI */}
       <button
-        onClick={() => onTogglePanel("ai")}
+        onClick={handleAiToggle}
         title="AI"
         className={`flex items-center justify-center h-[48px] transition-colors ${
           activePanel === "ai"
