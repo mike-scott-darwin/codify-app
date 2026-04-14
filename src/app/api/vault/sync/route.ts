@@ -3,29 +3,39 @@ import { createSupabaseAdmin } from "@/lib/supabase-admin";
 import { syncRepoToCache } from "@/lib/vault-cache";
 import { NextResponse, type NextRequest } from "next/server";
 
-// POST /api/vault/sync — manual sync (authenticated user)
-export async function POST() {
+// Reuse the same client lookup as the main vault route
+async function getClientConfig() {
   const supabase = await createSupabaseServer();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-  }
+  if (!user) return null;
 
-  const admin = createSupabaseAdmin();
-  const { data: client } = await admin
+  const { data: client } = await supabase
     .from("clients")
     .select("*")
     .eq("email", user.email ?? "")
     .single();
 
-  const token = client?.github_token || process.env.GITHUB_TOKEN;
-  const repo = client?.github_repo;
+  return client;
+}
+
+// POST /api/vault/sync — manual sync (authenticated user)
+export async function POST() {
+  const client = await getClientConfig();
+  if (!client) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const token = client.github_token || process.env.GITHUB_TOKEN;
+  const repo = client.github_repo;
 
   if (!token || !repo) {
-    return NextResponse.json({ error: "Missing GitHub configuration" }, { status: 500 });
+    return NextResponse.json(
+      { error: `Missing GitHub config: token=${!!token}, repo=${!!repo}` },
+      { status: 500 }
+    );
   }
 
   try {
@@ -37,7 +47,7 @@ export async function POST() {
   }
 }
 
-// GitHub webhook — POST with X-GitHub-Event header
+// GitHub webhook — PUT with X-GitHub-Event header
 export async function PUT(request: NextRequest) {
   const event = request.headers.get("x-github-event");
   if (event !== "push") {
@@ -50,7 +60,6 @@ export async function PUT(request: NextRequest) {
     return NextResponse.json({ error: "No repo in payload" }, { status: 400 });
   }
 
-  // Look up the client by repo
   const admin = createSupabaseAdmin();
   const { data: client } = await admin
     .from("clients")
@@ -58,12 +67,14 @@ export async function PUT(request: NextRequest) {
     .eq("github_repo", repo)
     .single();
 
-  if (!client?.github_token) {
+  const token = client?.github_token || process.env.GITHUB_TOKEN;
+
+  if (!token) {
     return NextResponse.json({ error: "No client for repo" }, { status: 404 });
   }
 
   try {
-    const result = await syncRepoToCache(client.github_token, client.github_repo);
+    const result = await syncRepoToCache(token, repo);
     return NextResponse.json({ ok: true, ...result });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Sync failed";
