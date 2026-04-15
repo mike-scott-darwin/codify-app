@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import type { Agent } from "@/lib/agents";
+import { SKILLS } from "@/lib/skills";
 
 interface TerminalLine {
   type: "input" | "status" | "output" | "error";
@@ -23,6 +24,9 @@ export default function AgentTerminal({
   const [lines, setLines] = useState<TerminalLine[]>([]);
   const [input, setInput] = useState("");
   const [running, setRunning] = useState(false);
+  const [showCommands, setShowCommands] = useState(false);
+  const [commandFilter, setCommandFilter] = useState("");
+  const [selectedCommandIdx, setSelectedCommandIdx] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const hasRun = useRef(false);
@@ -38,9 +42,33 @@ export default function AgentTerminal({
     }
   }, [initialPrompt]);
 
+  // Slash command detection
+  useEffect(() => {
+    if (input.startsWith("/")) {
+      const filter = input.slice(1).toLowerCase();
+      setCommandFilter(filter);
+      setShowCommands(true);
+      setSelectedCommandIdx(0);
+    } else {
+      setShowCommands(false);
+      setCommandFilter("");
+    }
+  }, [input]);
+
+  const filteredSkills = SKILLS.filter(
+    (s) => s.command.toLowerCase().includes(commandFilter) || s.name.toLowerCase().includes(commandFilter)
+  );
+
+  function selectCommand(skill: typeof SKILLS[number]) {
+    setInput(skill.command + " ");
+    setShowCommands(false);
+    inputRef.current?.focus();
+  }
+
   async function runAgent(prompt: string) {
     if (running || !prompt.trim()) return;
     setRunning(true);
+    setShowCommands(false);
 
     const newLines: TerminalLine[] = [
       ...lines,
@@ -127,6 +155,26 @@ export default function AgentTerminal({
     runAgent(input);
   }
 
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (showCommands && filteredSkills.length > 0) {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelectedCommandIdx((prev) => Math.min(prev + 1, filteredSkills.length - 1));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedCommandIdx((prev) => Math.max(prev - 1, 0));
+      } else if (e.key === "Tab" || (e.key === "Enter" && showCommands)) {
+        e.preventDefault();
+        selectCommand(filteredSkills[selectedCommandIdx]);
+      } else if (e.key === "Escape") {
+        setShowCommands(false);
+      }
+    } else if (e.key === "Enter" && !showCommands) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  }
+
   return (
     <div className="flex flex-col h-full bg-[#0a0a0a] overflow-hidden rounded-lg border border-border">
       {/* Terminal header */}
@@ -145,9 +193,27 @@ export default function AgentTerminal({
       {/* Terminal output */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 font-mono text-[13px] leading-relaxed space-y-1">
         {lines.length === 0 && (
-          <p className="text-dim">
-            <span className="text-muted">$</span> Ready. Type a task or question for the {agent.name} agent.
-          </p>
+          <div>
+            <p className="text-dim mb-3">
+              <span className="text-muted">$</span> Ready. Type a task or use a <span className="text-blue">/command</span>.
+            </p>
+            <p className="text-dim text-[11px] mb-1">Available commands:</p>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 mb-2">
+              {SKILLS.map((skill) => (
+                <button
+                  key={skill.id}
+                  onClick={() => {
+                    setInput(skill.command + " ");
+                    inputRef.current?.focus();
+                  }}
+                  className="text-left text-[11px] py-0.5 hover:text-blue transition-colors"
+                >
+                  <span className="text-blue">{skill.command}</span>
+                  <span className="text-dim ml-2">{skill.name}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         )}
         {lines.map((line, i) => (
           <div key={i} className="flex gap-3">
@@ -173,6 +239,39 @@ export default function AgentTerminal({
         )}
       </div>
 
+      {/* Slash command palette */}
+      {showCommands && filteredSkills.length > 0 && (
+        <div className="border-t border-border bg-[#111] max-h-[240px] overflow-y-auto">
+          {filteredSkills.map((skill, i) => (
+            <button
+              key={skill.id}
+              onClick={() => selectCommand(skill)}
+              className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
+                i === selectedCommandIdx
+                  ? "bg-blue/10 text-foreground"
+                  : "text-muted hover:bg-[#1a1a1a]"
+              }`}
+            >
+              <span className="text-lg">{skill.emoji}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-mono text-blue">{skill.command}</span>
+                  <span className="text-xs text-foreground">{skill.name}</span>
+                </div>
+                <p className="text-[11px] text-dim truncate">{skill.description}</p>
+              </div>
+            </button>
+          ))}
+          <div className="px-4 py-1.5 border-t border-border">
+            <p className="text-[10px] text-dim">
+              <span className="text-muted">↑↓</span> navigate
+              <span className="text-muted ml-3">Tab</span> select
+              <span className="text-muted ml-3">Esc</span> dismiss
+            </p>
+          </div>
+        </div>
+      )}
+
       {/* Input */}
       <form onSubmit={handleSubmit} className="border-t border-border px-4 py-3 flex items-center gap-3 bg-[#0d0d0d]">
         <span className="text-blue font-mono text-sm">$</span>
@@ -181,7 +280,8 @@ export default function AgentTerminal({
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder={`Ask the ${agent.name} agent...`}
+          onKeyDown={handleKeyDown}
+          placeholder={`Type / for commands or ask the ${agent.name} agent...`}
           disabled={running}
           className="flex-1 bg-transparent text-foreground text-sm font-mono placeholder:text-dim focus:outline-none disabled:opacity-50"
         />
