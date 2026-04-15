@@ -33,9 +33,9 @@ export default function AgentNavPanel() {
         </Link>
       </div>
 
-      {/* Codify */}
+      {/* Agents */}
       <div className="border-b border-border py-2">
-        <p className="px-4 py-1.5 text-[11px] font-medium text-dim uppercase tracking-wider">Codify</p>
+        <p className="px-4 py-1.5 text-[11px] font-medium text-dim uppercase tracking-wider">Agents</p>
         <Link
           href="/vault/agents/create"
           className={`flex items-center gap-3 px-4 py-2 text-[13px] transition-colors ${
@@ -47,18 +47,9 @@ export default function AgentNavPanel() {
           <span className="text-red text-sm">+</span>
           Create Agent
         </Link>
-      </div>
-
-      {/* Orchestrate */}
-      <div className="border-b border-border py-2">
-        <p className="px-4 py-1.5 text-[11px] font-medium text-purple uppercase tracking-wider">Orchestrate</p>
         <Link
-          href="/vault/agents/orchestrate"
-          className={`flex items-center gap-3 px-4 py-2 text-[13px] transition-colors ${
-            pathname === "/vault/agents/orchestrate"
-              ? "text-purple bg-purple/5"
-              : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
-          }`}
+          href="/vault/agents?view=all"
+          className="flex items-center gap-3 px-4 py-2 text-[13px] text-muted hover:text-foreground hover:bg-[#1a1a1a] transition-colors"
         >
           <span className="text-purple text-sm">◉</span>
           All Agents
@@ -79,7 +70,7 @@ export default function AgentNavPanel() {
         </Link>
       </div>
 
-      {/* Recent Chats — placeholder for future */}
+      {/* Recent Chats */}
       <div className="flex-1 overflow-y-auto py-2">
         <p className="px-4 py-1.5 text-[11px] font-medium text-dim uppercase tracking-wider">Recent Chats</p>
         <p className="px-4 py-2 text-[12px] text-dim">No recent chats yet</p>
