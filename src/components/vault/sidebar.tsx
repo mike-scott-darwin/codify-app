@@ -127,6 +127,148 @@ function FolderNode({
   );
 }
 
+/* ─── Help Panel ─── */
+
+function HelpPanel({ open, onClose }: { open: boolean; onClose: () => void }) {
+  if (!open) return null;
+
+  return (
+    <>
+      <div className="fixed inset-0 z-40" onClick={onClose} />
+      <div className="fixed left-[48px] top-0 h-full w-[320px] bg-surface border-r border-border z-50 overflow-y-auto shadow-2xl shadow-black/40">
+        <div className="px-5 py-4 border-b border-border flex items-center justify-between">
+          <h2 className="text-sm font-sans font-bold text-foreground">How Codify Works</h2>
+          <button onClick={onClose} className="text-dim hover:text-foreground transition-colors">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="2">
+              <path d="M6 6l8 8M14 6l-8 8" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="px-5 py-5 space-y-6">
+          {/* What is this */}
+          <div>
+            <p className="text-sm text-muted leading-relaxed">
+              Codify extracts what you know about your business into structured files so AI can produce work that actually sounds like you.
+            </p>
+          </div>
+
+          {/* Step 1 */}
+          <div>
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="w-6 h-6 rounded-full bg-blue/10 border border-blue/20 flex items-center justify-center shrink-0">
+                <span className="text-[11px] font-bold text-blue">1</span>
+              </div>
+              <h3 className="text-sm font-bold text-foreground">Have a conversation</h3>
+            </div>
+            <p className="text-xs text-muted leading-relaxed ml-[34px]">
+              Click <span className="text-blue font-medium">Get Started</span> on the dashboard.
+              AI will ask you about your business — what you sell, who you sell to, why you started,
+              and how you talk. Just answer naturally. Takes about 30 minutes.
+            </p>
+          </div>
+
+          {/* Step 2 */}
+          <div>
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="w-6 h-6 rounded-full bg-green/10 border border-green/20 flex items-center justify-center shrink-0">
+                <span className="text-[11px] font-bold text-green">2</span>
+              </div>
+              <h3 className="text-sm font-bold text-foreground">Your profile builds automatically</h3>
+            </div>
+            <p className="text-xs text-muted leading-relaxed ml-[34px]">
+              Your answers get structured into four files:
+            </p>
+            <div className="ml-[34px] mt-2 space-y-1.5">
+              <Link href="/vault/reference/core/soul.md" onClick={onClose} className="flex items-center gap-2 text-xs text-muted hover:text-blue transition-colors">
+                <span className="text-blue">◆</span> <span className="font-medium text-foreground">Soul</span> — your story, beliefs, what makes you different
+              </Link>
+              <Link href="/vault/reference/core/offer.md" onClick={onClose} className="flex items-center gap-2 text-xs text-muted hover:text-blue transition-colors">
+                <span className="text-green">◆</span> <span className="font-medium text-foreground">Offer</span> — what you sell, pricing, transformation
+              </Link>
+              <Link href="/vault/reference/core/audience.md" onClick={onClose} className="flex items-center gap-2 text-xs text-muted hover:text-blue transition-colors">
+                <span className="text-amber">◆</span> <span className="font-medium text-foreground">Audience</span> — who buys, their pain, their language
+              </Link>
+              <Link href="/vault/reference/core/voice.md" onClick={onClose} className="flex items-center gap-2 text-xs text-muted hover:text-blue transition-colors">
+                <span className="text-purple">◆</span> <span className="font-medium text-foreground">Voice</span> — your tone, phrases, how you sound
+              </Link>
+            </div>
+          </div>
+
+          {/* Step 3 */}
+          <div>
+            <div className="flex items-center gap-2.5 mb-2">
+              <div className="w-6 h-6 rounded-full bg-purple/10 border border-purple/20 flex items-center justify-center shrink-0">
+                <span className="text-[11px] font-bold text-purple">3</span>
+              </div>
+              <h3 className="text-sm font-bold text-foreground">Start creating</h3>
+            </div>
+            <p className="text-xs text-muted leading-relaxed ml-[34px]">
+              Once your profile is built, use <span className="text-foreground font-medium">AI agents</span> to
+              generate ads, proposals, emails, and content — all in your voice, targeting your audience, explaining your offer.
+            </p>
+          </div>
+
+          {/* Divider */}
+          <div className="border-t border-border" />
+
+          {/* Quick links */}
+          <div>
+            <h3 className="text-[11px] font-medium text-dim uppercase tracking-wider mb-3">Quick links</h3>
+            <div className="space-y-1">
+              <Link href="/vault" onClick={onClose} className="flex items-center gap-2.5 px-2 py-2 text-xs text-muted hover:text-foreground hover:bg-[#1a1a1a] rounded-md transition-colors">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M3 10.5L10 4l7 6.5M5 9v7a1 1 0 001 1h3v-4h2v4h3a1 1 0 001-1V9" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Dashboard
+              </Link>
+              <Link href="/vault/agents" onClick={onClose} className="flex items-center gap-2.5 px-2 py-2 text-xs text-muted hover:text-foreground hover:bg-[#1a1a1a] rounded-md transition-colors">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M10 2l1.5 4.5L16 8l-4.5 1.5L10 14l-1.5-4.5L4 8l4.5-1.5L10 2z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                AI Agents
+              </Link>
+              <Link href="/vault/files" onClick={onClose} className="flex items-center gap-2.5 px-2 py-2 text-xs text-muted hover:text-foreground hover:bg-[#1a1a1a] rounded-md transition-colors">
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M3 5h5l2 2h7a1 1 0 011 1v7a1 1 0 01-1 1H3a1 1 0 01-1-1V6a1 1 0 011-1z" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Browse Files
+              </Link>
+            </div>
+          </div>
+
+          {/* Keyboard shortcuts */}
+          <div>
+            <h3 className="text-[11px] font-medium text-dim uppercase tracking-wider mb-3">Keyboard shortcuts</h3>
+            <div className="space-y-2">
+              {[
+                { keys: "⌘ K", label: "Search & commands" },
+                { keys: "Q", label: "Toggle sidebar" },
+                { keys: "H", label: "Go to dashboard" },
+                { keys: "S", label: "Quick search" },
+              ].map((shortcut) => (
+                <div key={shortcut.keys} className="flex items-center justify-between text-xs">
+                  <span className="text-muted">{shortcut.label}</span>
+                  <kbd className="px-1.5 py-0.5 bg-background border border-border rounded text-[10px] text-dim font-mono">
+                    {shortcut.keys}
+                  </kbd>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Contact */}
+          <div className="bg-background border border-border rounded-lg p-4">
+            <p className="text-xs text-muted leading-relaxed">
+              Need help? Email <a href="mailto:hello@codify.build" className="text-blue hover:underline">hello@codify.build</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 /* ─── Workspace Switcher ─── */
 
 function WorkspaceSwitcher() {
@@ -153,21 +295,18 @@ function WorkspaceSwitcher() {
       .catch(() => {});
   }, []);
 
-  if (!clientName) return null;
-
   return (
     <div className="relative">
       <button
         onClick={() => setOpen(!open)}
-        title={clientName}
+        title={clientName || "Workspace"}
         className="flex items-center justify-center w-[48px] h-[48px] transition-colors group"
       >
         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-[11px] font-bold text-white shadow-sm group-hover:scale-105 transition-transform">
-          {initials}
+          {initials || "C"}
         </div>
       </button>
 
-      {/* Dropdown */}
       {open && (
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
@@ -176,10 +315,10 @@ function WorkspaceSwitcher() {
             <div className="px-4 py-3 border-b border-border">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-[11px] font-bold text-white shrink-0">
-                  {initials}
+                  {initials || "C"}
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-foreground truncate">{clientName}</p>
+                  <p className="text-sm font-medium text-foreground truncate">{clientName || "Codify"}</p>
                   <p className="text-[11px] text-dim">Current workspace</p>
                 </div>
               </div>
@@ -227,6 +366,7 @@ export function ActivityRibbon({
   const pathname = usePathname();
   const router = useRouter();
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
 
   const isHome = pathname === "/vault";
 
@@ -242,7 +382,7 @@ export function ActivityRibbon({
       {/* Home */}
       <Link
         href="/vault"
-        title="Home"
+        title="Home (H)"
         className={`flex items-center justify-center h-[48px] transition-colors ${
           isHome && !activePanel
             ? "text-blue"
@@ -277,7 +417,7 @@ export function ActivityRibbon({
       {/* AI */}
       <button
         onClick={handleAiToggle}
-        title="AI"
+        title="AI Agents"
         className={`flex items-center justify-center h-[48px] transition-colors ${
           activePanel === "ai"
             ? "text-blue"
@@ -293,6 +433,21 @@ export function ActivityRibbon({
       {/* Spacer */}
       <div className="flex-1" />
 
+      {/* Help */}
+      <button
+        onClick={() => setHelpOpen(!helpOpen)}
+        title="Help"
+        className={`flex items-center justify-center w-[48px] h-[48px] transition-colors ${
+          helpOpen ? "text-blue" : "text-dim hover:text-foreground"
+        }`}
+      >
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+          <path d="M10 18a8 8 0 100-16 8 8 0 000 16z" />
+          <path d="M7.5 7.5a2.5 2.5 0 014.9.7c0 1.7-2.5 2.3-2.5 2.3" strokeLinecap="round" />
+          <circle cx="10" cy="14" r="0.5" fill="currentColor" />
+        </svg>
+      </button>
+
       {/* Settings */}
       <button
         onClick={() => setSettingsOpen(true)}
@@ -304,14 +459,16 @@ export function ActivityRibbon({
         </svg>
       </button>
 
-      {/* Workspace switcher — bottom-left like ClickUp */}
+      {/* Workspace switcher */}
       <div className="pb-2">
         <WorkspaceSwitcher />
       </div>
 
+      {/* Modals */}
       {settingsOpen && (
         <SettingsModal isOpen={settingsOpen} onClose={() => setSettingsOpen(false)} />
       )}
+      <HelpPanel open={helpOpen} onClose={() => setHelpOpen(false)} />
     </div>
   );
 }
@@ -333,7 +490,6 @@ export function TreePanel() {
       .catch(() => {});
   }, []);
 
-  // Core context files at the top — no "Getting Started" wrapper
   const coreFiles = [
     { name: "Soul", path: "reference/core/soul.md", icon: "◆" },
     { name: "Audience", path: "reference/core/audience.md", icon: "◆" },
@@ -343,7 +499,7 @@ export function TreePanel() {
 
   return (
     <div className="flex flex-col h-full w-full overflow-hidden bg-surface">
-      {/* Core context files — always visible */}
+      {/* Core context files */}
       <div className="border-b border-border py-2">
         <p className="px-4 py-1.5 text-[11px] font-medium text-dim uppercase tracking-wider">Your Profile</p>
         {coreFiles.map((file) => (
