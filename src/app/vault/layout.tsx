@@ -15,12 +15,12 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
   const [activePanel, setActivePanel] = useState<RibbonPanel>("files");
   const pathname = usePathname();
 
-  // Auto-switch to AI panel when navigating to agents routes
+  // When navigating to agents via URL (not ribbon click), show AI panel
   useEffect(() => {
-    if (pathname.startsWith("/vault/agents")) {
+    if (pathname.startsWith("/vault/agents") && activePanel !== "files") {
       setActivePanel("ai");
     }
-  }, [pathname]);
+  }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
   function togglePanel(panel: "files" | "ai") {
     setActivePanel((prev) => (prev === panel ? null : panel));

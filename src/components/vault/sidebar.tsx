@@ -176,7 +176,13 @@ export function ActivityRibbon({
 
       {/* Files */}
       <button
-        onClick={() => onTogglePanel("files")}
+        onClick={() => {
+          // If on agents page, navigate back to vault so content area shows files
+          if (pathname.startsWith("/vault/agents")) {
+            router.push("/vault");
+          }
+          onTogglePanel("files");
+        }}
         title="Files"
         className={`flex items-center justify-center h-[48px] transition-colors ${
           activePanel === "files"
