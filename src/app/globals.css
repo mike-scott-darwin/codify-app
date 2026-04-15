@@ -87,6 +87,30 @@ body {
   --color-cyan: var(--cyan);
 }
 
+/* Vault interactive — snappy button feedback */
+button, a[class*="rounded"], a[class*="px-"] {
+  transition-duration: 100ms !important;
+  transition-timing-function: cubic-bezier(0.2, 0, 0, 1) !important;
+}
+button:active, a[class*="rounded"]:active, a[class*="px-"]:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+/* Tab/pill buttons — tighter press */
+button[class*="rounded-md"]:active,
+button[class*="rounded-lg"]:active {
+  transform: scale(0.96);
+}
+/* Primary gradient CTAs — glow pulse on press */
+a[class*="bg-gradient"]:active,
+button[class*="bg-gradient"]:active,
+a[class*="bg-purple"]:active,
+button[class*="bg-purple"]:active {
+  transform: scale(0.95);
+  opacity: 0.9;
+  box-shadow: 0 0 16px rgba(168, 85, 247, 0.3);
+}
+
 /* Vault prose — markdown rendering */
 .vault-prose {
   line-height: 1.7;
