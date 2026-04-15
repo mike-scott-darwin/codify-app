@@ -22,14 +22,6 @@ const VAULT_FOLDERS = [
   { name: "snapshots", path: "snapshots", label: "Snapshots", icon: "◇", color: "text-muted" },
 ];
 
-const ONBOARDING_FILES = [
-  { name: "Getting Started", path: "ONBOARDING.md", icon: "◈" },
-  { name: "Soul — Your Identity", path: "reference/core/soul.md", icon: "◆" },
-  { name: "Audience — Who Buys", path: "reference/core/audience.md", icon: "◆" },
-  { name: "Offer — Your Value", path: "reference/core/offer.md", icon: "◆" },
-  { name: "Voice — How You Sound", path: "reference/core/voice.md", icon: "◆" },
-];
-
 const HIDDEN_FOLDERS = new Set(["archive", ".context", ".claude", ".openclaw", ".obsidian"]);
 
 /* ─── Folder tree node ─── */
@@ -135,6 +127,94 @@ function FolderNode({
   );
 }
 
+/* ─── Workspace Switcher ─── */
+
+function WorkspaceSwitcher() {
+  const [open, setOpen] = useState(false);
+  const [clientName, setClientName] = useState("");
+  const [initials, setInitials] = useState("");
+
+  useEffect(() => {
+    fetch("/api/vault?action=client")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.client_name) {
+          setClientName(data.client_name);
+          setInitials(
+            data.client_name
+              .split(" ")
+              .slice(0, 2)
+              .map((w: string) => w[0])
+              .join("")
+              .toUpperCase()
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  if (!clientName) return null;
+
+  return (
+    <div className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        title={clientName}
+        className="flex items-center justify-center w-[48px] h-[48px] transition-colors group"
+      >
+        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-[11px] font-bold text-white shadow-sm group-hover:scale-105 transition-transform">
+          {initials}
+        </div>
+      </button>
+
+      {/* Dropdown */}
+      {open && (
+        <>
+          <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+          <div className="absolute bottom-full left-full ml-2 mb-0 w-56 bg-surface border border-border rounded-xl shadow-2xl shadow-black/40 z-50 overflow-hidden">
+            {/* Current workspace */}
+            <div className="px-4 py-3 border-b border-border">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-blue-600 flex items-center justify-center text-[11px] font-bold text-white shrink-0">
+                  {initials}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-medium text-foreground truncate">{clientName}</p>
+                  <p className="text-[11px] text-dim">Current workspace</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="py-1">
+              <button
+                className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-muted hover:text-foreground hover:bg-[#1a1a1a] transition-colors"
+                onClick={() => setOpen(false)}
+              >
+                <svg className="w-4 h-4 text-dim" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" />
+                </svg>
+                Add workspace
+              </button>
+              <form action="/vault/auth/signout" method="POST">
+                <button
+                  type="submit"
+                  className="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-muted hover:text-foreground hover:bg-[#1a1a1a] transition-colors"
+                >
+                  <svg className="w-4 h-4 text-dim" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M13 3H7a2 2 0 00-2 2v10a2 2 0 002 2h6M10 12l4-4m0 0l-4-4m4 4H5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  Sign out
+                </button>
+              </form>
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 /* ─── Activity Ribbon ─── */
 
 export function ActivityRibbon({
@@ -177,13 +257,12 @@ export function ActivityRibbon({
       {/* Files */}
       <button
         onClick={() => {
-          // If on agents page, navigate back to vault so content area shows files
           if (pathname.startsWith("/vault/agents")) {
             router.push("/vault");
           }
           onTogglePanel("files");
         }}
-        title="Files"
+        title="Files (Q)"
         className={`flex items-center justify-center h-[48px] transition-colors ${
           activePanel === "files"
             ? "text-blue"
@@ -211,17 +290,23 @@ export function ActivityRibbon({
         </svg>
       </button>
 
+      {/* Spacer */}
+      <div className="flex-1" />
+
       {/* Settings */}
-      <div className="mt-auto flex flex-col items-center pb-3">
-        <button
-          onClick={() => setSettingsOpen(true)}
-          title="Settings"
-          className="flex items-center justify-center w-[48px] h-[48px] text-dim hover:text-foreground transition-colors"
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
-            <path d="M10 3.5a1 1 0 00-1 1v.3a1.7 1.7 0 01-1 1.5 1.7 1.7 0 01-1.8-.2l-.2-.2a1 1 0 10-1.4 1.4l.2.2a1.7 1.7 0 01.2 1.8 1.7 1.7 0 01-1.5 1H4.5a1 1 0 000 2h.3a1.7 1.7 0 011.5 1 1.7 1.7 0 01-.2 1.8l-.2.2a1 1 0 101.4 1.4l.2-.2a1.7 1.7 0 011.8-.2 1.7 1.7 0 011 1.5v.3a1 1 0 002 0v-.3a1.7 1.7 0 011-1.5 1.7 1.7 0 011.8.2l.2.2a1 1 0 101.4-1.4l-.2-.2a1.7 1.7 0 01-.2-1.8 1.7 1.7 0 011.5-1h.3a1 1 0 000-2h-.3a1.7 1.7 0 01-1.5-1 1.7 1.7 0 01.2-1.8l.2-.2a1 1 0 10-1.4-1.4l-.2.2a1.7 1.7 0 01-1.8.2 1.7 1.7 0 01-1-1.5v-.3a1 1 0 00-1 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
-          </svg>
-        </button>
+      <button
+        onClick={() => setSettingsOpen(true)}
+        title="Settings"
+        className="flex items-center justify-center w-[48px] h-[48px] text-dim hover:text-foreground transition-colors"
+      >
+        <svg className="w-5 h-5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+          <path d="M10 3.5a1 1 0 00-1 1v.3a1.7 1.7 0 01-1 1.5 1.7 1.7 0 01-1.8-.2l-.2-.2a1 1 0 10-1.4 1.4l.2.2a1.7 1.7 0 01.2 1.8 1.7 1.7 0 01-1.5 1H4.5a1 1 0 000 2h.3a1.7 1.7 0 011.5 1 1.7 1.7 0 01-.2 1.8l-.2.2a1 1 0 101.4 1.4l.2-.2a1.7 1.7 0 011.8-.2 1.7 1.7 0 011 1.5v.3a1 1 0 002 0v-.3a1.7 1.7 0 011-1.5 1.7 1.7 0 011.8.2l.2.2a1 1 0 101.4-1.4l-.2-.2a1.7 1.7 0 01-.2-1.8 1.7 1.7 0 011.5-1h.3a1 1 0 000-2h-.3a1.7 1.7 0 01-1.5-1 1.7 1.7 0 01.2-1.8l.2-.2a1 1 0 10-1.4-1.4l-.2.2a1.7 1.7 0 01-1.8.2 1.7 1.7 0 01-1-1.5v-.3a1 1 0 00-1 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
+        </svg>
+      </button>
+
+      {/* Workspace switcher — bottom-left like ClickUp */}
+      <div className="pb-2">
+        <WorkspaceSwitcher />
       </div>
 
       {settingsOpen && (
@@ -235,7 +320,6 @@ export function ActivityRibbon({
 
 export function TreePanel() {
   const pathname = usePathname();
-  const [onboardingOpen, setOnboardingOpen] = useState(false);
   const [contextDepth, setContextDepth] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -249,45 +333,40 @@ export function TreePanel() {
       .catch(() => {});
   }, []);
 
+  // Core context files at the top — no "Getting Started" wrapper
+  const coreFiles = [
+    { name: "Soul", path: "reference/core/soul.md", icon: "◆" },
+    { name: "Audience", path: "reference/core/audience.md", icon: "◆" },
+    { name: "Offer", path: "reference/core/offer.md", icon: "◆" },
+    { name: "Voice", path: "reference/core/voice.md", icon: "◆" },
+  ];
+
   return (
     <div className="flex flex-col h-full w-full overflow-hidden bg-surface">
-      {/* Onboarding */}
+      {/* Core context files — always visible */}
       <div className="border-b border-border py-2">
-        <button
-          onClick={() => setOnboardingOpen(!onboardingOpen)}
-          className={`w-full flex items-center gap-3 px-4 py-2 text-[13px] transition-colors text-left ${
-            onboardingOpen ? "text-blue" : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
-          }`}
-        >
-          <span className="text-[10px]">{onboardingOpen ? "▼" : "▶"}</span>
-          <span className="text-blue text-sm">◈</span>
-          Getting Started
-        </button>
-        {onboardingOpen && (
-          <div>
-            {ONBOARDING_FILES.map((file) => (
-              <Link
-                key={file.path}
-                href={`/vault/${file.path}`}
-                className={`flex items-center gap-2.5 py-1.5 text-[13px] transition-colors ${
-                  pathname === `/vault/${file.path}`
-                    ? "text-blue bg-blue/5"
-                    : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
-                }`}
-                style={{ paddingLeft: "40px", paddingRight: "16px" }}
-              >
-                <span className="text-blue text-sm">{file.icon}</span>
-                <span className="truncate">{file.name}</span>
-                {file.path.startsWith("reference/core/") && contextDepth[file.path] && (
-                  <span className={`inline-block w-1.5 h-1.5 rounded-full ml-auto shrink-0 ${
-                    contextDepth[file.path] === "deep" ? "bg-green" :
-                    contextDepth[file.path] === "growing" ? "bg-amber" : "bg-red/50"
-                  }`} />
-                )}
-              </Link>
-            ))}
-          </div>
-        )}
+        <p className="px-4 py-1.5 text-[11px] font-medium text-dim uppercase tracking-wider">Your Profile</p>
+        {coreFiles.map((file) => (
+          <Link
+            key={file.path}
+            href={`/vault/${file.path}`}
+            className={`flex items-center gap-2.5 py-1.5 text-[13px] transition-colors ${
+              pathname === `/vault/${file.path}`
+                ? "text-blue bg-blue/5"
+                : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+            }`}
+            style={{ paddingLeft: "16px", paddingRight: "16px" }}
+          >
+            <span className="text-blue text-sm">{file.icon}</span>
+            <span className="truncate">{file.name}</span>
+            {contextDepth[file.path] && (
+              <span className={`inline-block w-1.5 h-1.5 rounded-full ml-auto shrink-0 ${
+                contextDepth[file.path] === "deep" ? "bg-green" :
+                contextDepth[file.path] === "growing" ? "bg-amber" : "bg-red/50"
+              }`} />
+            )}
+          </Link>
+        ))}
       </div>
 
       {/* File tree */}
@@ -295,15 +374,6 @@ export function TreePanel() {
         {VAULT_FOLDERS.map((folder) => (
           <FolderNode key={folder.path} node={folder} depth={0} onClose={() => {}} />
         ))}
-      </div>
-
-      {/* Sign out — tucked at bottom of tree panel */}
-      <div className="p-3 border-t border-border">
-        <form action="/vault/auth/signout" method="POST">
-          <button type="submit" className="text-xs text-dim hover:text-muted transition-colors">
-            Sign out
-          </button>
-        </form>
       </div>
     </div>
   );
@@ -322,7 +392,6 @@ export default function VaultSidebar({
 }) {
   const pathname = usePathname();
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [onboardingOpen, setOnboardingOpen] = useState(false);
   const [contextDepth, setContextDepth] = useState<Record<string, string>>({});
 
   useEffect(() => {
@@ -336,6 +405,13 @@ export default function VaultSidebar({
       })
       .catch(() => {});
   }, [isOpen]);
+
+  const coreFiles = [
+    { name: "Soul", path: "reference/core/soul.md", icon: "◆" },
+    { name: "Audience", path: "reference/core/audience.md", icon: "◆" },
+    { name: "Offer", path: "reference/core/offer.md", icon: "◆" },
+    { name: "Voice", path: "reference/core/voice.md", icon: "◆" },
+  ];
 
   return (
     <>
@@ -366,43 +442,31 @@ export default function VaultSidebar({
           </Link>
         </div>
 
+        {/* Core profile files */}
         <div className="border-b border-border py-2">
-          <button
-            onClick={() => setOnboardingOpen(!onboardingOpen)}
-            className={`w-full flex items-center gap-3 px-4 py-2 text-sm transition-colors text-left ${
-              onboardingOpen ? "text-blue" : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
-            }`}
-          >
-            <span className="text-xs">{onboardingOpen ? "▼" : "▶"}</span>
-            <span className="text-blue text-sm">◈</span>
-            Getting Started
-          </button>
-          {onboardingOpen && (
-            <div>
-              {ONBOARDING_FILES.map((file) => (
-                <Link
-                  key={file.path}
-                  href={`/vault/${file.path}`}
-                  onClick={onClose}
-                  className={`flex items-center gap-2.5 py-1.5 text-sm transition-colors ${
-                    pathname === `/vault/${file.path}`
-                      ? "text-blue bg-blue/5"
-                      : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
-                  }`}
-                  style={{ paddingLeft: "40px", paddingRight: "16px" }}
-                >
-                  <span className="text-blue text-sm">{file.icon}</span>
-                  <span className="truncate">{file.name}</span>
-                  {file.path.startsWith("reference/core/") && contextDepth[file.path] && (
-                    <span className={`inline-block w-1.5 h-1.5 rounded-full ml-auto shrink-0 ${
-                      contextDepth[file.path] === "deep" ? "bg-green" :
-                      contextDepth[file.path] === "growing" ? "bg-amber" : "bg-red/50"
-                    }`} />
-                  )}
-                </Link>
-              ))}
-            </div>
-          )}
+          <p className="px-4 py-1.5 text-[11px] font-medium text-dim uppercase tracking-wider">Your Profile</p>
+          {coreFiles.map((file) => (
+            <Link
+              key={file.path}
+              href={`/vault/${file.path}`}
+              onClick={onClose}
+              className={`flex items-center gap-2.5 py-1.5 text-sm transition-colors ${
+                pathname === `/vault/${file.path}`
+                  ? "text-blue bg-blue/5"
+                  : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+              }`}
+              style={{ paddingLeft: "16px", paddingRight: "16px" }}
+            >
+              <span className="text-blue text-sm">{file.icon}</span>
+              <span className="truncate">{file.name}</span>
+              {contextDepth[file.path] && (
+                <span className={`inline-block w-1.5 h-1.5 rounded-full ml-auto shrink-0 ${
+                  contextDepth[file.path] === "deep" ? "bg-green" :
+                  contextDepth[file.path] === "growing" ? "bg-amber" : "bg-red/50"
+                }`} />
+              )}
+            </Link>
+          ))}
         </div>
 
         <div className="flex-1 overflow-y-auto py-2">

@@ -53,6 +53,15 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get("action");
 
+  // Client info — lightweight, no GitHub needed
+  if (action === "client") {
+    return NextResponse.json({
+      client_name: client.client_name ?? null,
+      company: client.company ?? null,
+      email: client.email ?? null,
+    });
+  }
+
   // Check if we have a Supabase cache for this repo
   const useCache = await isCachePopulated(repo).catch(() => false);
 

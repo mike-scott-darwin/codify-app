@@ -1,13 +1,26 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 export default function VaultTopBar({
   onMenuToggle,
 }: {
   clientName?: string;
   onMenuToggle: () => void;
 }) {
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    fetch("/api/vault?action=client")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data?.client_name) setName(data.client_name);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
-    <div className="h-12 border-b border-border bg-surface flex items-center px-4">
+    <div className="h-12 border-b border-border bg-surface flex items-center px-4 gap-3">
       <button
         onClick={onMenuToggle}
         className="md:hidden text-muted hover:text-foreground"
@@ -16,6 +29,13 @@ export default function VaultTopBar({
           <path d="M3 5h14M3 10h14M3 15h14" />
         </svg>
       </button>
+
+      {/* Breadcrumb / workspace name */}
+      {name && (
+        <span className="hidden md:block text-sm font-sans font-medium text-foreground truncate">
+          {name}
+        </span>
+      )}
     </div>
   );
 }
