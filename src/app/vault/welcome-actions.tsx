@@ -11,19 +11,27 @@ export default function WelcomeActions() {
         onClick={() => openWithPrompt("/extract soul")}
         className="text-left bg-surface border border-border rounded-xl p-6 hover:border-blue/40 transition-colors group"
       >
-        <h3 className="text-base font-sans font-bold text-blue mb-2">Start Talking</h3>
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-lg">💬</span>
+          <h3 className="text-base font-sans font-bold text-blue">Talk it through</h3>
+        </div>
         <p className="text-sm text-muted leading-relaxed">
-          I'll ask you about your business. Your answers become the foundation.
+          I'll ask simple questions about your business. You talk, I build your profile. Most people start here.
         </p>
+        <p className="text-xs text-dim mt-3">~ 30 minutes</p>
       </button>
       <button
         onClick={() => openWithPrompt("/import")}
         className="text-left bg-surface border border-border rounded-xl p-6 hover:border-blue/40 transition-colors group"
       >
-        <h3 className="text-base font-sans font-bold text-blue mb-2">Import Existing</h3>
+        <div className="flex items-center gap-2 mb-2">
+          <span className="text-lg">📄</span>
+          <h3 className="text-base font-sans font-bold text-blue">Import what you have</h3>
+        </div>
         <p className="text-sm text-muted leading-relaxed">
-          Paste your website copy, a proposal, or any emails. I'll extract the context.
+          Already have website copy, proposals, or brand docs? Paste them in and I'll extract the key information.
         </p>
+        <p className="text-xs text-dim mt-3">~ 10 minutes</p>
       </button>
     </div>
   );
