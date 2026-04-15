@@ -36,7 +36,13 @@ export default function AgentsBrowser() {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!prompt.trim()) return;
-    router.push(`/vault/agents/strategy?prompt=${encodeURIComponent(prompt.trim())}`);
+    if (activeTab === "agents") {
+      // Orchestrate mode — runs multiple agents
+      router.push(`/vault/agents/orchestrate?goal=${encodeURIComponent(prompt.trim())}`);
+    } else {
+      // Codify mode — single agent
+      router.push(`/vault/agents/strategy?prompt=${encodeURIComponent(prompt.trim())}`);
+    }
   }
 
   const filteredAgents = category === "all"
