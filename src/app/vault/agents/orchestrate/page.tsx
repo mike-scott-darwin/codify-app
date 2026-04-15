@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { Suspense, useState, useRef, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 
@@ -18,6 +18,14 @@ interface AgentStep {
 type Phase = "idle" | "planning" | "running" | "summarising" | "complete" | "error";
 
 export default function OrchestratePage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-full"><span className="text-muted text-sm">Loading...</span></div>}>
+      <OrchestrateContent />
+    </Suspense>
+  );
+}
+
+function OrchestrateContent() {
   const searchParams = useSearchParams();
   const initialGoal = searchParams.get("goal") ?? "";
 
