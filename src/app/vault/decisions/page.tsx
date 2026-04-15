@@ -2,6 +2,8 @@ import { createSupabaseServer } from "@/lib/supabase-server";
 import { listDirectory, getFileContent, type VaultFile } from "@/lib/vault";
 import Link from "next/link";
 
+export const revalidate = 300; // cache for 5 minutes
+
 function parseSlug(filename: string) {
   // "2026-04-10-decision-slug.md" → { date: "2026-04-10", title: "Decision Slug" }
   const match = filename.match(/^(\d{4}-\d{2}-\d{2})-(.+)\.md$/);
@@ -37,7 +39,7 @@ export default async function DecisionsPage() {
 
   // Fetch frontmatter for each (parallel)
   const decisions = await Promise.all(
-    mdFiles.slice(0, 50).map(async (file) => {
+    mdFiles.slice(0, 20).map(async (file) => {
       const { date, title } = parseSlug(file.name);
       try {
         const doc = await getFileContent(token!, repo!, file.path);

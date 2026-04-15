@@ -6,6 +6,8 @@ import WelcomeState from "./welcome-state";
 import BuildingState from "./building-state";
 import SyncButton from "./sync-button";
 
+export const revalidate = 120; // cache dashboard for 2 minutes
+
 function timeAgo(dateStr: string): string {
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60000);

@@ -2,6 +2,8 @@ import { createSupabaseServer } from "@/lib/supabase-server";
 import { listDirectory, type VaultFile } from "@/lib/vault";
 import Link from "next/link";
 
+export const revalidate = 300; // cache for 5 minutes
+
 function fileIcon(file: VaultFile) {
   if (file.type === "dir") return "text-amber";
   if (file.name.endsWith(".md")) return "text-blue";

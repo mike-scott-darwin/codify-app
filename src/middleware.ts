@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  const publicPaths = ["/vault/login", "/vault/auth/callback"];
+  const publicPaths = ["/vault/login", "/vault/auth/callback", "/vault/agents"];
   if (publicPaths.some((p) => request.nextUrl.pathname.startsWith(p))) {
     return NextResponse.next();
   }

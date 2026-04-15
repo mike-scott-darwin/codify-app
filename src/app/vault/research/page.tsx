@@ -2,6 +2,8 @@ import { createSupabaseServer } from "@/lib/supabase-server";
 import { listDirectory, getFileContent, type VaultFile } from "@/lib/vault";
 import Link from "next/link";
 
+export const revalidate = 300; // cache for 5 minutes
+
 function parseSlug(filename: string) {
   const match = filename.match(/^(\d{4}-\d{2}-\d{2})-(.+)\.md$/);
   if (!match) return { date: "", title: filename.replace(".md", "") };
@@ -35,7 +37,7 @@ export default async function ResearchPage() {
     .sort((a, b) => b.name.localeCompare(a.name));
 
   const research = await Promise.all(
-    mdFiles.slice(0, 50).map(async (file) => {
+    mdFiles.slice(0, 20).map(async (file) => {
       const { date, title } = parseSlug(file.name);
       try {
         const doc = await getFileContent(token!, repo!, file.path);

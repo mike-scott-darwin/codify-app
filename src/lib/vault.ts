@@ -236,8 +236,8 @@ export async function getContextScore(
 
   let crossReferences = 0;
 
-  // Sample up to 30 files to avoid rate limits
-  const sample = allFiles.slice(0, 30);
+  // Sample up to 10 files to keep load fast
+  const sample = allFiles.slice(0, 10);
 
   for (const file of sample) {
     try {

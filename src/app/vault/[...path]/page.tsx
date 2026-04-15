@@ -6,6 +6,8 @@ import DocumentActions from "./document-actions";
 import Backlinks from "./backlinks";
 import FileContextSetter from "./file-context-setter";
 
+export const revalidate = 300; // cache file views for 5 minutes
+
 const CLEAN_FILES = new Set([
   "ONBOARDING.md",
   "reference/core/soul.md",
