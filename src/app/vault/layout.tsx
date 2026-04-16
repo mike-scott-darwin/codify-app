@@ -4,18 +4,29 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ChatDrawerProvider } from "@/components/vault/chat-drawer-provider";
 import CommandPalette from "@/components/vault/command-palette";
-import VaultSidebar, { ActivityRibbon, TreePanel, FilePreviewPanel } from "@/components/vault/sidebar";
+import VaultSidebar, { ActivityRibbon, TreePanel, FileListPanel, FilePreviewPanel } from "@/components/vault/sidebar";
 import type { PreviewFile } from "@/components/vault/sidebar";
 import VaultTopBar from "@/components/vault/top-bar";
 import ChatPanel from "@/components/vault/chat-panel";
 import type { RibbonPanel } from "@/components/vault/types";
 
+interface FileNode {
+  name: string;
+  path: string;
+  type: "file" | "dir";
+}
+
 export default function VaultLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activePanel, setActivePanel] = useState<RibbonPanel>("files");
+  // 3-pane state: selected folder → file list → preview
+  const [openFolder, setOpenFolder] = useState<{ path: string; label: string } | null>(null);
+  const [folderFiles, setFolderFiles] = useState<FileNode[]>([]);
+  const [loadingFiles, setLoadingFiles] = useState(false);
   const [preview, setPreview] = useState<PreviewFile | null>(null);
   const [loadingPreview, setLoadingPreview] = useState(false);
-  const [previewWidth, setPreviewWidth] = useState(360);
+  const [previewWidth, setPreviewWidth] = useState(420);
+  const fileCache = useRef<Record<string, string>>({});
   const resizing = useRef(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -31,7 +42,7 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
     function onMouseMove(ev: MouseEvent) {
       if (!resizing.current) return;
       const delta = ev.clientX - startX;
-      setPreviewWidth(Math.max(240, Math.min(startWidth + delta, 700)));
+      setPreviewWidth(Math.max(280, Math.min(startWidth + delta, 700)));
     }
     function onMouseUp() {
       resizing.current = false;
@@ -46,19 +57,85 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
     document.addEventListener("mouseup", onMouseUp);
   }, [previewWidth]);
 
-  // Close preview when navigating away from agents
+  // Close panes when navigating away from agents
   useEffect(() => {
-    if (!isOnAgents) setPreview(null);
+    if (!isOnAgents) {
+      setOpenFolder(null);
+      setPreview(null);
+      setFolderFiles([]);
+    }
   }, [isOnAgents]);
 
-  async function openPreview(path: string, name: string) {
+  // Open a folder → fetch file list → auto-preview first file
+  async function handleOpenFolder(path: string, label: string) {
+    if (openFolder?.path === path) {
+      // Toggle off
+      setOpenFolder(null);
+      setFolderFiles([]);
+      setPreview(null);
+      return;
+    }
+
+    setOpenFolder({ path, label });
+    setLoadingFiles(true);
+    setFolderFiles([]);
+    setPreview(null);
+
+    try {
+      const res = await fetch(`/api/vault?action=list&path=${encodeURIComponent(path)}`);
+      if (res.ok) {
+        const data = (await res.json()) as FileNode[];
+        const files = data
+          .filter((f) => f.type === "file")
+          .sort((a, b) => a.name.localeCompare(b.name));
+        const dirs = data
+          .filter((f) => f.type === "dir")
+          .sort((a, b) => a.name.localeCompare(b.name));
+
+        // If there are subdirectories, fetch their files too (one level deep)
+        const subFiles: FileNode[] = [];
+        for (const dir of dirs) {
+          try {
+            const subRes = await fetch(`/api/vault?action=list&path=${encodeURIComponent(dir.path)}`);
+            if (subRes.ok) {
+              const subData = (await subRes.json()) as FileNode[];
+              subFiles.push(...subData.filter((f) => f.type === "file"));
+            }
+          } catch { /* skip */ }
+        }
+
+        const allFiles = [...files, ...subFiles].sort((a, b) => a.name.localeCompare(b.name));
+        setFolderFiles(allFiles);
+
+        // Auto-preview first file
+        if (allFiles.length > 0) {
+          loadPreview(allFiles[0].path, allFiles[0].name);
+        }
+      }
+    } catch {
+      setFolderFiles([]);
+    }
+    setLoadingFiles(false);
+  }
+
+  // Load file preview with caching
+  async function loadPreview(path: string, name: string) {
+    // Optimistic: show cached content immediately if available
+    if (fileCache.current[path]) {
+      setPreview({ path, name, content: fileCache.current[path] });
+      setLoadingPreview(false);
+      return;
+    }
+
     setLoadingPreview(true);
     setPreview({ path, name, content: "" });
+
     try {
       const res = await fetch(`/api/vault?action=file&path=${encodeURIComponent(path)}`);
       if (res.ok) {
         const data = await res.json();
         const content = typeof data === "string" ? data : data.content || JSON.stringify(data, null, 2);
+        fileCache.current[path] = content;
         setPreview({ path, name, content });
       }
     } catch {
@@ -81,32 +158,30 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
   // Keyboard shortcuts
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      // Don't trigger when typing in inputs
       const tag = (e.target as HTMLElement).tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || (e.target as HTMLElement).isContentEditable) return;
 
       switch (e.key.toLowerCase()) {
         case "q":
-          // Toggle sidebar
           setActivePanel((prev) => (prev === "files" ? null : "files"));
           break;
         case "h":
-          // Go home
           router.push("/vault");
           break;
         case "s":
-          // Open search (Cmd+K handled by command palette, but S alone also works)
           if (!e.metaKey && !e.ctrlKey) {
             e.preventDefault();
-            // Dispatch Cmd+K to trigger command palette
             window.dispatchEvent(
               new KeyboardEvent("keydown", { key: "k", metaKey: true, bubbles: true })
             );
           }
           break;
+        case "escape":
+          if (preview) { setPreview(null); setOpenFolder(null); setFolderFiles([]); }
+          break;
       }
     },
-    [router]
+    [router, preview]
   );
 
   useEffect(() => {
@@ -126,17 +201,31 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
           />
         </div>
 
-        {/* Side panel — files */}
+        {/* Pane 1: Folder tree */}
         {activePanel === "files" && (
           <div className="hidden md:flex flex-col shrink-0 h-full w-[220px] border-r border-border">
             <TreePanel
-              onPreviewFile={isOnAgents ? openPreview : undefined}
-              previewPath={preview?.path}
+              onOpenFolder={isOnAgents ? handleOpenFolder : undefined}
+              activeFolderPath={openFolder?.path}
             />
           </div>
         )}
 
-        {/* Preview panel — resizable column next to file tree */}
+        {/* Pane 2: File list within selected folder */}
+        {openFolder && isOnAgents && (
+          <div className="hidden md:flex flex-col shrink-0 h-full w-[200px] border-r border-border">
+            <FileListPanel
+              folderLabel={openFolder.label}
+              files={folderFiles}
+              loading={loadingFiles}
+              selectedPath={preview?.path}
+              onSelectFile={loadPreview}
+              onClose={() => { setOpenFolder(null); setFolderFiles([]); setPreview(null); }}
+            />
+          </div>
+        )}
+
+        {/* Pane 3: File preview — resizable */}
         {preview && isOnAgents && (
           <div className="hidden md:flex shrink-0 h-full relative" style={{ width: previewWidth }}>
             <div className="flex flex-col h-full w-full border-r border-border">
@@ -162,7 +251,7 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
           <main className="flex-1 overflow-y-auto">{children}</main>
         </div>
 
-        {/* Mobile: chat overlay + sidebar overlay */}
+        {/* Mobile */}
         <ChatPanel />
         <div className="md:hidden">
           <VaultSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />

@@ -508,11 +508,11 @@ export interface PreviewFile {
 }
 
 export function TreePanel({
-  onPreviewFile,
-  previewPath,
+  onOpenFolder,
+  activeFolderPath,
 }: {
-  onPreviewFile?: (path: string, name: string) => void;
-  previewPath?: string;
+  onOpenFolder?: (path: string, label: string) => void;
+  activeFolderPath?: string;
 }) {
   const pathname = usePathname();
   const [contextDepth, setContextDepth] = useState<Record<string, string>>({});
@@ -537,70 +537,137 @@ export function TreePanel({
 
   return (
     <div className="flex flex-col h-full w-full overflow-hidden bg-surface">
-      {/* Core context files */}
+      {/* Your Profile — opens reference/core folder on agents page */}
       <div className="border-b border-border py-2">
-        <p className="px-4 py-1.5 text-[11px] font-medium text-dim uppercase tracking-wider">Your Profile</p>
-        {coreFiles.map((file) => (
-          onPreviewFile ? (
-            <button
-              key={file.path}
-              onClick={() => onPreviewFile(file.path, file.name)}
-              draggable
-              onDragStart={(e) => {
-                e.dataTransfer.setData("application/x-vault-path", file.path);
-                e.dataTransfer.setData("text/plain", file.name);
-                e.dataTransfer.effectAllowed = "copy";
-              }}
-              className={`w-full flex items-center gap-2.5 py-1.5 text-[13px] transition-colors cursor-grab active:cursor-grabbing ${
-                previewPath === file.path
-                  ? "text-blue bg-blue/5"
-                  : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
-              }`}
-              style={{ paddingLeft: "16px", paddingRight: "16px" }}
-            >
-              <span className="text-blue text-sm">{file.icon}</span>
-              <span className="truncate">{file.name}</span>
-              {contextDepth[file.path] && (
-                <span className={`inline-block w-1.5 h-1.5 rounded-full ml-auto shrink-0 ${
-                  contextDepth[file.path] === "deep" ? "bg-green" :
-                  contextDepth[file.path] === "growing" ? "bg-amber" : "bg-red/50"
-                }`} />
-              )}
-            </button>
-          ) : (
-            <Link
-              key={file.path}
-              href={`/vault/${file.path}`}
-              draggable
-              onDragStart={(e) => {
-                e.dataTransfer.setData("application/x-vault-path", file.path);
-                e.dataTransfer.setData("text/plain", file.name);
-                e.dataTransfer.effectAllowed = "copy";
-              }}
-              className={`flex items-center gap-2.5 py-1.5 text-[13px] transition-colors cursor-grab active:cursor-grabbing ${
-                pathname === `/vault/${file.path}`
-                  ? "text-blue bg-blue/5"
-                  : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
-              }`}
-              style={{ paddingLeft: "16px", paddingRight: "16px" }}
-            >
-              <span className="text-blue text-sm">{file.icon}</span>
-              <span className="truncate">{file.name}</span>
-              {contextDepth[file.path] && (
-                <span className={`inline-block w-1.5 h-1.5 rounded-full ml-auto shrink-0 ${
-                  contextDepth[file.path] === "deep" ? "bg-green" :
-                  contextDepth[file.path] === "growing" ? "bg-amber" : "bg-red/50"
-                }`} />
-              )}
-            </Link>
-          )
-        ))}
+        {onOpenFolder ? (
+          <button
+            onClick={() => onOpenFolder("reference/core", "Your Profile")}
+            className={`w-full flex items-center gap-2.5 px-4 py-2 text-[13px] transition-colors ${
+              activeFolderPath === "reference/core" ? "text-blue bg-blue/5" : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+            }`}
+          >
+            <span className="text-blue text-sm">◆</span>
+            <span className="font-medium">Your Profile</span>
+            <span className="text-[10px] text-dim ml-auto">4 files</span>
+          </button>
+        ) : (
+          <>
+            <p className="px-4 py-1.5 text-[11px] font-medium text-dim uppercase tracking-wider">Your Profile</p>
+            {coreFiles.map((file) => (
+              <Link
+                key={file.path}
+                href={`/vault/${file.path}`}
+                draggable
+                onDragStart={(e) => {
+                  e.dataTransfer.setData("application/x-vault-path", file.path);
+                  e.dataTransfer.setData("text/plain", file.name);
+                  e.dataTransfer.effectAllowed = "copy";
+                }}
+                className={`flex items-center gap-2.5 py-1.5 text-[13px] transition-colors cursor-grab active:cursor-grabbing ${
+                  pathname === `/vault/${file.path}`
+                    ? "text-blue bg-blue/5"
+                    : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+                }`}
+                style={{ paddingLeft: "16px", paddingRight: "16px" }}
+              >
+                <span className="text-blue text-sm">{file.icon}</span>
+                <span className="truncate">{file.name}</span>
+                {contextDepth[file.path] && (
+                  <span className={`inline-block w-1.5 h-1.5 rounded-full ml-auto shrink-0 ${
+                    contextDepth[file.path] === "deep" ? "bg-green" :
+                    contextDepth[file.path] === "growing" ? "bg-amber" : "bg-red/50"
+                  }`} />
+                )}
+              </Link>
+            ))}
+          </>
+        )}
       </div>
 
-      {/* File tree */}
+      {/* Vault folders */}
       <div className="flex-1 overflow-y-auto py-2">
-        {VAULT_FOLDERS.map((folder) => (
-          <FolderNode key={folder.path} node={folder} depth={0} onClose={() => {}} onPreview={onPreviewFile} />
+        {onOpenFolder ? (
+          // Agents page: folders are clickable to open file list in middle pane
+          VAULT_FOLDERS.map((folder) => (
+            <button
+              key={folder.path}
+              onClick={() => onOpenFolder(folder.path, folder.label)}
+              className={`w-full flex items-center gap-2.5 px-4 py-2 text-[13px] transition-colors ${
+                activeFolderPath === folder.path ? `${folder.color} bg-[#1a1a1a]` : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+              }`}
+            >
+              <span className={`text-sm ${folder.color}`}>{folder.icon}</span>
+              <span className="truncate">{folder.label}</span>
+            </button>
+          ))
+        ) : (
+          // Normal pages: expandable folder tree
+          VAULT_FOLDERS.map((folder) => (
+            <FolderNode key={folder.path} node={folder} depth={0} onClose={() => {}} />
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ─── File List Panel (middle pane) ─── */
+
+export function FileListPanel({
+  folderLabel,
+  files,
+  loading,
+  selectedPath,
+  onSelectFile,
+  onClose,
+}: {
+  folderLabel: string;
+  files: FileNode[];
+  loading: boolean;
+  selectedPath?: string;
+  onSelectFile: (path: string, name: string) => void;
+  onClose: () => void;
+}) {
+  return (
+    <div className="flex flex-col h-full w-full overflow-hidden bg-surface">
+      <div className="flex items-center justify-between px-3 py-2.5 border-b border-border shrink-0">
+        <span className="text-xs font-sans font-medium text-foreground">{folderLabel}</span>
+        <button onClick={onClose} className="text-dim hover:text-foreground transition-colors p-0.5">
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="2">
+            <path d="M6 6l8 8M14 6l-8 8" strokeLinecap="round" />
+          </svg>
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto py-1">
+        {loading && (
+          <div className="px-3 py-4 space-y-2">
+            {[1,2,3].map(i => <div key={i} className="h-4 bg-[#1a1a1a] rounded animate-pulse" style={{ width: `${70 + i * 8}%` }} />)}
+          </div>
+        )}
+        {!loading && files.length === 0 && (
+          <p className="px-3 py-4 text-xs text-dim">No files found.</p>
+        )}
+        {files.map((file) => (
+          <button
+            key={file.path}
+            onClick={() => onSelectFile(file.path, file.name)}
+            draggable
+            onDragStart={(e) => {
+              e.dataTransfer.setData("application/x-vault-path", file.path);
+              e.dataTransfer.setData("text/plain", file.name);
+              e.dataTransfer.effectAllowed = "copy";
+            }}
+            className={`w-full flex items-center gap-2 px-3 py-1.5 text-[13px] font-sans transition-colors cursor-grab active:cursor-grabbing ${
+              selectedPath === file.path
+                ? "text-blue bg-blue/5"
+                : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
+            }`}
+          >
+            <span className={`text-xs shrink-0 ${file.name.endsWith(".md") ? "text-blue" : "text-dim"}`}>
+              {file.name.endsWith(".md") ? "◆" : "·"}
+            </span>
+            <span className="truncate">{file.name.replace(".md", "")}</span>
+          </button>
         ))}
       </div>
     </div>
