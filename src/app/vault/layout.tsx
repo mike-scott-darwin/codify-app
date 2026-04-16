@@ -26,35 +26,39 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
   const [preview, setPreview] = useState<PreviewFile | null>(null);
   const [loadingPreview, setLoadingPreview] = useState(false);
   const [previewWidth, setPreviewWidth] = useState(420);
+  const [treeWidth, setTreeWidth] = useState(220);
+  const [fileListWidth, setFileListWidth] = useState(200);
   const fileCache = useRef<Record<string, string>>({});
   const resizing = useRef(false);
   const pathname = usePathname();
   const router = useRouter();
 
-  // Resize handler for preview panel
-  const startResize = useCallback((e: React.MouseEvent) => {
-    e.preventDefault();
-    resizing.current = true;
-    const startX = e.clientX;
-    const startWidth = previewWidth;
+  // Generic resize handler for any pane
+  const startPaneResize = useCallback(
+    (e: React.MouseEvent, setter: (w: number) => void, currentWidth: number, min: number, max: number) => {
+      e.preventDefault();
+      resizing.current = true;
+      const startX = e.clientX;
 
-    function onMouseMove(ev: MouseEvent) {
-      if (!resizing.current) return;
-      const delta = ev.clientX - startX;
-      setPreviewWidth(Math.max(280, Math.min(startWidth + delta, 700)));
-    }
-    function onMouseUp() {
-      resizing.current = false;
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-      document.body.style.cursor = "";
-      document.body.style.userSelect = "";
-    }
-    document.body.style.cursor = "col-resize";
-    document.body.style.userSelect = "none";
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-  }, [previewWidth]);
+      function onMouseMove(ev: MouseEvent) {
+        if (!resizing.current) return;
+        const delta = ev.clientX - startX;
+        setter(Math.max(min, Math.min(currentWidth + delta, max)));
+      }
+      function onMouseUp() {
+        resizing.current = false;
+        document.removeEventListener("mousemove", onMouseMove);
+        document.removeEventListener("mouseup", onMouseUp);
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+      }
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
+      document.addEventListener("mousemove", onMouseMove);
+      document.addEventListener("mouseup", onMouseUp);
+    },
+    []
+  );
 
   // Close panes when navigating to a specific file/page (not agents or dashboard)
   useEffect(() => {
@@ -196,28 +200,46 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
           />
         </div>
 
-        {/* Pane 1: Folder tree */}
+        {/* Pane 1: Folder tree + resize handle */}
         {activePanel === "files" && (
-          <div className="hidden md:flex flex-col shrink-0 h-full w-[220px] border-r border-border">
-            <TreePanel
-              onOpenFolder={handleOpenFolder}
-              activeFolderPath={openFolder?.path}
+          <>
+            <div
+              className="hidden md:flex flex-col shrink-0 h-full border-r border-border"
+              style={{ width: `${treeWidth}px` }}
+            >
+              <TreePanel
+                onOpenFolder={handleOpenFolder}
+                activeFolderPath={openFolder?.path}
+              />
+            </div>
+            <div
+              className="hidden md:block w-[3px] h-full cursor-col-resize shrink-0 hover:bg-blue/30 active:bg-blue/40 transition-colors"
+              onMouseDown={(e) => startPaneResize(e, setTreeWidth, treeWidth, 160, 360)}
             />
-          </div>
+          </>
         )}
 
-        {/* Pane 2: File list within selected folder */}
+        {/* Pane 2: File list + resize handle */}
         {openFolder && (
-          <div className="hidden md:flex flex-col shrink-0 h-full w-[200px] border-r border-border">
-            <FileListPanel
-              folderLabel={openFolder.label}
-              files={folderFiles}
-              loading={loadingFiles}
-              selectedPath={preview?.path}
-              onSelectFile={loadPreview}
-              onClose={() => { setOpenFolder(null); setFolderFiles([]); setPreview(null); }}
+          <>
+            <div
+              className="hidden md:flex flex-col shrink-0 h-full border-r border-border"
+              style={{ width: `${fileListWidth}px` }}
+            >
+              <FileListPanel
+                folderLabel={openFolder.label}
+                files={folderFiles}
+                loading={loadingFiles}
+                selectedPath={preview?.path}
+                onSelectFile={loadPreview}
+                onClose={() => { setOpenFolder(null); setFolderFiles([]); setPreview(null); }}
+              />
+            </div>
+            <div
+              className="hidden md:block w-[3px] h-full cursor-col-resize shrink-0 hover:bg-blue/30 active:bg-blue/40 transition-colors"
+              onMouseDown={(e) => startPaneResize(e, setFileListWidth, fileListWidth, 140, 350)}
             />
-          </div>
+          </>
         )}
 
         {/* Pane 3: File preview — takes remaining space when open */}

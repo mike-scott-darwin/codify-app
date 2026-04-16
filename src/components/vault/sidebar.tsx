@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
+import MarkdownRenderer from "@/app/vault/[...path]/markdown-renderer";
 import SettingsModal from "./settings-modal";
 import type { RibbonPanel } from "./types";
 
@@ -686,49 +687,40 @@ export function FilePreviewPanel({
   onClose: () => void;
 }) {
   return (
-    <div className="flex flex-col h-full w-full overflow-hidden bg-surface">
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
-        <div className="flex items-center gap-2.5 min-w-0">
-          <span className="text-blue text-sm">◆</span>
-          <span className="text-sm font-sans font-medium text-foreground truncate">
-            {file.name.replace(".md", "")}
-          </span>
-        </div>
-        <div className="flex items-center gap-2 shrink-0">
-          <span
-            className="text-[11px] text-blue bg-blue/10 px-2 py-1 rounded-md cursor-grab font-sans font-medium hover:bg-blue/15 transition-colors"
-            draggable
-            onDragStart={(e) => {
-              e.dataTransfer.setData("application/x-vault-path", file.path);
-              e.dataTransfer.setData("text/plain", file.name);
-              e.dataTransfer.effectAllowed = "copy";
-            }}
-            title="Drag to Codify terminal"
-          >
-            Drag to Codify
-          </span>
-          <button onClick={onClose} className="text-dim hover:text-foreground transition-colors p-1 rounded-md hover:bg-[#1a1a1a]">
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="2">
-              <path d="M6 6l8 8M14 6l-8 8" strokeLinecap="round" />
-            </svg>
-          </button>
-        </div>
+    <div className="flex flex-col h-full w-full overflow-hidden bg-[#0e0e0e]">
+      {/* Minimal breadcrumb header — file name is draggable */}
+      <div className="flex items-center justify-between px-6 py-2.5 border-b border-border/50 shrink-0">
+        <span
+          className="text-xs text-dim truncate cursor-grab active:cursor-grabbing hover:text-muted transition-colors"
+          draggable
+          onDragStart={(e) => {
+            e.dataTransfer.setData("application/x-vault-path", file.path);
+            e.dataTransfer.setData("text/plain", file.name);
+            e.dataTransfer.effectAllowed = "copy";
+          }}
+          title="Drag to Codify terminal"
+        >
+          {file.path}
+        </span>
+        <button onClick={onClose} className="text-dim hover:text-foreground transition-colors p-1 rounded-md hover:bg-[#1a1a1a] shrink-0 ml-3">
+          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="2">
+            <path d="M6 6l8 8M14 6l-8 8" strokeLinecap="round" />
+          </svg>
+        </button>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-y-auto px-5 py-4">
+      {/* Content — same renderer as full file view */}
+      <div className="flex-1 overflow-y-auto px-8 py-6">
         {loading ? (
-          <div className="space-y-3">
-            <div className="h-4 bg-[#1a1a1a] rounded w-3/4 animate-pulse" />
-            <div className="h-4 bg-[#1a1a1a] rounded w-full animate-pulse" />
-            <div className="h-4 bg-[#1a1a1a] rounded w-5/6 animate-pulse" />
-            <div className="h-4 bg-[#1a1a1a] rounded w-2/3 animate-pulse" />
+          <div className="space-y-3 max-w-3xl">
+            <div className="h-5 bg-[#1a1a1a] rounded w-2/3 animate-pulse" />
+            <div className="h-3 bg-[#1a1a1a] rounded w-full animate-pulse mt-4" />
+            <div className="h-3 bg-[#1a1a1a] rounded w-5/6 animate-pulse" />
+            <div className="h-3 bg-[#1a1a1a] rounded w-4/5 animate-pulse" />
+            <div className="h-3 bg-[#1a1a1a] rounded w-2/3 animate-pulse" />
           </div>
         ) : (
-          <div className="text-[13px] text-muted leading-[1.8] font-sans whitespace-pre-wrap">
-            {file.content}
-          </div>
+          <MarkdownRenderer content={file.content} />
         )}
       </div>
     </div>

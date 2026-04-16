@@ -137,3 +137,32 @@ button[class*="bg-purple"]:active {
 .vault-prose hr { border: none; border-top: 1px solid var(--border-color); margin: 1.5rem 0; }
 .vault-prose strong { font-weight: 600; }
 .vault-prose img { max-width: 100%; border-radius: 0.5rem; }
+
+/* Vault preview — Obsidian reading view */
+.vault-preview { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 15px; line-height: 1.75; color: var(--foreground); }
+.vault-preview h1 { font-size: 1.8rem; font-weight: 700; margin: 2rem 0 0.75rem; letter-spacing: -0.02em; color: var(--foreground); border-bottom: 1px solid var(--border-color); padding-bottom: 0.4rem; }
+.vault-preview h2 { font-size: 1.4rem; font-weight: 600; margin: 1.75rem 0 0.5rem; letter-spacing: -0.01em; color: var(--foreground); }
+.vault-preview h3 { font-size: 1.15rem; font-weight: 600; margin: 1.25rem 0 0.4rem; color: var(--foreground); }
+.vault-preview h4, .vault-preview h5, .vault-preview h6 { font-size: 1rem; font-weight: 600; margin: 1rem 0 0.3rem; color: var(--foreground); }
+.vault-preview p { margin: 0.6rem 0; color: var(--muted); }
+.vault-preview ul, .vault-preview ol { margin: 0.5rem 0; padding-left: 1.75rem; color: var(--muted); }
+.vault-preview li { margin: 0.3rem 0; }
+.vault-preview li::marker { color: var(--dim); }
+.vault-preview ul { list-style-type: disc; }
+.vault-preview ol { list-style-type: decimal; }
+.vault-preview code { font-family: var(--font-mono); background: rgba(255,255,255,0.05); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9em; color: var(--blue); }
+.vault-preview pre { background: #0d0d0d; border: 1px solid var(--border-color); border-radius: 8px; padding: 1rem 1.25rem; overflow-x: auto; margin: 1rem 0; }
+.vault-preview pre code { background: none; padding: 0; color: var(--muted); }
+.vault-preview a { color: var(--blue); text-decoration: none; }
+.vault-preview a:hover { text-decoration: underline; }
+.vault-preview blockquote { border-left: 3px solid var(--blue); padding: 0.5rem 1rem; margin: 1rem 0; background: rgba(74,158,255,0.03); border-radius: 0 4px 4px 0; }
+.vault-preview blockquote p { color: var(--muted); margin: 0.25rem 0; }
+.vault-preview table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+.vault-preview th, .vault-preview td { border: 1px solid var(--border-color); padding: 0.5rem 0.75rem; text-align: left; font-size: 0.9em; }
+.vault-preview th { background: rgba(255,255,255,0.03); font-weight: 600; color: var(--foreground); }
+.vault-preview td { color: var(--muted); }
+.vault-preview hr { border: none; border-top: 1px solid var(--border-color); margin: 2rem 0; }
+.vault-preview strong { font-weight: 600; color: var(--foreground); }
+.vault-preview em { font-style: italic; }
+.vault-preview img { max-width: 100%; border-radius: 8px; margin: 1rem 0; }
+.vault-preview > :first-child { margin-top: 0; }
