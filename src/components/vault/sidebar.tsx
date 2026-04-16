@@ -413,7 +413,7 @@ export function ActivityRibbon({
         href="/vault"
         title="Home (H)"
         className={`flex items-center justify-center h-[48px] transition-colors ${
-          isHome && !activePanel
+          isHome
             ? "text-blue"
             : "text-dim hover:text-foreground"
         }`}
@@ -426,9 +426,6 @@ export function ActivityRibbon({
       {/* Files */}
       <button
         onClick={() => {
-          if (pathname.startsWith("/vault/agents")) {
-            router.push("/vault");
-          }
           onTogglePanel("files");
         }}
         title="Files (Q)"
