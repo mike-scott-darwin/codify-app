@@ -105,7 +105,13 @@ function FolderNode({
                 key={child.path}
                 href={`/vault/${child.path}`}
                 onClick={onClose}
-                className={`flex items-center gap-2.5 py-1.5 text-[13px] transition-colors ${
+                draggable
+                onDragStart={(e) => {
+                  e.dataTransfer.setData("application/x-vault-path", child.path);
+                  e.dataTransfer.setData("text/plain", child.name);
+                  e.dataTransfer.effectAllowed = "copy";
+                }}
+                className={`flex items-center gap-2.5 py-1.5 text-[13px] transition-colors cursor-grab active:cursor-grabbing ${
                   pathname === `/vault/${child.path}`
                     ? "text-blue bg-blue/5"
                     : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
@@ -506,7 +512,13 @@ export function TreePanel() {
           <Link
             key={file.path}
             href={`/vault/${file.path}`}
-            className={`flex items-center gap-2.5 py-1.5 text-[13px] transition-colors ${
+            draggable
+            onDragStart={(e) => {
+              e.dataTransfer.setData("application/x-vault-path", file.path);
+              e.dataTransfer.setData("text/plain", file.name);
+              e.dataTransfer.effectAllowed = "copy";
+            }}
+            className={`flex items-center gap-2.5 py-1.5 text-[13px] transition-colors cursor-grab active:cursor-grabbing ${
               pathname === `/vault/${file.path}`
                 ? "text-blue bg-blue/5"
                 : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
@@ -606,7 +618,13 @@ export default function VaultSidebar({
               key={file.path}
               href={`/vault/${file.path}`}
               onClick={onClose}
-              className={`flex items-center gap-2.5 py-1.5 text-sm transition-colors ${
+              draggable
+              onDragStart={(e) => {
+                e.dataTransfer.setData("application/x-vault-path", file.path);
+                e.dataTransfer.setData("text/plain", file.name);
+                e.dataTransfer.effectAllowed = "copy";
+              }}
+              className={`flex items-center gap-2.5 py-1.5 text-sm transition-colors cursor-grab active:cursor-grabbing ${
                 pathname === `/vault/${file.path}`
                   ? "text-blue bg-blue/5"
                   : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"

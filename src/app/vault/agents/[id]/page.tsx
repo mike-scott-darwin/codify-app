@@ -145,6 +145,21 @@ function AgentPageContent() {
     });
   }
 
+  async function handleVaultDrop(vaultPath: string) {
+    const name = vaultPath.split("/").pop() || vaultPath;
+    setAttachedFiles((prev) => [...prev, { name, content: `[Loading ${name}...]` }]);
+    try {
+      const res = await fetch(`/api/vault?action=file&path=${encodeURIComponent(vaultPath)}`);
+      if (res.ok) {
+        const data = await res.json();
+        const content = typeof data === "string" ? data : data.content || JSON.stringify(data);
+        setAttachedFiles((prev) => prev.map((f) => f.content === `[Loading ${name}...]` ? { ...f, content } : f));
+      }
+    } catch {
+      setAttachedFiles((prev) => prev.filter((f) => f.content !== `[Loading ${name}...]`));
+    }
+  }
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
@@ -401,7 +416,7 @@ function AgentPageContent() {
             className={`border rounded-xl bg-surface focus-within:border-blue/40 transition-colors overflow-hidden relative ${dragOver ? "border-blue border-dashed" : "border-border"}`}
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
-            onDrop={(e) => { e.preventDefault(); setDragOver(false); if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files); }}
+            onDrop={(e) => { e.preventDefault(); setDragOver(false); const vaultPath = e.dataTransfer.getData("application/x-vault-path"); if (vaultPath) { handleVaultDrop(vaultPath); } else if (e.dataTransfer.files.length) { handleFiles(e.dataTransfer.files); } }}
           >
             {dragOver && (
               <div className="absolute inset-0 bg-blue/5 flex items-center justify-center z-10 rounded-xl pointer-events-none">
