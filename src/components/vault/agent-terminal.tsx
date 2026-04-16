@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import type { Agent } from "@/lib/agents";
-import { SKILLS } from "@/lib/skills";
+import { SKILLS, EXTRACT_SKILLS, CREATE_SKILLS } from "@/lib/skills";
 
 interface TerminalLine {
   type: "input" | "status" | "output" | "error";
@@ -194,12 +194,12 @@ export default function AgentTerminal({
       <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 font-mono text-[13px] leading-relaxed space-y-1">
         {lines.length === 0 && (
           <div>
-            <p className="text-dim mb-3">
+            <p className="text-dim mb-4">
               <span className="text-muted">$</span> Ready. Type a task or use a <span className="text-blue">/command</span>.
             </p>
-            <p className="text-dim text-[11px] mb-1">Available commands:</p>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 mb-2">
-              {SKILLS.map((skill) => (
+            <p className="text-blue text-[11px] font-bold mb-1">Step 1 — Extract your knowledge</p>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 mb-3">
+              {EXTRACT_SKILLS.map((skill) => (
                 <button
                   key={skill.id}
                   onClick={() => {
@@ -209,6 +209,22 @@ export default function AgentTerminal({
                   className="text-left text-[11px] py-0.5 hover:text-blue transition-colors"
                 >
                   <span className="text-blue">{skill.command}</span>
+                  <span className="text-dim ml-2">{skill.name}</span>
+                </button>
+              ))}
+            </div>
+            <p className="text-green text-[11px] font-bold mb-1">Step 2 — Create from your vault</p>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 mb-2">
+              {CREATE_SKILLS.map((skill) => (
+                <button
+                  key={skill.id}
+                  onClick={() => {
+                    setInput(skill.command + " ");
+                    inputRef.current?.focus();
+                  }}
+                  className="text-left text-[11px] py-0.5 hover:text-green transition-colors"
+                >
+                  <span className="text-green">{skill.command}</span>
                   <span className="text-dim ml-2">{skill.name}</span>
                 </button>
               ))}

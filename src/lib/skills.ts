@@ -1,5 +1,5 @@
 // Skills are manual, single-shot commands the Codify agent can execute.
-// Each skill reads from the vault's core reference files and produces one output.
+// Phase 1 (Extract) must be completed before Phase 2 (Create) is useful.
 
 export interface Skill {
   id: string;
@@ -8,80 +8,37 @@ export interface Skill {
   description: string;
   emoji: string;
   example: string;
+  phase: "extract" | "create";
 }
 
-export const SKILLS: Skill[] = [
+// Phase 1: Extract your knowledge into the vault
+export const EXTRACT_SKILLS: Skill[] = [
   {
-    id: "brief",
-    command: "/brief",
-    name: "Brief Me",
-    description: "Read your core files and recent activity, summarise where things stand",
-    emoji: "📋",
-    example: "/brief — what changed this week?",
+    id: "extract",
+    command: "/extract",
+    name: "Extract Knowledge",
+    description: "AI interviews you about your business and builds your core profile",
+    emoji: "💬",
+    example: "/extract soul",
+    phase: "extract",
   },
   {
-    id: "draft",
-    command: "/draft",
-    name: "Draft Content",
-    description: "Write a blog post, email, or social post in your voice",
-    emoji: "✏️",
-    example: "/draft linkedin post about our new offer",
-  },
-  {
-    id: "facebook-ad",
-    command: "/facebook-ad",
-    name: "Facebook Ad",
-    description: "Generate ad copy — headline, primary text, and CTA — matched to your audience",
-    emoji: "📣",
-    example: "/facebook-ad for our spring coaching launch",
-  },
-  {
-    id: "email",
-    command: "/email",
-    name: "Email Sequence",
-    description: "Write a sales or nurture email grounded in your offer and voice",
-    emoji: "📧",
-    example: "/email welcome sequence for new subscribers",
-  },
-  {
-    id: "research",
-    command: "/research",
-    name: "Research",
-    description: "Investigate a topic, competitor, or market trend and save findings to your vault",
-    emoji: "🔍",
-    example: "/research competitor pricing in our niche",
-  },
-  {
-    id: "decide",
-    command: "/decide",
-    name: "Capture Decision",
-    description: "Log a strategic decision with reasoning so your vault remembers why",
-    emoji: "⚖️",
-    example: "/decide we're raising prices 20% because...",
+    id: "import",
+    command: "/import",
+    name: "Import Existing",
+    description: "Paste website copy, proposals, or docs — AI extracts the key info",
+    emoji: "📄",
+    example: "/import",
+    phase: "extract",
   },
   {
     id: "audit",
     command: "/audit",
-    name: "Vault Audit",
-    description: "Check which files need updating, what's missing, and what's gone stale",
+    name: "Context Check",
+    description: "See which profile areas need more depth before creating content",
     emoji: "🔎",
-    example: "/audit — what needs attention?",
-  },
-  {
-    id: "proposal",
-    command: "/proposal",
-    name: "Proposal",
-    description: "Draft a client proposal using your offer, voice, and positioning",
-    emoji: "📄",
-    example: "/proposal for [client name]'s coaching package",
-  },
-  {
-    id: "landing-page",
-    command: "/landing-page",
-    name: "Landing Page",
-    description: "Generate landing page copy — hero, benefits, social proof, CTA",
-    emoji: "🖥️",
-    example: "/landing-page for our free workshop funnel",
+    example: "/audit",
+    phase: "extract",
   },
   {
     id: "voice-check",
@@ -90,5 +47,67 @@ export const SKILLS: Skill[] = [
     description: "Paste any text and check if it sounds like you",
     emoji: "🎤",
     example: "/voice-check [paste your draft]",
+    phase: "extract",
   },
 ];
+
+// Phase 2: Create content from your vault (only useful once context is rich)
+export const CREATE_SKILLS: Skill[] = [
+  {
+    id: "draft",
+    command: "/draft",
+    name: "Draft Content",
+    description: "Blog post, social post, or article — in your voice",
+    emoji: "✏️",
+    example: "/draft linkedin post about our new offer",
+    phase: "create",
+  },
+  {
+    id: "facebook-ad",
+    command: "/facebook-ad",
+    name: "Facebook Ad",
+    description: "Ad copy — headline, primary text, CTA — matched to your audience",
+    emoji: "📣",
+    example: "/facebook-ad for our spring coaching launch",
+    phase: "create",
+  },
+  {
+    id: "email",
+    command: "/email",
+    name: "Email Sequence",
+    description: "Sales or nurture emails grounded in your offer and voice",
+    emoji: "📧",
+    example: "/email welcome sequence for new subscribers",
+    phase: "create",
+  },
+  {
+    id: "proposal",
+    command: "/proposal",
+    name: "Proposal",
+    description: "Client proposal using your offer, voice, and positioning",
+    emoji: "📄",
+    example: "/proposal for [client name]'s coaching package",
+    phase: "create",
+  },
+  {
+    id: "landing-page",
+    command: "/landing-page",
+    name: "Landing Page",
+    description: "Landing page copy — hero, benefits, proof, CTA",
+    emoji: "🖥️",
+    example: "/landing-page for our free workshop funnel",
+    phase: "create",
+  },
+  {
+    id: "research",
+    command: "/research",
+    name: "Research",
+    description: "Investigate a topic, competitor, or market trend",
+    emoji: "🔍",
+    example: "/research competitor pricing in our niche",
+    phase: "create",
+  },
+];
+
+// Combined list for slash command palette
+export const SKILLS: Skill[] = [...EXTRACT_SKILLS, ...CREATE_SKILLS];

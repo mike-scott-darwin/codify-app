@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AGENTS } from "@/lib/agents";
-import { SKILLS } from "@/lib/skills";
+import { EXTRACT_SKILLS, CREATE_SKILLS } from "@/lib/skills";
 
 export default function AgentsBrowser() {
   const [prompt, setPrompt] = useState("");
@@ -33,7 +33,7 @@ export default function AgentsBrowser() {
               </svg>
               <h1 className="text-2xl font-sans font-bold text-foreground">Codify</h1>
             </div>
-            <p className="text-sm text-muted">One agent. Your vault. Manual skills you trigger.</p>
+            <p className="text-sm text-muted">Extract your expertise, then create content that sounds like you.</p>
           </>
         ) : (
           <>
@@ -124,46 +124,75 @@ export default function AgentsBrowser() {
       {/* Content */}
       <div className="w-full max-w-4xl px-6 pb-12">
         {activeTab === "codify" ? (
-          /* ═══ CODIFY TAB: Single agent + skills ═══ */
+          /* ═══ CODIFY TAB: Sequential flow — Extract first, then Create ═══ */
           <div>
-            {/* How it works */}
-            <div className="flex items-center gap-4 mb-6 px-2">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg shadow-black/20">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
-                  <path d="M10 2l1.5 4.5L16 8l-4.5 1.5L10 14l-1.5-4.5L4 8l4.5-1.5L10 2z" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
+            {/* PHASE 1: Extract */}
+            <div className="mb-10">
+              <div className="flex items-center gap-3 mb-1 px-2">
+                <div className="w-6 h-6 rounded-full bg-blue/10 border border-blue/20 flex items-center justify-center">
+                  <span className="text-[11px] font-bold text-blue">1</span>
+                </div>
+                <h2 className="text-sm font-sans font-bold text-foreground">Extract your knowledge</h2>
               </div>
-              <div>
-                <h2 className="text-sm font-sans font-bold text-foreground">One agent. Your 4 core files.</h2>
-                <p className="text-xs text-muted">Reads your Soul, Offer, Audience, and Voice — then executes the skill you choose.</p>
+              <p className="text-xs text-muted mb-4 ml-[38px]">
+                Start here. AI interviews you and builds your profile — what you sell, who you sell to, how you talk about it.
+                The richer this is, the better everything downstream works.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {EXTRACT_SKILLS.map((skill) => (
+                  <button
+                    key={skill.id}
+                    onClick={() => setPrompt(skill.command + " ")}
+                    className="flex items-start gap-3 p-4 bg-surface border border-blue/10 rounded-xl hover:border-blue/30 transition-colors text-left group"
+                  >
+                    <span className="text-xl mt-0.5">{skill.emoji}</span>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-sans font-bold text-foreground group-hover:text-blue transition-colors">{skill.name}</span>
+                        <span className="text-[11px] text-dim font-mono">{skill.command}</span>
+                      </div>
+                      <p className="text-xs text-muted mt-0.5">{skill.description}</p>
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
 
-            {/* Skills grid */}
-            <p className="text-xs text-dim uppercase tracking-wider px-2 mb-3">Skills</p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              {SKILLS.map((skill) => (
-                <button
-                  key={skill.id}
-                  onClick={() => {
-                    setPrompt(skill.command + " ");
-                  }}
-                  className="flex items-start gap-3 p-4 bg-surface border border-border rounded-xl hover:border-blue/30 transition-colors text-left group"
-                >
-                  <span className="text-xl mt-0.5">{skill.emoji}</span>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-sans font-bold text-foreground group-hover:text-blue transition-colors">{skill.name}</span>
-                      <span className="text-[11px] text-dim font-mono">{skill.command}</span>
+            {/* PHASE 2: Create */}
+            <div>
+              <div className="flex items-center gap-3 mb-1 px-2">
+                <div className="w-6 h-6 rounded-full bg-green/10 border border-green/20 flex items-center justify-center">
+                  <span className="text-[11px] font-bold text-green">2</span>
+                </div>
+                <h2 className="text-sm font-sans font-bold text-foreground">Create from your vault</h2>
+              </div>
+              <p className="text-xs text-muted mb-4 ml-[38px]">
+                Once your profile has enough depth, these skills produce real work — ads, emails, proposals, content — all in your voice.
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {CREATE_SKILLS.map((skill) => (
+                  <button
+                    key={skill.id}
+                    onClick={() => setPrompt(skill.command + " ")}
+                    className="flex items-start gap-3 p-4 bg-surface border border-border rounded-xl hover:border-green/30 transition-colors text-left group"
+                  >
+                    <span className="text-xl mt-0.5">{skill.emoji}</span>
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-sans font-bold text-foreground group-hover:text-green transition-colors">{skill.name}</span>
+                        <span className="text-[11px] text-dim font-mono">{skill.command}</span>
+                      </div>
+                      <p className="text-xs text-muted mt-0.5">{skill.description}</p>
                     </div>
-                    <p className="text-xs text-muted mt-0.5">{skill.description}</p>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Upgrade nudge */}
-            <div className="mt-8 bg-purple/5 border border-purple/20 rounded-xl p-4 flex items-center justify-between">
+            <div className="mt-10 bg-purple/5 border border-purple/20 rounded-xl p-4 flex items-center justify-between">
               <div>
                 <p className="text-sm font-sans font-bold text-foreground">Need agents working together?</p>
                 <p className="text-xs text-muted mt-0.5">Orchestrate runs a full agent team autonomously on your goal.</p>

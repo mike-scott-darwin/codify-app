@@ -29,18 +29,18 @@ const NAV_PATHS: Record<string, string> = {
 };
 
 const SKILL_ITEMS: Omit<SearchResult, "action">[] = [
-  { id: "sk-brief", label: "/brief", description: "Morning brief — vault state and focus", category: "skill" },
-  { id: "sk-extract", label: "/extract", description: "Extract context from conversation", category: "skill" },
-  { id: "sk-import", label: "/import", description: "Import existing documents", category: "skill" },
+  // Extract
+  { id: "sk-extract", label: "/extract", description: "AI interviews you and builds your profile", category: "skill" },
+  { id: "sk-import", label: "/import", description: "Import existing docs, copy, or proposals", category: "skill" },
+  { id: "sk-audit", label: "/audit", description: "Check which profile areas need more depth", category: "skill" },
+  { id: "sk-voice-check", label: "/voice-check", description: "Check if text sounds like you", category: "skill" },
+  // Create
   { id: "sk-draft", label: "/draft", description: "Draft content for any platform", category: "skill" },
+  { id: "sk-facebook-ad", label: "/facebook-ad", description: "Generate Facebook ad copy", category: "skill" },
   { id: "sk-email", label: "/email", description: "Generate email sequences", category: "skill" },
-  { id: "sk-ad", label: "/ad", description: "Create ad copy and hooks", category: "skill" },
-  { id: "sk-research", label: "/research", description: "Research a topic", category: "skill" },
-  { id: "sk-audit", label: "/audit", description: "Check vault health", category: "skill" },
-  { id: "sk-proposal", label: "/proposal", description: "Generate a proposal", category: "skill" },
-  { id: "sk-landing", label: "/landing", description: "Generate landing page copy", category: "skill" },
-  { id: "sk-content", label: "/content", description: "Generate content for any platform", category: "skill" },
-  { id: "sk-enrich", label: "/enrich", description: "Deepen thin context files", category: "skill" },
+  { id: "sk-proposal", label: "/proposal", description: "Generate a client proposal", category: "skill" },
+  { id: "sk-landing", label: "/landing-page", description: "Generate landing page copy", category: "skill" },
+  { id: "sk-research", label: "/research", description: "Research a topic or competitor", category: "skill" },
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {
