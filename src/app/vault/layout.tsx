@@ -220,31 +220,25 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
           </div>
         )}
 
-        {/* Pane 3: File preview — resizable */}
-        {preview && (
-          <div className="hidden md:flex shrink-0 h-full relative" style={{ width: previewWidth }}>
-            <div className="flex flex-col h-full w-full border-r border-border">
+        {/* Pane 3: File preview — takes remaining space when open */}
+        {preview ? (
+          <div className="hidden md:flex flex-1 flex-col h-full min-w-0">
+            <VaultTopBar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+            <div className="flex-1 overflow-hidden">
               <FilePreviewPanel
                 file={preview}
                 loading={loadingPreview}
                 onClose={() => setPreview(null)}
               />
             </div>
-            {/* Resize handle */}
-            <div
-              onMouseDown={startResize}
-              className="absolute top-0 right-0 w-1.5 h-full cursor-col-resize z-10 group hover:bg-blue/20 transition-colors"
-            >
-              <div className="absolute top-1/2 -translate-y-1/2 right-0 w-1 h-8 rounded-full bg-border group-hover:bg-blue/50 transition-colors" />
-            </div>
+          </div>
+        ) : (
+          /* Content — full remaining width */
+          <div className="flex-1 flex flex-col overflow-hidden min-w-0">
+            <VaultTopBar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+            <main className="flex-1 overflow-y-auto">{children}</main>
           </div>
         )}
-
-        {/* Content — full remaining width */}
-        <div className="flex-1 flex flex-col overflow-hidden min-w-0">
-          <VaultTopBar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
-          <main className="flex-1 overflow-y-auto">{children}</main>
-        </div>
 
         {/* Mobile */}
         <ChatPanel />
