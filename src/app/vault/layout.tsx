@@ -30,7 +30,6 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
   const resizing = useRef(false);
   const pathname = usePathname();
   const router = useRouter();
-  const isOnAgents = pathname.startsWith("/vault/agents");
 
   // Resize handler for preview panel
   const startResize = useCallback((e: React.MouseEvent) => {
@@ -57,14 +56,10 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
     document.addEventListener("mouseup", onMouseUp);
   }, [previewWidth]);
 
-  // Close panes when navigating away from agents
+  // Close panes when navigating to a specific file/page (not agents or dashboard)
   useEffect(() => {
-    if (!isOnAgents) {
-      setOpenFolder(null);
-      setPreview(null);
-      setFolderFiles([]);
-    }
-  }, [isOnAgents]);
+    // Keep 3-pane open as the user browses
+  }, [pathname]);
 
   // Open a folder → fetch file list → auto-preview first file
   async function handleOpenFolder(path: string, label: string) {
@@ -146,7 +141,7 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
 
   // When navigating to agents, keep files panel open for drag & drop
   useEffect(() => {
-    if (pathname.startsWith("/vault/agents") && activePanel === "ai") {
+    if (activePanel === "ai") {
       setActivePanel("files");
     }
   }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -205,14 +200,14 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
         {activePanel === "files" && (
           <div className="hidden md:flex flex-col shrink-0 h-full w-[220px] border-r border-border">
             <TreePanel
-              onOpenFolder={isOnAgents ? handleOpenFolder : undefined}
+              onOpenFolder={handleOpenFolder}
               activeFolderPath={openFolder?.path}
             />
           </div>
         )}
 
         {/* Pane 2: File list within selected folder */}
-        {openFolder && isOnAgents && (
+        {openFolder && (
           <div className="hidden md:flex flex-col shrink-0 h-full w-[200px] border-r border-border">
             <FileListPanel
               folderLabel={openFolder.label}
@@ -226,7 +221,7 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
         )}
 
         {/* Pane 3: File preview — resizable */}
-        {preview && isOnAgents && (
+        {preview && (
           <div className="hidden md:flex shrink-0 h-full relative" style={{ width: previewWidth }}>
             <div className="flex flex-col h-full w-full border-r border-border">
               <FilePreviewPanel
