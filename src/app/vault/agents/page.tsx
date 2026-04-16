@@ -92,36 +92,52 @@ export default function AgentsPage() {
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      {activeTab === "ask" ? (
-        /* ═══ ASK TAB ═══ */
-        <div className="flex flex-col items-center justify-center flex-1 px-6">
-          {/* Branding */}
-          <div className="flex items-center gap-3 mb-8">
+      {/* ═══ Shared header — branding + tabs ═══ */}
+      <div className="flex flex-col items-center pt-8 pb-6 px-6 shrink-0">
+        <div className="flex items-center gap-3 mb-6">
+          {activeTab === "ask" ? (
             <svg className="w-10 h-10 text-blue" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.2">
               <path d="M10 2l1.5 4.5L16 8l-4.5 1.5L10 14l-1.5-4.5L4 8l4.5-1.5L10 2z" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <h1 className="text-4xl font-sans font-bold text-foreground tracking-tight">Codify</h1>
-          </div>
+          ) : (
+            <svg className="w-10 h-10 text-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+          )}
+          <h1 className="text-4xl font-sans font-bold text-foreground tracking-tight">
+            {activeTab === "ask" ? "Codify" : "Orchestrate"}
+          </h1>
+        </div>
 
-          {/* Tab toggle */}
-          <div className="flex items-center gap-0.5 bg-[#1a1a1a] rounded-full p-0.5 mb-6">
-            <button className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full bg-blue/15 text-blue">
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="2">
-                <path d="M10 2l1.5 4.5L16 8l-4.5 1.5L10 14l-1.5-4.5L4 8l4.5-1.5L10 2z" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              Ask
-            </button>
-            <button
-              onClick={() => setActiveTab("orchestrate")}
-              className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full text-muted hover:text-foreground transition-colors"
-            >
-              <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-              </svg>
-              Orchestrate
-            </button>
-          </div>
+        <div className="flex items-center gap-0.5 bg-[#1a1a1a] rounded-full p-0.5">
+          <button
+            onClick={() => setActiveTab("ask")}
+            className={`flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full transition-colors ${
+              activeTab === "ask" ? "bg-blue/15 text-blue" : "text-muted hover:text-foreground"
+            }`}
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="2">
+              <path d="M10 2l1.5 4.5L16 8l-4.5 1.5L10 14l-1.5-4.5L4 8l4.5-1.5L10 2z" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Ask
+          </button>
+          <button
+            onClick={() => setActiveTab("orchestrate")}
+            className={`flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full transition-colors ${
+              activeTab === "orchestrate" ? "bg-purple/15 text-purple" : "text-muted hover:text-foreground"
+            }`}
+          >
+            <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
+            </svg>
+            Orchestrate
+          </button>
+        </div>
+      </div>
 
+      {activeTab === "ask" ? (
+        /* ═══ ASK TAB ═══ */
+        <div className="flex flex-col items-center flex-1 px-6 overflow-y-auto">
           {/* Input area */}
           <div className="w-full max-w-2xl relative">
             {showSlashMenu && filteredSkills.length > 0 && (
@@ -225,36 +241,8 @@ export default function AgentsPage() {
       ) : (
         /* ═══ ORCHESTRATE TAB — ClickUp Agents style ═══ */
         <div className="flex-1 overflow-y-auto">
-          {/* Header area — centered */}
-          <div className="flex flex-col items-center pt-8 pb-6 px-6">
-            {/* Branding */}
-            <div className="flex items-center gap-3 mb-6">
-              <svg className="w-10 h-10 text-purple" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.2">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-              </svg>
-              <h1 className="text-4xl font-sans font-bold text-foreground tracking-tight">Orchestrate</h1>
-            </div>
-
-            {/* Tab toggle */}
-            <div className="flex items-center gap-0.5 bg-[#1a1a1a] rounded-full p-0.5 mb-6">
-              <button
-                onClick={() => setActiveTab("ask")}
-                className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full text-muted hover:text-foreground transition-colors"
-              >
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="2">
-                  <path d="M10 2l1.5 4.5L16 8l-4.5 1.5L10 14l-1.5-4.5L4 8l4.5-1.5L10 2z" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                Ask
-              </button>
-              <button className="flex items-center gap-1.5 px-4 py-1.5 text-xs font-medium rounded-full bg-purple/15 text-purple">
-                <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
-                </svg>
-                Orchestrate
-              </button>
-            </div>
-
-            {/* Category filter bar */}
+          {/* Category filter bar */}
+          <div className="flex flex-col items-center pb-6 px-6">
             <div className="flex items-center gap-1 flex-wrap justify-center">
               {CATEGORIES.map((cat) => (
                 <button
