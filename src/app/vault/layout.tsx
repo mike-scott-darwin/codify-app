@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ChatDrawerProvider } from "@/components/vault/chat-drawer-provider";
 import CommandPalette from "@/components/vault/command-palette";
@@ -15,9 +15,36 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
   const [activePanel, setActivePanel] = useState<RibbonPanel>("files");
   const [preview, setPreview] = useState<PreviewFile | null>(null);
   const [loadingPreview, setLoadingPreview] = useState(false);
+  const [previewWidth, setPreviewWidth] = useState(360);
+  const resizing = useRef(false);
   const pathname = usePathname();
   const router = useRouter();
   const isOnAgents = pathname.startsWith("/vault/agents");
+
+  // Resize handler for preview panel
+  const startResize = useCallback((e: React.MouseEvent) => {
+    e.preventDefault();
+    resizing.current = true;
+    const startX = e.clientX;
+    const startWidth = previewWidth;
+
+    function onMouseMove(ev: MouseEvent) {
+      if (!resizing.current) return;
+      const delta = ev.clientX - startX;
+      setPreviewWidth(Math.max(240, Math.min(startWidth + delta, 700)));
+    }
+    function onMouseUp() {
+      resizing.current = false;
+      document.removeEventListener("mousemove", onMouseMove);
+      document.removeEventListener("mouseup", onMouseUp);
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+    }
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+    document.addEventListener("mousemove", onMouseMove);
+    document.addEventListener("mouseup", onMouseUp);
+  }, [previewWidth]);
 
   // Close preview when navigating away from agents
   useEffect(() => {
@@ -109,14 +136,23 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
           </div>
         )}
 
-        {/* Preview panel — separate column next to file tree */}
+        {/* Preview panel — resizable column next to file tree */}
         {preview && isOnAgents && (
-          <div className="hidden md:flex flex-col shrink-0 h-full w-[320px] border-r border-border">
-            <FilePreviewPanel
-              file={preview}
-              loading={loadingPreview}
-              onClose={() => setPreview(null)}
-            />
+          <div className="hidden md:flex shrink-0 h-full relative" style={{ width: previewWidth }}>
+            <div className="flex flex-col h-full w-full border-r border-border">
+              <FilePreviewPanel
+                file={preview}
+                loading={loadingPreview}
+                onClose={() => setPreview(null)}
+              />
+            </div>
+            {/* Resize handle */}
+            <div
+              onMouseDown={startResize}
+              className="absolute top-0 right-0 w-1.5 h-full cursor-col-resize z-10 group hover:bg-blue/20 transition-colors"
+            >
+              <div className="absolute top-1/2 -translate-y-1/2 right-0 w-1 h-8 rounded-full bg-border group-hover:bg-blue/50 transition-colors" />
+            </div>
           </div>
         )}
 
