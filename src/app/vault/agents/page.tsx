@@ -3,8 +3,9 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { EXTRACT_SKILLS, SKILLS, AGENTS } from "@/lib/skills";
+import { EXTRACT_SKILLS, SKILLS } from "@/lib/skills";
 import type { Skill } from "@/lib/skills";
+import { AGENTS as AGENT_LIST } from "@/lib/agents";
 
 const MODELS = [
   { id: "claude-sonnet", label: "Claude Sonnet", badge: "Fast" },
@@ -84,9 +85,6 @@ export default function AgentsPage() {
       handleSend();
     }
   }
-
-  // Import agents from lib
-  const { AGENTS: AGENT_LIST } = require("@/lib/agents");
 
   const filteredAgents = activeCategory === "All"
     ? AGENT_LIST
