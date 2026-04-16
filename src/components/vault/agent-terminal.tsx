@@ -255,29 +255,75 @@ export default function AgentTerminal({
         )}
       </div>
 
-      {/* Slash command palette */}
+      {/* Slash command palette — positioned above input */}
       {showCommands && filteredSkills.length > 0 && (
-        <div className="border-t border-border bg-[#111] max-h-[240px] overflow-y-auto">
-          {filteredSkills.map((skill, i) => (
-            <button
-              key={skill.id}
-              onClick={() => selectCommand(skill)}
-              className={`w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors ${
-                i === selectedCommandIdx
-                  ? "bg-blue/10 text-foreground"
-                  : "text-muted hover:bg-[#1a1a1a]"
-              }`}
-            >
-              <span className="text-lg">{skill.emoji}</span>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-mono text-blue">{skill.command}</span>
-                  <span className="text-xs text-foreground">{skill.name}</span>
-                </div>
-                <p className="text-[11px] text-dim truncate">{skill.description}</p>
+        <div className="border-t border-border bg-[#111] max-h-[320px] overflow-y-auto">
+          {/* Extract skills */}
+          {filteredSkills.some((s) => s.phase === "extract") && (
+            <>
+              <div className="px-4 pt-2.5 pb-1">
+                <p className="text-[10px] font-bold text-blue uppercase tracking-wider">Extract</p>
               </div>
-            </button>
-          ))}
+              {filteredSkills
+                .filter((s) => s.phase === "extract")
+                .map((skill) => {
+                  const globalIdx = filteredSkills.indexOf(skill);
+                  return (
+                    <button
+                      key={skill.id}
+                      onClick={() => selectCommand(skill)}
+                      className={`w-full flex items-center gap-3 px-4 py-2 text-left transition-colors ${
+                        globalIdx === selectedCommandIdx
+                          ? "bg-blue/10 text-foreground"
+                          : "text-muted hover:bg-[#1a1a1a]"
+                      }`}
+                    >
+                      <span className="text-lg">{skill.emoji}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-mono text-blue">{skill.command}</span>
+                          <span className="text-xs text-foreground">{skill.name}</span>
+                        </div>
+                        <p className="text-[11px] text-dim truncate">{skill.description}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+            </>
+          )}
+          {/* Create skills */}
+          {filteredSkills.some((s) => s.phase === "create") && (
+            <>
+              <div className="px-4 pt-2.5 pb-1">
+                <p className="text-[10px] font-bold text-green uppercase tracking-wider">Create</p>
+              </div>
+              {filteredSkills
+                .filter((s) => s.phase === "create")
+                .map((skill) => {
+                  const globalIdx = filteredSkills.indexOf(skill);
+                  return (
+                    <button
+                      key={skill.id}
+                      onClick={() => selectCommand(skill)}
+                      className={`w-full flex items-center gap-3 px-4 py-2 text-left transition-colors ${
+                        globalIdx === selectedCommandIdx
+                          ? "bg-green/10 text-foreground"
+                          : "text-muted hover:bg-[#1a1a1a]"
+                      }`}
+                    >
+                      <span className="text-lg">{skill.emoji}</span>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-mono text-green">{skill.command}</span>
+                          <span className="text-xs text-foreground">{skill.name}</span>
+                        </div>
+                        <p className="text-[11px] text-dim truncate">{skill.description}</p>
+                      </div>
+                    </button>
+                  );
+                })}
+            </>
+          )}
           <div className="px-4 py-1.5 border-t border-border">
             <p className="text-[10px] text-dim">
               <span className="text-muted">↑↓</span> navigate
