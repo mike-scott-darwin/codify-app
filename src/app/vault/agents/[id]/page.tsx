@@ -127,9 +127,23 @@ function AgentPageContent() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
   const [running, setRunning] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const [attachedFiles, setAttachedFiles] = useState<{ name: string; content: string }[]>([]);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const hasRun = useRef(false);
+
+  function handleFiles(fileList: FileList) {
+    Array.from(fileList).forEach((file) => {
+      if (file.size > 5 * 1024 * 1024) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        setAttachedFiles((prev) => [...prev, { name: file.name, content: reader.result as string }]);
+      };
+      reader.readAsText(file);
+    });
+  }
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -156,12 +170,16 @@ function AgentPageContent() {
   };
 
   async function sendMessage(text: string) {
-    if (running || !text.trim()) return;
+    if (running || (!text.trim() && attachedFiles.length === 0)) return;
     setRunning(true);
+
+    const fileContext = attachedFiles.map((f) => `[File: ${f.name}]\n${f.content}`).join("\n\n");
+    const fullText = fileContext ? `${text.trim()}\n\n${fileContext}` : text.trim();
+    setAttachedFiles([]);
 
     const newMessages: ChatMessage[] = [
       ...messages,
-      { role: "user", content: text.trim() },
+      { role: "user", content: fullText },
       { role: "status", content: "Reading your vault..." },
     ];
     setMessages(newMessages);
@@ -172,7 +190,7 @@ function AgentPageContent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messages: [{ role: "user", content: text.trim() }],
+          messages: [{ role: "user", content: fullText }],
           agentId: agent!.id,
         }),
       });
@@ -379,7 +397,20 @@ function AgentPageContent() {
       {/* ═══ Input bar ═══ */}
       <div className="border-t border-border bg-[#0d0d0d] px-4 py-3">
         <div className="max-w-2xl mx-auto">
-          <div className="border border-border rounded-xl bg-surface focus-within:border-blue/40 transition-colors overflow-hidden">
+          <div
+            className={`border rounded-xl bg-surface focus-within:border-blue/40 transition-colors overflow-hidden relative ${dragOver ? "border-blue border-dashed" : "border-border"}`}
+            onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+            onDragLeave={() => setDragOver(false)}
+            onDrop={(e) => { e.preventDefault(); setDragOver(false); if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files); }}
+          >
+            {dragOver && (
+              <div className="absolute inset-0 bg-blue/5 flex items-center justify-center z-10 rounded-xl pointer-events-none">
+                <div className="flex items-center gap-2 text-blue text-sm font-medium">
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+                  Drop to analyze
+                </div>
+              </div>
+            )}
             <textarea
               ref={inputRef}
               value={input}
@@ -390,15 +421,30 @@ function AgentPageContent() {
               disabled={running}
               className="w-full bg-transparent text-foreground text-sm placeholder:text-dim resize-none focus:outline-none px-4 pt-3 pb-1 disabled:opacity-50"
             />
+            {/* Attached file pills */}
+            {attachedFiles.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 px-4 pb-2">
+                {attachedFiles.map((f, i) => (
+                  <span key={i} className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs text-blue bg-blue/10 border border-blue/20 rounded-lg">
+                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
+                    {f.name}
+                    <button onClick={() => setAttachedFiles((prev) => prev.filter((_, j) => j !== i))} className="text-blue/60 hover:text-blue transition-colors">
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
             <div className="flex items-center gap-1 px-3 pb-2.5">
-              <button title="Attach document" className="p-1.5 rounded-md text-dim hover:text-muted hover:bg-[#1a1a1a] transition-colors">
+              <button onClick={() => fileInputRef.current?.click()} title="Attach document" className="p-1.5 rounded-md text-dim hover:text-muted hover:bg-[#1a1a1a] transition-colors">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
               </button>
+              <input ref={fileInputRef} type="file" className="hidden" accept=".pdf,.doc,.docx,.txt,.md,.csv" multiple onChange={(e) => { if (e.target.files?.length) handleFiles(e.target.files); e.target.value = ""; }} />
               <span className="text-[11px] text-dim">{agent.name} agent reads your vault</span>
               <div className="flex-1" />
               <button
                 onClick={() => sendMessage(input)}
-                disabled={running || !input.trim()}
+                disabled={running || (!input.trim() && attachedFiles.length === 0)}
                 className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue to-purple text-white flex items-center justify-center hover:opacity-80 disabled:opacity-20 transition-all"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>

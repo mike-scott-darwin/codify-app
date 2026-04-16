@@ -40,9 +40,22 @@ export default function AgentsPage() {
   const [activeCategory, setActiveCategory] = useState<string>("All");
   const [showPlusMenu, setShowPlusMenu] = useState(false);
   const [webSearch, setWebSearch] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
+  const [attachedFiles, setAttachedFiles] = useState<{ name: string; content: string }[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
+
+  function handleFiles(fileList: FileList) {
+    Array.from(fileList).forEach((file) => {
+      if (file.size > 5 * 1024 * 1024) return; // 5MB limit
+      const reader = new FileReader();
+      reader.onload = () => {
+        setAttachedFiles((prev) => [...prev, { name: file.name, content: reader.result as string }]);
+      };
+      reader.readAsText(file);
+    });
+  }
 
   useEffect(() => {
     if (input.startsWith("/")) {
@@ -65,8 +78,11 @@ export default function AgentsPage() {
   }
 
   function handleSend() {
-    if (!input.trim()) return;
-    router.push(`/vault/agents/strategy?prompt=${encodeURIComponent(input.trim())}`);
+    if (!input.trim() && attachedFiles.length === 0) return;
+    const fileContext = attachedFiles.map((f) => `[File: ${f.name}]\n${f.content}`).join("\n\n");
+    const fullPrompt = fileContext ? `${input.trim()}\n\n${fileContext}` : input.trim();
+    setAttachedFiles([]);
+    router.push(`/vault/agents/strategy?prompt=${encodeURIComponent(fullPrompt)}`);
   }
 
   function handleKeyDown(e: React.KeyboardEvent) {
@@ -185,7 +201,20 @@ export default function AgentsPage() {
               </div>
             )}
 
-            <div className="border border-border rounded-2xl bg-surface focus-within:border-blue/40 transition-colors overflow-hidden">
+            <div
+              className={`border rounded-2xl bg-surface focus-within:border-blue/40 transition-colors overflow-hidden relative ${dragOver ? "border-blue border-dashed" : "border-border"}`}
+              onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
+              onDragLeave={() => setDragOver(false)}
+              onDrop={(e) => { e.preventDefault(); setDragOver(false); if (e.dataTransfer.files.length) handleFiles(e.dataTransfer.files); }}
+            >
+              {dragOver && (
+                <div className="absolute inset-0 bg-blue/5 flex items-center justify-center z-10 rounded-2xl pointer-events-none">
+                  <div className="flex items-center gap-2 text-blue text-sm font-medium">
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" /></svg>
+                    Drop to analyze
+                  </div>
+                </div>
+              )}
               <textarea
                 ref={inputRef}
                 value={input}
@@ -195,6 +224,20 @@ export default function AgentsPage() {
                 rows={3}
                 className="w-full bg-transparent text-foreground text-sm placeholder:text-dim resize-none focus:outline-none px-5 pt-4 pb-2"
               />
+              {/* Attached file pills */}
+              {attachedFiles.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 px-5 pb-2">
+                  {attachedFiles.map((f, i) => (
+                    <span key={i} className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs text-blue bg-blue/10 border border-blue/20 rounded-lg">
+                      <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" /></svg>
+                      {f.name}
+                      <button onClick={() => setAttachedFiles((prev) => prev.filter((_, j) => j !== i))} className="text-blue/60 hover:text-blue transition-colors">
+                        <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
               {/* Toolbar row */}
               <div className="flex items-center gap-1 px-3 pb-3">
                 {/* + menu: Attach file / Saved prompts */}
@@ -214,7 +257,7 @@ export default function AgentsPage() {
                       </button>
                     </div>
                   )}
-                  <input ref={fileInputRef} type="file" className="hidden" accept=".pdf,.doc,.docx,.txt,.md,.csv" onChange={(e) => { const f = e.target.files?.[0]; if (f) { setInput((prev) => prev + `[Attached: ${f.name}] `); } e.target.value = ""; setShowPlusMenu(false); }} />
+                  <input ref={fileInputRef} type="file" className="hidden" accept=".pdf,.doc,.docx,.txt,.md,.csv" multiple onChange={(e) => { if (e.target.files?.length) handleFiles(e.target.files); e.target.value = ""; setShowPlusMenu(false); }} />
                 </div>
 
                 {/* Model selector */}
