@@ -38,6 +38,9 @@ export default function AgentsPage() {
   const [slashFilter, setSlashFilter] = useState("");
   const [slashIdx, setSlashIdx] = useState(0);
   const [activeCategory, setActiveCategory] = useState<string>("All");
+  const [showPlusMenu, setShowPlusMenu] = useState(false);
+  const [webSearch, setWebSearch] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const router = useRouter();
 
@@ -192,10 +195,29 @@ export default function AgentsPage() {
                 rows={3}
                 className="w-full bg-transparent text-foreground text-sm placeholder:text-dim resize-none focus:outline-none px-5 pt-4 pb-2"
               />
+              {/* Toolbar row */}
               <div className="flex items-center gap-1 px-3 pb-3">
-                <button title="Attach document" className="p-1.5 rounded-md text-dim hover:text-muted hover:bg-[#1a1a1a] transition-colors">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                </button>
+                {/* + menu: Attach file / Saved prompts */}
+                <div className="relative">
+                  <button onClick={() => setShowPlusMenu(!showPlusMenu)} className="p-1.5 rounded-md text-dim hover:text-muted hover:bg-[#1a1a1a] transition-colors">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                  </button>
+                  {showPlusMenu && (
+                    <div className="absolute bottom-full left-0 mb-1 w-44 bg-surface border border-border rounded-lg shadow-xl overflow-hidden z-10">
+                      <button onClick={() => { fileInputRef.current?.click(); setShowPlusMenu(false); }} className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left text-xs text-muted hover:text-foreground hover:bg-[#1a1a1a] transition-colors">
+                        <svg className="w-4 h-4 text-dim" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" /></svg>
+                        Attach file
+                      </button>
+                      <button onClick={() => { setInput("/"); setShowPlusMenu(false); inputRef.current?.focus(); }} className="w-full flex items-center gap-2.5 px-3 py-2.5 text-left text-xs text-muted hover:text-foreground hover:bg-[#1a1a1a] transition-colors">
+                        <svg className="w-4 h-4 text-dim" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" /></svg>
+                        Saved prompts
+                      </button>
+                    </div>
+                  )}
+                  <input ref={fileInputRef} type="file" className="hidden" accept=".pdf,.doc,.docx,.txt,.md,.csv" onChange={(e) => { const f = e.target.files?.[0]; if (f) { setInput((prev) => prev + `[Attached: ${f.name}] `); } e.target.value = ""; setShowPlusMenu(false); }} />
+                </div>
+
+                {/* Model selector */}
                 <div className="relative">
                   <button onClick={() => setShowModelPicker(!showModelPicker)} className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] text-muted hover:text-foreground hover:bg-[#1a1a1a] transition-colors">
                     <svg className="w-3.5 h-3.5 text-blue" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5"><path d="M10 2l1.5 4.5L16 8l-4.5 1.5L10 14l-1.5-4.5L4 8l4.5-1.5L10 2z" strokeLinecap="round" strokeLinejoin="round" /></svg>
@@ -213,13 +235,20 @@ export default function AgentsPage() {
                     </div>
                   )}
                 </div>
-                <button title="Settings" className="p-1.5 rounded-md text-dim hover:text-muted hover:bg-[#1a1a1a] transition-colors">
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.281z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                </button>
+
                 <div className="flex-1" />
-                <button title="Search the web" className="p-1.5 rounded-md text-dim hover:text-muted hover:bg-[#1a1a1a] transition-colors">
+
+                {/* Web search toggle */}
+                <button
+                  onClick={() => setWebSearch(!webSearch)}
+                  title={webSearch ? "Web search enabled" : "Enable web search"}
+                  className={`p-1.5 rounded-md transition-colors ${webSearch ? "text-blue bg-blue/10" : "text-dim hover:text-muted hover:bg-[#1a1a1a]"}`}
+                >
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" /></svg>
                 </button>
+                {webSearch && <span className="text-[10px] text-blue">Web</span>}
+
+                {/* Send */}
                 <button onClick={handleSend} disabled={!input.trim()} className="w-8 h-8 rounded-lg bg-gradient-to-r from-blue to-purple text-white flex items-center justify-center hover:opacity-80 disabled:opacity-20 transition-all">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12h15m0 0l-6.75-6.75M19.5 12l-6.75 6.75" /></svg>
                 </button>
