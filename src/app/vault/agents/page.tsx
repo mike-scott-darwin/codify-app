@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { EXTRACT_SKILLS, CREATE_SKILLS, SKILLS } from "@/lib/skills";
+import { EXTRACT_SKILLS, SKILLS } from "@/lib/skills";
 import type { Skill } from "@/lib/skills";
 import { AGENTS as AGENT_LIST } from "@/lib/agents";
 
@@ -314,35 +314,15 @@ export default function AgentsPage() {
             </div>
           </div>
 
-          {/* Skill commands */}
-          <div className="w-full max-w-2xl mt-6 space-y-4">
-            {/* Extract skills */}
-            <div>
-              <p className="text-[11px] font-bold text-blue uppercase tracking-wider mb-2">Extract</p>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {EXTRACT_SKILLS.map((skill) => (
-                  <button key={skill.id} onClick={() => { setInput(skill.command + " "); inputRef.current?.focus(); }} className="flex flex-col gap-1.5 p-3 bg-surface border border-border rounded-xl hover:border-blue/30 transition-colors text-left group">
-                    <span className="text-base">{skill.emoji}</span>
-                    <p className="text-xs font-sans font-bold text-foreground group-hover:text-blue transition-colors leading-tight">{skill.name}</p>
-                    <p className="text-[11px] text-dim leading-snug line-clamp-2">{skill.description}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Create skills */}
-            <div>
-              <p className="text-[11px] font-bold text-green uppercase tracking-wider mb-2">Create</p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-                {CREATE_SKILLS.map((skill) => (
-                  <button key={skill.id} onClick={() => { setInput(skill.command + " "); inputRef.current?.focus(); }} className="flex flex-col gap-1.5 p-3 bg-surface border border-border rounded-xl hover:border-green/30 transition-colors text-left group">
-                    <span className="text-base">{skill.emoji}</span>
-                    <p className="text-xs font-sans font-bold text-foreground group-hover:text-green transition-colors leading-tight">{skill.name}</p>
-                    <p className="text-[11px] text-dim leading-snug line-clamp-2">{skill.description}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
+          {/* 4 suggestion cards */}
+          <div className="grid grid-cols-4 gap-3 mt-6 w-full max-w-2xl">
+            {EXTRACT_SKILLS.map((skill) => (
+              <button key={skill.id} onClick={() => { setInput(skill.command + " "); inputRef.current?.focus(); }} className="flex flex-col gap-1.5 p-3 bg-surface border border-border rounded-xl hover:border-blue/30 transition-colors text-left group">
+                <span className="text-base">{skill.emoji}</span>
+                <p className="text-xs font-sans font-bold text-foreground group-hover:text-blue transition-colors leading-tight">{skill.name}</p>
+                <p className="text-[11px] text-dim leading-snug line-clamp-2">{skill.description}</p>
+              </button>
+            ))}
           </div>
         </div>
       ) : (
