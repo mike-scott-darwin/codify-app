@@ -20,6 +20,7 @@ function AgentPageContent() {
   const agent = getAgent(params.id as string);
   const initialPrompt = searchParams.get("prompt") ?? undefined;
   const [activeTab, setActiveTab] = useState<"agent" | "activity" | "tasks">("agent");
+  const [showConfig, setShowConfig] = useState(false);
 
   if (!agent) {
     return (
@@ -33,84 +34,86 @@ function AgentPageContent() {
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
-      {/* Agent header */}
-      <div className="px-6 py-4 border-b border-border bg-surface shrink-0">
-        <div className="flex items-center gap-3 mb-3">
-          <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${agent.gradient} flex items-center justify-center shadow-sm`}>
-            <span className="text-lg">{agent.emoji}</span>
+      {/* Agent header — compact */}
+      <div className="px-6 py-3 border-b border-border bg-surface shrink-0">
+        <div className="flex items-center gap-3">
+          <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${agent.gradient} flex items-center justify-center shadow-sm shrink-0`}>
+            <span className="text-base">{agent.emoji}</span>
           </div>
-          <div>
-            <h1 className="text-base font-sans font-bold text-foreground">{agent.name}</h1>
-            <p className="text-xs text-muted">{agent.shortDescription}</p>
+          <div className="flex-1 min-w-0">
+            <h1 className="text-sm font-sans font-bold text-foreground">{agent.name}</h1>
+            <p className="text-[11px] text-muted truncate">{agent.shortDescription}</p>
           </div>
-        </div>
 
-        {/* Tabs */}
-        <div className="flex items-center gap-1 bg-[#1a1a1a] rounded-lg p-1 w-fit">
-          {(["agent", "activity", "tasks"] as const).map((tab) => (
-            <button
-              key={tab}
-              onClick={() => setActiveTab(tab)}
-              className={`px-4 py-1.5 text-xs font-medium rounded-md transition-colors capitalize ${
-                activeTab === tab
-                  ? "bg-surface text-foreground"
-                  : "text-muted hover:text-foreground"
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+          {/* Tabs + config toggle — inline with header */}
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-1 bg-[#1a1a1a] rounded-lg p-0.5">
+              {(["agent", "activity", "tasks"] as const).map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-3 py-1 text-[11px] font-medium rounded-md transition-colors capitalize ${
+                    activeTab === tab
+                      ? "bg-surface text-foreground"
+                      : "text-muted hover:text-foreground"
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
+            {activeTab === "agent" && (
+              <button
+                onClick={() => setShowConfig(!showConfig)}
+                title="Agent config"
+                className={`p-1.5 rounded-md transition-colors ${
+                  showConfig ? "text-blue bg-blue/10" : "text-dim hover:text-muted"
+                }`}
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M10 3.5a1 1 0 00-1 1v.3a1.7 1.7 0 01-1 1.5 1.7 1.7 0 01-1.8-.2l-.2-.2a1 1 0 10-1.4 1.4l.2.2a1.7 1.7 0 01.2 1.8 1.7 1.7 0 01-1.5 1H4.5a1 1 0 000 2h.3a1.7 1.7 0 011.5 1 1.7 1.7 0 01-.2 1.8l-.2.2a1 1 0 101.4 1.4l.2-.2a1.7 1.7 0 011.8-.2 1.7 1.7 0 011 1.5v.3a1 1 0 002 0v-.3a1.7 1.7 0 011-1.5 1.7 1.7 0 011.8.2l.2.2a1 1 0 101.4-1.4l-.2-.2a1.7 1.7 0 01-.2-1.8 1.7 1.7 0 011.5-1h.3a1 1 0 000-2h-.3a1.7 1.7 0 01-1.5-1 1.7 1.7 0 01.2-1.8l.2-.2a1 1 0 10-1.4-1.4l-.2.2a1.7 1.7 0 01-1.8.2 1.7 1.7 0 01-1-1.5v-.3a1 1 0 00-1 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
+                </svg>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Tab content */}
       {activeTab === "agent" && (
-        <div className="flex flex-col flex-1 overflow-hidden">
-          {/* Collapsible config sections */}
-          <div className="px-6 py-3 border-b border-border bg-surface/50 space-y-1 shrink-0 max-h-[240px] overflow-y-auto">
-            <details className="group">
-              <summary className="flex items-center justify-between py-2 cursor-pointer text-xs font-medium text-dim uppercase tracking-wider hover:text-muted transition-colors">
-                Instructions
-                <svg className="w-3 h-3 text-dim group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                </svg>
-              </summary>
-              <p className="text-sm text-muted leading-relaxed pb-2">{agent.description}</p>
-            </details>
-
-            <details className="group">
-              <summary className="flex items-center justify-between py-2 cursor-pointer text-xs font-medium text-dim uppercase tracking-wider hover:text-muted transition-colors">
-                Skills
-                <svg className="w-3 h-3 text-dim group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                </svg>
-              </summary>
-              <div className="flex flex-wrap gap-1.5 pb-2">
-                {agent.skills.map((skill) => (
-                  <span key={skill} className="px-2 py-1 text-xs text-blue bg-blue/10 border border-blue/20 rounded-md font-mono">
-                    {skill}
-                  </span>
-                ))}
+        <div className="flex flex-col flex-1 overflow-hidden min-h-0">
+          {/* Config drawer — only visible when toggled */}
+          {showConfig && (
+            <div className="px-6 py-3 border-b border-border bg-[#0d0d0d] space-y-1 shrink-0 max-h-[200px] overflow-y-auto">
+              <div className="mb-2">
+                <p className="text-[11px] text-dim uppercase tracking-wider mb-1">Instructions</p>
+                <p className="text-xs text-muted leading-relaxed">{agent.description}</p>
               </div>
-            </details>
-
-            <details className="group">
-              <summary className="flex items-center justify-between py-2 cursor-pointer text-xs font-medium text-dim uppercase tracking-wider hover:text-muted transition-colors">
-                Knowledge
-                <svg className="w-3 h-3 text-dim group-open:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                </svg>
-              </summary>
-              <div className="space-y-1 pb-2">
-                {agent.knowledgeSources.map((source) => (
-                  <p key={source} className="text-xs text-muted font-mono">{source}</p>
-                ))}
+              <div className="mb-2">
+                <p className="text-[11px] text-dim uppercase tracking-wider mb-1">Skills</p>
+                <div className="flex flex-wrap gap-1">
+                  {agent.skills.map((skill) => (
+                    <span key={skill} className="px-2 py-0.5 text-[11px] text-blue bg-blue/10 border border-blue/20 rounded font-mono">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </details>
-          </div>
+              <div>
+                <p className="text-[11px] text-dim uppercase tracking-wider mb-1">Knowledge</p>
+                <div className="flex flex-wrap gap-1">
+                  {agent.knowledgeSources.map((source) => (
+                    <span key={source} className="px-2 py-0.5 text-[11px] text-muted bg-background border border-border rounded font-mono">
+                      {source.replace("reference/core/", "").replace(".md", "")}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
 
-          {/* Terminal */}
-          <div className="flex-1 p-4 min-h-0">
+          {/* Terminal — takes all remaining space */}
+          <div className="flex-1 min-h-0">
             <AgentTerminal agent={agent} initialPrompt={initialPrompt} />
           </div>
         </div>

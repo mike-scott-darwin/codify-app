@@ -176,7 +176,7 @@ export default function AgentTerminal({
   }
 
   return (
-    <div className="flex flex-col h-full bg-[#0a0a0a] overflow-hidden rounded-lg border border-border">
+    <div className="flex flex-col h-full bg-[#0a0a0a] overflow-hidden border-t border-border">
       {/* Terminal header */}
       <div className="flex items-center gap-2 px-4 py-2.5 border-b border-border bg-[#0d0d0d]">
         <div className="flex gap-1.5">
