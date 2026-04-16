@@ -60,12 +60,14 @@ export default async function VaultDashboard() {
   const isFirstOpen = !depth || depth.every((d) => d.words < 100);
   const isBuilding = depth && depth.some((d) => d.level === "needs-attention") && !isFirstOpen;
 
+  const businessName = client?.client_name || client?.company || null;
+
   if (isFirstOpen) {
-    return <WelcomeState />;
+    return <WelcomeState businessName={businessName} />;
   }
 
   if (isBuilding) {
-    return <BuildingState depth={depth!} activity={activity} />;
+    return <BuildingState depth={depth!} activity={activity} businessName={businessName} />;
   }
 
   // --- State 3: Compounding (all context files active) ---

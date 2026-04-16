@@ -1,6 +1,6 @@
 import WelcomeActions from "./welcome-actions";
 
-export default function WelcomeState() {
+export default function WelcomeState({ businessName }: { businessName?: string | null }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] px-6">
       <div className="max-w-md text-center">
@@ -13,13 +13,13 @@ export default function WelcomeState() {
 
         {/* Headline */}
         <h1 className="text-2xl font-sans font-bold text-foreground mb-5">
-          Teach AI your business
+          {businessName ? `Let's set up ${businessName}` : "Teach AI your business"}
         </h1>
 
         {/* Single clear explanation */}
         <p className="text-base text-muted leading-relaxed mb-10">
           We'll have a <span className="text-foreground font-medium">30-minute conversation</span> about
-          your business — what you sell, who you sell to, and how you talk about it.
+          {businessName ? ` ${businessName}` : " your business"} — what you sell, who you sell to, and how you talk about it.
           From that, Codify builds a profile so every
           <span className="text-blue"> ad</span>,
           <span className="text-green"> proposal</span>,

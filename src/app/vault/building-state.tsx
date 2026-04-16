@@ -3,6 +3,7 @@ import { ExtractButton, NextStepAction } from "./building-actions";
 interface BuildingStateProps {
   depth: { file: string; label: string; words: number; level: "deep" | "growing" | "needs-attention" }[];
   activity: { sha: string; message: string; date: string; author: string }[] | null;
+  businessName?: string | null;
 }
 
 const fileContext: Record<string, { question: string; unlock: string }> = {
@@ -34,7 +35,7 @@ function timeAgo(dateStr: string): string {
   return `${days}d ago`;
 }
 
-export default function BuildingState({ depth, activity }: BuildingStateProps) {
+export default function BuildingState({ depth, activity, businessName }: BuildingStateProps) {
   const activeCount = depth.filter((d) => d.words > 800).length;
   const needsAttention = depth.find((d) => d.level === "needs-attention");
   const recentActivity = activity?.slice(0, 5) ?? [];
@@ -46,7 +47,11 @@ export default function BuildingState({ depth, activity }: BuildingStateProps) {
       {/* Progress header */}
       <div className="flex items-center gap-3 mb-2">
         <h1 className="text-2xl font-sans font-bold text-foreground">
-          {activeCount === 0 ? "Getting started" : activeCount < 4 ? "Making progress" : "Almost there"}
+          {activeCount === 0
+            ? businessName ? `Setting up ${businessName}` : "Getting started"
+            : activeCount < 4
+            ? businessName ? `Building ${businessName}'s profile` : "Making progress"
+            : businessName ? `${businessName} is almost ready` : "Almost there"}
         </h1>
         <span className="text-sm text-muted bg-surface border border-border rounded-full px-3 py-1">
           {activeCount}/4 complete
@@ -54,10 +59,10 @@ export default function BuildingState({ depth, activity }: BuildingStateProps) {
       </div>
       <p className="text-sm text-muted mb-8">
         {activeCount === 0
-          ? "Once you complete your four core conversations, AI will actually understand your business."
+          ? `Once you complete your four core conversations, AI will actually understand ${businessName || "your business"}.`
           : activeCount < 3
-          ? "Each section you finish makes everything AI creates for you more accurate."
-          : "One more section and your AI will have everything it needs to produce real work."}
+          ? `Each section you finish makes everything AI creates for ${businessName || "you"} more accurate.`
+          : `One more section and AI will have everything it needs to produce real work for ${businessName || "you"}.`}
       </p>
 
       {/* Overall progress bar */}
