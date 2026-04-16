@@ -6,7 +6,6 @@ import { ChatDrawerProvider } from "@/components/vault/chat-drawer-provider";
 import CommandPalette from "@/components/vault/command-palette";
 import VaultSidebar, { ActivityRibbon, TreePanel } from "@/components/vault/sidebar";
 import VaultTopBar from "@/components/vault/top-bar";
-import AiSidePanel from "@/components/vault/ai-side-panel";
 import ChatPanel from "@/components/vault/chat-panel";
 import type { RibbonPanel } from "@/components/vault/types";
 
@@ -16,10 +15,10 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const router = useRouter();
 
-  // When navigating to agents via URL (not ribbon click), show AI panel
+  // When navigating to agents, keep files panel open for drag & drop
   useEffect(() => {
-    if (pathname.startsWith("/vault/agents") && activePanel !== "files") {
-      setActivePanel("ai");
+    if (pathname.startsWith("/vault/agents") && activePanel === "ai") {
+      setActivePanel("files");
     }
   }, [pathname]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -79,11 +78,6 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
         {activePanel === "files" && (
           <div className="hidden md:flex flex-col shrink-0 h-full w-[220px] border-r border-border">
             <TreePanel />
-          </div>
-        )}
-        {activePanel === "ai" && (
-          <div className="hidden md:flex flex-col shrink-0 h-full w-[260px] border-r border-border">
-            <AiSidePanel />
           </div>
         )}
 
