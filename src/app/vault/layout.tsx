@@ -4,7 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { ChatDrawerProvider } from "@/components/vault/chat-drawer-provider";
 import CommandPalette from "@/components/vault/command-palette";
-import VaultSidebar, { ActivityRibbon, TreePanel } from "@/components/vault/sidebar";
+import VaultSidebar, { ActivityRibbon, TreePanel, FilePreviewPanel } from "@/components/vault/sidebar";
+import type { PreviewFile } from "@/components/vault/sidebar";
 import VaultTopBar from "@/components/vault/top-bar";
 import ChatPanel from "@/components/vault/chat-panel";
 import type { RibbonPanel } from "@/components/vault/types";
@@ -12,8 +13,32 @@ import type { RibbonPanel } from "@/components/vault/types";
 export default function VaultLayout({ children }: { children: React.ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activePanel, setActivePanel] = useState<RibbonPanel>("files");
+  const [preview, setPreview] = useState<PreviewFile | null>(null);
+  const [loadingPreview, setLoadingPreview] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+  const isOnAgents = pathname.startsWith("/vault/agents");
+
+  // Close preview when navigating away from agents
+  useEffect(() => {
+    if (!isOnAgents) setPreview(null);
+  }, [isOnAgents]);
+
+  async function openPreview(path: string, name: string) {
+    setLoadingPreview(true);
+    setPreview({ path, name, content: "" });
+    try {
+      const res = await fetch(`/api/vault?action=file&path=${encodeURIComponent(path)}`);
+      if (res.ok) {
+        const data = await res.json();
+        const content = typeof data === "string" ? data : data.content || JSON.stringify(data, null, 2);
+        setPreview({ path, name, content });
+      }
+    } catch {
+      setPreview({ path, name, content: "Failed to load file." });
+    }
+    setLoadingPreview(false);
+  }
 
   // When navigating to agents, keep files panel open for drag & drop
   useEffect(() => {
@@ -74,10 +99,24 @@ export default function VaultLayout({ children }: { children: React.ReactNode })
           />
         </div>
 
-        {/* Side panel — files or AI */}
+        {/* Side panel — files */}
         {activePanel === "files" && (
           <div className="hidden md:flex flex-col shrink-0 h-full w-[220px] border-r border-border">
-            <TreePanel />
+            <TreePanel
+              onPreviewFile={isOnAgents ? openPreview : undefined}
+              previewPath={preview?.path}
+            />
+          </div>
+        )}
+
+        {/* Preview panel — separate column next to file tree */}
+        {preview && isOnAgents && (
+          <div className="hidden md:flex flex-col shrink-0 h-full w-[320px] border-r border-border">
+            <FilePreviewPanel
+              file={preview}
+              loading={loadingPreview}
+              onClose={() => setPreview(null)}
+            />
           </div>
         )}
 

@@ -504,12 +504,21 @@ export function ActivityRibbon({
 
 /* ─── Tree Panel ─── */
 
-export function TreePanel() {
+export interface PreviewFile {
+  path: string;
+  name: string;
+  content: string;
+}
+
+export function TreePanel({
+  onPreviewFile,
+  previewPath,
+}: {
+  onPreviewFile?: (path: string, name: string) => void;
+  previewPath?: string;
+}) {
   const pathname = usePathname();
   const [contextDepth, setContextDepth] = useState<Record<string, string>>({});
-  const [preview, setPreview] = useState<{ path: string; name: string; content: string } | null>(null);
-  const [loadingPreview, setLoadingPreview] = useState(false);
-  const isOnAgents = pathname.startsWith("/vault/agents");
 
   useEffect(() => {
     fetch("/api/vault?action=depth")
@@ -521,22 +530,6 @@ export function TreePanel() {
       })
       .catch(() => {});
   }, []);
-
-  async function openPreview(path: string, name: string) {
-    setLoadingPreview(true);
-    setPreview({ path, name, content: "" });
-    try {
-      const res = await fetch(`/api/vault?action=file&path=${encodeURIComponent(path)}`);
-      if (res.ok) {
-        const data = await res.json();
-        const content = typeof data === "string" ? data : data.content || JSON.stringify(data, null, 2);
-        setPreview({ path, name, content });
-      }
-    } catch {
-      setPreview({ path, name, content: "Failed to load file." });
-    }
-    setLoadingPreview(false);
-  }
 
   const coreFiles = [
     { name: "Soul", path: "reference/core/soul.md", icon: "◆" },
@@ -551,10 +544,10 @@ export function TreePanel() {
       <div className="border-b border-border py-2">
         <p className="px-4 py-1.5 text-[11px] font-medium text-dim uppercase tracking-wider">Your Profile</p>
         {coreFiles.map((file) => (
-          isOnAgents ? (
+          onPreviewFile ? (
             <button
               key={file.path}
-              onClick={() => openPreview(file.path, file.name)}
+              onClick={() => onPreviewFile(file.path, file.name)}
               draggable
               onDragStart={(e) => {
                 e.dataTransfer.setData("application/x-vault-path", file.path);
@@ -562,7 +555,7 @@ export function TreePanel() {
                 e.dataTransfer.effectAllowed = "copy";
               }}
               className={`w-full flex items-center gap-2.5 py-1.5 text-[13px] transition-colors cursor-grab active:cursor-grabbing ${
-                preview?.path === file.path
+                previewPath === file.path
                   ? "text-blue bg-blue/5"
                   : "text-muted hover:text-foreground hover:bg-[#1a1a1a]"
               }`}
@@ -608,59 +601,72 @@ export function TreePanel() {
       </div>
 
       {/* File tree */}
-      <div className={`overflow-y-auto py-2 ${preview ? "h-[40%] shrink-0" : "flex-1"}`}>
+      <div className="flex-1 overflow-y-auto py-2">
         {VAULT_FOLDERS.map((folder) => (
-          <FolderNode key={folder.path} node={folder} depth={0} onClose={() => {}} onPreview={isOnAgents ? openPreview : undefined} />
+          <FolderNode key={folder.path} node={folder} depth={0} onClose={() => {}} onPreview={onPreviewFile} />
         ))}
       </div>
+    </div>
+  );
+}
 
-      {/* Preview pane */}
-      {preview && (
-        <div className="flex-1 border-t border-border flex flex-col min-h-0">
-          <div className="flex items-center justify-between px-3 py-2 border-b border-border shrink-0">
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="text-blue text-sm">◆</span>
-              <span
-                className="text-xs font-medium text-foreground truncate cursor-grab"
-                draggable
-                onDragStart={(e) => {
-                  e.dataTransfer.setData("application/x-vault-path", preview.path);
-                  e.dataTransfer.setData("text/plain", preview.name);
-                  e.dataTransfer.effectAllowed = "copy";
-                }}
-              >
-                {preview.name.replace(".md", "")}
-              </span>
-            </div>
-            <div className="flex items-center gap-1 shrink-0">
-              <span
-                className="text-[10px] text-blue bg-blue/10 px-1.5 py-0.5 rounded cursor-grab"
-                draggable
-                onDragStart={(e) => {
-                  e.dataTransfer.setData("application/x-vault-path", preview.path);
-                  e.dataTransfer.setData("text/plain", preview.name);
-                  e.dataTransfer.effectAllowed = "copy";
-                }}
-                title="Drag to Codify"
-              >
-                Drag
-              </span>
-              <button onClick={() => setPreview(null)} className="text-dim hover:text-foreground transition-colors p-0.5">
-                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="2">
-                  <path d="M6 6l8 8M14 6l-8 8" strokeLinecap="round" />
-                </svg>
-              </button>
-            </div>
-          </div>
-          <div className="flex-1 overflow-y-auto px-3 py-2 text-xs text-muted leading-relaxed font-mono whitespace-pre-wrap">
-            {loadingPreview ? (
-              <span className="text-dim animate-pulse">Loading...</span>
-            ) : (
-              preview.content
-            )}
-          </div>
+/* ─── File Preview Panel ─── */
+
+export function FilePreviewPanel({
+  file,
+  loading,
+  onClose,
+}: {
+  file: PreviewFile;
+  loading: boolean;
+  onClose: () => void;
+}) {
+  return (
+    <div className="flex flex-col h-full w-full overflow-hidden bg-surface">
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border shrink-0">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <span className="text-blue text-sm">◆</span>
+          <span className="text-sm font-sans font-medium text-foreground truncate">
+            {file.name.replace(".md", "")}
+          </span>
         </div>
-      )}
+        <div className="flex items-center gap-2 shrink-0">
+          <span
+            className="text-[11px] text-blue bg-blue/10 px-2 py-1 rounded-md cursor-grab font-sans font-medium hover:bg-blue/15 transition-colors"
+            draggable
+            onDragStart={(e) => {
+              e.dataTransfer.setData("application/x-vault-path", file.path);
+              e.dataTransfer.setData("text/plain", file.name);
+              e.dataTransfer.effectAllowed = "copy";
+            }}
+            title="Drag to Codify terminal"
+          >
+            Drag to Codify
+          </span>
+          <button onClick={onClose} className="text-dim hover:text-foreground transition-colors p-1 rounded-md hover:bg-[#1a1a1a]">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 20 20" stroke="currentColor" strokeWidth="2">
+              <path d="M6 6l8 8M14 6l-8 8" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="flex-1 overflow-y-auto px-5 py-4">
+        {loading ? (
+          <div className="space-y-3">
+            <div className="h-4 bg-[#1a1a1a] rounded w-3/4 animate-pulse" />
+            <div className="h-4 bg-[#1a1a1a] rounded w-full animate-pulse" />
+            <div className="h-4 bg-[#1a1a1a] rounded w-5/6 animate-pulse" />
+            <div className="h-4 bg-[#1a1a1a] rounded w-2/3 animate-pulse" />
+          </div>
+        ) : (
+          <div className="text-[13px] text-muted leading-[1.8] font-sans whitespace-pre-wrap">
+            {file.content}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
